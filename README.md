@@ -1,6 +1,4 @@
-# node-capwap
 
-CAPWAP implementation in JavaScript (Work in progress)
+node-capwap
 =========
-
-* 
+### CAPWAP implementation in JavaScript (Work in progress)
