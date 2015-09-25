@@ -1,17 +1,6 @@
-var encoder = require('./encoder');
-var serializer = require("packet").createSerializer();
-
-var buildTlv = function(serializer, type, length) {
-	var buf = new Buffer(length);
-	serializer.write(buf, 0, buf.length);
-
-	var tlv = {
-		type: type,
-		length: length,
-		value: buf.toJSON().data
-	};
-	return tlv;
-}
+var encoder = require('../capwap/encoder');
+var serializer = require('packet').createSerializer();
+var builder = require('../capwap/builder');
 
 var buildAcDescriptor = function() {
 	var hVersion = '1.0.0';
@@ -39,7 +28,7 @@ var buildAcDescriptor = function() {
 	});
 
 	var len = 28 + hVersion.length + sVersion.length;
-	return buildTlv(serializer, 1, len);
+	return builder.buildTlv(serializer, 1, len);
 }
 
 var buildAcName = function() {
@@ -50,7 +39,7 @@ var buildAcName = function() {
 	});
 
 	var len = name.length;
-	return buildTlv(serializer, 4, len);
+	return builder.buildTlv(serializer, 4, len);
 }
 
 var buildVspWtpAllow = function(sn) {
@@ -65,7 +54,7 @@ var buildVspWtpAllow = function(sn) {
 	});
 
 	var len = 7 + sn.length;
-	return buildTlv(serializer, 37, len);
+	return builder.buildTlv(serializer, 37, len);
 }
 
 exports.discoverRequestProcess = function(request) {

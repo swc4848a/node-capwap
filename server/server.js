@@ -1,20 +1,20 @@
 var dgram = require('dgram');
-var capwap = dgram.createSocket('udp4');
-var decoder = require('./decoder');
+var server = dgram.createSocket('udp4');
+var decoder = require('../capwap/decoder');
 var control = require('./control');
 
-capwap.on('listening', function() {
-	var address = capwap.address();
+server.on('listening', function() {
+	var address = server.address();
 	console.log('UDP Server listening on ' + address.address + ":" + address.port);
 });
 
-capwap.on('message', function(message, remote) {
+server.on('message', function(message, remote) {
 	decoder.parse(message, function(request) {
 		var type = request.controlHeader.messageType;
 		if (1 == type) {
 			console.log('receive Discover Request');
 			var response = control.discoverRequestProcess(request);
-			capwap.send(response, 0, response.length, 5246, '172.16.94.161' /* error callback */ );
+			server.send(response, 0, response.length, 10002, 'localhost' /* error callback */ );
 			console.log('send Discover Response');
 		} else {
 			console.log('unknow message [%d]', type);
@@ -22,9 +22,13 @@ capwap.on('message', function(message, remote) {
 	});
 });
 
-capwap.on("error", function(err) {
+server.on("error", function(err) {
 	console.log("Server Error:\n" + err.stack);
-	capwap.close();
+	server.close();
 });
 
-module.exports = capwap;
+server.on("close", function(err) {
+	console.log("Server close:\n");
+});
+
+module.exports = server;
