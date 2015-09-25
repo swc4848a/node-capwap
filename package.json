@@ -1,0 +1,22 @@
+{
+  "name": "node-capwap",
+  "version": "1.0.0",
+  "description": "node-capwap ========= ### CAPWAP implementation in JavaScript (Work in progress)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://zqqiang@github.com/zqqiang/node-capwap.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zqqiang/node-capwap/issues"
+  },
+  "homepage": "https://github.com/zqqiang/node-capwap#readme",
+  "dependencies": {
+    "packet": "0.0.6"
+  }
+}
