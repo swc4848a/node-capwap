@@ -22,4 +22,9 @@ capwap.on('message', function(message, remote) {
 	});
 });
 
+capwap.on("error", function(err) {
+	console.log("Server Error:\n" + err.stack);
+	capwap.close();
+});
+
 module.exports = capwap;
