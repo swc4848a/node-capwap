@@ -1,7 +1,7 @@
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
-var control = require('./control');
+var session = require('./session');
 
 server.on('listening', function() {
 	var address = server.address();
@@ -13,7 +13,7 @@ server.on('message', function(message, remote) {
 		var type = request.controlHeader.messageType;
 		if (1 == type) {
 			console.log('receive Discover Request');
-			var response = control.discoverRequestProcess(request);
+			var response = session.discoverRequestProcess(request);
 			server.send(response, 0, response.length, 10002, 'localhost' /* error callback */ );
 			console.log('send Discover Response');
 		} else {
