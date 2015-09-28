@@ -10,9 +10,25 @@ var buildDiscoverType = function() {
 	return builder.buildTlv(serializer, 20, 1);
 }
 
+var buildWtpBoardData = function() {
+	var wtpSN = 'FP320C3X14012026';
+	serializer.serialize('b32 => vendor, \
+		  				  b16 => wtpBoardDataSNType, b16 => wtpBoardDataSNLen, b8[' + wtpSN.length + ']z|str("ascii") => wtpBoardDataSNValue', {
+		vendor: 12356,
+		wtpBoardDataSNType: 1,
+		wtpBoardDataSNLen: wtpSN.length,
+		wtpBoardDataSNValue: wtpSN
+	});
+	var len = 4 + 4 + wtpSN.length;
+	return builder.buildTlv(serializer, 38, len);
+}
+
 exports.create = function(client) {
 	var discoverType = buildDiscoverType();
-	var elementLength = 4 * 1 + discoverType.length;
+	var wtpBoardData = buildWtpBoardData();
+
+	var elementLength = 4 * 2 + discoverType.length + wtpBoardData.length;
+
 	var discoverRequest = encoder.encode({
 		preamble: {
 			version: 0,
@@ -34,7 +50,8 @@ exports.create = function(client) {
 			flags: 0
 		},
 		tlv: [
-			discoverType
+			discoverType,
+			wtpBoardData
 		],
 	});
 	client.send(discoverRequest, 0, discoverRequest.length, 5246, 'localhost' /* error callback */ );

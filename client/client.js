@@ -9,7 +9,7 @@ client.on('listening', function() {
 });
 
 client.on('message', function(message, remote) {
-	console.log("client receive:\n" + message);
+	console.log("client receive:\n" + message.toString());
 });
 
 client.on("error", function(err) {
