@@ -2,6 +2,7 @@ var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
 var session = require('./session');
 var decoder = require('../capwap/decoder');
+var util = require('util');
 
 client.on('listening', function() {
 	var address = client.address();
@@ -14,7 +15,8 @@ client.on('message', function(message, remote) {
 	decoder.parse(message, function(response) {
 		var type = response.controlHeader.messageType;
 		if (2 == type) {
-			console.log('receive Discover Response');
+			console.log('Receive Discover Response');
+			// console.log(util.inspect(response, false, null));
 		} else {
 			console.log('unknow message [%d]', type);
 		}

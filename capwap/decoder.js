@@ -64,10 +64,22 @@ var getWtpBoardData = function(tlv, start) {
 }
 
 var getAcDescriptor = function(tlv, success) {
-	parser.extract('b16 => stations, b16 => limitStations, b16 => activeWtps, ', function(tlvObj) {
+	parser.extract('b16 => stations, b16 => limitStations, b16 => activeWtps, b16 => maxWtps, b8 => securityFlags, \
+		            b8 => rmacField, x8, b8 => dtlsPolicyFlags, \
+		            b32 => acInformationHardwareVendor, b16 => acInformationHardwareType, b16 => acInformationHardwareLength, \
+		            b40 => acInformationHardwareValue, b8[5]z|str("ascii") => acHardwareVersion, \
+		            b32 => acInformationSoftwareVendor, b16 => acInformationSoftwareType, b16 => acInformationSoftwareLength, \
+		            b40 => acInformationSoftwareValue, b8[5]z|str("ascii") => acSoftwareVersion', function(tlvObj) {
 		success(tlvObj);
 	});
 	parser.parse(tlv);
+}
+
+var getAcName = function(tlv, success) {
+	parser.extract('b8[' + tlv.length + ']z|str("ascii") => acName', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
 }
 
 var parseTlvValueObject = function(tlv, success) {
@@ -77,6 +89,12 @@ var parseTlvValueObject = function(tlv, success) {
 	if (tlv.type === 1) {
 		// 'AC Descriptor （1）'
 		getAcDescriptor(tlv.value, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
+	} else if (tlv.type === 4) {
+		// 'AC Name (4)'
+		getAcName(tlv, function(tlvObj) {
 			obj.value = tlvObj;
 			success(obj);
 		});
