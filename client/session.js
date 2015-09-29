@@ -1,13 +1,13 @@
 var serializer = require('packet').createSerializer();
 var builder = require('../capwap/builder');
 var encoder = require('../capwap/encoder');
+var enumType = require('../capwap/enum');
 
-var buildDiscoverType = function() {
-	serializer.serialize('b8 => discoverType', {
-		discoverType: 1
+var buildDiscoveryType = function() {
+	serializer.serialize('b8 => discoveryType', {
+		discoveryType: enumType.discoveryType.STATIC_CONFIGURATION
 	});
-
-	return builder.buildTlv(serializer, 20, 1);
+	return builder.buildTlv(serializer, enumType.tlvType.DISCOVERY_TYPE, 1);
 }
 
 var buildWtpBoardData = function() {
@@ -24,10 +24,10 @@ var buildWtpBoardData = function() {
 }
 
 exports.create = function(client) {
-	var discoverType = buildDiscoverType();
+	var discoveryType = buildDiscoveryType();
 	var wtpBoardData = buildWtpBoardData();
 
-	var elementLength = 4 * 2 + discoverType.length + wtpBoardData.length;
+	var elementLength = 4 * 2 + discoveryType.length + wtpBoardData.length;
 
 	var discoverRequest = encoder.encode({
 		preamble: {
@@ -50,7 +50,7 @@ exports.create = function(client) {
 			flags: 0
 		},
 		tlv: [
-			discoverType,
+			discoveryType,
 			wtpBoardData
 		],
 	});
