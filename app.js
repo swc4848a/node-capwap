@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
+var enumType = require('./capwap/enum');
+
 var server = require('./server/server');
-server.bind(5246);
+server.bind(enumType.socket.SERVER_PORT);
 
 var client = require('./client/client');
-client.bind(10002);
+client.bind(enumType.socket.CLIENT_PORT);

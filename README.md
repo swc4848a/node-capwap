@@ -23,7 +23,7 @@ node app.js
 
 ### Todo List
 
- * 
+ * add event bind state machine
 
 
 ### Change Log
@@ -32,6 +32,7 @@ Changes for each release.
 
 #### Version 0.0.1
 
-Sun Sep  1 00:00:00 UTC 2015
+Thu Oct 1 09:00:00 UTC 2015
 
- * Todo.
+ * CAPWAP control channel protocol realization
+ * State machine timeout retransmit schedule

@@ -4,10 +4,15 @@ var session = require('./session');
 var decoder = require('../capwap/decoder');
 var util = require('util');
 
+var context = {
+	discoveryCount: 0,
+	discoveryTimer: 0
+};
+
 client.on('listening', function() {
 	var address = client.address();
 	console.log('UDP client listening on ' + address.address + ":" + address.port);
-	session.create(client);
+	session.create(client, context);
 });
 
 client.on('message', function(message, remote) {
@@ -16,6 +21,7 @@ client.on('message', function(message, remote) {
 		var type = response.controlHeader.messageType;
 		if (2 == type) {
 			console.log('Receive Discover Response');
+			clearTimeout(context.discoveryTimer);
 			// console.log(util.inspect(response, false, null));
 		} else {
 			console.log('unknow message [%d]', type);

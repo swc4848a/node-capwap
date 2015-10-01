@@ -23,7 +23,16 @@ var buildWtpBoardData = function() {
 	return builder.buildTlv(serializer, 38, len);
 }
 
-exports.create = function(client) {
+var scheduleWaitDiscoveryResponse = function(context) {
+	context.discoveryTimer = setTimeout(function() {
+		console.log('wait discovery response timeout: %d times', context.discoveryCount);
+		// todo:
+		context.discoveryCount++;
+		if (context.discoveryCount <= enumType.timer.MAX_RETRY) scheduleWaitDiscoveryResponse(context);
+	}, 1000);
+};
+
+exports.create = function(client, context) {
 	var discoveryType = buildDiscoveryType();
 	var wtpBoardData = buildWtpBoardData();
 
@@ -54,6 +63,8 @@ exports.create = function(client) {
 			wtpBoardData
 		],
 	});
-	client.send(discoverRequest, 0, discoverRequest.length, 5246, 'localhost' /* error callback */ );
+	client.send(discoverRequest, 0, discoverRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP /* error callback */ );
+	context.discoveryCount++;
+	scheduleWaitDiscoveryResponse(context);
 	console.log('send Discover Request');
 }
