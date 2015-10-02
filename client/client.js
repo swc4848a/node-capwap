@@ -1,8 +1,8 @@
 var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
-var session = require('./session');
 var decoder = require('../capwap/decoder');
 var util = require('util');
+var state = require('./state');
 
 var context = {
 	discoveryCount: 0,
@@ -12,7 +12,7 @@ var context = {
 client.on('listening', function() {
 	var address = client.address();
 	console.log('UDP client listening on ' + address.address + ":" + address.port);
-	session.create(client, context);
+	state.INIT_COMPLETE(client, context);
 });
 
 client.on('message', function(message, remote) {
@@ -21,8 +21,7 @@ client.on('message', function(message, remote) {
 		var type = response.controlHeader.messageType;
 		if (2 == type) {
 			console.log('Receive Discover Response');
-			clearTimeout(context.discoveryTimer);
-			// console.log(util.inspect(response, false, null));
+			state.DISCOVERY_RESP_RECV(context);
 		} else {
 			console.log('unknow message [%d]', type);
 		}

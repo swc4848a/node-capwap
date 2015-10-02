@@ -23,7 +23,7 @@ node app.js
 
 ### Todo List
 
- * add event bind state machine
+ * use fschaefer/Stately.js as DSL state machine
 
 
 ### Change Log
@@ -35,4 +35,3 @@ Changes for each release.
 Thu Oct 1 09:00:00 UTC 2015
 
  * CAPWAP control channel protocol realization
- * State machine timeout retransmit schedule

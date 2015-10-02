@@ -11,7 +11,8 @@ exports.timer = {
 };
 
 exports.socket = {
-	SERVER_PORT: 5246,
+	SERVER_PORT: 15246,
 	SERVER_IP: 'localhost',
-	CLIENT_PORT: 10002
+	CLIENT_PORT: 10002,
+	CLIENT_IP: 'localhost',
 };
