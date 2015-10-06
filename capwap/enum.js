@@ -1,5 +1,6 @@
 exports.tlvType = {
-	DISCOVERY_TYPE: 20
+	DISCOVERY_TYPE: 20,
+	LOCATION_DATA: 28,
 };
 
 exports.discoveryType = {
