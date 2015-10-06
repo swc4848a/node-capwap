@@ -19,6 +19,7 @@
   "dependencies": {
     "packet": "0.0.6",
     "stately.js": "fschaefer/Stately.js",
+    "tap": "isaacs/node-tap",
     "underscore": "^1.8.3"
   }
 }
