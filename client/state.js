@@ -9,16 +9,14 @@ var state = Stately.machine({
 		}
 	},
 	'DISCOVERY': {
-		'DISCOVERY_RESP_RECV': function(context) {
+		'DISCOVERY_RESP_RECV': function(client, context) {
 			clearTimeout(context.discoveryTimer);
-			// console.log(util.inspect(response, false, null));
-			return this.END;
+			session.startJoin(client, context);
+			return this.JOIN;
 		}
 	},
-	'END': {
-		'*': function() {
-			console.log('do nothing');
-		}
+	'JOIN': {
+
 	}
 });
 

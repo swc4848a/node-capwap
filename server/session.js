@@ -57,7 +57,7 @@ var buildVspWtpAllow = function(sn) {
 	return builder.buildTlv(serializer, 37, len);
 }
 
-exports.discoverRequestProcess = function(request) {
+exports.discoveryRequestProcess = function(request) {
 	var acDescriptor = buildAcDescriptor();
 	var acName = buildAcName();
 	var vspWtpAllow = buildVspWtpAllow(request.messageElement.wtpBoardData.wtpSerialNumber.value);

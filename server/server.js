@@ -14,7 +14,7 @@ server.on('message', function(message, remote) {
 		var type = request.controlHeader.messageType;
 		if (1 == type) {
 			console.log('receive Discover Request');
-			var response = session.discoverRequestProcess(request);
+			var response = session.discoveryRequestProcess(request);
 			server.send(response, 0, response.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
 			console.log('send Discover Response');
 		} else {

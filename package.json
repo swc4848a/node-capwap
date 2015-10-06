@@ -18,6 +18,7 @@
   "homepage": "https://github.com/zqqiang/node-capwap#readme",
   "dependencies": {
     "packet": "0.0.6",
-    "stately.js": "fschaefer/Stately.js"
+    "stately.js": "fschaefer/Stately.js",
+    "underscore": "^1.8.3"
   }
 }
