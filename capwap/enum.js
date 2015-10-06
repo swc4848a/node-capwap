@@ -17,3 +17,9 @@ exports.socket = {
 	CLIENT_PORT: 10002,
 	CLIENT_IP: 'localhost',
 };
+
+exports.messageType = {
+	DISCOVER_REQUEST: 1,
+	DISCOVER_RESPONSE: 2,
+	JOIN_REQUEST: 3,
+};

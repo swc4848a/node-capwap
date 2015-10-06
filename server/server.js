@@ -12,11 +12,13 @@ server.on('listening', function() {
 server.on('message', function(message, remote) {
 	decoder.parse(message, function(request) {
 		var type = request.controlHeader.messageType;
-		if (1 == type) {
+		if (enumType.messageType.DISCOVER_REQUEST == type) {
 			console.log('receive Discover Request');
 			var response = session.discoveryRequestProcess(request);
 			server.send(response, 0, response.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
 			console.log('send Discover Response');
+		} else if (enumType.messageType.JOIN_REQUEST === type) {
+			console.log('receive Join Request\n');
 		} else {
 			console.log('unknow message [%d]', type);
 		}

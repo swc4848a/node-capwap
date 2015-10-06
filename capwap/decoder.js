@@ -1,4 +1,6 @@
 var parser = require('packet').createParser();
+var enumType = require('./enum');
+
 var object = {};
 var callback;
 
@@ -82,6 +84,13 @@ var getAcName = function(tlv, success) {
 	parser.parse(tlv.value);
 }
 
+var getLocationData = function(tlv, success) {
+	parser.extract('b8[3]z|str("ascii") => locationData', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -104,6 +113,12 @@ var parseTlvValueObject = function(tlv, success) {
 			obj.value = 'Discover Type: Static Configuration (1)';
 		}
 		success(obj);
+	} else if (tlv.type === enumType.tlvType.LOCATION_DATA) {
+		// 'Location Data (28)';
+		getLocationData(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
 	} else if (tlv.type === 37) {
 		// 'Vendor Specific Payload (37)';
 		obj.value = {};
@@ -142,8 +157,10 @@ var parseTlvValue = function(tlv, length) {
 				object.messageElement.acDescriptor = tlvObj;
 			} else if (tlvObj.type === 4) {
 				object.messageElement.acName = tlvObj;
-			} else if (tlvObj.type === 20) {
+			} else if (tlvObj.type === enumType.tlvType.DISCOVERY_TYPE) {
 				object.messageElement.discoverType = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.LOCATION_DATA) {
+				object.messageElement.locationData = tlvObj;
 			} else if (tlvObj.type === 37) {
 				if (tlvObj.value.venderElementId === 34) {
 					object.messageElement.vspMgmtWtpAllow = tlvObj;
