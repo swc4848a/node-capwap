@@ -3,10 +3,12 @@ var server = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
 var session = require('./session');
 var enumType = require('../capwap/enum');
+var state = require('./state');
 
 server.on('listening', function() {
 	var address = server.address();
 	console.log('UDP Server listening on ' + address.address + ":" + address.port);
+	state.INIT_COMPLETE();
 });
 
 server.on('message', function(message, remote) {
@@ -17,8 +19,10 @@ server.on('message', function(message, remote) {
 			var response = session.discoveryRequestProcess(request);
 			server.send(response, 0, response.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
 			console.log('send Discover Response');
+			state.LOCAL_WTP_CONN();
 		} else if (enumType.messageType.JOIN_REQUEST === type) {
-			console.log('receive Join Request\n');
+			console.log('receive Join Request');
+			state.JOIN_REQ_RECV(request);
 		} else {
 			console.log('unknow message [%d]', type);
 		}

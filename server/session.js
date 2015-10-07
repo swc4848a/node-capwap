@@ -1,7 +1,8 @@
 var encoder = require('../capwap/encoder');
 var serializer = require('packet').createSerializer();
 var builder = require('../capwap/builder');
-var util = require('../capwap/util');
+var tool = require('../capwap/tool');
+var util = require('util');
 
 exports.discoveryRequestProcess = function(request) {
 	var tlv = [
@@ -9,7 +10,7 @@ exports.discoveryRequestProcess = function(request) {
 		builder.buildAcName(),
 		builder.buildVspWtpAllow(request.messageElement.wtpBoardData.wtpSerialNumber.value),
 	];
-	var elementLength = util.calMessageElementLength(tlv);
+	var elementLength = tool.calMessageElementLength(tlv);
 	var res = encoder.encode({
 		preamble: {
 			version: 0,
@@ -34,3 +35,10 @@ exports.discoveryRequestProcess = function(request) {
 	});
 	return res;
 }
+
+exports.joinRequestProcess = function(request) {
+	console.log(util.inspect(request, {
+		showHidden: true,
+		depth: null
+	}));
+};

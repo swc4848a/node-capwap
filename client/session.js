@@ -2,7 +2,7 @@ var serializer = require('packet').createSerializer();
 var builder = require('../capwap/builder');
 var encoder = require('../capwap/encoder');
 var enumType = require('../capwap/enum');
-var util = require('../capwap/util');
+var tool = require('../capwap/tool');
 
 var scheduleWaitDiscoveryResponse = function(context) {
 	context.discoveryTimer = setTimeout(function() {
@@ -18,7 +18,7 @@ exports.create = function(client, context) {
 		builder.buildDiscoveryType(),
 		builder.buildWtpBoardData(),
 	];
-	var elementLength = util.calMessageElementLength(tlv);
+	var elementLength = tool.calMessageElementLength(tlv);
 	var discoverRequest = encoder.encode({
 		preamble: {
 			version: 0,
@@ -51,7 +51,7 @@ exports.startJoin = function(client, context) {
 	var tlv = [
 		builder.buildLocationData(),
 	]
-	var elementLength = util.calMessageElementLength(tlv);
+	var elementLength = tool.calMessageElementLength(tlv);
 	var joinRequest = encoder.encode({
 		preamble: {
 			version: 0,

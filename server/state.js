@@ -3,20 +3,19 @@ var session = require('./session');
 
 var state = Stately.machine({
 	'START': {
-		'INIT_COMPLETE': function(client, context) {
-			session.create(client, context);
-			return this.DISCOVERY;
+		'INIT_COMPLETE': function() {
+			return this.IDLE;
 		}
 	},
-	'DISCOVERY': {
-		'DISCOVERY_RESP_RECV': function(client, context) {
-			clearTimeout(context.discoveryTimer);
-			session.startJoin(client, context);
+	'IDLE': {
+		'LOCAL_WTP_CONN': function() {
 			return this.JOIN;
 		}
 	},
 	'JOIN': {
-
+		'JOIN_REQ_RECV': function(request) {
+			session.joinRequestProcess(request);
+		}
 	}
 });
 
@@ -24,7 +23,7 @@ state.bind(function(event, oldState, newState) {
 	var transition = event + ': ' + oldState + ' => ' + newState;
 	switch (transition) {
 		default: {
-			console.log('Client: ' + transition);
+			console.log('Server: ' + transition);
 		}
 		break;
 	}

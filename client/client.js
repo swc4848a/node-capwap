@@ -1,7 +1,6 @@
 var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
-var util = require('util');
 var state = require('./state');
 var context = require('./context');
 
