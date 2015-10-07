@@ -13,8 +13,8 @@ var state = Stately.machine({
 		}
 	},
 	'JOIN': {
-		'JOIN_REQ_RECV': function(request) {
-			session.joinRequestProcess(request);
+		'JOIN_REQ_RECV': function(server, request) {
+			session.joinRequestProcess(server, request);
 		}
 	}
 });

@@ -94,3 +94,10 @@ exports.buildVspWtpAllow = function(sn) {
 	var len = 7 + sn.length;
 	return this.buildTlv(serializer, 37, len);
 };
+
+exports.buildResultCode = function(result) {
+	serializer.serialize('b32 => resultCode', {
+		resultCode: result
+	});
+	return this.buildTlv(serializer, enumType.tlvType.RESULT_CODE, 4);
+};

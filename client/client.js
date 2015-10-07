@@ -3,6 +3,7 @@ var client = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
 var state = require('./state');
 var context = require('./context');
+var enumType = require('../capwap/enum');
 
 client.on('listening', function() {
 	var address = client.address();
@@ -16,14 +17,17 @@ client.on('message', function(message, remote) {
 		if (2 == type) {
 			console.log('Receive Discover Response');
 			state.DISCOVERY_RESP_RECV(client, context);
+		} else if (enumType.messageType.JOIN_RESPONSE == type) {
+			console.log('Receive Join Response');
+			state.JOIN_RESP_RC_SUCC_IMAGE_SAME();
 		} else {
-			console.log('unknow message [%d]', type);
+			console.trace('unknow message [%d]', type);
 		}
 	});
 });
 
 client.on("error", function(err) {
-	console.log("client Error:\n" + err.stack);
+	console.trace("client Error:\n" + err.stack);
 	client.close();
 });
 

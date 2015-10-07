@@ -1,6 +1,7 @@
 exports.tlvType = {
 	DISCOVERY_TYPE: 20,
 	LOCATION_DATA: 28,
+	RESULT_CODE: 33,
 };
 
 exports.discoveryType = {
@@ -22,4 +23,5 @@ exports.messageType = {
 	DISCOVER_REQUEST: 1,
 	DISCOVER_RESPONSE: 2,
 	JOIN_REQUEST: 3,
+	JOIN_RESPONSE: 4,
 };

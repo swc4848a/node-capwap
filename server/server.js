@@ -22,15 +22,15 @@ server.on('message', function(message, remote) {
 			state.LOCAL_WTP_CONN();
 		} else if (enumType.messageType.JOIN_REQUEST === type) {
 			console.log('receive Join Request');
-			state.JOIN_REQ_RECV(request);
+			state.JOIN_REQ_RECV(server, request);
 		} else {
-			console.log('unknow message [%d]', type);
+			console.trace('unknow message [%d]', type);
 		}
 	});
 });
 
 server.on("error", function(err) {
-	console.log("Server Error:\n" + err.stack);
+	console.trace("Server Error:\n" + err.stack);
 	server.close();
 });
 

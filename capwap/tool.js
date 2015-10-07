@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var util = require('util');
 
 exports.calMessageElementLength = function(element) {
 	var len = 0
@@ -6,4 +7,11 @@ exports.calMessageElementLength = function(element) {
 		len += element[i].length;
 	}
 	return 4 * i + len;
+};
+
+exports.inspectObject = function(obj) {
+	console.log(util.inspect(obj, {
+		showHidden: true,
+		depth: null
+	}));
 };

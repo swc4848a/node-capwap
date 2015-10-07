@@ -16,6 +16,11 @@ var state = Stately.machine({
 		}
 	},
 	'JOIN': {
+		'JOIN_RESP_RC_SUCC_IMAGE_SAME': function() {
+			return this.CONFIG;
+		}
+	},
+	'CONFIG': {
 
 	}
 });
