@@ -23,10 +23,17 @@ var state = Stately.machine({
 	},
 	'CONFIG': {
 		'CONFIG_STATUS_RESP_SUCC': function(client, context) {
+			session.startChange(client, context);
 			return this.DATA_CHECK;
 		}
 	},
 	'DATA_CHECK': {
+		'CHANGE_STATE_EVENT_RC_SUCC': function(client, context) {
+			session.startKeepAlive(client, context);
+			return this.RUN;
+		}
+	},
+	'RUN': {
 
 	}
 });

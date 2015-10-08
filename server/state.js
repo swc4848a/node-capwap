@@ -21,6 +21,12 @@ var state = Stately.machine({
 	'CONFIG': {
 		'CFG_STATUS_REQ': function(server, request) {
 			session.configurationStatusRequestProcess(server, request);
+			return this.DATA_CHAN_SETUP;
+		}
+	},
+	'DATA_CHAN_SETUP': {
+		'CHG_STATE_EVENT_REQ_RECV': function(server, request) {
+			session.changeStateRequestProcess(server, request);
 		}
 	}
 });

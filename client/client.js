@@ -23,6 +23,9 @@ client.on('message', function(message, remote) {
 		} else if (enumType.messageType.CONFIGURATION_STATUS_RESPONSE === type) {
 			console.log('Client: Receive Configuration Status Response');
 			state.CONFIG_STATUS_RESP_SUCC(client, context);
+		} else if (enumType.messageType.CHANGE_STATE_RESPONSE === type) {
+			console.log('Client: Receive Change State Response');
+			state.CHANGE_STATE_EVENT_RC_SUCC(client, context);
 		} else {
 			console.trace('unknow message [%d]', type);
 		}

@@ -26,6 +26,9 @@ server.on('message', function(message, remote) {
 		} else if (enumType.messageType.CONFIGURATION_STATUS_REQUEST === type) {
 			console.log('Server: Receive Configuration Status Request');
 			state.CFG_STATUS_REQ(server, request);
+		} else if (enumType.messageType.CHANGE_STATE_REQUEST === type) {
+			console.log('Server: Receive Change State Request');
+			state.CHG_STATE_EVENT_REQ_RECV(server, request);
 		} else {
 			console.trace('unknow message [%d]', type);
 		}

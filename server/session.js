@@ -42,7 +42,7 @@ exports.joinRequestProcess = function(server, request) {
 		tlv: tlv
 	});
 	server.send(joinResponse, 0, joinResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
-	console.log('send Join Response');
+	console.log('Server: Send Join Response');
 };
 
 exports.configurationStatusRequestProcess = function(server, request) {
@@ -62,5 +62,25 @@ exports.configurationStatusRequestProcess = function(server, request) {
 		tlv: tlv
 	});
 	server.send(configurationStatusResponse, 0, configurationStatusResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
-	console.log('send Configuration Status Response');
+	console.log('Server: Send Configuration Status Response');
+};
+
+exports.changeStateRequestProcess = function(server, request) {
+	var tlv = [
+		builder.buildResultCode(0),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var changeStateResponse = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.CHANGE_STATE_RESPONSE,
+			sequneceNumber: request.controlHeader.sequneceNumber,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	server.send(changeStateResponse, 0, changeStateResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
+	console.log('Server: Send Change State Response');
 };

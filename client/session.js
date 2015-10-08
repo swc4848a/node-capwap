@@ -75,3 +75,27 @@ exports.startConfig = function(client, context) {
 	client.send(configurationStatusRequest, 0, configurationStatusRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
 	console.log('send Configuration Status Request');
 };
+
+exports.startChange = function(client, context) {
+	var tlv = [
+		builder.buildResultCode(0),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var changeStateRequest = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.CHANGE_STATE_REQUEST,
+			sequneceNumber: context.sequneceNumber++,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	client.send(changeStateRequest, 0, changeStateRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
+	console.log('send Change State Request');
+};
+
+exports.startKeepAlive = function(client, context) {
+
+};
