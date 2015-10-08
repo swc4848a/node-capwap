@@ -98,6 +98,13 @@ var getResultCode = function(tlv, success) {
 	parser.parse(tlv.value);
 };
 
+var getCapwapTimers = function(tlv, success) {
+	parser.extract('b8 => discovery, b8 => echoRequest', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -111,6 +118,12 @@ var parseTlvValueObject = function(tlv, success) {
 	} else if (tlv.type === 4) {
 		// 'AC Name (4)'
 		getAcName(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
+	} else if (tlv.type === enumType.tlvType.CAPWAP_TIMERS) {
+		// CAPWAP Timers Discovery (Sec): 3
+		getCapwapTimers(tlv, function(tlvObj) {
 			obj.value = tlvObj;
 			success(obj);
 		});
@@ -170,6 +183,8 @@ var parseTlvValue = function(tlv, length) {
 				object.messageElement.acDescriptor = tlvObj;
 			} else if (tlvObj.type === 4) {
 				object.messageElement.acName = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.CAPWAP_TIMERS) {
+				object.messageElement.capwapTimers = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.DISCOVERY_TYPE) {
 				object.messageElement.discoverType = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.LOCATION_DATA) {

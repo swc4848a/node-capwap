@@ -12,19 +12,8 @@ exports.discoveryRequestProcess = function(request) {
 	];
 	var elementLength = tool.calMessageElementLength(tlv);
 	var res = encoder.encode({
-		preamble: {
-			version: 0,
-			type: 0
-		},
-		header: {
-			headerLength: 2,
-			radioId: 1,
-			wirelessBindId: 1,
-			headerFlags: 0,
-			fragmentId: 0,
-			fragmentOffset: 0,
-			reserved: 0
-		},
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
 		controlHeader: {
 			messageType: 2,
 			sequneceNumber: request.controlHeader.sequneceNumber,
@@ -42,19 +31,8 @@ exports.joinRequestProcess = function(server, request) {
 	]
 	var elementLength = tool.calMessageElementLength(tlv);
 	var joinResponse = encoder.encode({
-		preamble: {
-			version: 0,
-			type: 0
-		},
-		header: {
-			headerLength: 2,
-			radioId: 1,
-			wirelessBindId: 1,
-			headerFlags: 0,
-			fragmentId: 0,
-			fragmentOffset: 0,
-			reserved: 0
-		},
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
 		controlHeader: {
 			messageType: enumType.messageType.JOIN_RESPONSE,
 			sequneceNumber: request.controlHeader.sequneceNumber,
@@ -65,4 +43,24 @@ exports.joinRequestProcess = function(server, request) {
 	});
 	server.send(joinResponse, 0, joinResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
 	console.log('send Join Response');
+};
+
+exports.configurationStatusRequestProcess = function(server, request) {
+	var tlv = [
+		builder.buildCapwapTimers(),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var configurationStatusResponse = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.CONFIGURATION_STATUS_RESPONSE,
+			sequneceNumber: request.controlHeader.sequneceNumber,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	server.send(configurationStatusResponse, 0, configurationStatusResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
+	console.log('send Configuration Status Response');
 };

@@ -16,11 +16,17 @@ var state = Stately.machine({
 		}
 	},
 	'JOIN': {
-		'JOIN_RESP_RC_SUCC_IMAGE_SAME': function() {
+		'JOIN_RESP_RC_SUCC_IMAGE_SAME': function(client, context) {
+			session.startConfig(client, context);
 			return this.CONFIG;
 		}
 	},
 	'CONFIG': {
+		'CONFIG_STATUS_RESP_SUCC': function(client, context) {
+			return this.DATA_CHECK;
+		}
+	},
+	'DATA_CHECK': {
 
 	}
 });

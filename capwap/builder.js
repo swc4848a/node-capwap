@@ -1,6 +1,25 @@
 var serializer = require("packet").createSerializer();
 var enumType = require('./enum');
 
+exports.getPreamble = function() {
+	return {
+		version: 0,
+		type: 0
+	};
+};
+
+exports.getHeader = function() {
+	return {
+		headerLength: 2,
+		radioId: 1,
+		wirelessBindId: 1,
+		headerFlags: 0,
+		fragmentId: 0,
+		fragmentOffset: 0,
+		reserved: 0
+	};
+};
+
 exports.buildTlv = function(serializer, type, length) {
 	var buf = new Buffer(length);
 	serializer.write(buf, 0, buf.length);
@@ -100,4 +119,12 @@ exports.buildResultCode = function(result) {
 		resultCode: result
 	});
 	return this.buildTlv(serializer, enumType.tlvType.RESULT_CODE, 4);
+};
+
+exports.buildCapwapTimers = function() {
+	serializer.serialize('b8 => discovery, b8 => echoRequest', {
+		discovery: 3,
+		echoRequest: 30,
+	});
+	return this.buildTlv(serializer, enumType.tlvType.CAPWAP_TIMERS, 4);
 };

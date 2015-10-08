@@ -20,21 +20,10 @@ exports.create = function(client, context) {
 	];
 	var elementLength = tool.calMessageElementLength(tlv);
 	var discoverRequest = encoder.encode({
-		preamble: {
-			version: 0,
-			type: 0
-		},
-		header: {
-			headerLength: 2,
-			radioId: 1,
-			wirelessBindId: 1,
-			headerFlags: 0,
-			fragmentId: 0,
-			fragmentOffset: 0,
-			reserved: 0
-		},
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
 		controlHeader: {
-			messageType: 1,
+			messageType: enumType.messageType.DISCOVERY_REQUEST,
 			sequneceNumber: context.sequneceNumber,
 			messageElementLength: elementLength,
 			flags: 0
@@ -53,21 +42,10 @@ exports.startJoin = function(client, context) {
 	]
 	var elementLength = tool.calMessageElementLength(tlv);
 	var joinRequest = encoder.encode({
-		preamble: {
-			version: 0,
-			type: 0
-		},
-		header: {
-			headerLength: 2,
-			radioId: 1,
-			wirelessBindId: 1,
-			headerFlags: 0,
-			fragmentId: 0,
-			fragmentOffset: 0,
-			reserved: 0
-		},
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
 		controlHeader: {
-			messageType: 3,
+			messageType: enumType.messageType.JOIN_REQUEST,
 			sequneceNumber: context.sequneceNumber++,
 			messageElementLength: elementLength,
 			flags: 0
@@ -77,3 +55,23 @@ exports.startJoin = function(client, context) {
 	client.send(joinRequest, 0, joinRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
 	console.log('send Join Request');
 }
+
+exports.startConfig = function(client, context) {
+	var tlv = [
+		builder.buildAcName(),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var configurationStatusRequest = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.CONFIGURATION_STATUS_REQUEST,
+			sequneceNumber: context.sequneceNumber++,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	client.send(configurationStatusRequest, 0, configurationStatusRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
+	console.log('send Configuration Status Request');
+};

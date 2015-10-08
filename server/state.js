@@ -15,6 +15,12 @@ var state = Stately.machine({
 	'JOIN': {
 		'JOIN_REQ_RECV': function(server, request) {
 			session.joinRequestProcess(server, request);
+			return this.CONFIG;
+		}
+	},
+	'CONFIG': {
+		'CFG_STATUS_REQ': function(server, request) {
+			session.configurationStatusRequestProcess(server, request);
 		}
 	}
 });

@@ -14,15 +14,18 @@ server.on('listening', function() {
 server.on('message', function(message, remote) {
 	decoder.parse(message, function(request) {
 		var type = request.controlHeader.messageType;
-		if (enumType.messageType.DISCOVER_REQUEST == type) {
-			console.log('receive Discover Request');
+		if (enumType.messageType.DISCOVERY_REQUEST == type) {
+			console.log('Server: Receive Discover Request');
 			var response = session.discoveryRequestProcess(request);
 			server.send(response, 0, response.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
-			console.log('send Discover Response');
+			console.log('Server: Send Discover Response');
 			state.LOCAL_WTP_CONN();
 		} else if (enumType.messageType.JOIN_REQUEST === type) {
-			console.log('receive Join Request');
+			console.log('Server: Receive Join Request');
 			state.JOIN_REQ_RECV(server, request);
+		} else if (enumType.messageType.CONFIGURATION_STATUS_REQUEST === type) {
+			console.log('Server: Receive Configuration Status Request');
+			state.CFG_STATUS_REQ(server, request);
 		} else {
 			console.trace('unknow message [%d]', type);
 		}
