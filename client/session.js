@@ -33,7 +33,7 @@ exports.create = function(client, context) {
 	client.send(discoverRequest, 0, discoverRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP /* error callback */ );
 	context.discoveryCount++;
 	scheduleWaitDiscoveryResponse(context);
-	console.log('send Discover Request');
+	console.log('Client: Send Discover Request');
 }
 
 exports.startJoin = function(client, context) {
@@ -53,7 +53,7 @@ exports.startJoin = function(client, context) {
 		tlv: tlv
 	});
 	client.send(joinRequest, 0, joinRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
-	console.log('send Join Request');
+	console.log('Client: Send Join Request');
 }
 
 exports.startConfig = function(client, context) {
@@ -73,7 +73,7 @@ exports.startConfig = function(client, context) {
 		tlv: tlv
 	});
 	client.send(configurationStatusRequest, 0, configurationStatusRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
-	console.log('send Configuration Status Request');
+	console.log('Client: Send Configuration Status Request');
 };
 
 exports.startChange = function(client, context) {
@@ -93,9 +93,22 @@ exports.startChange = function(client, context) {
 		tlv: tlv
 	});
 	client.send(changeStateRequest, 0, changeStateRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
-	console.log('send Change State Request');
+	console.log('Client: Send Change State Request');
 };
 
 exports.startKeepAlive = function(client, context) {
-
+	var tlv = [
+		builder.buildSessionId(),
+	];
+	var elementLength = tool.calMessageElementLength(tlv);
+	var keepAlive = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getKeepAliveHeader(),
+		keepAlive: {
+			messageElementLength: elementLength,
+			tlv: tlv
+		}
+	});
+	client.send(keepAlive, 0, keepAlive.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
+	console.log('Client: Send Keep Alive');
 };

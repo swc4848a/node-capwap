@@ -3,6 +3,7 @@ exports.tlvType = {
 	DISCOVERY_TYPE: 20,
 	LOCATION_DATA: 28,
 	RESULT_CODE: 33,
+	SESSION_ID: 35
 };
 
 exports.discoveryType = {

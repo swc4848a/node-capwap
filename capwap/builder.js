@@ -20,6 +20,18 @@ exports.getHeader = function() {
 	};
 };
 
+exports.getKeepAliveHeader = function() {
+	return {
+		headerLength: 2,
+		radioId: 0,
+		wirelessBindId: 0,
+		headerFlags: 0x000008,
+		fragmentId: 0,
+		fragmentOffset: 0,
+		reserved: 0
+	};
+};
+
 exports.buildTlv = function(serializer, type, length) {
 	var buf = new Buffer(length);
 	serializer.write(buf, 0, buf.length);
@@ -127,4 +139,11 @@ exports.buildCapwapTimers = function() {
 		echoRequest: 30,
 	});
 	return this.buildTlv(serializer, enumType.tlvType.CAPWAP_TIMERS, 4);
+};
+
+exports.buildSessionId = function() {
+	serializer.serialize('b128 => sessionId', {
+		sessionId: 0x66599b55205d4b50574ccab51c7fab19
+	});
+	return this.buildTlv(serializer, enumType.tlvType.SESSION_ID, 16);
 };
