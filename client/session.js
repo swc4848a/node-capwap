@@ -30,7 +30,7 @@ exports.create = function(client, context) {
 		},
 		tlv: tlv
 	});
-	client.send(discoverRequest, 0, discoverRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP /* error callback */ );
+	client.send(discoverRequest, 0, discoverRequest.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP /* error callback */ );
 	context.discoveryCount++;
 	scheduleWaitDiscoveryResponse(context);
 	console.log('Client: Send Discover Request');
@@ -52,7 +52,7 @@ exports.startJoin = function(client, context) {
 		},
 		tlv: tlv
 	});
-	client.send(joinRequest, 0, joinRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
+	client.send(joinRequest, 0, joinRequest.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
 	console.log('Client: Send Join Request');
 }
 
@@ -72,7 +72,7 @@ exports.startConfig = function(client, context) {
 		},
 		tlv: tlv
 	});
-	client.send(configurationStatusRequest, 0, configurationStatusRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
+	client.send(configurationStatusRequest, 0, configurationStatusRequest.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
 	console.log('Client: Send Configuration Status Request');
 };
 
@@ -92,7 +92,7 @@ exports.startChange = function(client, context) {
 		},
 		tlv: tlv
 	});
-	client.send(changeStateRequest, 0, changeStateRequest.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
+	client.send(changeStateRequest, 0, changeStateRequest.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
 	console.log('Client: Send Change State Request');
 };
 
@@ -109,6 +109,6 @@ exports.startKeepAlive = function(client, context) {
 			tlv: tlv
 		}
 	});
-	client.send(keepAlive, 0, keepAlive.length, enumType.socket.SERVER_PORT, enumType.socket.SERVER_IP);
+	client.send(keepAlive, 0, keepAlive.length, enumType.socket.SERVER_DATA_PORT, enumType.socket.SERVER_IP);
 	console.log('Client: Send Keep Alive');
 };

@@ -15,7 +15,8 @@ exports.timer = {
 };
 
 exports.socket = {
-	SERVER_PORT: 15246, // should be 5246 => debug use only
+	SERVER_CTRL_PORT: 15246, // should be 5246 => debug use only
+	SERVER_DATA_PORT: 15247, // should be 5247 => debug use only
 	SERVER_IP: 'localhost',
 	CLIENT_PORT: 10002,
 	CLIENT_IP: 'localhost',

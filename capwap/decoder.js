@@ -16,6 +16,13 @@ var parseMessageElement = function(message, elementLength) {
 	parser.parse(message);
 }
 
+var parseKeepAliveMessageElement = function(message, elementLength) {
+	parser.extract('x80, b8[' + elementLength + '] => messageElement', function(element) {
+		parseTlv(element.messageElement, elementLength);
+	});
+	parser.parse(message);
+};
+
 var parseTlv = function(tlv, elementLength) {
 	parser.extract('x16, b16 => length', function(tlvObj) {
 		parseTlvValue(tlv, tlvObj.length);
@@ -218,32 +225,49 @@ var parsePreamble = function(preamble) {
 	parser.parse(preamble);
 }
 
-var parseHeader = function(header) {
+var parseHeader = function(header, callback) {
 	parser.extract('b56{b5 => headerLength, b5 => radioId, b5 => wirelessBindId, b9 => headerFlags, b16 => fragmentId, b13 => fragmentOffset, b3 => reserved}', function(header) {
 		object.header = header;
+		callback(header);
 	});
 	parser.parse(header);
 }
 
-var parseControlHeader = function(message, controlHeader) {
-	parser.extract('b32 => messageType, \
+var parseControlHeader = function(message) {
+	parser.extract('x64, b32 => messageType, \
 					b8 => sequneceNumber, \
 					b16 => messageElementLength, \
 					b8 => flags', function(controlHeader) {
 		object.controlHeader = controlHeader;
 		parseMessageElement(message, controlHeader.messageElementLength);
 	});
-	parser.parse(controlHeader);
+	parser.parse(message);
 }
+
+var parseKeepAlive = function(message) {
+	parser.extract('x64, b16 => messageElementLength', function(keepAlive) {
+		object.keepAlive = keepAlive;
+		parseKeepAliveMessageElement(message, keepAlive.messageElementLength);
+	});
+	parser.parse(message);
+};
+
+var isControlPacket = function(header) {
+	return header.headerFlags === 0;
+};
 
 exports.parse = function(message, success) {
 	callback = success;
 	parser.extract('b8[1] => preamble, \
-		            b8[7] => header, \
-		            b8[8] => controlHeader', function(capwap) {
+		            b8[7] => header', function(capwap) {
 		parsePreamble(capwap.preamble);
-		parseHeader(capwap.header);
-		parseControlHeader(message, capwap.controlHeader);
+		parseHeader(capwap.header, function(header) {
+			if (isControlPacket(header)) {
+				parseControlHeader(message);
+			} else {
+				parseKeepAlive(message);
+			}
+		});
 	});
 	parser.parse(message);
 }
