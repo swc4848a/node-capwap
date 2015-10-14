@@ -1,5 +1,6 @@
 var parser = require('packet').createParser();
 var enumType = require('./enum');
+var tool = require('./tool');
 
 var object = {};
 var callback;
@@ -112,6 +113,13 @@ var getCapwapTimers = function(tlv, success) {
 	parser.parse(tlv.value);
 };
 
+var getSessionId = function(tlv, success) {
+	parser.extract('b128 => sessionId', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -149,6 +157,12 @@ var parseTlvValueObject = function(tlv, success) {
 	} else if (tlv.type === enumType.tlvType.RESULT_CODE) {
 		// 'Result Code (33)';
 		getResultCode(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
+	} else if (tlv.type === enumType.tlvType.SESSION_ID) {
+		// Type: (t=35,l=16) Session ID
+		getSessionId(tlv, function(tlvObj) {
 			obj.value = tlvObj;
 			success(obj);
 		});
@@ -210,6 +224,8 @@ var parseTlvValue = function(tlv, length) {
 				object.messageElement.wtpBoardData = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.RESULT_CODE) {
 				object.messageElement.resultCode = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.SESSION_ID) {
+				object.messageElement.sessionId = tlvObj;
 			} else {
 				console.trace('unknown tlv type [%d]', tlvObj.type);
 			}
