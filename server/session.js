@@ -1,3 +1,5 @@
+'use strict';
+
 var encoder = require('../capwap/encoder');
 var serializer = require('packet').createSerializer();
 var builder = require('../capwap/builder');

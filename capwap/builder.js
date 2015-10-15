@@ -1,3 +1,5 @@
+'use strict';
+
 var serializer = require("packet").createSerializer();
 var enumType = require('./enum');
 

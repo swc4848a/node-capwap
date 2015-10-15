@@ -1,3 +1,5 @@
+'use strict';
+
 exports.tlvType = {
 	CAPWAP_TIMERS: 12,
 	DISCOVERY_TYPE: 20,

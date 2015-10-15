@@ -1,3 +1,5 @@
+'use strict';
+
 var parser = require('packet').createParser();
 var enumType = require('./enum');
 var tool = require('./tool');

@@ -1,3 +1,5 @@
+'use strict';
+
 var Stately = require('stately.js');
 var session = require('./session');
 

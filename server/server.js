@@ -1,3 +1,5 @@
+'use strict';
+
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
