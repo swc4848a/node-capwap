@@ -57,7 +57,7 @@ var encodeKeepAlive = function(keepAlive) {
 exports.encode = function(message) {
 	messageStart = 0;
 	if (isKeepAlive(message)) {
-		buf = new Buffer(message.keepAlive.messageElementLength + 8);
+		buf = new Buffer(message.keepAlive.messageElementLength + 10);
 		encodePreamble(message.preamble);
 		encodeHeader(message.header);
 		encodeKeepAlive(message.keepAlive);

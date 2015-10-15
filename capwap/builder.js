@@ -142,8 +142,8 @@ exports.buildCapwapTimers = function() {
 };
 
 exports.buildSessionId = function() {
-	serializer.serialize('b128 => sessionId', {
-		sessionId: 0x66599b55205d4b50574ccab51c7fab19
+	serializer.serialize('b8[16] => sessionId', {
+		sessionId: [0x66,0x59,0x9b,0x55,0x20,0x5d,0x4b,0x50,0x57,0x4c,0xca,0xb5,0x1c,0x7f,0xab,0x19]
 	});
 	return this.buildTlv(serializer, enumType.tlvType.SESSION_ID, 16);
 };

@@ -114,7 +114,7 @@ var getCapwapTimers = function(tlv, success) {
 };
 
 var getSessionId = function(tlv, success) {
-	parser.extract('b128 => sessionId', function(tlvObj) {
+	parser.extract('b8[16] => sessionId', function(tlvObj) {
 		success(tlvObj);
 	});
 	parser.parse(tlv.value);
@@ -225,7 +225,7 @@ var parseTlvValue = function(tlv, length) {
 			} else if (tlvObj.type === enumType.tlvType.RESULT_CODE) {
 				object.messageElement.resultCode = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.SESSION_ID) {
-				object.messageElement.sessionId = tlvObj;
+				object.keepAlive.messageElement.sessionId = tlvObj;
 			} else {
 				console.trace('unknown tlv type [%d]', tlvObj.type);
 			}
@@ -263,6 +263,7 @@ var parseControlHeader = function(message) {
 var parseKeepAlive = function(message) {
 	parser.extract('x64, b16 => messageElementLength', function(keepAlive) {
 		object.keepAlive = keepAlive;
+		object.keepAlive.messageElement = {};
 		parseKeepAliveMessageElement(message, keepAlive.messageElementLength);
 	});
 	parser.parse(message);
@@ -274,6 +275,7 @@ var isControlPacket = function(header) {
 
 exports.parse = function(message, success) {
 	callback = success;
+	object = {};
 	parser.extract('b8[1] => preamble, \
 		            b8[7] => header', function(capwap) {
 		parsePreamble(capwap.preamble);
