@@ -21,6 +21,7 @@ exports.socket = {
 	SERVER_DATA_PORT: 15247, // should be 5247 => debug use only
 	SERVER_IP: 'localhost',
 	CLIENT_PORT: 10002,
+	CLIENT_DATA_PORT: 10003,
 	CLIENT_IP: 'localhost',
 };
 

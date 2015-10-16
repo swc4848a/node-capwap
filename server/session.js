@@ -5,6 +5,7 @@ var serializer = require('packet').createSerializer();
 var builder = require('../capwap/builder');
 var tool = require('../capwap/tool');
 var enumType = require('../capwap/enum');
+var state = require('./state');
 
 exports.discoveryRequestProcess = function(request) {
 	var tlv = [
@@ -85,4 +86,9 @@ exports.changeStateRequestProcess = function(server, request) {
 	});
 	server.send(changeStateResponse, 0, changeStateResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
 	console.log('Server: Send Change State Response');
+};
+
+exports.keepAliveProcess = function(server, request) {
+	state.DATA_CHAN_KEEP_ALIVE_RECV(server, request);
+	
 };

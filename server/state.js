@@ -17,18 +17,28 @@ var state = Stately.machine({
 	'JOIN': {
 		'JOIN_REQ_RECV': function(server, request) {
 			session.joinRequestProcess(server, request);
+			return this.JOIN;
+		},
+		'CFG_STATUS_REQ': function(server, request) {
+			session.configurationStatusRequestProcess(server, request);
 			return this.CONFIG;
 		}
 	},
 	'CONFIG': {
-		'CFG_STATUS_REQ': function(server, request) {
-			session.configurationStatusRequestProcess(server, request);
+		'CHG_STATE_EVENT_REQ_RECV': function(server, request) {
+			session.changeStateRequestProcess(server, request);
 			return this.DATA_CHAN_SETUP;
 		}
 	},
 	'DATA_CHAN_SETUP': {
-		'CHG_STATE_EVENT_REQ_RECV': function(server, request) {
-			session.changeStateRequestProcess(server, request);
+		'DATA_CHAN_CONNECTED': function(server, request) {
+			session.keepAliveProcess(server, request);
+			return this.DATA_CHECK;
+		}
+	},
+	'DATA_CHECK': {
+		'DATA_CHAN_KEEP_ALIVE_RECV': function(server, request) {
+			return this.DATA_CHECK;
 		}
 	}
 });
