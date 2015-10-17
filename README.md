@@ -23,7 +23,8 @@ node app.js
 
 ### Todo List
 
- * use fschaefer/Stately.js as DSL state machine
+ * use [fschaefer/Stately.js](https://github.com/fschaefer/Stately.js) as DSL state machine；(:heavy_check_mark:)
+ * replace console.log with [visionmedia/debug](https://github.com/visionmedia/debug);
 
 
 ### Change Log
