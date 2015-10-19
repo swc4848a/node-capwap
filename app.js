@@ -1,5 +1,8 @@
 #!/usr/bin/env node
+
 'use strict';
+
+process.env['DEBUG'] = '*';
 
 var enumType = require('./capwap/enum');
 

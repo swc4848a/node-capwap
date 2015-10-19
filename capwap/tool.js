@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('underscore');
+var debug = require('debug')('node-capwap::capwap::tool');
 var util = require('util');
 
 exports.calMessageElementLength = function(element) {
@@ -12,7 +13,7 @@ exports.calMessageElementLength = function(element) {
 };
 
 exports.inspectObject = function(obj) {
-	console.log(util.inspect(obj, {
+	debug(util.inspect(obj, {
 		showHidden: true,
 		depth: null
 	}));

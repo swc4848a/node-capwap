@@ -5,10 +5,11 @@ var data = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
 var tool = require('../capwap/tool');
 var state = require('./state');
+var debug = require('debug')('node-capwap::server::data');
 
 data.on('listening', function() {
 	var address = data.address();
-	console.log('UDP Server Data listening on ' + address.address + ":" + address.port);
+	debug('UDP Server Data listening on ' + address.address + ":" + address.port);
 });
 
 data.on('message', function(message, remote) {
@@ -16,7 +17,7 @@ data.on('message', function(message, remote) {
 		tool.inspectObject(request);
 		var headerFlags = request.header.headerFlags;
 		if (headerFlags && 0x08) {
-			console.log('Server Data: Receive Keep Alive');
+			debug('Receive Keep Alive');
 			state.DATA_CHAN_CONNECTED(data, request);
 		}
 	});
@@ -28,7 +29,7 @@ data.on("error", function(err) {
 });
 
 data.on("close", function(err) {
-	console.log("Server Data close:\n");
+	debug("Server Data close");
 });
 
 module.exports = data;

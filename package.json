@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/zqqiang/node-capwap#readme",
   "dependencies": {
+    "debug": "^2.2.0",
     "packet": "0.0.6",
     "stately.js": "fschaefer/Stately.js",
     "tap": "isaacs/node-tap",

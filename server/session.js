@@ -6,6 +6,7 @@ var builder = require('../capwap/builder');
 var tool = require('../capwap/tool');
 var enumType = require('../capwap/enum');
 var state = require('./state');
+var debug = require('debug')('node-capwap::server::session');
 
 exports.discoveryRequestProcess = function(request) {
 	var tlv = [
@@ -45,7 +46,7 @@ exports.joinRequestProcess = function(server, request) {
 		tlv: tlv
 	});
 	server.send(joinResponse, 0, joinResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
-	console.log('Server: Send Join Response');
+	debug('Send Join Response');
 };
 
 exports.configurationStatusRequestProcess = function(server, request) {
@@ -65,7 +66,7 @@ exports.configurationStatusRequestProcess = function(server, request) {
 		tlv: tlv
 	});
 	server.send(configurationStatusResponse, 0, configurationStatusResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
-	console.log('Server: Send Configuration Status Response');
+	debug('Send Configuration Status Response');
 };
 
 exports.changeStateRequestProcess = function(server, request) {
@@ -85,10 +86,10 @@ exports.changeStateRequestProcess = function(server, request) {
 		tlv: tlv
 	});
 	server.send(changeStateResponse, 0, changeStateResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
-	console.log('Server: Send Change State Response');
+	debug('Send Change State Response');
 };
 
 exports.keepAliveProcess = function(server, request) {
 	state.DATA_CHAN_KEEP_ALIVE_RECV(server, request);
-	
+
 };

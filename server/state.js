@@ -2,6 +2,7 @@
 
 var Stately = require('stately.js');
 var session = require('./session');
+var debug = require('debug')('node-capwap::server::state');
 
 var state = Stately.machine({
 	'START': {
@@ -47,7 +48,7 @@ state.bind(function(event, oldState, newState) {
 	var transition = event + ': ' + oldState + ' => ' + newState;
 	switch (transition) {
 		default: {
-			console.log('Server: ' + transition);
+			debug(transition);
 		}
 		break;
 	}
