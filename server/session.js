@@ -91,5 +91,21 @@ exports.changeStateRequestProcess = function(server, request) {
 
 exports.keepAliveProcess = function(server, request) {
 	state.DATA_CHAN_KEEP_ALIVE_RECV(server, request);
+};
 
+exports.keepAliveResonse = function(server, request) {
+	var tlv = [
+		builder.buildSessionId(),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var keepAlive = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(0x00008),
+		keepAlive: {
+			messageElementLength: elementLength,
+			tlv: tlv
+		}
+	});
+	server.send(keepAlive, 0, keepAlive.length, enumType.socket.CLIENT_DATA_PORT, enumType.socket.CLIENT_IP);
+	debug('Send Keep Alive');
 };

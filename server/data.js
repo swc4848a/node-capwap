@@ -18,7 +18,11 @@ data.on('message', function(message, remote) {
 		var headerFlags = request.header.headerFlags;
 		if (headerFlags && 0x08) {
 			debug('Receive Keep Alive');
-			state.DATA_CHAN_CONNECTED(data, request);
+			if ('DATA_CHAN_SETUP' === state.getMachineState()) {
+				state.DATA_CHAN_CONNECTED(data, request);
+			}
+			state.DATA_CHAN_KEEP_ALIVE_RECV(data, request);
+			// session.keepAliveResonse(data, request);
 		}
 	});
 });

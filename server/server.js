@@ -18,19 +18,19 @@ server.on('message', function(message, remote) {
 	decoder.parse(message, function(request) {
 		var type = request.controlHeader.messageType;
 		if (enumType.messageType.DISCOVERY_REQUEST == type) {
-			debug('Server: Receive Discover Request');
+			debug('Receive Discover Request');
 			var response = session.discoveryRequestProcess(request);
 			server.send(response, 0, response.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
-			debug('Server: Send Discover Response');
+			debug('Send Discover Response');
 			state.LOCAL_WTP_CONN();
 		} else if (enumType.messageType.JOIN_REQUEST === type) {
-			debug('Server: Receive Join Request');
+			debug('Receive Join Request');
 			state.JOIN_REQ_RECV(server, request);
 		} else if (enumType.messageType.CONFIGURATION_STATUS_REQUEST === type) {
-			debug('Server: Receive Configuration Status Request');
+			debug('Receive Configuration Status Request');
 			state.CFG_STATUS_REQ(server, request);
 		} else if (enumType.messageType.CHANGE_STATE_REQUEST === type) {
-			debug('Server: Receive Change State Request');
+			debug('Receive Change State Request');
 			state.CHG_STATE_EVENT_REQ_RECV(server, request);
 		} else {
 			console.trace('unknow message [%d]', type);
@@ -44,7 +44,7 @@ server.on("error", function(err) {
 });
 
 server.on("close", function(err) {
-	debug("Server close:\n");
+	debug("Server close");
 });
 
 module.exports = server;

@@ -10,12 +10,16 @@ exports.getPreamble = function() {
 	};
 };
 
-exports.getHeader = function() {
+var getHeaderFlags = function(flags) {
+	return flags ? 0x000008 : 0;
+};
+
+exports.getHeader = function(flags) {
 	return {
 		headerLength: 2,
 		radioId: 1,
 		wirelessBindId: 1,
-		headerFlags: 0,
+		headerFlags: getHeaderFlags(flags),
 		fragmentId: 0,
 		fragmentOffset: 0,
 		reserved: 0
@@ -32,6 +36,10 @@ exports.getKeepAliveHeader = function() {
 		fragmentOffset: 0,
 		reserved: 0
 	};
+};
+
+exports.getKeepAlive = function() {
+
 };
 
 exports.buildTlv = function(serializer, type, length) {
@@ -145,7 +153,7 @@ exports.buildCapwapTimers = function() {
 
 exports.buildSessionId = function() {
 	serializer.serialize('b8[16] => sessionId', {
-		sessionId: [0x66,0x59,0x9b,0x55,0x20,0x5d,0x4b,0x50,0x57,0x4c,0xca,0xb5,0x1c,0x7f,0xab,0x19]
+		sessionId: [0x66, 0x59, 0x9b, 0x55, 0x20, 0x5d, 0x4b, 0x50, 0x57, 0x4c, 0xca, 0xb5, 0x1c, 0x7f, 0xab, 0x19]
 	});
 	return this.buildTlv(serializer, enumType.tlvType.SESSION_ID, 16);
 };
