@@ -90,10 +90,6 @@ exports.changeStateRequestProcess = function(server, request) {
 };
 
 exports.keepAliveProcess = function(server, request) {
-	state.DATA_CHAN_KEEP_ALIVE_RECV(server, request);
-};
-
-exports.keepAliveResonse = function(server, request) {
 	var tlv = [
 		builder.buildSessionId(),
 	]

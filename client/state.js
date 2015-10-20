@@ -37,7 +37,9 @@ var state = Stately.machine({
 		}
 	},
 	'RUN': {
-
+		'DATA_CHAN_KEEP_ALIVE_RECV': function(client, context) {
+			
+		}
 	}
 });
 

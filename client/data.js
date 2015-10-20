@@ -5,11 +5,11 @@ var data = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
 var tool = require('../capwap/tool');
 var state = require('./state');
-var debug = require('debug')('node-capwap::server::data');
+var debug = require('debug')('node-capwap::client::data');
 
 data.on('listening', function() {
 	var address = data.address();
-	debug('UDP Server Data listening on ' + address.address + ":" + address.port);
+	debug('UDP Client Data listening on ' + address.address + ":" + address.port);
 });
 
 data.on('message', function(message, remote) {

@@ -32,22 +32,13 @@ var state = Stately.machine({
 		}
 	},
 	'DATA_CHAN_SETUP': {
-		'DATA_CHAN_CONNECTED': function(server, request) {
-			session.keepAliveProcess(server, request);
-			return this.DATA_CHECK;
-		}
-	},
-	'DATA_CHECK': {
 		'DATA_CHAN_KEEP_ALIVE_RECV': function(server, request) {
-			// this.DATA_CHAN_VERIFIED(server, request);
-			return this.DATA_CHECK;
-		},
-		'DATA_CHAN_VERIFIED': function(server, request) {
+			session.keepAliveProcess(server, request);
 			return this.RUN;
-		}
+		},
 	},
 	'RUN': {
-		
+
 	}
 });
 
