@@ -32,8 +32,8 @@ var state = Stately.machine({
 		}
 	},
 	'DATA_CHAN_SETUP': {
-		'DATA_CHAN_KEEP_ALIVE_RECV': function(server, request) {
-			session.keepAliveProcess(server, request);
+		'DATA_CHAN_KEEP_ALIVE_RECV': function(data, request) {
+			session.keepAliveProcess(data, request);
 			return this.RUN;
 		},
 	},

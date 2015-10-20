@@ -31,14 +31,14 @@ var state = Stately.machine({
 		}
 	},
 	'DATA_CHECK': {
-		'CHANGE_STATE_EVENT_RC_SUCC': function(client, context) {
-			session.startKeepAlive(client, context);
+		'CHANGE_STATE_EVENT_RC_SUCC': function(data, context) {
+			session.startKeepAlive(data, context);
 			return this.RUN;
 		}
 	},
 	'RUN': {
-		'DATA_CHAN_KEEP_ALIVE_RECV': function(client, context) {
-			
+		'DATA_CHAN_KEEP_ALIVE_RECV': function(data, context) {
+
 		}
 	}
 });
