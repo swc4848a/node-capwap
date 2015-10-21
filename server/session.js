@@ -6,6 +6,7 @@ var builder = require('../capwap/builder');
 var tool = require('../capwap/tool');
 var enumType = require('../capwap/enum');
 var state = require('./state');
+var context = require('./context');
 var debug = require('debug')('node-capwap::server::session');
 
 exports.discoveryRequestProcess = function(request) {
@@ -89,7 +90,7 @@ exports.changeStateRequestProcess = function(server, request) {
 	debug('Send Change State Response');
 };
 
-exports.keepAliveProcess = function(server, request) {
+exports.keepAliveProcess = function(data, request) {
 	var tlv = [
 		builder.buildSessionId(),
 	]
@@ -102,6 +103,26 @@ exports.keepAliveProcess = function(server, request) {
 			tlv: tlv
 		}
 	});
-	server.send(keepAlive, 0, keepAlive.length, enumType.socket.CLIENT_DATA_PORT, enumType.socket.CLIENT_IP);
+	data.send(keepAlive, 0, keepAlive.length, enumType.socket.CLIENT_DATA_PORT, enumType.socket.CLIENT_IP);
 	debug('Send Keep Alive');
+};
+
+exports.dataChannelVerifiedProcess = function(server, request) {
+	var tlv = [
+		builder.buildWtpName(),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var configurationUpdateRequest = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.CONFIGURATION_UPDATE_REQUEST,
+			sequneceNumber: context.sequneceNumber++,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	server.send(configurationUpdateRequest, 0, configurationUpdateRequest.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
+	debug("Send Configuration Update Request");
 };

@@ -157,3 +157,11 @@ exports.buildSessionId = function() {
 	});
 	return this.buildTlv(serializer, enumType.tlvType.SESSION_ID, 16);
 };
+
+exports.buildWtpName = function() {
+	var name = 'FP320C3X14012026';
+	serializer.serialize('b8[' + name.length + ']z|str("ascii") => wtpName', {
+		wtpName: name
+	});
+	return this.buildTlv(serializer, enumType.tlvType.WTP_NAME, name.length);
+};
