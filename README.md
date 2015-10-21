@@ -36,8 +36,3 @@ Changes for each release.
 Thu Oct 1 09:00:00 UTC 2015
 
  * CAPWAP control channel protocol realization
-
-
-### Bug
-
- * can not include data.js in state.js ?
