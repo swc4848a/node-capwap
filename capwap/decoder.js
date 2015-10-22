@@ -122,6 +122,13 @@ var getSessionId = function(tlv, success) {
 	parser.parse(tlv.value);
 };
 
+var getWtpName = function(tlv, success) {
+	parser.extract('b8[' + tlv.length + ']z|str("ascii") => wtpName', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -194,6 +201,12 @@ var parseTlvValueObject = function(tlv, success) {
 			}
 		}
 		success(obj);
+	} else if (tlv.type === enumType.tlvType.WTP_NAME) {
+		// Type: WTP Name (45)
+		getWtpName(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
 	} else {
 		console.trace('unknown tlv type [%d]', tlv.type);
 	}
@@ -228,6 +241,8 @@ var parseTlvValue = function(tlv, length) {
 				object.messageElement.resultCode = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.SESSION_ID) {
 				object.keepAlive.messageElement.sessionId = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.WTP_NAME) {
+				object.messageElement.wtpName = tlvObj;
 			} else {
 				console.trace('unknown tlv type [%d]', tlvObj.type);
 			}

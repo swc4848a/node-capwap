@@ -115,3 +115,23 @@ exports.startKeepAlive = function(client, context) {
 	client.send(keepAlive, 0, keepAlive.length, enumType.socket.SERVER_DATA_PORT, enumType.socket.SERVER_IP);
 	debug('Send Keep Alive');
 };
+
+exports.configurationUpdateRequestProcess = function(client, request) {
+	var tlv = [
+		builder.buildResultCode(0),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var configurationUpdateResponse = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.CONFIGURATION_UPDATE_RESPONSE,
+			sequneceNumber: request.controlHeader.sequneceNumber,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	client.send(configurationUpdateResponse, 0, configurationUpdateResponse.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
+	debug('Send Configuration Update Response');
+};

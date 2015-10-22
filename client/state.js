@@ -39,6 +39,10 @@ var state = Stately.machine({
 	'RUN': {
 		'DATA_CHAN_KEEP_ALIVE_RECV': function(data, context) {
 			return this.RUN;
+		},
+		'CFG_UPDATE_REQ_RECV': function(client, message) {
+			session.configurationUpdateRequestProcess(client, message);
+			return this.RUN;
 		}
 	}
 });

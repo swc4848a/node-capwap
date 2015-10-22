@@ -16,8 +16,8 @@ client.on('listening', function() {
 });
 
 client.on('message', function(message, remote) {
-	decoder.parse(message, function(response) {
-		var type = response.controlHeader.messageType;
+	decoder.parse(message, function(message) {
+		var type = message.controlHeader.messageType;
 		if (2 === type) {
 			debug('Receive Discover Response');
 			state.DISCOVERY_RESP_RECV(client, context);
@@ -30,6 +30,9 @@ client.on('message', function(message, remote) {
 		} else if (enumType.messageType.CHANGE_STATE_RESPONSE === type) {
 			debug('Receive Change State Response');
 			state.CHANGE_STATE_EVENT_RC_SUCC(data, context);
+		} else if (enumType.messageType.CONFIGURATION_UPDATE_REQUEST) {
+			debug('Receive Configuration Update Request');
+			state.CFG_UPDATE_REQ_RECV(client, message);
 		} else {
 			console.trace('unknow message [%d]', type);
 		}
