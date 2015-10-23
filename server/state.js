@@ -39,7 +39,10 @@ var state = Stately.machine({
 		},
 	},
 	'RUN': {
-
+		'CFG_UPDATE_RESP_RECV': function(server, request) {
+			session.startConfigurationProcess(server, request);
+			return this.RUN;
+		}
 	}
 });
 

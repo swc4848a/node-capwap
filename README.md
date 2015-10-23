@@ -25,7 +25,7 @@ node app.js
 
  * use [fschaefer/Stately.js](https://github.com/fschaefer/Stately.js) as DSL state machine;(:heavy_check_mark:)
  * replace console.log with [visionmedia/debug](https://github.com/visionmedia/debug);(:heavy_check_mark:)
-
+ * after configuration update cloud need start json file push and 802.11 wlan configuration;
 
 ### Change Log
 

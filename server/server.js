@@ -34,7 +34,7 @@ server.on('message', function(message, remote) {
 			state.CHG_STATE_EVENT_REQ_RECV(server, request);
 		} else if (enumType.messageType.CONFIGURATION_UPDATE_RESPONSE) {
 			debug('Receive Configuration Update Response');
-			// 
+			state.CFG_UPDATE_RESP_RECV(server, request);
 		} else {
 			console.trace('unknow message [%d]', type);
 		}

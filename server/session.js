@@ -126,3 +126,29 @@ exports.dataChannelVerifiedProcess = function(server, request) {
 	server.send(configurationUpdateRequest, 0, configurationUpdateRequest.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
 	debug("Send Configuration Update Request");
 };
+
+var addWlan = function(server, request) {
+	var tlv = [
+		// builder.ieee80211AddWlan(),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var ieee80211WlanConfigurationRequest = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.CONFIGURATION_UPDATE_REQUEST,
+			sequneceNumber: context.sequneceNumber++,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	server.send(ieee80211WlanConfigurationRequest, 0, ieee80211WlanConfigurationRequest.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
+	debug("Send 802.11 WLAN Configuration Request");
+};
+
+exports.startConfigurationProcess = function(server, request) {
+	// todo: if condition => start JSON data push
+	// todo: addWlan need to move correct position
+	addWlan(server, request);
+};
