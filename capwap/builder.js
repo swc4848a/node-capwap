@@ -3,7 +3,9 @@
 var serializer = require("packet").createSerializer();
 var enumType = require('./enum');
 
-exports.getPreamble = function() {
+var builder = module.exports = {};
+
+builder.getPreamble = function() {
 	return {
 		version: 0,
 		type: 0
@@ -14,7 +16,7 @@ var getHeaderFlags = function(flags) {
 	return flags ? 0x000008 : 0;
 };
 
-exports.getHeader = function(flags) {
+builder.getHeader = function(flags) {
 	return {
 		headerLength: 2,
 		radioId: 1,
@@ -26,7 +28,7 @@ exports.getHeader = function(flags) {
 	};
 };
 
-exports.getKeepAliveHeader = function() {
+builder.getKeepAliveHeader = function() {
 	return {
 		headerLength: 2,
 		radioId: 0,
@@ -38,11 +40,11 @@ exports.getKeepAliveHeader = function() {
 	};
 };
 
-exports.getKeepAlive = function() {
+builder.getKeepAlive = function() {
 
 };
 
-exports.buildTlv = function(serializer, type, length) {
+builder.buildTlv = function(serializer, type, length) {
 	var buf = new Buffer(length);
 	serializer.write(buf, 0, buf.length);
 
@@ -54,21 +56,21 @@ exports.buildTlv = function(serializer, type, length) {
 	return tlv;
 }
 
-exports.buildLocationData = function() {
+builder.buildLocationData = function() {
 	serializer.serialize('b8[3]z|str("ascii") => locationData', {
 		locationData: 'N/A'
 	});
 	return this.buildTlv(serializer, enumType.tlvType.LOCATION_DATA, 3);
 };
 
-exports.buildDiscoveryType = function() {
+builder.buildDiscoveryType = function() {
 	serializer.serialize('b8 => discoveryType', {
 		discoveryType: enumType.discoveryType.STATIC_CONFIGURATION
 	});
 	return this.buildTlv(serializer, enumType.tlvType.DISCOVERY_TYPE, 1);
 };
 
-exports.buildWtpBoardData = function() {
+builder.buildWtpBoardData = function() {
 	var wtpSN = 'FP320C3X14012026';
 	serializer.serialize('b32 => vendor, \
 		  				  b16 => wtpBoardDataSNType, b16 => wtpBoardDataSNLen, b8[' + wtpSN.length + ']z|str("ascii") => wtpBoardDataSNValue', {
@@ -81,7 +83,7 @@ exports.buildWtpBoardData = function() {
 	return this.buildTlv(serializer, 38, len);
 };
 
-exports.buildAcDescriptor = function() {
+builder.buildAcDescriptor = function() {
 	var hVersion = '1.0.0';
 	var sVersion = '2.0.0';
 
@@ -110,7 +112,7 @@ exports.buildAcDescriptor = function() {
 	return this.buildTlv(serializer, 1, len);
 };
 
-exports.buildAcName = function() {
+builder.buildAcName = function() {
 	var name = 'FortiCloud Wireless Controller';
 
 	serializer.serialize('b8[' + name.length + ']z|str("ascii") => acName', {
@@ -121,7 +123,7 @@ exports.buildAcName = function() {
 	return this.buildTlv(serializer, 4, len);
 };
 
-exports.buildVspWtpAllow = function(sn) {
+builder.buildVspWtpAllow = function(sn) {
 	serializer.serialize('b32 => identifier, \
 		                  b16 => elementId, \
 		                  b8[' + sn.length + ']z|str("ascii") => wtpSN, \
@@ -136,14 +138,14 @@ exports.buildVspWtpAllow = function(sn) {
 	return this.buildTlv(serializer, 37, len);
 };
 
-exports.buildResultCode = function(result) {
+builder.buildResultCode = function(result) {
 	serializer.serialize('b32 => resultCode', {
 		resultCode: result
 	});
 	return this.buildTlv(serializer, enumType.tlvType.RESULT_CODE, 4);
 };
 
-exports.buildCapwapTimers = function() {
+builder.buildCapwapTimers = function() {
 	serializer.serialize('b8 => discovery, b8 => echoRequest', {
 		discovery: 3,
 		echoRequest: 30,
@@ -151,14 +153,14 @@ exports.buildCapwapTimers = function() {
 	return this.buildTlv(serializer, enumType.tlvType.CAPWAP_TIMERS, 4);
 };
 
-exports.buildSessionId = function() {
+builder.buildSessionId = function() {
 	serializer.serialize('b8[16] => sessionId', {
 		sessionId: [0x66, 0x59, 0x9b, 0x55, 0x20, 0x5d, 0x4b, 0x50, 0x57, 0x4c, 0xca, 0xb5, 0x1c, 0x7f, 0xab, 0x19]
 	});
 	return this.buildTlv(serializer, enumType.tlvType.SESSION_ID, 16);
 };
 
-exports.buildWtpName = function() {
+builder.buildWtpName = function() {
 	var name = 'FP320C3X14012026';
 	serializer.serialize('b8[' + name.length + ']z|str("ascii") => wtpName', {
 		wtpName: name
@@ -166,7 +168,7 @@ exports.buildWtpName = function() {
 	return this.buildTlv(serializer, enumType.tlvType.WTP_NAME, name.length);
 };
 
-exports.buildIeee80211AddWlan = function() {
+builder.buildIeee80211AddWlan = function() {
 	var ssid = 'zqq-ssid-7';
 	serializer.serialize('b8 => radioId, b8 => wlanId, b16 => capability, \
 						  b8 => keyIndex, b8 => keyStatus, b16 => keyLength, \

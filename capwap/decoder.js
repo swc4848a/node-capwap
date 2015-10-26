@@ -7,6 +7,8 @@ var tool = require('./tool');
 var object = {};
 var callback;
 
+var decoder = module.exports = {};
+
 var bin2String = function(array) {
 	return String.fromCharCode.apply(String, array);
 }
@@ -308,7 +310,7 @@ var isControlPacket = function(header) {
 	return header.headerFlags === 0;
 };
 
-exports.parse = function(message, success) {
+decoder.parse = function(message, success) {
 	callback = success;
 	object = {};
 	parser.extract('b8[1] => preamble, \
