@@ -165,3 +165,28 @@ exports.buildWtpName = function() {
 	});
 	return this.buildTlv(serializer, enumType.tlvType.WTP_NAME, name.length);
 };
+
+exports.buildIeee80211AddWlan = function() {
+	var ssid = 'zqq-ssid-7';
+	serializer.serialize('b8 => radioId, b8 => wlanId, b16 => capability, \
+						  b8 => keyIndex, b8 => keyStatus, b16 => keyLength, \
+						  b48 => groupTsc, b8 => qos, b8 => authType, b8 => macMode, \
+						  b8 => tunnelMode, b8 => supressSSID, b8[10]z|str("ascii") => ssid', {
+		radioId: 1,
+		wlanId: 3,
+		capability: 0x84e0,
+		keyIndex: 0,
+		keyStatus: 0,
+		keyLength: 0,
+		groupTsc: 0,
+		qos: 0,
+		authType: 0,
+		macMode: 0,
+		tunnelMode: 1,
+		supressSSID: 0,
+		ssid: ssid
+	});
+
+	var len = 19 + ssid.length;
+	return this.buildTlv(serializer, enumType.tlvType.IEEE_80211_ADD_WLAN, len);
+};

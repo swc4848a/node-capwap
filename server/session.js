@@ -129,14 +129,14 @@ exports.dataChannelVerifiedProcess = function(server, request) {
 
 var addWlan = function(server, request) {
 	var tlv = [
-		// builder.ieee80211AddWlan(),
+		builder.buildIeee80211AddWlan(),
 	]
 	var elementLength = tool.calMessageElementLength(tlv);
 	var ieee80211WlanConfigurationRequest = encoder.encode({
 		preamble: builder.getPreamble(),
 		header: builder.getHeader(),
 		controlHeader: {
-			messageType: enumType.messageType.CONFIGURATION_UPDATE_REQUEST,
+			messageType: enumType.messageType.IEEE_80211_WLAN_CONFIGURATION_REQUEST,
 			sequneceNumber: context.sequneceNumber++,
 			messageElementLength: elementLength,
 			flags: 0

@@ -129,6 +129,16 @@ var getWtpName = function(tlv, success) {
 	parser.parse(tlv.value);
 };
 
+var getIeee80211AddWlan = function(tlv, success) {
+	parser.extract('b8 => radioId, b8 => wlanId, b16 => capability, \
+					b8 => keyIndex, b8 => keyStatus, b16 => keyLength, \
+					b48 => groupTsc, b8 => qos, b8 => authType, b8 => macMode, \
+					b8 => tunnelMode, b8 => supressSSID, b8[10]z|str("ascii") => ssid', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -207,6 +217,12 @@ var parseTlvValueObject = function(tlv, success) {
 			obj.value = tlvObj;
 			success(obj);
 		});
+	} else if (tlv.type === enumType.tlvType.IEEE_80211_ADD_WLAN) {
+		// Type: IEEE 802.11 Add WLAN (1024)
+		getIeee80211AddWlan(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
 	} else {
 		console.trace('unknown tlv type [%d]', tlv.type);
 	}
@@ -243,6 +259,8 @@ var parseTlvValue = function(tlv, length) {
 				object.keepAlive.messageElement.sessionId = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.WTP_NAME) {
 				object.messageElement.wtpName = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_ADD_WLAN) {
+				object.messageElement.ieee80211AddWlan = tlvObj;
 			} else {
 				console.trace('unknown tlv type [%d]', tlvObj.type);
 			}
