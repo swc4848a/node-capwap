@@ -43,6 +43,10 @@ var state = Stately.machine({
 		'CFG_UPDATE_REQ_RECV': function(client, message) {
 			session.configurationUpdateRequestProcess(client, message);
 			return this.RUN;
+		},
+		'IEEE_80211_WLAN_CFG_REQ': function(client, message) {
+			session.ieee80211WlanConfigurationRequestProcess(client, message);
+			return this.RUN;
 		}
 	}
 });

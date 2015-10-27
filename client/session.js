@@ -16,7 +16,9 @@ var scheduleWaitDiscoveryResponse = function(context) {
 	}, 1000);
 };
 
-exports.create = function(client, context) {
+var session = module.exports = {};
+
+session.create = function(client, context) {
 	var tlv = [
 		builder.buildDiscoveryType(),
 		builder.buildWtpBoardData(),
@@ -39,7 +41,7 @@ exports.create = function(client, context) {
 	debug('Send Discover Request');
 }
 
-exports.startJoin = function(client, context) {
+session.startJoin = function(client, context) {
 	var tlv = [
 		builder.buildLocationData(),
 	]
@@ -59,7 +61,7 @@ exports.startJoin = function(client, context) {
 	debug('Send Join Request');
 }
 
-exports.startConfig = function(client, context) {
+session.startConfig = function(client, context) {
 	var tlv = [
 		builder.buildAcName(),
 	]
@@ -79,7 +81,7 @@ exports.startConfig = function(client, context) {
 	debug('Send Configuration Status Request');
 };
 
-exports.startChange = function(client, context) {
+session.startChange = function(client, context) {
 	var tlv = [
 		builder.buildResultCode(0),
 	]
@@ -99,7 +101,7 @@ exports.startChange = function(client, context) {
 	debug('Send Change State Request');
 };
 
-exports.startKeepAlive = function(client, context) {
+session.startKeepAlive = function(client, context) {
 	var tlv = [
 		builder.buildSessionId(),
 	];
@@ -116,7 +118,7 @@ exports.startKeepAlive = function(client, context) {
 	debug('Send Keep Alive');
 };
 
-exports.configurationUpdateRequestProcess = function(client, request) {
+session.configurationUpdateRequestProcess = function(client, request) {
 	var tlv = [
 		builder.buildResultCode(0),
 	]
@@ -134,4 +136,24 @@ exports.configurationUpdateRequestProcess = function(client, request) {
 	});
 	client.send(configurationUpdateResponse, 0, configurationUpdateResponse.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
 	debug('Send Configuration Update Response');
+};
+
+session.ieee80211WlanConfigurationRequestProcess = function(client, request) {
+	var tlv = [
+		builder.buildResultCode(0),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var ieee80211ConfigurationResponse = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.IEEE_80211_WLAN_CONFIGURATION_RESPONSE,
+			sequneceNumber: request.controlHeader.sequneceNumber,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	client.send(ieee80211ConfigurationResponse, 0, ieee80211ConfigurationResponse.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
+	debug('Send IEEE 802.11 Configuration Response');
 };

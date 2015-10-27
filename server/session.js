@@ -9,6 +9,8 @@ var state = require('./state');
 var context = require('./context');
 var debug = require('debug')('node-capwap::server::session');
 
+// var session = module.exports = {};
+
 exports.discoveryRequestProcess = function(request) {
 	var tlv = [
 		builder.buildAcDescriptor(),
@@ -28,7 +30,7 @@ exports.discoveryRequestProcess = function(request) {
 		tlv: tlv
 	});
 	return res;
-}
+};
 
 exports.joinRequestProcess = function(server, request) {
 	var tlv = [
@@ -151,4 +153,8 @@ exports.startConfigurationProcess = function(server, request) {
 	// todo: if condition => start JSON data push
 	// todo: addWlan need to move correct position
 	addWlan(server, request);
+};
+
+exports.ieee80211ConfigurationResponseProcess = function(server, response) {
+	// todo:
 };

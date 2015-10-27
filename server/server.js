@@ -32,9 +32,12 @@ server.on('message', function(message, remote) {
 		} else if (enumType.messageType.CHANGE_STATE_REQUEST === type) {
 			debug('Receive Change State Request');
 			state.CHG_STATE_EVENT_REQ_RECV(server, request);
-		} else if (enumType.messageType.CONFIGURATION_UPDATE_RESPONSE) {
+		} else if (enumType.messageType.CONFIGURATION_UPDATE_RESPONSE === type) {
 			debug('Receive Configuration Update Response');
 			state.CFG_UPDATE_RESP_RECV(server, request);
+		} else if (enumType.messageType.IEEE_80211_WLAN_CONFIGURATION_RESPONSE === type) {
+			debug('Receive IEEE 802.11 Configuration Response');
+			state.IEEE_80211_WLAN_CFG_RESP_RC_SUCC(server, request);
 		} else {
 			console.trace('unknow message [%d]', type);
 		}

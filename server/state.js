@@ -4,6 +4,8 @@ var Stately = require('stately.js');
 var session = require('./session');
 var debug = require('debug')('node-capwap::server::state');
 
+console.log(session);
+
 var state = Stately.machine({
 	'START': {
 		'INIT_COMPLETE': function() {
@@ -39,8 +41,12 @@ var state = Stately.machine({
 		},
 	},
 	'RUN': {
-		'CFG_UPDATE_RESP_RECV': function(server, request) {
-			session.startConfigurationProcess(server, request);
+		'CFG_UPDATE_RESP_RECV': function(server, response) {
+			session.startConfigurationProcess(server, response);
+			return this.RUN;
+		},
+		'IEEE_80211_WLAN_CFG_RESP_RC_SUCC': function(server, response) {
+			session.ieee80211ConfigurationResponseProcess(server, response);
 			return this.RUN;
 		}
 	}
