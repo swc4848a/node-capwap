@@ -192,3 +192,19 @@ builder.buildIeee80211AddWlan = function() {
 	var len = 19 + ssid.length;
 	return this.buildTlv(serializer, enumType.tlvType.IEEE_80211_ADD_WLAN, len);
 };
+
+builder.buildIEEE80211WTPRadioConfiguration = function() {
+	serializer.serialize('b8 => radioId, b8 => shortPreamble, b8 => numOfBssids, \
+						  b8 => dtimPeriod, b8[6] => bssid, b16 => beaconPeriod, b8[4]z|str("ascii") => countryString', {
+		radioId: 1,
+		shortPreamble: 1,
+		numOfBssids: 8,
+		dtimPeriod: 1,
+		bssid: [0x08, 0x5b, 0x0e, 0xc6, 0x6a, 0x5a],
+		beaconPeriod: 100,
+		countryString: 'US'
+	});
+
+	var len = 16;
+	return this.buildTlv(serializer, enumType.tlvType.IEEE_80211_WTP_RADIO_CONFIGURATION, len);
+};

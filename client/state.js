@@ -37,7 +37,8 @@ var state = Stately.machine({
 		}
 	},
 	'RUN': {
-		'DATA_CHAN_KEEP_ALIVE_RECV': function(data, context) {
+		'DATA_CHAN_KEEP_ALIVE_RECV': function(client, context) {
+			session.startWtpEventRequest(client, context);
 			return this.RUN;
 		},
 		'CFG_UPDATE_REQ_RECV': function(client, message) {

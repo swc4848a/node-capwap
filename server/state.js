@@ -4,8 +4,6 @@ var Stately = require('stately.js');
 var session = require('./session');
 var debug = require('debug')('node-capwap::server::state');
 
-console.log(session);
-
 var state = Stately.machine({
 	'START': {
 		'INIT_COMPLETE': function() {

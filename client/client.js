@@ -2,7 +2,7 @@
 
 var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
-var data = require('./data');
+// var data = require('./data');
 var decoder = require('../capwap/decoder');
 var state = require('./state');
 var context = require('./context');
@@ -29,7 +29,7 @@ client.on('message', function(message, remote) {
 			state.CONFIG_STATUS_RESP_SUCC(client, context);
 		} else if (enumType.messageType.CHANGE_STATE_RESPONSE === type) {
 			debug('Receive Change State Response');
-			state.CHANGE_STATE_EVENT_RC_SUCC(data, context);
+			state.CHANGE_STATE_EVENT_RC_SUCC(client, context);
 		} else if (enumType.messageType.CONFIGURATION_UPDATE_REQUEST === type) {
 			debug('Receive Configuration Update Request');
 			state.CFG_UPDATE_REQ_RECV(client, message);
@@ -50,5 +50,7 @@ client.on("error", function(err) {
 client.on("close", function(err) {
 	debug("client close");
 });
+
+debug('module.exports = client;');
 
 module.exports = client;

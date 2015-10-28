@@ -157,3 +157,23 @@ session.ieee80211WlanConfigurationRequestProcess = function(client, request) {
 	client.send(ieee80211ConfigurationResponse, 0, ieee80211ConfigurationResponse.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
 	debug('Send IEEE 802.11 Configuration Response');
 };
+
+session.startWtpEventRequest = function(client, context) {
+	var tlv = [
+		builder.buildIEEE80211WTPRadioConfiguration(),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var wtpEventRequest = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.WTP_EVENT_REQUEST,
+			sequneceNumber: context.sequneceNumber++,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	client.send(wtpEventRequest, 0, wtpEventRequest.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
+	debug('Send WTP Event Request');
+};
