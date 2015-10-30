@@ -158,3 +158,7 @@ exports.startConfigurationProcess = function(server, request) {
 exports.ieee80211ConfigurationResponseProcess = function(server, response) {
 	// todo:
 };
+
+exports.wtpEventRequestProcess = function(server, request) {
+	// todo:
+};

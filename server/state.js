@@ -46,6 +46,10 @@ var state = Stately.machine({
 		'IEEE_80211_WLAN_CFG_RESP_RC_SUCC': function(server, response) {
 			session.ieee80211ConfigurationResponseProcess(server, response);
 			return this.RUN;
+		},
+		'WTP_EVENT_REQ_RECV': function(server, request) {
+			session.wtpEventRequestProcess(server, request);
+			return this.RUN;
 		}
 	}
 });
