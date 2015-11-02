@@ -36,6 +36,9 @@ client.on('message', function(message, remote) {
 		} else if (enumType.messageType.IEEE_80211_WLAN_CONFIGURATION_REQUEST === type) {
 			debug('Receive IEEE 802.11 WLAN Configuration Request');
 			state.IEEE_80211_WLAN_CFG_REQ(client, message);
+		} else if (enumType.messageType.WTP_EVENT_RESPONSE === type) {
+			debug('Receive WTP Event Response');
+			state.WTP_EVENT_RESP_RECV(client, message);
 		} else {
 			console.trace('unknow message [%d]', type);
 		}

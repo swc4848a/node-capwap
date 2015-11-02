@@ -160,5 +160,21 @@ exports.ieee80211ConfigurationResponseProcess = function(server, response) {
 };
 
 exports.wtpEventRequestProcess = function(server, request) {
-	// todo:
+	var tlv = [
+		builder.buildResultCode(0),
+	]
+	var elementLength = tool.calMessageElementLength(tlv);
+	var wtpEventResponse = encoder.encode({
+		preamble: builder.getPreamble(),
+		header: builder.getHeader(),
+		controlHeader: {
+			messageType: enumType.messageType.WTP_EVENT_RESPONSE,
+			sequneceNumber: request.controlHeader.sequneceNumber,
+			messageElementLength: elementLength,
+			flags: 0
+		},
+		tlv: tlv
+	});
+	server.send(wtpEventResponse, 0, wtpEventResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
+	debug('Send WTP Event Response');
 };

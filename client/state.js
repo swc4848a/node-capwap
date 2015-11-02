@@ -48,6 +48,10 @@ var state = Stately.machine({
 		'IEEE_80211_WLAN_CFG_REQ': function(client, message) {
 			session.ieee80211WlanConfigurationRequestProcess(client, message);
 			return this.RUN;
+		},
+		'WTP_EVENT_RESP_RECV': function(client, message) {
+			session.wtpEventResponseProcess(client, message);
+			return this.RUN;
 		}
 	}
 });

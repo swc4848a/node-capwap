@@ -177,3 +177,7 @@ session.startWtpEventRequest = function(client, context) {
 	client.send(wtpEventRequest, 0, wtpEventRequest.length, enumType.socket.SERVER_CTRL_PORT, enumType.socket.SERVER_IP);
 	debug('Send WTP Event Request');
 };
+
+session.wtpEventResponseProcess = function(client, response) {
+	// do nothing now
+};
