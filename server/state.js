@@ -11,7 +11,8 @@ var state = Stately.machine({
 		}
 	},
 	'IDLE': {
-		'LOCAL_WTP_CONN': function() {
+		'LOCAL_WTP_CONN': function(server, request) {
+			session.discoveryRequestProcess(server, request);
 			return this.JOIN;
 		}
 	},

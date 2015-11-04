@@ -19,10 +19,7 @@ server.on('message', function(message, remote) {
 		var type = request.controlHeader.messageType;
 		if (enumType.messageType.DISCOVERY_REQUEST == type) {
 			debug('Receive Discover Request');
-			var response = session.discoveryRequestProcess(request);
-			server.send(response, 0, response.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
-			debug('Send Discover Response');
-			state.LOCAL_WTP_CONN();
+			state.LOCAL_WTP_CONN(server, request);
 		} else if (enumType.messageType.JOIN_REQUEST === type) {
 			debug('Receive Join Request');
 			state.JOIN_REQ_RECV(server, request);
