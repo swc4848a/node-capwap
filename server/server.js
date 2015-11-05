@@ -6,6 +6,7 @@ var decoder = require('../capwap/decoder');
 var session = require('./session');
 var enumType = require('../capwap/enum');
 var state = require('./state');
+var context = require('./context');
 var debug = require('debug')('node-capwap::server::server');
 
 server.on('listening', function() {
@@ -15,6 +16,7 @@ server.on('listening', function() {
 });
 
 server.on('message', function(message, remote) {
+	context.remote = remote;
 	decoder.parse(message, function(request) {
 		var type = request.controlHeader.messageType;
 		if (enumType.messageType.DISCOVERY_REQUEST == type) {

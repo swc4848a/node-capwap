@@ -7,6 +7,7 @@ var debug = require('debug')('node-capwap::server::state');
 var state = Stately.machine({
 	'START': {
 		'INIT_COMPLETE': function() {
+			session.start();
 			return this.IDLE;
 		}
 	},

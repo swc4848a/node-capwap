@@ -11,15 +11,11 @@ var debug = require('debug')('node-capwap::server::session');
 
 // var session = module.exports = {};
 
-exports.discoveryRequestProcess = function(server, request) {
-	// 1. check if ip/port used by other wtp-session
-	// 2. find wtp hash by sn
-	// 3. udpate wtp hash ip and port
-	// 4. add ip port hash entry
-	// 5. check account sta 
-	// 6. if wtp session already start, shutdown it
+exports.start = function start() {
+	context.init();
+};
 
-	// 7. send discover response
+var sendDiscoverResponse = function(server, request) {
 	var tlv = [
 		builder.buildAcDescriptor(),
 		builder.buildAcName(),
@@ -39,6 +35,25 @@ exports.discoveryRequestProcess = function(server, request) {
 	});
 	server.send(discoverResponse, 0, discoverResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
 	debug('Send Discover Response');
+};
+
+exports.discoveryRequestProcess = function(server, request) {
+	// 1. check if ip/port used by other wtp-session
+	debug(context);
+	if (context.getWtpHashByIpControlPort(context.remote.address, context.remote.port)) {
+		// any discovery msg from this ip/port can take over previous wtp ws
+		// todo: shutdown already running session
+		debug('getWtpHashByIpControlPort return');
+		return;
+	}
+
+	// 2. find wtp hash by sn
+	// 3. udpate wtp hash ip and port
+	// 4. add ip port hash entry
+	// 5. check account sta 
+	// 6. if wtp session already start, shutdown it
+
+	sendDiscoverResponse(server, request);
 };
 
 exports.joinRequestProcess = function(server, request) {
