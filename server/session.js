@@ -58,9 +58,14 @@ exports.discoveryRequestProcess = function(server, request) {
 	wtpHash.ip = context.remote.address;
 	wtpHash.port = context.remote.port;
 
-	// 4. add ip port hash entry
-	// 5. check account sta 
-	// 6. if wtp session already start, shutdown it
+	// 4. check account sta 
+	// if request.messageElement.vsp has wbh sta
+
+	// 5. if wtp session already start, shutdown it
+	if (wtpHash.session) {
+		// shutdown this session
+		return;
+	}
 
 	sendDiscoverResponse(server, request);
 };
