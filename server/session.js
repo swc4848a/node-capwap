@@ -39,11 +39,9 @@ var sendDiscoverResponse = function(server, request) {
 
 exports.discoveryRequestProcess = function(server, request) {
 	// 1. check if ip/port used by other wtp-session
-	debug(context);
 	if (context.getWtpHashByIpControlPort(context.remote.address, context.remote.port)) {
 		// any discovery msg from this ip/port can take over previous wtp ws
 		// todo: shutdown already running session
-		debug('getWtpHashByIpControlPort return');
 		return;
 	}
 
