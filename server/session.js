@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('underscore');
 var encoder = require('../capwap/encoder');
 var serializer = require('packet').createSerializer();
 var builder = require('../capwap/builder');
@@ -46,7 +47,17 @@ exports.discoveryRequestProcess = function(server, request) {
 	}
 
 	// 2. find wtp hash by sn
+	var sn = request.messageElement.wtpBoardData.wtpSerialNumber.value;
+	var wtpHash = context.getWtpHashBySn(sn);
+	if (_.isUndefined(wtpHash)) {
+		debug('ap serial number %s not configured.', sn);
+		return;
+	}
+
 	// 3. udpate wtp hash ip and port
+	wtpHash.ip = context.remote.address;
+	wtpHash.port = context.remote.port;
+
 	// 4. add ip port hash entry
 	// 5. check account sta 
 	// 6. if wtp session already start, shutdown it

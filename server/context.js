@@ -7,7 +7,9 @@ var context = exports = module.exports = {};
 
 context.init = function init() {
 	this.sequenceNumber = 0;
-	this.wtpHash = [];
+	this.wtpHash = [{
+		sn: 'FP320C3X14012026'
+	}];
 };
 
 context.getWtpHashByIpControlPort = function getWtpHashByIpControlPort(ip, port) {
@@ -15,4 +17,14 @@ context.getWtpHashByIpControlPort = function getWtpHashByIpControlPort(ip, port)
 		address: ip,
 		port: port
 	});
+};
+
+context.getWtpHashBySn = function getWtpHashBySn(sn) {
+	return _.findWhere(this.wtpHash, {
+		sn: sn
+	});
+};
+
+context.addIpControlPortToWtpHash = function addIpControlPortToWtpHash(wtpHash) {
+	
 };
