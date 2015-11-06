@@ -8,34 +8,13 @@ var tool = require('../capwap/tool');
 var enumType = require('../capwap/enum');
 var state = require('./state');
 var context = require('./context');
+var message = require('./message');
 var debug = require('debug')('node-capwap::server::session');
 
 // var session = module.exports = {};
 
 exports.start = function start() {
 	context.init();
-};
-
-var sendDiscoverResponse = function(server, request) {
-	var tlv = [
-		builder.buildAcDescriptor(),
-		builder.buildAcName(),
-		builder.buildVspWtpAllow(request.messageElement.wtpBoardData.wtpSerialNumber.value),
-	];
-	var elementLength = tool.calMessageElementLength(tlv);
-	var discoverResponse = encoder.encode({
-		preamble: builder.getPreamble(),
-		header: builder.getHeader(),
-		controlHeader: {
-			messageType: 2,
-			sequneceNumber: request.controlHeader.sequneceNumber,
-			messageElementLength: elementLength,
-			flags: 0
-		},
-		tlv: tlv
-	});
-	server.send(discoverResponse, 0, discoverResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
-	debug('Send Discover Response');
 };
 
 exports.discoveryRequestProcess = function(server, request) {
@@ -67,27 +46,22 @@ exports.discoveryRequestProcess = function(server, request) {
 		return;
 	}
 
-	sendDiscoverResponse(server, request);
+	message.sendDiscoverResponse(server, request);
 };
 
 exports.joinRequestProcess = function(server, request) {
-	var tlv = [
-		builder.buildResultCode(0), // Success
-	]
-	var elementLength = tool.calMessageElementLength(tlv);
-	var joinResponse = encoder.encode({
-		preamble: builder.getPreamble(),
-		header: builder.getHeader(),
-		controlHeader: {
-			messageType: enumType.messageType.JOIN_RESPONSE,
-			sequneceNumber: request.controlHeader.sequneceNumber,
-			messageElementLength: elementLength,
-			flags: 0
-		},
-		tlv: tlv
-	});
-	server.send(joinResponse, 0, joinResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
-	debug('Send Join Response');
+	// 1. update wtp capability
+	// 2. sn check
+	// 3. FIRST TIME received JOIN REQ from unmanaged WTP
+	// 4. received JOIN REQ from unmanaged WTP
+	// 5. received JOIN REQ from admin disabled WTP
+	// 6. we check if WTP support DFS here
+	// 7. we need to check both radio_type and chan_num here.
+	// 8. received JOIN REQ from WTP with unsupported radio
+	// 9. if the radio type check is done.
+	// 10. update wtp information
+	 
+	message.sendJoinResponse(server, request);
 };
 
 exports.configurationStatusRequestProcess = function(server, request) {
