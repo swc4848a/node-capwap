@@ -44,6 +44,8 @@ session.create = function(client, context) {
 session.startJoin = function(client, context) {
 	var tlv = [
 		builder.buildLocationData(),
+		builder.buildWtpBoardData(),
+		builder.buildVspWtpCapabilities()
 	]
 	var elementLength = tool.calMessageElementLength(tlv);
 	var joinRequest = encoder.encode({

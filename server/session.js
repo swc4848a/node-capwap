@@ -51,7 +51,13 @@ exports.discoveryRequestProcess = function(server, request) {
 
 exports.joinRequestProcess = function(server, request) {
 	// 1. update wtp capability
+	var sn = request.messageElement.wtpBoardData.wtpSerialNumber.value;
+	var wtpHash = context.getWtpHashBySn(sn);
+	if (1 == request.messageElement.vspWtpCapabilities.value.venderData.version) {
+		wtpHash.capability = request.messageElement.vspWtpCapabilities.value.venderData.wtpCapFlags;
+	}
 	// 2. sn check
+	
 	// 3. FIRST TIME received JOIN REQ from unmanaged WTP
 	// 4. received JOIN REQ from unmanaged WTP
 	// 5. received JOIN REQ from admin disabled WTP
@@ -60,7 +66,7 @@ exports.joinRequestProcess = function(server, request) {
 	// 8. received JOIN REQ from WTP with unsupported radio
 	// 9. if the radio type check is done.
 	// 10. update wtp information
-	 
+
 	message.sendJoinResponse(server, request);
 };
 

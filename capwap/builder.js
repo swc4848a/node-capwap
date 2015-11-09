@@ -208,3 +208,22 @@ builder.buildIEEE80211WTPRadioConfiguration = function() {
 	var len = 16;
 	return this.buildTlv(serializer, enumType.tlvType.IEEE_80211_WTP_RADIO_CONFIGURATION, len);
 };
+
+builder.buildVspWtpCapabilities = function buildVspWtpCapabilities() {
+	serializer.serialize('b32 => identifier,\
+		                  b16 => elementId,\
+		                  b16 => version,\
+		                  b8 => radioId,\
+		                  b8 => wtpCapFlags,\
+		                  b8[15] => reserved', {
+		identifier: 12356,
+		elementId: 192,
+		version: 1,
+		radioId: 1,
+		wtpCapFlags: 0xff,
+		reserved: [0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+	});
+
+	var len = 10 + 15;
+	return this.buildTlv(serializer, 37, len);
+};
