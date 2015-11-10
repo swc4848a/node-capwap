@@ -25,6 +25,12 @@ var state = Stately.machine({
 		'CFG_STATUS_REQ': function(server, request) {
 			session.configurationStatusRequestProcess(server, request);
 			return this.CONFIG;
+		},
+		'WTP_UNKNOWN': function() {
+
+		},
+		'WTP_DISABLED': function() {
+
 		}
 	},
 	'CONFIG': {

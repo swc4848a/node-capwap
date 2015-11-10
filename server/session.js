@@ -9,6 +9,7 @@ var enumType = require('../capwap/enum');
 var state = require('./state');
 var context = require('./context');
 var message = require('./message');
+var config = require('./config');
 var debug = require('debug')('node-capwap::server::session');
 
 // var session = module.exports = {};
@@ -56,12 +57,20 @@ exports.joinRequestProcess = function(server, request) {
 	if (1 == request.messageElement.vspWtpCapabilities.value.venderData.version) {
 		wtpHash.capability = request.messageElement.vspWtpCapabilities.value.venderData.wtpCapFlags;
 	}
-	// 2. sn check
-	
-	// 3. FIRST TIME received JOIN REQ from unmanaged WTP
+	// 2. sn check => wtpHash is get from sn so sn do not need check
+
 	// 4. received JOIN REQ from unmanaged WTP
+	if (wtpHash.adminState < enumType.wtpAdminState.WTP_ADMIN_DISCOVERY) {
+		debug('received JOIN REQ from unmanaged WTP %s', sn);
+		state.WTP_UNKNOWN();
+	}
 	// 5. received JOIN REQ from admin disabled WTP
+	if (wtpHash.adminState < enumType.wtpAdminState.WTP_ADMIN_DISABLE) {
+		debug('received JOIN REQ from admin disabled WTP %s', sn);
+		state.WTP_DISABLED();
+	}
 	// 6. we check if WTP support DFS here
+	
 	// 7. we need to check both radio_type and chan_num here.
 	// 8. received JOIN REQ from WTP with unsupported radio
 	// 9. if the radio type check is done.

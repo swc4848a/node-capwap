@@ -8,7 +8,8 @@ var context = exports = module.exports = {};
 context.init = function init() {
 	this.sequenceNumber = 0;
 	this.wtpHash = [{
-		sn: 'FP320C3X14012026'
+		sn: 'FP320C3X14012026',
+		adminState: 0
 	}];
 };
 
@@ -26,5 +27,5 @@ context.getWtpHashBySn = function getWtpHashBySn(sn) {
 };
 
 context.addIpControlPortToWtpHash = function addIpControlPortToWtpHash(wtpHash) {
-	
+
 };
