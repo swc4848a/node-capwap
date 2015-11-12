@@ -50,6 +50,10 @@ exports.discoveryRequestProcess = function(server, request) {
 	message.sendDiscoverResponse(server, request);
 };
 
+var isWtpSupportDFS = function isWtpSupportDFS(radio) {
+
+};
+
 exports.joinRequestProcess = function(server, request) {
 	// 1. update wtp capability
 	var sn = request.messageElement.wtpBoardData.wtpSerialNumber.value;
@@ -70,7 +74,36 @@ exports.joinRequestProcess = function(server, request) {
 		state.WTP_DISABLED();
 	}
 	// 6. we check if WTP support DFS here
-	
+	for (var i = 0; i < 2; ++i) {
+		var radio = wtpHash.radio[i];
+		if (enumType.wtpRadioMode.RMODE_NODEV === radio.mode) {
+			if (!isWtpSupportDFS(radio)) {
+				if (enumType.wtpRadioType.CW_11_RADIO_TYPE_11a === radio.type ||
+					enumType.wtpRadioType.CW_11_RADIO_TYPE_11n_5G === radio.type ||
+					enumType.wtpRadioType.CW_11_RADIO_TYPE_11ac === radio.type) {
+					/* 
+					 * we need to check both radio_type and chan_num here. 
+					 * because if WTP has 2G HZ radio and 2G HZ md_cap 
+					 * may be empty,  we can't deny it, 
+					 * because for 2G HZ, empty md_cap means all channels, 
+					 * its md_cap_no_dfs[] is the same as md_cap[]
+					 */
+					if (radio.mdCap[0].channelNumber && 0 === radio.mdCapNoDfs[0].channelNumeber) {
+						/* 
+						 * WTP is on 5G HZ freq and it doesn't support DFS, 
+						 * all channels selected are DFS channels, then deny 
+						 *  
+						 * we use code CW_RC_JOIN_FAILURE_WTP_HW_UNSUPPORTED 
+						 * it means : Join Failure (WTP Hardware not supported) 
+						 */
+						// CW_RC_JOIN_FAILURE_WTP_HW_UNSUPPORTED process
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	// 7. we need to check both radio_type and chan_num here.
 	// 8. received JOIN REQ from WTP with unsupported radio
 	// 9. if the radio type check is done.
