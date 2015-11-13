@@ -31,6 +31,9 @@ var state = Stately.machine({
 		},
 		'WTP_DISABLED': function() {
 
+		},
+		'WTP_HW_UNSUPPORTED': function() {
+
 		}
 	},
 	'CONFIG': {
@@ -58,7 +61,7 @@ var state = Stately.machine({
 		'WTP_EVENT_REQ_RECV': function(server, request) {
 			session.wtpEventRequestProcess(server, request);
 			return this.RUN;
-		}
+		},
 	}
 });
 

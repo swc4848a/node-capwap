@@ -79,3 +79,12 @@ exports.wtpRadioType = {
 	// CW_11_RADIO_TYPE_11bg: (CW_11_RADIO_TYPE_11b | CW_11_RADIO_TYPE_11g),
 	// CW_11_RADIO_TYPE_11abg: (CW_11_RADIO_TYPE_11b | CW_11_RADIO_TYPE_11a | CW_11_RADIO_TYPE_11g)
 };
+
+exports.apScanType = {
+	CW_AP_SCAN_DISABLE: 0,
+	CW_AP_SCAN_BG: 1, //scan at idle time
+	CW_AP_SCAN_FG: 2,
+	CW_AP_SCAN_BG2: 3, //scan at regular time
+	CW_AP_SCAN_FG2: 4, //sniffer
+	CW_AP_SCAN_ENABLE: 5
+};

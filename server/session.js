@@ -88,6 +88,7 @@ exports.joinRequestProcess = function(server, request) {
 					 * because for 2G HZ, empty md_cap means all channels, 
 					 * its md_cap_no_dfs[] is the same as md_cap[]
 					 */
+					// 7. we need to check both radio_type and chan_num here.
 					if (radio.mdCap[0].channelNumber && 0 === radio.mdCapNoDfs[0].channelNumeber) {
 						/* 
 						 * WTP is on 5G HZ freq and it doesn't support DFS, 
@@ -97,16 +98,41 @@ exports.joinRequestProcess = function(server, request) {
 						 * it means : Join Failure (WTP Hardware not supported) 
 						 */
 						// CW_RC_JOIN_FAILURE_WTP_HW_UNSUPPORTED process
+						// send response with result code CW_RC_JOIN_FAILURE_WTP_HW_UNSUPPORTED
+
 						break;
 					}
 				}
 			}
 		}
 	}
-
-	// 7. we need to check both radio_type and chan_num here.
 	// 8. received JOIN REQ from WTP with unsupported radio
+	for (var i = 0; i < 2; ++i) {
+		var radio = wtpHash.radio[i];
+		if (enumType.wtpRadioMode.RMODE_WTP === radio.mode) {
+			var wtpRadioInfoArray = request.messageElement.ieee80211WtpRadioInfomation;
+			var wtpRadioInfo = _.findWhere(wtpRadioInfoArray, {
+				radioId: i + 1
+			});
+			radio.radioTypeWtp = wtpRadioInfo.radioType;
+			if (enumType.apScanType.CW_AP_SCAN_FG === radio.apScan ||
+				enumType.apScanType.CW_AP_SCAN_FG2 === radio.apScan) {
+				continue;
+			}
+			if (0 === radio.type & CW_11_RADIO_TYPE_MASK & radio.radioTypeWtp) {
+				debug('received JOIN REQ from WTP with unsupported radio %d type %x AC %x', i, radio.radioTypeWtp, radio.radioType);
+				state.WTP_HW_UNSUPPORTED();
+				// send response with resul code CW_RC_JOIN_FAILURE_WTP_HW_UNSUPPORTED
+			}
+		}
+	}
+
+	// update local ipv4 address
+	if (request.messageElement.capwapLocalIpv4Address) {
+		wtpHash.wtpLocalIp = request.messageElement.capwapLocalIpv4Address.value;
+	}
 	// 9. if the radio type check is done.
+	
 	// 10. update wtp information
 
 	message.sendJoinResponse(server, request);
