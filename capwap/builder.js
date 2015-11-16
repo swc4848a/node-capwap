@@ -227,3 +227,14 @@ builder.buildVspWtpCapabilities = function buildVspWtpCapabilities() {
 	var len = 10 + 15;
 	return this.buildTlv(serializer, 37, len);
 };
+
+builder.buildIEEE80211WTPRadioInformation = function buildIEEE80211WTPRadioInformation(id, type) {
+	serializer.serialize('b8 => radioId,\
+						  b24 => radioTypeReserved,\
+						  b8 => radioType', {
+		radioId: id,
+		radioTypeReserved: 0,
+		radioType: type
+	});
+	return this.buildTlv(serializer, 1048, 5);
+};

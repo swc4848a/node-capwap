@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('underscore');
 var parser = require('packet').createParser();
 var enumType = require('./enum');
 var tool = require('./tool');
@@ -149,6 +150,15 @@ var getIeee80211WtpRadioConfiguration = function(tlv, success) {
 	parser.parse(tlv.value);
 };
 
+var getIeee80211WtpRadioInformation = function getIeee80211WtpRadioInformation(tlv, success) {
+	parser.extract('b8 => radioId,\
+					b24 => radioTypeReserved,\
+					b8 => radioType', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -239,6 +249,12 @@ var parseTlvValueObject = function(tlv, success) {
 			obj.value = tlvObj;
 			success(obj);
 		});
+	} else if (tlv.type === enumType.tlvType.IEEE_80211_WTP_RADIO_INFORMATION) {
+		// Type: IEEE 802.11 WTP Radio Information (1048)
+		getIeee80211WtpRadioInformation(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
 	} else {
 		console.trace('unknown tlv type [%d]', tlv.type);
 	}
@@ -279,6 +295,11 @@ var parseTlvValue = function(tlv, length) {
 				object.messageElement.ieee80211AddWlan = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_WTP_RADIO_CONFIGURATION) {
 				object.messageElement.ieee80211WtpRadioConfiguration = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_WTP_RADIO_INFORMATION) {
+				if (_.isUndefined(object.messageElement.ieee80211WtpRadioInformation)) {
+					object.messageElement.ieee80211WtpRadioInformation = [];
+				}
+				object.messageElement.ieee80211WtpRadioInformation.push(tlvObj.value);
 			} else {
 				console.trace('unknown tlv type [%d]', tlvObj.type);
 			}

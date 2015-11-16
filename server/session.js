@@ -110,7 +110,7 @@ exports.joinRequestProcess = function(server, request) {
 	for (var i = 0; i < 2; ++i) {
 		var radio = wtpHash.radio[i];
 		if (enumType.wtpRadioMode.RMODE_WTP === radio.mode) {
-			var wtpRadioInfoArray = request.messageElement.ieee80211WtpRadioInfomation;
+			var wtpRadioInfoArray = request.messageElement.ieee80211WtpRadioInformation;
 			var wtpRadioInfo = _.findWhere(wtpRadioInfoArray, {
 				radioId: i + 1
 			});
@@ -119,7 +119,7 @@ exports.joinRequestProcess = function(server, request) {
 				enumType.apScanType.CW_AP_SCAN_FG2 === radio.apScan) {
 				continue;
 			}
-			if (0 === radio.type & CW_11_RADIO_TYPE_MASK & radio.radioTypeWtp) {
+			if (0 === radio.type & enumType.wtpRadioType.CW_11_RADIO_TYPE_MASK & radio.radioTypeWtp) {
 				debug('received JOIN REQ from WTP with unsupported radio %d type %x AC %x', i, radio.radioTypeWtp, radio.radioType);
 				state.WTP_HW_UNSUPPORTED();
 				// send response with resul code CW_RC_JOIN_FAILURE_WTP_HW_UNSUPPORTED
@@ -132,7 +132,7 @@ exports.joinRequestProcess = function(server, request) {
 		wtpHash.wtpLocalIp = request.messageElement.capwapLocalIpv4Address.value;
 	}
 	// 9. if the radio type check is done.
-	
+
 	// 10. update wtp information
 
 	message.sendJoinResponse(server, request);
