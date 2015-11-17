@@ -136,6 +136,7 @@ exports.joinRequestProcess = function(server, request) {
 	wtpHash.macTypeSupport = request.messageElement.wtpMacType.value.wtpMacType;
 
 	// 10. update wtp information
+	wtpHash.boardId = request.messageElement.wtpBoardData.wtpBoardId.value;
 
 	message.sendJoinResponse(server, request);
 };

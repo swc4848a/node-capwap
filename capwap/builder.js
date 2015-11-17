@@ -72,14 +72,19 @@ builder.buildDiscoveryType = function() {
 
 builder.buildWtpBoardData = function() {
 	var wtpSN = 'FP320C3X14012026';
+	var wtpBoardId = '220-1';
 	serializer.serialize('b32 => vendor, \
-		  				  b16 => wtpBoardDataSNType, b16 => wtpBoardDataSNLen, b8[' + wtpSN.length + ']z|str("ascii") => wtpBoardDataSNValue', {
+		  				  b16 => wtpBoardDataSNType, b16 => wtpBoardDataSNLen, b8[' + wtpSN.length + ']z|str("ascii") => wtpBoardDataSNValue, \
+		  				  b16 => wtpBoardDataBoardIdType, b16 => wtpBoardDataBoardIdLen, b8[' + wtpBoardId.length + ']z|str("ascii") => wtpBoardDataBoardIdValue', {
 		vendor: 12356,
 		wtpBoardDataSNType: 1,
 		wtpBoardDataSNLen: wtpSN.length,
-		wtpBoardDataSNValue: wtpSN
+		wtpBoardDataSNValue: wtpSN,
+		wtpBoardDataBoardIdType: 2,
+		wtpBoardDataBoardIdLen: 5,
+		wtpBoardDataBoardIdValue: wtpBoardId
 	});
-	var len = 4 + 4 + wtpSN.length;
+	var len = 4 + 4 + wtpSN.length + 4 + wtpBoardId.length;
 	return this.buildTlv(serializer, 38, len);
 };
 
