@@ -47,7 +47,9 @@ session.startJoin = function(client, context) {
 		builder.buildWtpBoardData(),
 		builder.buildVspWtpCapabilities(),
 		builder.buildIEEE80211WTPRadioInformation(1, 0x0d),
-		builder.buildIEEE80211WTPRadioInformation(2, 0x1a)
+		builder.buildIEEE80211WTPRadioInformation(2, 0x1a),
+		builder.builderWtpFrameTunnelMode(),
+		builder.builderWtpMacType()
 	]
 	var elementLength = tool.calMessageElementLength(tlv);
 	var joinRequest = encoder.encode({

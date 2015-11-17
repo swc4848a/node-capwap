@@ -132,6 +132,8 @@ exports.joinRequestProcess = function(server, request) {
 		wtpHash.wtpLocalIp = request.messageElement.capwapLocalIpv4Address.value;
 	}
 	// 9. if the radio type check is done.
+	wtpHash.tunnelTypeSupport = request.messageElement.wtpFrameTunnelMode.value.wtpFrameTunnelMode;
+	wtpHash.macTypeSupport = request.messageElement.wtpMacType.value.wtpMacType;
 
 	// 10. update wtp information
 

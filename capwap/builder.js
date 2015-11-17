@@ -238,3 +238,17 @@ builder.buildIEEE80211WTPRadioInformation = function buildIEEE80211WTPRadioInfor
 	});
 	return this.buildTlv(serializer, 1048, 5);
 };
+
+builder.builderWtpFrameTunnelMode = function builderWtpFrameTunnelMode() {
+	serializer.serialize('b8 => wtpFrameTunnelMode', {
+		wtpFrameTunnelMode: 0x04
+	});
+	return this.buildTlv(serializer, 41, 1);
+};
+
+builder.builderWtpMacType = function builderWtpMacType() {
+	serializer.serialize('b8 => wtpMacType', {
+		wtpMacType: 0
+	});
+	return this.buildTlv(serializer, 44, 1);
+};

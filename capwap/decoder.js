@@ -159,6 +159,20 @@ var getIeee80211WtpRadioInformation = function getIeee80211WtpRadioInformation(t
 	parser.parse(tlv.value);
 };
 
+var getWtpFrameTunnelMode = function getWtpFrameTunnelMode(tlv, success) {
+	parser.extract('b8 => wtpFrameTunnelMode', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
+var getWtpMacType = function getWtpMacType(tlv, success) {
+	parser.extract('b8 => wtpMacType', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -255,6 +269,18 @@ var parseTlvValueObject = function(tlv, success) {
 			obj.value = tlvObj;
 			success(obj);
 		});
+	} else if (tlv.type === enumType.tlvType.WTP_FRAME_TUNNEL_MODE) {
+		// Type: WTP Frame Tunnel Mode  (41)
+		getWtpFrameTunnelMode(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
+	} else if (tlv.type === enumType.tlvType.WTP_MAC_TYPE) {
+		// Type: WTP MAC Type (44)
+		getWtpMacType(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
 	} else {
 		console.trace('unknown tlv type [%d]', tlv.type);
 	}
@@ -300,6 +326,10 @@ var parseTlvValue = function(tlv, length) {
 					object.messageElement.ieee80211WtpRadioInformation = [];
 				}
 				object.messageElement.ieee80211WtpRadioInformation.push(tlvObj.value);
+			} else if (tlvObj.type === enumType.tlvType.WTP_FRAME_TUNNEL_MODE) {
+				object.messageElement.wtpFrameTunnelMode = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.WTP_MAC_TYPE) {
+				object.messageElement.wtpMacType = tlvObj;
 			} else {
 				console.trace('unknown tlv type [%d]', tlvObj.type);
 			}
