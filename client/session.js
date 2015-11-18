@@ -45,6 +45,7 @@ session.startJoin = function(client, context) {
 	var tlv = [
 		builder.buildLocationData(),
 		builder.buildWtpBoardData(),
+		builder.buildWtpDescriptor(),
 		builder.buildVspWtpCapabilities(),
 		builder.buildIEEE80211WTPRadioInformation(1, 0x0d),
 		builder.buildIEEE80211WTPRadioInformation(2, 0x1a),

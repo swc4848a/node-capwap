@@ -73,19 +73,33 @@ builder.buildDiscoveryType = function() {
 builder.buildWtpBoardData = function() {
 	var wtpSN = 'FP320C3X14012026';
 	var wtpBoardId = '220-1';
+	var boardRevision = '0';
+
 	serializer.serialize('b32 => vendor, \
 		  				  b16 => wtpBoardDataSNType, b16 => wtpBoardDataSNLen, b8[' + wtpSN.length + ']z|str("ascii") => wtpBoardDataSNValue, \
-		  				  b16 => wtpBoardDataBoardIdType, b16 => wtpBoardDataBoardIdLen, b8[' + wtpBoardId.length + ']z|str("ascii") => wtpBoardDataBoardIdValue', {
+		  				  b16 => wtpBoardDataBoardIdType, b16 => wtpBoardDataBoardIdLen, b8[' + wtpBoardId.length + ']z|str("ascii") => wtpBoardDataBoardIdValue, \
+		  				  b16 => wtpBoardDataRevisionType, b16 => wtpBoardDataRevisionLen, b8 => wtpBoardDataRevisionValue, \
+		  				  b16 => wtpBaordDataBaseMacAddressType, b16 => wtpBaordDataBaseMacAddressLen, b8[6] => wtpBaordDataBaseMacAddressValue', {
 		vendor: 12356,
 		wtpBoardDataSNType: 1,
 		wtpBoardDataSNLen: wtpSN.length,
 		wtpBoardDataSNValue: wtpSN,
 		wtpBoardDataBoardIdType: 2,
 		wtpBoardDataBoardIdLen: 5,
-		wtpBoardDataBoardIdValue: wtpBoardId
+		wtpBoardDataBoardIdValue: wtpBoardId,
+		wtpBoardDataRevisionType: 3,
+		wtpBoardDataRevisionLen: 1,
+		wtpBoardDataRevisionValue: boardRevision,
+		wtpBaordDataBaseMacAddressType: 4,
+		wtpBaordDataBaseMacAddressLen: 6,
+		wtpBaordDataBaseMacAddressValue: [0x08, 0x5b, 0x0e, 0xc6, 0x6a, 0x58]
 	});
-	var len = 4 + 4 + wtpSN.length + 4 + wtpBoardId.length;
+	var len = 4 + 4 + wtpSN.length + 4 + wtpBoardId.length + 4 + boardRevision.length + 4 + 6;
 	return this.buildTlv(serializer, 38, len);
+};
+
+builder.buildWtpDescriptor = function buildWtpDescriptor() {
+	
 };
 
 builder.buildAcDescriptor = function() {
