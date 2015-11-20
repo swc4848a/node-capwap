@@ -99,7 +99,49 @@ builder.buildWtpBoardData = function() {
 };
 
 builder.buildWtpDescriptor = function buildWtpDescriptor() {
-	
+	var hardwareVersion = '0';
+	var activeSoftwareVersion = 'FP320C-v5.2-build638';
+	var bootVersion = '04000001';
+	var otherSoftwareVersion = 'FP320C-v5.2-build638';
+
+	serializer.serialize('b32 => wtpDescriptorHardwareVersionVendor, \
+		                  b16 => wtpDescriptorHardwareVersionType, \
+		                  b16 => wtpDescriptorHardwareVersionLen, \
+		                  b8[1]z|str("ascii") => wtpDescriptorHardwareVersionValue, \
+						  b32 => wtpDescriptorActiveSoftwareVersionVendor, \
+						  b16 => wtpDescriptorActiveSoftwareVersionType, \
+						  b16 => wtpDescriptorActiveSoftwareVersionLen, \
+						  b8[' + activeSoftwareVersion.length + ']z|str("ascii") => wtpDescriptorActiveSoftwareVersionValue, \
+						  b32 => wtpDescriptorBootVersionVendor, \
+						  b16 => wtpDescriptorBootVersionType, \
+						  b16 => wtpDescriptorBootVersionLen, \
+						  b8[' + bootVersion.length + ']z|str("ascii") => wtpDescriptorBootVersionValue, \
+						  b32 => wtpDescriptorOtherSoftwareVersionVendor, \
+						  b16 => wtpDescriptorOtherSoftwareVersionType, \
+						  b16 => wtpDescriptorOtherSoftwareVersionLen, \
+						  b8[' + otherSoftwareVersion.length + ']z|str("ascii") => wtpDescriptorOtherSoftwareVersionValue', {
+		wtpDescriptorHardwareVersionVendor: 0,
+		wtpDescriptorHardwareVersionType: 0,
+		wtpDescriptorHardwareVersionLen: 1,
+		wtpDescriptorHardwareVersionValue: hardwareVersion,
+
+		wtpDescriptorActiveSoftwareVersionVendor: 0,
+		wtpDescriptorActiveSoftwareVersionType: 1,
+		wtpDescriptorActiveSoftwareVersionLen: activeSoftwareVersion.length,
+		wtpDescriptorActiveSoftwareVersionValue: activeSoftwareVersion,
+
+		wtpDescriptorBootVersionVendor: 0,
+		wtpDescriptorBootVersionType: 1,
+		wtpDescriptorBootVersionLen: bootVersion.length,
+		wtpDescriptorBootVersionValue: bootVersion,
+
+		wtpDescriptorOtherSoftwareVersionVendor: 0,
+		wtpDescriptorOtherSoftwareVersionType: 1,
+		wtpDescriptorOtherSoftwareVersionLen: otherSoftwareVersion.length,
+		wtpDescriptorOtherSoftwareVersionValue: otherSoftwareVersion
+	});
+	var len = 4 + 9 + 8 + activeSoftwareVersion.length + 8 + bootVersion.length + 8 + otherSoftwareVersion.length;
+	return this.buildTlv(serializer, 39, len);
 };
 
 builder.buildAcDescriptor = function() {

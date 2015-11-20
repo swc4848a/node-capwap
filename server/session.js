@@ -138,20 +138,21 @@ exports.joinRequestProcess = function(server, request) {
 	// 10. update wtp information
 	wtpHash.boardId = request.messageElement.wtpBoardData.wtpBoardId.value;
 
-	debug(request.messageElement.wtpBoardData);
-
 	wtpHash.boardRevision = request.messageElement.wtpBoardData.wtpBoardRevision.value;
 	wtpHash.baseMacAddress = request.messageElement.wtpBoardData.wtpBaseMacAddress.value;
-	wtpHash.wtpHardwareVersion = request.messageElement.wtpDescriptor.wtpHardwareVersion.value;
-	wtpHash.wtpActiveSoftwareVersion = request.messageElement.wtpDescriptor.wtpActiveSoftwareVersion.value;
-	wtpHash.wtpBootVersion = request.messageElement.wtpDescriptor.wtpBootVersion.value;
-	wtpHash.wtpOtherSoftwareVersion = request.messageElement.wtpDescriptor.wtpOtherSoftwareVersion.value;
+
+	wtpHash.wtpHardwareVersion = request.messageElement.wtpDescriptor.value.wtpDescriptorHardwareVersionValue;
+	wtpHash.wtpActiveSoftwareVersion = request.messageElement.wtpDescriptor.value.wtpDescriptorActiveSoftwareVersionValue;
+	wtpHash.wtpBootVersion = request.messageElement.wtpDescriptor.value.wtpDescriptorBootVersionValue;
+	wtpHash.wtpOtherSoftwareVersion = request.messageElement.wtpDescriptor.value.wtpDescriptorOtherSoftwareVersionValue;
 
 	if (request.messageElement.vspWbhStation) {
 		// udpate 
 	} else {
 		// update other
 	}
+
+	debug(wtpHash);
 
 	wtpHash.sessionId = request.messageElement.sessionId.value;
 

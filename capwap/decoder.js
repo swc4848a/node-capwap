@@ -173,6 +173,29 @@ var getWtpMacType = function getWtpMacType(tlv, success) {
 	parser.parse(tlv.value);
 };
 
+var getWtpDescriptor = function getWtpDescriptor(tlv, success) {
+	// todo: auto calculate len?
+	parser.extract('b32 => wtpDescriptorHardwareVersionVendor, \
+		            b16 => wtpDescriptorHardwareVersionType, \
+		            b16 => wtpDescriptorHardwareVersionLen, \
+		            b8[1]z|str("ascii") => wtpDescriptorHardwareVersionValue, \
+		            b32 => wtpDescriptorActiveSoftwareVersionVendor, \
+				    b16 => wtpDescriptorActiveSoftwareVersionType, \
+				    b16 => wtpDescriptorActiveSoftwareVersionLen, \
+				    b8[20]z|str("ascii") => wtpDescriptorActiveSoftwareVersionValue, \
+				    b32 => wtpDescriptorBootVersionVendor, \
+				    b16 => wtpDescriptorBootVersionType, \
+				    b16 => wtpDescriptorBootVersionLen, \
+				    b8[8]z|str("ascii") => wtpDescriptorBootVersionValue, \
+				    b32 => wtpDescriptorOtherSoftwareVersionVendor, \
+				    b16 => wtpDescriptorOtherSoftwareVersionType, \
+				    b16 => wtpDescriptorOtherSoftwareVersionLen, \
+				    b8[20]z|str("ascii") => wtpDescriptorOtherSoftwareVersionValue', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var parseTlvValueObject = function(tlv, success) {
 	var obj = {};
 	obj.type = tlv.type;
@@ -281,6 +304,12 @@ var parseTlvValueObject = function(tlv, success) {
 			obj.value = tlvObj;
 			success(obj);
 		});
+	} else if (tlv.type === enumType.tlvType.WTP_DESCRIPTOR) {
+		// Type: WTP Descriptor (39)
+		getWtpDescriptor(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
 	} else {
 		console.trace('unknown tlv type [%d]', tlv.type);
 	}
@@ -330,6 +359,8 @@ var parseTlvValue = function(tlv, length) {
 				object.messageElement.wtpFrameTunnelMode = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.WTP_MAC_TYPE) {
 				object.messageElement.wtpMacType = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.WTP_DESCRIPTOR) {
+				object.messageElement.wtpDescriptor = tlvObj;
 			} else {
 				console.trace('unknown tlv type [%d]', tlvObj.type);
 			}
