@@ -141,6 +141,7 @@ exports.joinRequestProcess = function(server, request) {
 	wtpHash.boardRevision = request.messageElement.wtpBoardData.wtpBoardRevision.value;
 	wtpHash.baseMacAddress = request.messageElement.wtpBoardData.wtpBaseMacAddress.value;
 
+	// todo: refacor to uniform architecture
 	wtpHash.wtpHardwareVersion = request.messageElement.wtpDescriptor.value.wtpDescriptorHardwareVersionValue;
 	wtpHash.wtpActiveSoftwareVersion = request.messageElement.wtpDescriptor.value.wtpDescriptorActiveSoftwareVersionValue;
 	wtpHash.wtpBootVersion = request.messageElement.wtpDescriptor.value.wtpDescriptorBootVersionValue;
@@ -152,10 +153,9 @@ exports.joinRequestProcess = function(server, request) {
 		// update other
 	}
 
+	wtpHash.sessionId = request.messageElement.sessionId.value.sessionId;
+
 	debug(wtpHash);
-
-	wtpHash.sessionId = request.messageElement.sessionId.value;
-
 	// todo: notify worker thread?
 
 	message.sendJoinResponse(server, request);

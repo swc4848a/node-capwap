@@ -343,7 +343,12 @@ var parseTlvValue = function(tlv, length) {
 			} else if (tlvObj.type === enumType.tlvType.RESULT_CODE) {
 				object.messageElement.resultCode = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.SESSION_ID) {
-				object.keepAlive.messageElement.sessionId = tlvObj;
+				// todo: merge keepAlive and join req
+				if (object.keepAlive) {
+					object.keepAlive.messageElement.sessionId = tlvObj;
+				} else {
+					object.messageElement.sessionId = tlvObj;
+				}
 			} else if (tlvObj.type === enumType.tlvType.WTP_NAME) {
 				object.messageElement.wtpName = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_ADD_WLAN) {
