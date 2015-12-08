@@ -11,7 +11,7 @@ require.config({
         'backbone': 'bower_components/backbone/backbone',
         'marionette': 'bower_components/marionette/lib/backbone.marionette',
         'handlebars': 'bower_components/handlebars/handlebars',
-        'highcharts': 'bower_components/highcharts/highcharts',
+        'highcharts': 'bower_components/highcharts/lib/highcharts',
         'text': 'bower_components/text/text'
     },
 

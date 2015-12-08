@@ -23,7 +23,6 @@ require(
         };
 
         app.navigateTo = function(context, options) {
-            console.log(context);
             app.mainRegion.show(new contextMap[context](options));
         };
 

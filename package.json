@@ -20,6 +20,7 @@
     "debug": "^2.2.0",
     "express": "^4.13.3",
     "packet": "0.0.6",
+    "serve-favicon": "^2.3.0",
     "stately.js": "fschaefer/Stately.js",
     "tap": "isaacs/node-tap",
     "underscore": "^1.8.3"
