@@ -1,67 +1,99 @@
 define(['marionette', 'templates/compiled'], function(Marionette, JST) {
+	var draw = function(array) {
+
+		var categories = _.keys(_.groupBy(array, function(obj) {
+			return obj.threadId
+		}));
+
+		var mapCategories = _.map(categories, function(item) {
+			return 'thread:' + (item - 1);
+		});
+
+		mapCategories[0] = 'main process';
+
+		console.log(mapCategories);
+
+		var groupName = _.groupBy(array, function(obj) {
+			return obj.name
+		});
+
+		console.log(groupName);
+
+		var keyGroupName = _.keys(groupName);
+
+		console.log(keyGroupName);
+
+		var series = [];
+		for (var i = 0; i < keyGroupName.length; ++i) {
+			var groupData = groupName[keyGroupName[i]];
+			var data = [];
+			for (var j = 0; j < groupData.length; ++j) {
+				var freequeue = groupData[j].freequeue;
+				var percent;
+				if (freequeue.tail - freequeue.head > 0) {
+					percent = (freequeue.tail - freequeue.head + 1) / 500;
+				} else {
+					percent = (freequeue.tail + 50000 - freequeue.head + 1) / 500;
+				}
+				data.push(percent);
+			}
+			var item = {
+				name: keyGroupName[i],
+				data: data
+			};
+			series.push(item);
+		}
+
+		console.log(series);
+
+		$('#container').highcharts({
+			chart: {
+				type: 'column'
+			},
+			title: {
+				text: 'Capwap Apserver Tracer Share Memory Usage'
+			},
+			subtitle: {
+				text: ''
+			},
+			xAxis: {
+				categories: mapCategories,
+				crosshair: true
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Free Percent (%)'
+				}
+			},
+			tooltip: {
+				headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+					'<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+				footerFormat: '</table>',
+				shared: true,
+				useHTML: true
+			},
+			plotOptions: {
+				column: {
+					pointPadding: 0.2,
+					borderWidth: 0
+				}
+			},
+			series: series
+		});
+
+	};
+
 	var Homepage = Marionette.ItemView.extend({
 		template: JST.HomepageTemplate,
 		onShow: function() {
-			$('#container').highcharts({
-
-				chart: {
-					type: 'column',
-					options3d: {
-						enabled: true,
-						alpha: 15,
-						beta: 15,
-						viewDistance: 25,
-						depth: 40
-					},
-					marginTop: 80,
-					marginRight: 40
-				},
-
-				title: {
-					text: 'Total fruit consumption, grouped by gender'
-				},
-
-				xAxis: {
-					categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-				},
-
-				yAxis: {
-					allowDecimals: false,
-					min: 0,
-					title: {
-						text: 'Number of fruits'
-					}
-				},
-
-				tooltip: {
-					headerFormat: '<b>{point.key}</b><br>',
-					pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
-				},
-
-				plotOptions: {
-					column: {
-						stacking: 'normal',
-						depth: 40
-					}
-				},
-
-				series: [{
-					name: 'John',
-					data: [5, 3, 4, 7, 2],
-					stack: 'male'
-				}, {
-					name: 'Joe',
-					data: [3, 4, 4, 2, 5],
-					stack: 'male'
-				}, {
-					name: 'Jane',
-					data: [2, 5, 6, 2, 1],
-					stack: 'female'
-				}, {
-					name: 'Janet',
-					data: [3, 0, 4, 4, 3],
-					stack: 'female'
-				}]
+			$.ajax({
+				url: 'Stat'
+			}).success(function(data, textStatus, jqXHR) {
+				var array = data.result[0].data;
+				console.log(array);
+				draw(array);
 			});
 		}
 	});
