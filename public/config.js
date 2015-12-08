@@ -1,7 +1,5 @@
 'use strict';
 
-if (typeof DEBUG === 'undefined') DEBUG = true;
-
 require.config({
 
     baseUrl: '/',
@@ -11,9 +9,10 @@ require.config({
         'bootstrap': 'bower_components/bootstrap/dist/js/bootstrap',
         'underscore': 'bower_components/underscore/underscore',
         'backbone': 'bower_components/backbone/backbone',
-        'marionette': 'bower_components/backbone.marionette/lib/backbone.marionette',
+        'marionette': 'bower_components/marionette/lib/backbone.marionette',
         'handlebars': 'bower_components/handlebars/handlebars',
-        'highcharts': 'bower_components/highstock-release/highstock'
+        'highcharts': 'bower_components/highcharts/highcharts',
+        'text': 'bower_components/text/text'
     },
 
     // non-AMD lib
