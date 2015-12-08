@@ -3,55 +3,64 @@ define(['marionette', 'templates/compiled'], function(Marionette, JST) {
 		template: JST.HomepageTemplate,
 		onShow: function() {
 			$('#container').highcharts({
+
 				chart: {
-					plotBackgroundColor: null,
-					plotBorderWidth: null,
-					plotShadow: false,
-					type: 'pie'
+					type: 'column',
+					options3d: {
+						enabled: true,
+						alpha: 15,
+						beta: 15,
+						viewDistance: 25,
+						depth: 40
+					},
+					marginTop: 80,
+					marginRight: 40
 				},
+
 				title: {
-					text: 'Browser market shares January, 2015 to May, 2015'
+					text: 'Total fruit consumption, grouped by gender'
 				},
-				tooltip: {
-					pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+
+				xAxis: {
+					categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
 				},
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: true,
-							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-							style: {
-								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-							}
-						}
+
+				yAxis: {
+					allowDecimals: false,
+					min: 0,
+					title: {
+						text: 'Number of fruits'
 					}
 				},
+
+				tooltip: {
+					headerFormat: '<b>{point.key}</b><br>',
+					pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+				},
+
+				plotOptions: {
+					column: {
+						stacking: 'normal',
+						depth: 40
+					}
+				},
+
 				series: [{
-					name: 'Brands',
-					colorByPoint: true,
-					data: [{
-						name: 'Microsoft Internet Explorer',
-						y: 56.33
-					}, {
-						name: 'Chrome',
-						y: 24.03,
-						sliced: true,
-						selected: true
-					}, {
-						name: 'Firefox',
-						y: 10.38
-					}, {
-						name: 'Safari',
-						y: 4.77
-					}, {
-						name: 'Opera',
-						y: 0.91
-					}, {
-						name: 'Proprietary or Undetectable',
-						y: 0.2
-					}]
+					name: 'John',
+					data: [5, 3, 4, 7, 2],
+					stack: 'male'
+				}, {
+					name: 'Joe',
+					data: [3, 4, 4, 2, 5],
+					stack: 'male'
+				}, {
+					name: 'Jane',
+					data: [2, 5, 6, 2, 1],
+					stack: 'female'
+				}, {
+					name: 'Janet',
+					data: [3, 0, 4, 4, 3],
+					stack: 'female'
 				}]
 			});
 		}
