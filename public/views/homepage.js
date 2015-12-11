@@ -34,6 +34,8 @@ define(['marionette', 'templates/compiled'], function(Marionette, JST) {
 					percent = (freequeue.tail + 50000 - freequeue.head + 1) / 500;
 				}
 				data.push(percent);
+				var stat = groupData[j].stat;
+				if (stat.in !== stat.out) console.log('left to process [%d]', stat.in - stat.out);
 			}
 			var item = {
 				name: keyGroupName[i],
@@ -67,7 +69,7 @@ define(['marionette', 'templates/compiled'], function(Marionette, JST) {
 			tooltip: {
 				headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-					'<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+					'<td style="padding:0"><b>{point.y:.3f}%</b></td></tr>',
 				footerFormat: '</table>',
 				shared: true,
 				useHTML: true
@@ -86,6 +88,9 @@ define(['marionette', 'templates/compiled'], function(Marionette, JST) {
 	var Homepage = Marionette.ItemView.extend({
 		template: JST.HomepageTemplate,
 		onShow: function() {
+			setInterval(this.query, 5000);
+		},
+		query: function() {
 			$.ajax({
 				url: 'Stat'
 			}).success(function(data, textStatus, jqXHR) {
