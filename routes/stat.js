@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
 	}));
 
 	var client = dgram.createSocket('udp4');
-	client.bind(65535);
+	client.bind(65534);
 
 	client.send(message, 0, message.length, 9688, '172.16.94.163');
 

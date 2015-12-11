@@ -6,10 +6,8 @@ define(['marionette', 'templates/compiled'], function(Marionette, JST) {
 		}));
 
 		var mapCategories = _.map(categories, function(item) {
-			return 'thread:' + (item - 1);
+			return 'thread:' + item;
 		});
-
-		mapCategories[0] = 'main process';
 
 		console.log(mapCategories);
 
