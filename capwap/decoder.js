@@ -142,6 +142,13 @@ var getIeee80211AddWlan = function(tlv, success) {
 	parser.parse(tlv.value);
 };
 
+var getIeee80211AssignedWtpBssid = function getIeee80211AssignedWtpBssid(tlv, success) {
+	parser.extract('b8 => radioId, b8 => wlanId, b8[6] => bssid', function(tlvObj) {
+		success(tlvObj);
+	});
+	parser.parse(tlv.value);
+};
+
 var getIeee80211WtpRadioConfiguration = function(tlv, success) {
 	parser.extract('b8 => radioId, b8 => shortPreamble, b8 => numOfBssids, \
 					b8 => dtimPeriod, b8[6] => bssid, b16 => beaconPeriod, b8[4]z|str("ascii") => countryString', function(tlvObj) {
@@ -280,6 +287,12 @@ var parseTlvValueObject = function(tlv, success) {
 			obj.value = tlvObj;
 			success(obj);
 		});
+	} else if (tlv.type === enumType.tlvType.IEEE_80211_ASSIGNED_WTP_BSSID) {
+		// Type: IEEE 802.11 Assigned WTP BSSID (1026)
+		getIeee80211AssignedWtpBssid(tlv, function(tlvObj) {
+			obj.value = tlvObj;
+			success(obj);
+		});
 	} else if (tlv.type === enumType.tlvType.IEEE_80211_WTP_RADIO_CONFIGURATION) {
 		// Type: IEEE 802.11 WTP Radio Configuration (1046)
 		getIeee80211WtpRadioConfiguration(tlv, function(tlvObj) {
@@ -353,6 +366,8 @@ var parseTlvValue = function(tlv, length) {
 				object.messageElement.wtpName = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_ADD_WLAN) {
 				object.messageElement.ieee80211AddWlan = tlvObj;
+			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_ASSIGNED_WTP_BSSID) {
+				object.messageElement.ieee80211AssignedWtpBssid = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_WTP_RADIO_CONFIGURATION) {
 				object.messageElement.ieee80211WtpRadioConfiguration = tlvObj;
 			} else if (tlvObj.type === enumType.tlvType.IEEE_80211_WTP_RADIO_INFORMATION) {

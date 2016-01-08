@@ -148,6 +148,7 @@ session.configurationUpdateRequestProcess = function(client, request) {
 
 session.ieee80211WlanConfigurationRequestProcess = function(client, request) {
 	var tlv = [
+		builder.buildIEEE80211AssignedWtpBssid(),
 		builder.buildResultCode(0),
 	]
 	var elementLength = tool.calMessageElementLength(tlv);

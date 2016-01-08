@@ -270,6 +270,16 @@ builder.buildIEEE80211WTPRadioConfiguration = function() {
 	return this.buildTlv(serializer, enumType.tlvType.IEEE_80211_WTP_RADIO_CONFIGURATION, len);
 };
 
+builder.buildIEEE80211AssignedWtpBssid = function buildIEEE80211AssignedWtpBssid() {
+	serializer.serialize('b8 => radioId, b8 => wlanId, b8[6] => bssid', {
+		radioId: 1,
+		wlanId: 3,
+		bssid: [0x2a, 0x5b, 0x0e, 0xc6, 0x6a, 0x5a]
+	});
+	var len = 8;
+	return this.buildTlv(serializer, enumType.tlvType.IEEE_80211_ASSIGNED_WTP_BSSID, len);
+};
+
 builder.buildVspWtpCapabilities = function buildVspWtpCapabilities() {
 	serializer.serialize('b32 => identifier,\
 		                  b16 => elementId,\
