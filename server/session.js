@@ -267,7 +267,7 @@ exports.startConfigurationProcess = function(server, request) {
 exports.ieee80211ConfigurationResponseProcess = function(server, response) {
 	// todo: assinged wtp bssid
 	if (response.messageElement.ieee80211AssignedWtpBssid) {
-
+		
 	}
 	// todo: wlan add
 	// todo: wlan delete

@@ -18,7 +18,9 @@ npm install
 Start
 
 ```
-npm start
+* Server: node server.js SERVER_IP  
+* Client: node client.js CLIENT_IP  
+
 ```
 
 ### Todo List
