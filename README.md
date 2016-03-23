@@ -15,6 +15,15 @@ Install Dependent using NPM.
 npm install
 ```
 
+Modify config.json.
+
+```
+{
+	"server_ip": "172.16.94.161",
+	"client_ip": "172.16.94.163"
+}
+```
+
 Start
 
 ```
@@ -50,7 +59,7 @@ Thu Oct 1 09:00:00 UTC 2015
 Thu Nov 4 09:00:00 UTC 2015
 
  * Add wtp-hash, account-context, wtp-session to manage protocol interaction  
- * 
+ * Add config file,  
 
 
 # License
