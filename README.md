@@ -18,7 +18,7 @@ npm install
 Start
 
 ```
-node app.js
+npm start
 ```
 
 ### Todo List
@@ -47,7 +47,8 @@ Thu Oct 1 09:00:00 UTC 2015
 
 Thu Nov 4 09:00:00 UTC 2015
 
- * Add wtp-hash, account-context, wtp-session to manage protocol interaction
+ * Add wtp-hash, account-context, wtp-session to manage protocol interaction  
+ * 
 
 
 # License
