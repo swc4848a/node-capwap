@@ -5,9 +5,12 @@
 process.env['DEBUG'] = '*';
 
 var enumType = require('./capwap/enum');
+var fs = require('fs');
 
-enumType.socket.CLIENT_IP = process.argv[2];
-enumType.socket.SERVER_IP = process.argv[3];
+var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+enumType.socket.SERVER_IP = config.server_ip;
+enumType.socket.CLIENT_IP = config.client_ip;
 
 var client = require('./client/client');
 client.bind(enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP);
