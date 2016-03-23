@@ -27,9 +27,8 @@ Modify config.json.
 Start
 
 ```
-* Server: node server.js  
-* Client: node client.js  
-
+Server: node server.js  
+Client: node client.js  
 ```
 
 ### Todo List
