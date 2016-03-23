@@ -18,8 +18,8 @@ npm install
 Start
 
 ```
-* Server: node server.js SERVER_IP  
-* Client: node client.js CLIENT_IP  
+* Server: node server.js  
+* Client: node client.js  
 
 ```
 
