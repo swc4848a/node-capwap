@@ -31,6 +31,39 @@ Server: node server.js
 Client: node client.js  
 ```
 
+### Mermaid
+
+Mermaid doc for modules interaction
+
+```
+sequenceDiagram
+    participant apserver
+    participant wtp_wpa
+    participant wpa_supplicant
+
+    apserver-->>wtp_wpa: IEEE 802.11 WLAN Configuration Request
+    wtp_wpa-->>apserver: IEEE 802.11 WLAN Configuration Response
+    
+    Note over apserver,wtp_wpa: wtp connect success
+    
+    wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ADD
+    wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_ADDED
+    wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_ASSOC
+    wtp_wpa-->>apserver: Association Request(SSID)
+    apserver-->>wtp_wpa: Association Request
+    wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ASSOC
+
+    apserver-->>wtp_wpa: Station Configuration Request
+    wtp_wpa-->>apserver: Station Configuration Response
+    apserver-->>wtp_wpa: EAP Request Identity
+
+```
+
+Generated diagram
+
+![Generated diagram](./doc/diagram.svg)
+
+
 ### Todo List
 
  * check if ip/port used by other wtp-session
