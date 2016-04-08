@@ -61,7 +61,7 @@ sequenceDiagram
 
 Generated diagram
 
-![Generated diagram](./doc/diagram.svg)
+![Generated diagram](./doc/diagram.png)
 
 
 ### Todo List
