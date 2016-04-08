@@ -33,7 +33,7 @@ Client: node client.js
 
 ### Mermaid
 
-Mermaid doc for modules interaction
+[Mermaid](http://knsv.github.io/mermaid/) doc for modules interaction
 
 ```
 sequenceDiagram
