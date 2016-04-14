@@ -1,0 +1,4 @@
+
+> node-capwap@0.0.1 watch-js D:\Workspaces\Project\node-capwap
+> watchify public/main.js -o public/bundle.js -t [ babelify --presets [ es2015 react ] ] -dv
+
