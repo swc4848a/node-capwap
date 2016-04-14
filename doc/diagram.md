@@ -85,4 +85,4 @@ sequenceDiagram
 
 Generated diagram
 
-![Generated diagram](./diagram.svg)
+![Generated diagram](./diagram.png)
