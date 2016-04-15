@@ -1,10 +1,15 @@
 var React = require('react');
+var MainHeader = require('./mainheader.react');
+
+// <MainSidebar />
+// <ContentWrapper />
+// <MainFooter />
 
 var Main = React.createClass({
     render: function() {
         return (
-            <div className="">
-        		Hello Monitor!
+            <div>
+            	<MainHeader />
         	</div>
         );
     }
