@@ -4,7 +4,9 @@ var MainHeaderLogo = React.createClass({
     render: function() {
         return (
             <a href="javascript:void(0);" className="logo">
-                <span className="logo-lg"><i className="fa fa-cloud" aria-hidden="true"></i> FortiCloud Monitor</span>
+                <span className="logo-lg">
+                    <i className="fa fa-cloud" aria-hidden="true"></i> FortiCloud Monitor
+                </span>
             </a>
         );
     }

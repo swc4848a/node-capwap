@@ -1,15 +1,17 @@
 var React = require('react');
 var MainHeader = require('./mainheader.react');
-
-// <MainSidebar />
-// <ContentWrapper />
-// <MainFooter />
+var MainSidebar = require('./mainsidebar.react');
+var ContentWrapper = require('./contentwrapper.react');
+var MainFooter = require('./mainfooter.react');
 
 var Main = React.createClass({
     render: function() {
         return (
             <div>
-            	<MainHeader />
+                <MainHeader />
+            	<MainSidebar />
+                <ContentWrapper />
+                <MainFooter />
         	</div>
         );
     }
