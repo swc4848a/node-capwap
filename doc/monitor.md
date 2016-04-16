@@ -2,6 +2,6 @@
 
 ##Format Design
 
-| timestamp | daemon | module | thread | level | file | line | function | apnetwork | ap | sta | ssid | custom_string |
-|-----------|--------|--------|--------|-------|------|------|----------|-----------|----|-----|------|---------------|
-|           |        |        |        |       |      |      |          |           |    |     |      |               |
+| timestamp | daemon | thread | level | file | line | apnetwork | ap | sta | ssid | custom_string |
+|-----------|--------|--------|-------|------|------|-----------|----|-----|------|---------------|
+|           |        |        |       |      |      |           |    |     |      |               |
