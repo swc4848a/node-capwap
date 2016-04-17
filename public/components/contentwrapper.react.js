@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactTable = require('Reactable').Table;
 
 var ContentHeader = React.createClass({
     render: function() {
@@ -18,21 +19,20 @@ var ContentHeader = React.createClass({
     }
 });
 
-var HeaderOptions = ['timestamp', 'daemon', 'thread', 'level', 'file', 'line', 'apnetwork', 'ap', 'sta', 'ssid', 'custom_string'];
-
-var TableHeader = React.createClass({
-    render: function() {
-        var items = [];
-        HeaderOptions.forEach(function(item, index) {
-            items.push(<th key={index}>{item}</th>);
-        });
-        return (
-            <thead>
-                <tr>{items}</tr>
-            </thead>
-        );
-    }
-});
+var options = [
+    { Name: 'Griffin Smith', Age: 18, Position: 'Vancouver' },
+    { Name: 'Lee Salminen', Age: 23, Position: 'Burnaby' },
+    { Name: 'Tomas', Age: 28, Position: 'Developer' },
+    { Name: 'Griffin Smith', Age: 18, Position: 'Vancouver' },
+    { Name: 'Lee Salminen', Age: 23, Position: 'Burnaby' },
+    { Name: 'Tomas', Age: 28, Position: 'Developer' },
+    { Name: 'Griffin Smith', Age: 18, Position: 'Vancouver' },
+    { Name: 'Lee Salminen', Age: 23, Position: 'Burnaby' },
+    { Name: 'Tomas', Age: 28, Position: 'Developer' },
+    { Name: 'Griffin Smith', Age: 18, Position: 'Vancouver' },
+    { Name: 'Lee Salminen', Age: 23, Position: 'Burnaby' },
+    { Name: 'Tomas', Age: 28, Position: 'Developer' }
+];
 
 var Content = React.createClass({
     render: function() {
@@ -45,9 +45,13 @@ var Content = React.createClass({
                                 <h3 className="box-title">Hover Data Table</h3>
                             </div>
                             <div className="box-body">
-                                <table id="example2" className="table table-bordered table-hover">
-                                    <TableHeader />
-                                </table>
+                                <ReactTable 
+                                    className="table" 
+                                    data={options} 
+                                    sortable={true} 
+                                    itemsPerPage={4} 
+                                    filterable={['Age', 'Name']}
+                                />
                             </div>
                         </div>
                     </div>
