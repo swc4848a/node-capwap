@@ -1,4 +1,6 @@
 var React = require('react');
+// var AppStore = require('../stores/AppStore');
+// var AppActions = require('../actions/AppActions');
 
 var ContentHeader = React.createClass({
     render: function() {
@@ -35,6 +37,19 @@ var TableHeader = React.createClass({
 });
 
 var Content = React.createClass({
+    // getInitialState: function() {
+    //     return AppStore.getAll();
+    // },
+    componentDidMount: function() {
+        // AppStore.addChangeListener(this._onChange);
+        // AppActions.updateCollections();
+    },
+    componentWillUnmount: function() {
+        // AppStore.removeChangeListener(this._onChange);
+    },
+    _onChange: function() {
+        // this.setState(AppStore.getAll());
+    },
     render: function() {
         return (
             <section className="content">
