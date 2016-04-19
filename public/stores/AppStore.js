@@ -8,42 +8,91 @@ var AppConstants = require('../constants/AppConstants');
 var CHANGE_EVENT = 'change';
 
 var _apps = {
+    serverRequest: null,
     collections: [],
-    selectOptions: []
+    filter: {
+        input: {
+            label: '',
+            status: false
+        },
+        select: {
+            options: [],
+            status: false
+        }
+    }
 };
+
+function updateFilterInput(options) {
+    _apps.filter.input = assign({}, _apps.filter.input, options);
+}
+
+function updateFilterSelect(options) {
+    _apps.filter.select = assign({}, _apps.filter.select, options);
+}
+
+function updateCollections() {
+    _apps.serverRequest = $.get('/Stores', function(result) {
+        _apps.collections = result;
+        updateFilterSelect({
+            options: _.keys(result[0]),
+            status: false
+        });
+        AppStore.emitChange();
+    });
+}
+
+function toggleFilterSelect() {
+    _apps.filter.select = assign({}, _apps.filter.select, {
+        status: !_apps.filter.select.status
+    });
+}
 
 var AppStore = assign({}, EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT);
     },
-    getAll: function() {
+    getCollections: function() {
         return _apps.collections;
     },
-    getSelectOptions: function() {
-        return _apps.selectOptions;
+    getSelect: function() {
+        return _apps.filter.select;
+    },
+    getInput: function() {
+        return _apps.filter.input;
     },
     addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback);
     },
-    updateCollections: function() {
-        this.serverRequest = $.get('/Stores', function(result) {
-            _apps.collections = result;
-            _apps.selectOptions = _.keys(result[0]);
-            this.emitChange();
-        }.bind(this));
-    },
     serverAbort: function() {
         this.serverRequest.abort();
-    }
+    },
 });
 
 AppDispatcher.register(function(action) {
     switch (action.actionType) {
         case AppConstants.APP_UPDATE_COLLECTIONS:
-            AppStore.updateCollections();
+            updateCollections();
             break;
         case AppConstants.APP_SERVER_ABORT:
             AppStore.serverAbort();
+            break;
+        case AppConstants.APP_UPDATE_FILTER_INPUT:
+            updateFilterInput({
+                label: action.label,
+                status: action.status
+            });
+            AppStore.emitChange();
+            break;
+        case AppConstants.APP_UPDATE_FILTER_SELECT:
+            updateFilterSelect({
+                options: action.options,
+                status: action.status
+            });
+            AppStore.emitChange();
+            break;
+        case AppConstants.APP_TOGGLE_FILTER_SELECT:
+            toggleFilterSelect();
+            AppStore.emitChange();
             break;
         default:
             console.log('Do not support action type [%s]', action.actionType);

@@ -38,7 +38,7 @@ router.get('/', function(req, res) {
 
     connection.connect();
 
-    connection.query('SELECT * from wlEvent', function(err, rows, fields) {
+    connection.query('SELECT * from wlEvent LIMIT 5', function(err, rows, fields) {
         if (err) {
             throw err;
         }

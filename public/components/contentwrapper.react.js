@@ -22,16 +22,17 @@ var ContentHeader = React.createClass({
     }
 });
 
-function getStoreState() {
+function getAppStore() {
     return {
-        allCols: AppStore.getAll(),
-        selectOptions: AppStore.getSelectOptions()
+        collections: AppStore.getCollections(),
+        select: AppStore.getSelect(),
+        input: AppStore.getInput(),
     };
 }
 
 var Content = React.createClass({
     getInitialState: function() {
-        return getStoreState();
+        return getAppStore();
     },
     componentDidMount: function() {
         AppStore.addChangeListener(this._onChange);
@@ -42,7 +43,7 @@ var Content = React.createClass({
         AppActions.serverAbort();
     },
     _onChange: function() {
-        this.setState(getStoreState());
+        this.setState(getAppStore());
     },
     render: function() {
         return (
@@ -50,12 +51,15 @@ var Content = React.createClass({
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="box">
-                            <Filter selectOptions={this.state.selectOptions} />
+                            <Filter 
+                                select={this.state.select} 
+                                input={this.state.input} 
+                            />
                             <div className="box-body">
                                 <div className="table-responsive">
                                     <ReactTable 
                                         className="table table-hover table-bordered" 
-                                        data={this.state.allCols} 
+                                        data={this.state.collections} 
                                         sortable={true} 
                                         itemsPerPage={10} 
                                         filterable={['oid']}

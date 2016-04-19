@@ -12,9 +12,23 @@ var AppActions = {
             actionType: AppConstants.APP_SERVER_ABORT,
         });
     },
-    updateSelectOptions: function() {
+    updateFilterInput: function(label, status) {
         AppDispatcher.dispatch({
-            actionType: AppConstants.APP_UPDATE_OPTIONS,
+            actionType: AppConstants.APP_UPDATE_FILTER_INPUT,
+            label: label,
+            status: status
+        });
+    },
+    updateFilterSelect: function(options, status) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_FILTER_SELECT,
+            options: options,
+            status: status
+        });
+    },
+    toggleFilterSelect: function() {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_TOGGLE_FILTER_SELECT,
         });
     }
 };
