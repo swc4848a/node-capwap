@@ -30,6 +30,13 @@ var AppActions = {
         AppDispatcher.dispatch({
             actionType: AppConstants.APP_TOGGLE_FILTER_SELECT,
         });
+    },
+    addFilter: function(key, condition) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_ADD_FILTER,
+            key: key,
+            condition: condition
+        });
     }
 };
 

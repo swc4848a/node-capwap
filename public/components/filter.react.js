@@ -1,6 +1,8 @@
 var React = require('react');
 var AppActions = require('../actions/AppActions');
 
+var ENTER_KEY_CODE = 13;
+
 var Select = React.createClass({
     handleChange: function(event) {
         AppActions.updateFilterInput(event.target.value, true);
@@ -21,12 +23,49 @@ var Select = React.createClass({
 });
 
 var Input = React.createClass({
+    handleKeyDown: function(event) {
+        if (ENTER_KEY_CODE === event.keyCode) {
+            AppActions.addFilter(this.props.options.label, event.target.value);
+            AppActions.toggleFilterSelect();
+            AppActions.updateFilterInput("", false);
+        }
+    },
     render: function() {
         return (
-            <div className={"form-group" + (this.props.options.status ? "" : " hidden")} >
+            <div className={"form-group filter-input" + (this.props.options.status ? "" : " hidden")} >
                 <i className="fa fa-times" aria-hidden="true"></i>&nbsp;
                 <label for="filterInput">{this.props.options.label + ":"}</label>&nbsp;
-                <input type="text" className="form-control" id="filterInput" />
+                <input type="text" 
+                       className="form-control" 
+                       id="filterInput" 
+                       onKeyDown={this.handleKeyDown}
+                       autoFocus={true} 
+                />
+            </div>
+        );
+    }
+});
+
+var ListItem = React.createClass({
+    render: function() {
+        return (
+            <span className="filter-item">
+                <i className="fa fa-times" aria-hidden="true"></i>{this.props.options.key + ":" + this.props.options.condition}
+            </span>
+        );
+    }
+});
+
+var FilterList = React.createClass({
+    render: function() {
+        var items = [];
+        this.props.options.forEach(function(item, index) {
+            items.push(<ListItem options={item} key={index} />);
+        });
+
+        return (
+            <div className="form-group filter-list">
+                {items}
             </div>
         );
     }
@@ -40,19 +79,20 @@ var Filter = React.createClass({
         return (
             <div className="box-header">
                 <h3 className="box-title">
-                    <form className="form-inline">
+                    <div className="form-inline">
+                        <FilterList options={this.props.list} />
                         <Input options={this.props.input}/>
                         &nbsp;
-                        <div className="form-group">
+                        <div className="form-group filter-button">
                             <a href="javascript:void(0);" onClick={this.handleClick}>
                                 <i className="fa fa-plus-circle" aria-hidden="true"></i> Add Filter
                             </a>
                         </div>
                         &nbsp;
-                        <div className="form-group">
+                        <div className="form-group filter-select">
                             <Select options={this.props.select}/>
                         </div>
-                    </form>
+                    </div>
                 </h3>
             </div>
         );

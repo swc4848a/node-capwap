@@ -18,7 +18,8 @@ var _apps = {
         select: {
             options: [],
             status: false
-        }
+        },
+        list: []
     }
 };
 
@@ -47,6 +48,10 @@ function toggleFilterSelect() {
     });
 }
 
+function addFilter(filter) {
+    _apps.filter.list.push(filter);
+}
+
 var AppStore = assign({}, EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT);
@@ -59,6 +64,9 @@ var AppStore = assign({}, EventEmitter.prototype, {
     },
     getInput: function() {
         return _apps.filter.input;
+    },
+    getList: function() {
+        return _apps.filter.list;
     },
     addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback);
@@ -92,6 +100,13 @@ AppDispatcher.register(function(action) {
             break;
         case AppConstants.APP_TOGGLE_FILTER_SELECT:
             toggleFilterSelect();
+            AppStore.emitChange();
+            break;
+        case AppConstants.APP_ADD_FILTER:
+            addFilter({
+                key: action.key,
+                condition: action.condition
+            });
             AppStore.emitChange();
             break;
         default:

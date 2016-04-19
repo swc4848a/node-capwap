@@ -27,6 +27,7 @@ function getAppStore() {
         collections: AppStore.getCollections(),
         select: AppStore.getSelect(),
         input: AppStore.getInput(),
+        list: AppStore.getList()
     };
 }
 
@@ -54,6 +55,7 @@ var Content = React.createClass({
                             <Filter 
                                 select={this.state.select} 
                                 input={this.state.input} 
+                                list={this.state.list}
                             />
                             <div className="box-body">
                                 <div className="table-responsive">
