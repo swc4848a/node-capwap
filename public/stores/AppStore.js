@@ -1,3 +1,5 @@
+var $ = require('jquery');
+var _ = require('underscore');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
@@ -6,12 +8,8 @@ var AppConstants = require('../constants/AppConstants');
 var CHANGE_EVENT = 'change';
 
 var _apps = {
-
-};
-
-function updateCollecions() {
-    // do sql query
-    _apps = assign({}, _apps, udpates);
+    collections: [],
+    selectOptions: []
 };
 
 var AppStore = assign({}, EventEmitter.prototype, {
@@ -19,18 +17,33 @@ var AppStore = assign({}, EventEmitter.prototype, {
         this.emit(CHANGE_EVENT);
     },
     getAll: function() {
-        return _apps;
+        return _apps.collections;
+    },
+    getSelectOptions: function() {
+        return _apps.selectOptions;
     },
     addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback);
     },
+    updateCollections: function() {
+        this.serverRequest = $.get('/Stores', function(result) {
+            _apps.collections = result;
+            _apps.selectOptions = _.keys(result[0]);
+            this.emitChange();
+        }.bind(this));
+    },
+    serverAbort: function() {
+        this.serverRequest.abort();
+    }
 });
 
 AppDispatcher.register(function(action) {
     switch (action.actionType) {
         case AppConstants.APP_UPDATE_COLLECTIONS:
-            updateCollecions();
-            AppStore.emitChange();
+            AppStore.updateCollections();
+            break;
+        case AppConstants.APP_SERVER_ABORT:
+            AppStore.serverAbort();
             break;
         default:
             console.log('Do not support action type [%s]', action.actionType);
