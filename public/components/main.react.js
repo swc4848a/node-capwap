@@ -1,7 +1,7 @@
 var React = require('react');
+
 var MainHeader = require('./mainheader.react');
-var MainSidebar = require('./mainsidebar.react');
-var ContentWrapper = require('./contentwrapper.react');
+var MainRouter = require('./mainrouter.react');
 var MainFooter = require('./mainfooter.react');
 
 var Main = React.createClass({
@@ -9,8 +9,7 @@ var Main = React.createClass({
         return (
             <div>
                 <MainHeader />
-            	<MainSidebar />
-                <ContentWrapper />
+                <MainRouter />
                 <MainFooter />
         	</div>
         );

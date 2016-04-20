@@ -9,8 +9,8 @@ var ContentHeader = React.createClass({
         return (
             <section className="content-header">
                 <h1>
-                    Data Tables
-                    <small>advanced tables</small>
+                    Log Tables
+                    <small>detailed logs</small>
                 </h1>
                 <ol className="breadcrumb">
                     <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
@@ -76,7 +76,7 @@ var Content = React.createClass({
     }
 });
 
-var ContentWrapper = React.createClass({
+var LogTable = React.createClass({
     render: function() {
         return (
             <div className="content-wrapper">
@@ -87,4 +87,4 @@ var ContentWrapper = React.createClass({
     }
 });
 
-module.exports = ContentWrapper;
+module.exports = LogTable;

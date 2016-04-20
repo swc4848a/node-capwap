@@ -27,8 +27,11 @@
 .skin-blue .sidebar-menu li > .treeview-menu {
   background: #FFFFFF;
 }
-.content-wrapper {
+.main-content {
   min-height: 976px;
+}
+.skin-blue .wrapper {
+  background-color: #FFFFFF;
 }
 a.reactable-previous-page,
 a.reactable-page-button,
