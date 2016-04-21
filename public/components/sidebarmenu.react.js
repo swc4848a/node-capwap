@@ -47,6 +47,7 @@ var TreeView = React.createClass({
 var graphNodes = [
     { to: 'LogTable', icon: 'table', label: 'Log Table' },
     { to: 'LogGraph', icon: 'area-chart', label: 'Log Graph' },
+    { to: 'LogDiagram', icon: 'area-chart', label: 'Log Diagram' },
 ];
 
 var settingsNodes = [
@@ -57,8 +58,8 @@ var SidebarMenu = React.createClass({
     render: function() {
         return (
             <ul className="sidebar-menu">
-                <TreeView leaf='Log & Graph' icon='line-chart' nodes={graphNodes} />
-                <TreeView leaf='Log & Settings' icon='cog' nodes={settingsNodes} />
+                <TreeView leaf='Log Graph' icon='line-chart' nodes={graphNodes} />
+                <TreeView leaf='Log Settings' icon='cog' nodes={settingsNodes} />
             </ul>
         );
     }

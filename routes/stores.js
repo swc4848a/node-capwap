@@ -2,7 +2,6 @@
 
 var express = require('express');
 var router = express.Router();
-var dgram = require('dgram');
 var mysql = require('mysql');
 
 // var message = new Buffer(JSON.stringify({
