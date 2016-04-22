@@ -53,9 +53,9 @@ function arrow(ren, text, start, end, y) {
         })
         .add();
 
-    var pos = (start.x < end.x) ? start.x : y;
+    var pos = (start.x < end.x) ? start.x : end.x;
 
-    ren.label(text, pos + 70, y - ar.getBBox().height * 2)
+    ren.label(text, pos + 60, y - ar.getBBox().height * 2)
         .css({
             fontSize: '10px',
             color: colors[3]
@@ -63,32 +63,28 @@ function arrow(ren, text, start, end, y) {
         .add();
 }
 
+var mock = [
+    { type: 'JOIN_REQ', label: 'Join Request', direction: '<== ws', apnetwork: 662, sn: 'FP320CZQQ1000001', ip: '172.16.95.182', port: 10002 },
+    { type: 'JOIN_RESP', label: 'Join Response', direction: '==> ws', apnetwork: 662, sn: 'FP320CZQQ1000001', ip: '172.16.95.182', port: 10002 }
+];
+
 function diagram() {
     var ren = this.renderer;
 
     var server = labelWithDash(ren, 'AP Server', 100);
     var ap = labelWithDash(ren, 'AP', 300);
 
-    arrow(ren, 'Request', server, ap, 100);
-    arrow(ren, 'Response', ap, server, 130);
+    mock.forEach(function(item, index) {
+        if ('<== ws' === item.direction) {
+            arrow(ren, item.label, ap, server, 100 + index * 30);
+        } else if ('==> ws' === item.direction) {
+            arrow(ren, item.label, server, ap, 100 + index * 30);
+        }
+    });
+
 }
 
 var LogGraph = React.createClass({
-    // getInitialState: function() {
-    //     return {
-    //         data: []
-    //     };
-    // },
-    // componentDidMount: function() {
-    //     this.serverRequest = $.get('/Graph', function(result) {
-    //         this.setState({
-    //             data: result
-    //         });
-    //     }.bind(this));
-    // },
-    // componentWillUnmount: function() {
-    //     this.serverRequest.abort();
-    // },
     render: function() {
         var config = {
             chart: {
