@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var _ = require('underscore');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
@@ -32,13 +31,15 @@ function updateFilterSelect(options) {
 }
 
 function updateCollections() {
-    _apps.serverRequest = $.get('/Stores', function(result) {
-        _apps.collections = result;
-        updateFilterSelect({
-            options: _.keys(result[0]),
-            status: false
+    fetch('/Stores').then(function(response) {
+        response.json().then(function(json) {
+            _apps.collections = json;
+            updateFilterSelect({
+                options: _.keys(json[0]),
+                status: false
+            });
+            AppStore.emitChange();
         });
-        AppStore.emitChange();
     });
 }
 
@@ -74,10 +75,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     removeChangeListener: function(callback) {
         this.removeListener(CHANGE_EVENT, callback);
     },
-    serverAbort: function() {
-        // todo: move to outside
-        _apps.serverRequest.abort();
-    },
+    serverAbort: function() {},
 });
 
 AppDispatcher.register(function(action) {

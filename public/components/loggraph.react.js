@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var React = require('react');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
@@ -10,14 +9,17 @@ var LogGraph = React.createClass({
         };
     },
     componentDidMount: function() {
-        this.serverRequest = $.get('/Graph', function(result) {
-            this.setState({
-                data: result
+        var that = this;
+        fetch('/Graph').then(function(response) {
+            response.json().then(function(json) {
+                that.setState({
+                    data: result
+                });
             });
-        }.bind(this));
+        });
     },
     componentWillUnmount: function() {
-        this.serverRequest.abort();
+
     },
     render: function() {
         var config = {

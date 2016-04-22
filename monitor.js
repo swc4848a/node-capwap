@@ -13,10 +13,12 @@ app.use(favicon(__dirname + '/public/theme/project/img/cloud.png'));
 
 var Stores = require('./routes/stores');
 var Graph = require('./routes/graph');
+var Diagram = require('./routes/diagram');
 
 // routes
 app.use('/Stores', Stores);
 app.use('/Graph', Graph);
+app.use('/Diagram', Diagram);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

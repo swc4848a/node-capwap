@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var React = require('react');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
@@ -66,25 +65,23 @@ function arrow(ren, text, start, end, y) {
 
 }
 
-var mock = [
-    { type: 'JOIN_REQ', label: 'Join Request', direction: '<== ws', apnetwork: 662, sn: 'FP320CZQQ1000001', ip: '172.16.95.182', port: 10002 },
-    { type: 'JOIN_RESP', label: 'Join Response', direction: '==> ws', apnetwork: 662, sn: 'FP320CZQQ1000001', ip: '172.16.95.182', port: 10002 }
-];
-
 function diagram() {
     var ren = this.renderer;
 
     var server = labelWithDash(ren, 'AP Server', 100);
     var ap = labelWithDash(ren, 'AP', 300);
 
-    mock.forEach(function(item, index) {
-        if ('<== ws' === item.direction) {
-            arrow(ren, item.label, ap, server, 100 + index * 30);
-        } else if ('==> ws' === item.direction) {
-            arrow(ren, item.label, server, ap, 100 + index * 30);
-        }
+    fetch('/Diagram').then(function(response) {
+        response.json().then(function(json) {
+            json.forEach(function(item, index) {
+                if ('<== ws' === item.direction) {
+                    arrow(ren, item.label, ap, server, 100 + index * 30);
+                } else if ('==> ws' === item.direction) {
+                    arrow(ren, item.label, server, ap, 100 + index * 30);
+                }
+            });
+        });
     });
-
 }
 
 var LogGraph = React.createClass({
