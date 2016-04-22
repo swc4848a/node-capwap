@@ -55,12 +55,15 @@ function arrow(ren, text, start, end, y) {
 
     var pos = (start.x < end.x) ? start.x : end.x;
 
-    ren.label(text, pos + 60, y - ar.getBBox().height * 2)
+    var offset = (Math.abs(start.x - end.x) - text.length * 5.6) / 2;
+
+    ren.label(text, pos + offset, y - ar.getBBox().height * 2)
         .css({
             fontSize: '10px',
             color: colors[3]
         })
         .add();
+
 }
 
 var mock = [
