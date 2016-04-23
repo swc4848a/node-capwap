@@ -1,50 +1,72 @@
 'use strict';
-
+const fs = require('fs');
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql');
 
-// var message = new Buffer(JSON.stringify({
-// 	method: 'get',
-// 	url: '/debug/tracePacketShmDump/',
-// 	apNetworkOid: 100,
-// 	id: 1
-// }));
+var diagramArray = [];
 
-// var client = dgram.createSocket('udp4');
-// client.bind(65534);
+function parseLine(log) {
+    var parts;
+    var timestamp;
+    var level;
+    var thread;
+    var file;
+    var line;
+    var message;
 
-// client.send(message, 0, message.length, 9688, '172.16.94.163');
+    if (parts = log.match(/\((\d{5})\)\[(.*?)\s-\s(.*?)\] \[thread:(\d)\] \[(.*):(\d+)\] (.*)/)) {
+        timestamp = parts[2];
+        level = parts[3];
+        thread = parts[4];
+        file = parts[5];
+        line = parts[6];
+        message = parts[7];
+    } else if (parts = log.match(/\((\d{5})\)\[(.*?)\s-\s(.*?)\] \[thread:(\d)\](.*)/)) {
+        timestamp = parts[2];
+        level = parts[3];
+        thread = parts[4];
+        message = parts[5];
+    } else if (parts = log.match(/\((\d{5})\)\[(.*?)\s-\s(.*?)\] (.*)/)) {
+        timestamp = parts[2];
+        level = parts[3];
+        message = parts[4];
+    } else {
+        // console.log('Cannot MATCH => ' + log);
+        return;
+    }
 
-// client.on('message', function(message, remote) {
-// 	res.json(JSON.parse(message.toString()));
-// 	client.close();
-// });
+    var item = {
+        timestamp: timestamp,
+        level: level,
+        thread: thread,
+        file: file,
+        line: line,
+        message: message
+    };
+    console.log(item);
+    diagramArray.push(item);
+}
 
-// client.on("error", function(err) {
-// 	console.trace("client Error:\n" + err.stack);
-// 	client.close();
-// });
+function parseLog(callback) {
+    var file = 'D:\\Workspaces\\Project\\log\\fapsim\\capwap.log';
+
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (err) throw err;
+        var lines = data.match(/[^\r\n]+/g);
+
+        lines.forEach(function(line, index) {
+            parseLine(line);
+        });
+
+        callback();
+    });
+}
 
 router.get('/', function(req, res) {
-    // do sql query
-    var connection = mysql.createConnection({
-        host: '172.16.95.95',
-        user: 'forticrm',
-        password: 'forticrm',
-        database: 'acct000556'
+    diagramArray = [];
+    parseLog(function() {
+        res.json(diagramArray);
     });
-
-    connection.connect();
-
-    connection.query('SELECT * from wlTraffic LIMIT 5', function(err, rows, fields) {
-        if (err) {
-            throw err;
-        }
-        res.json(rows);
-    });
-
-    connection.end();
 });
 
 module.exports = router;

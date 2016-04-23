@@ -13,7 +13,7 @@ var LogGraph = React.createClass({
         fetch('/Graph').then(function(response) {
             response.json().then(function(json) {
                 that.setState({
-                    data: result
+                    data: json
                 });
             });
         });

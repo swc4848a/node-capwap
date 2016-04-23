@@ -1,4 +1,5 @@
 var React = require('react');
+var Select = require('react-select');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
 
@@ -6,7 +7,7 @@ function labelWithDash(ren, label, pos) {
     var colors = Highcharts.getOptions().colors;
 
     var top = 40;
-    var bottom = 330;
+    var bottom = 850;
 
     var label = ren.label(label, pos, top)
         .attr({
@@ -84,10 +85,90 @@ function diagram() {
     });
 }
 
+var SettingsHeader = React.createClass({
+    render: function() {
+        return (
+            <div className="box-header with-border">
+                <h3 className="box-title">Settings</h3>
+                <div className="box-tools pull-right">
+                    <button type="button" className="btn btn-box-tool" data-widget="collapse"><i className="fa fa-minus"></i></button>
+                    <button type="button" className="btn btn-box-tool" data-widget="remove"><i className="fa fa-remove"></i></button>
+                </div>
+            </div>
+        );
+    }
+});
+
+var CustomSelect = React.createClass({
+    getInitialState: function() {
+        return {
+            selectValue: ''
+        };
+    },
+    updateValue: function(newValue) {
+        this.setState({
+            selectValue: newValue
+        });
+    },
+    getOptions: function(input, callback) {
+        fetch('/Options/' + this.props.name).then(function(response) {
+            response.json().then(function(json) {
+                callback(null, {
+                    options: json,
+                    complete: true
+                });
+            });
+        });
+    },
+    render: function() {
+        return (
+            <div className="form-group">
+                <label>{this.props.label}</label>
+                <Select.Async 
+                    name={this.props.name}
+                    loadOptions={this.getOptions}
+                    value={this.state.selectValue}
+                    searchable={true}
+                    onChange={this.updateValue}
+                />
+            </div>
+        );
+    }
+});
+
+var SettingsBody = React.createClass({
+    render: function() {
+        return (
+            <div className="box-body">
+                <div className="row">
+                    <div className="col-md-3">
+                        <CustomSelect label="AP Network" name="apnetwork" />
+                    </div>
+                    <div className="col-md-3">
+                        <CustomSelect label="AP" name="ap" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
+var Settings = React.createClass({
+    render: function() {
+        return (
+            <div className="box box-default">
+                <SettingsHeader />
+                <SettingsBody />
+            </div>
+        );
+    }
+});
+
 var LogGraph = React.createClass({
     render: function() {
         var config = {
             chart: {
+                height: 912,
                 backgroundColor: 'white',
                 events: {
                     load: diagram
@@ -104,6 +185,7 @@ var LogGraph = React.createClass({
         return (
             <div className="content-wrapper">
                 <section className="content">
+                    <Settings />
                     <ReactHighcharts config = {config}></ReactHighcharts>
                 </section>
             </div>

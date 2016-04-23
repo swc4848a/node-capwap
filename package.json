@@ -37,6 +37,7 @@
     "react-dom": "^15.0.1",
     "react-highcharts": "^8.2.0",
     "react-router": "^2.2.2",
+    "react-select": "^1.0.0-beta12",
     "reactable": "^0.12.5",
     "serve-favicon": "^2.3.0",
     "stately.js": "fschaefer/Stately.js",
