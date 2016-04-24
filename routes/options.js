@@ -17,9 +17,11 @@ router.get('/apnetwork', function(req, res) {
 
     connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_network LIMIT 10', function(err, rows, fields) {
         if (err) {
-            throw err;
+            console.log(err.message);
+            res.json([]);
+        } else {
+            res.json(rows);
         }
-        res.json(rows);
     });
 
     connection.end();
@@ -38,9 +40,11 @@ router.get('/ap', function(req, res) {
 
     connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_ap LIMIT 10', function(err, rows, fields) {
         if (err) {
-            throw err;
+            console.log(err.message);
+            res.json([]);
+        } else {
+            res.json(rows);
         }
-        res.json(rows);
     });
 
     connection.end();

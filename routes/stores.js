@@ -51,21 +51,27 @@ function parseLog(callback) {
     var file = 'D:\\Workspaces\\Project\\log\\fapsim\\capwap.log';
 
     fs.readFile(file, 'utf8', (err, data) => {
-        if (err) throw err;
-        var lines = data.match(/[^\r\n]+/g);
+        if (!err) {
+            var lines = data.match(/[^\r\n]+/g);
 
-        lines.forEach(function(line, index) {
-            parseLine(line);
-        });
+            lines.forEach(function(line, index) {
+                parseLine(line);
+            });
+        };
 
-        callback();
+        callback(err);
     });
 }
 
 router.get('/', function(req, res) {
     diagramArray = [];
-    parseLog(function() {
-        res.json(diagramArray);
+    parseLog(function(err) {
+        if (err) {
+            console.log(err.message);
+            res.json([]);
+        } else {
+            res.json(diagramArray);
+        }
     });
 });
 
