@@ -34,7 +34,7 @@ var LogGraph = React.createClass({
                     'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
             },
             xAxis: {
-                type: 'datetime'
+                type: 'datetime',
             },
             yAxis: {
                 title: {
@@ -74,7 +74,7 @@ var LogGraph = React.createClass({
             series: [{
                 type: 'area',
                 name: 'Join Request',
-                data: this.state.data
+                data: this.state.data,
             }]
         };
 

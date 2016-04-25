@@ -5,19 +5,19 @@ var router = express.Router();
 var mysql = require('mysql');
 
 router.get('/apnetwork', function(req, res) {
-    // do sql query
-    var connection = mysql.createConnection({
+    var options = {
         host: '172.16.95.95',
         user: 'forticrm',
         password: 'forticrm',
         database: 'portal'
-    });
+    };
+    var connection = mysql.createConnection(options);
 
     connection.connect();
 
     connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_network LIMIT 10', function(err, rows, fields) {
         if (err) {
-            console.log(err.message);
+            console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
             res.json([]);
         } else {
             res.json(rows);
@@ -28,19 +28,19 @@ router.get('/apnetwork', function(req, res) {
 });
 
 router.get('/ap', function(req, res) {
-    // do sql query
-    var connection = mysql.createConnection({
+    var options = {
         host: '172.16.95.95',
         user: 'forticrm',
         password: 'forticrm',
         database: 'portal'
-    });
+    };
+    var connection = mysql.createConnection(options);
 
     connection.connect();
 
     connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_ap LIMIT 10', function(err, rows, fields) {
         if (err) {
-            console.log(err.message);
+            console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
             res.json([]);
         } else {
             res.json(rows);

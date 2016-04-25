@@ -43,7 +43,7 @@ function parseLine(log) {
         line: line,
         message: message
     };
-    console.log(item);
+    // console.log(item);
     diagramArray.push(item);
 }
 

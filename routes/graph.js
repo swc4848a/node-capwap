@@ -2,73 +2,34 @@
 
 var express = require('express');
 var router = express.Router();
+var mysql = require('mysql');
 
 router.get('/', function(req, res) {
-    var data = [
-        [Date.UTC(2013, 5, 2), 100],
-        [Date.UTC(2013, 5, 3), 100],
-        [Date.UTC(2013, 5, 4), 100],
-        [Date.UTC(2013, 5, 5), 100],
-        [Date.UTC(2013, 5, 6), 100],
-        [Date.UTC(2013, 5, 7), 0],
-        [Date.UTC(2013, 5, 9), 0],
-        [Date.UTC(2013, 5, 10), 0],
-        [Date.UTC(2013, 5, 11), 100],
-        [Date.UTC(2013, 5, 12), 100],
-        [Date.UTC(2013, 5, 13), 100],
-        [Date.UTC(2013, 5, 14), 100],
-        [Date.UTC(2013, 5, 16), 100],
-        [Date.UTC(2013, 5, 17), 100],
-        [Date.UTC(2013, 5, 18), 100],
-        [Date.UTC(2013, 5, 19), 100],
-        [Date.UTC(2013, 5, 20), 100],
-        [Date.UTC(2013, 5, 21), 100],
-        [Date.UTC(2013, 5, 23), 100],
-        [Date.UTC(2013, 5, 24), 100],
-        [Date.UTC(2013, 5, 25), 100],
-        [Date.UTC(2013, 5, 26), 0],
-        [Date.UTC(2013, 5, 27), 0],
-        [Date.UTC(2013, 5, 28), 0],
-        [Date.UTC(2013, 5, 30), 100],
-        [Date.UTC(2013, 6, 1), 100],
-        [Date.UTC(2013, 6, 2), 100],
-        [Date.UTC(2013, 6, 3), 100],
-        [Date.UTC(2013, 6, 4), 100],
-        [Date.UTC(2013, 6, 5), 100],
-        [Date.UTC(2013, 6, 7), 100],
-        [Date.UTC(2013, 6, 8), 100],
-        [Date.UTC(2013, 6, 9), 100],
-        [Date.UTC(2013, 6, 10), 100],
-        [Date.UTC(2013, 6, 11), 100],
-        [Date.UTC(2013, 6, 12), 100],
-        [Date.UTC(2013, 6, 14), 100],
-        [Date.UTC(2013, 6, 15), 100],
-        [Date.UTC(2013, 6, 16), 100],
-        [Date.UTC(2013, 6, 17), 100],
-        [Date.UTC(2013, 6, 18), 100],
-        [Date.UTC(2013, 6, 19), 100],
-        [Date.UTC(2013, 6, 21), 100],
-        [Date.UTC(2013, 6, 22), 100],
-        [Date.UTC(2013, 6, 23), 100],
-        [Date.UTC(2013, 6, 24), 100],
-        [Date.UTC(2013, 6, 25), 100],
-        [Date.UTC(2013, 6, 26), 0],
-        [Date.UTC(2013, 6, 28), 100],
-        [Date.UTC(2013, 6, 29), 100],
-        [Date.UTC(2013, 6, 30), 100],
-        [Date.UTC(2013, 6, 31), 100],
-        [Date.UTC(2013, 7, 1), 100],
-        [Date.UTC(2013, 7, 2), 100],
-        [Date.UTC(2013, 7, 4), 100],
-        [Date.UTC(2013, 7, 5), 100],
-        [Date.UTC(2013, 7, 6), 100],
-        [Date.UTC(2013, 7, 7), 100],
-        [Date.UTC(2013, 7, 8), 100],
-        [Date.UTC(2013, 7, 9), 100],
-        [Date.UTC(2013, 7, 11), 100],
-        [Date.UTC(2013, 7, 12), 100]
-    ];
-    res.json(data);
+    var options = {
+        host: '172.16.94.163',
+        user: 'monitor',
+        password: 'pass',
+        database: 'monitor'
+    };
+    var connection = mysql.createConnection(options);
+
+    connection.connect();
+
+    var sql = 'SELECT time AS time, COUNT(*) AS count FROM message GROUP BY UNIX_TIMESTAMP(time) DIV 60;';
+    connection.query(sql, function(err, rows, fields) {
+        if (err) {
+            console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
+            res.json([]);
+        } else {
+            var json = [];
+            rows.forEach(function(item, index) {
+                json.push([Date.parse(item.time), item.count]);
+            });
+            res.json(json);
+        }
+    });
+
+    connection.end();
 });
 
 module.exports = router;
