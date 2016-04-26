@@ -50,4 +50,14 @@ router.get('/ap', function(req, res) {
     connection.end();
 });
 
+router.get('/messageType', function(req, res) {
+    res.json([{
+        label: 'Discovery Request',
+        value: 'DISCOVERY_REQ'
+    }, {
+        label: 'Echo Request',
+        value: 'ECHO_REQ'
+    }]);
+});
+
 module.exports = router;

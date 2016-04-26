@@ -13,9 +13,15 @@ router.get('/', function(req, res) {
     };
     var connection = mysql.createConnection(options);
 
+    console.log(req.query);
+
     connection.connect();
 
-    var sql = 'SELECT time AS time, COUNT(*) AS count FROM message GROUP BY UNIX_TIMESTAMP(time) DIV 60;';
+    var whereCondition = 'messageType="' + req.query.messageType +
+        '" and apnetwork="' + req.query.apnetwork +
+        '" and ap="' + req.query.ap + '"';
+    var sql = 'SELECT time AS time, COUNT(*) AS count FROM message WHERE ' + whereCondition + ' GROUP BY UNIX_TIMESTAMP(time) DIV 3600;';
+
     connection.query(sql, function(err, rows, fields) {
         if (err) {
             console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);

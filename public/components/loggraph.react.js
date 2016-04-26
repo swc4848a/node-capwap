@@ -1,16 +1,105 @@
 var React = require('react');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
+var Select = require('react-select');
+
+var CustomSelect = React.createClass({
+    getInitialState: function() {
+        return {
+            selectValue: this.props.value
+        };
+    },
+    updateValue: function(newValue) {
+        this.setState({
+            selectValue: newValue
+        });
+    },
+    getOptions: function(input, callback) {
+        fetch('/Options/' + this.props.name).then(function(response) {
+            response.json().then(function(json) {
+                callback(null, {
+                    options: json,
+                    complete: true
+                });
+            });
+        });
+    },
+    render: function() {
+        return (
+            <div className="form-group">
+                <label>{this.props.label}</label>
+                <Select.Async 
+                    name={this.props.name}
+                    loadOptions={this.getOptions}
+                    value={this.state.selectValue}
+                    searchable={true}
+                    onChange={this.updateValue}
+                />
+            </div>
+        );
+    }
+});
+
+var SettingsHeader = React.createClass({
+    render: function() {
+        return (
+            <div className="box-header with-border">
+                <h3 className="box-title">Settings</h3>
+                <div className="box-tools pull-right">
+                    <button type="button" className="btn btn-box-tool" data-widget="collapse"><i className="fa fa-minus"></i></button>
+                    <button type="button" className="btn btn-box-tool" data-widget="remove"><i className="fa fa-remove"></i></button>
+                </div>
+            </div>
+        );
+    }
+});
+
+var SettingsBody = React.createClass({
+    render: function() {
+        return (
+            <div className="box-body">
+                <div className="row">
+                    <div className="col-md-2">
+                        <CustomSelect label="AP Network" name="apnetwork" />
+                    </div>
+                    <div className="col-md-2">
+                        <CustomSelect label="AP" name="ap" />
+                    </div>
+                    <div className="col-md-2">
+                        <CustomSelect label="Message Type" value={this.props.messageType} name="messageType" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
+var Settings = React.createClass({
+    render: function() {
+        return (
+            <div className="box box-default">
+                <SettingsHeader />
+                <SettingsBody messageType={this.props.messageType} />
+            </div>
+        );
+    }
+});
 
 var LogGraph = React.createClass({
     getInitialState: function() {
         return {
+            messageType: 'DISCOVERY_REQ',
             data: []
         };
     },
     componentDidMount: function() {
         var that = this;
-        fetch('/Graph').then(function(response) {
+        var url = '/Graph?' +
+            'messageType=ECHO_REQ' +
+            '&apnetwork=761' +
+            '&ap=FC225C4N15000010';
+
+        fetch(url).then(function(response) {
             response.json().then(function(json) {
                 that.setState({
                     data: json
@@ -27,7 +116,7 @@ var LogGraph = React.createClass({
                 zoomType: 'x'
             },
             title: {
-                text: 'Join Request Statistics over time'
+                text: this.state.messageType + ' Statistics over time'
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
@@ -73,7 +162,7 @@ var LogGraph = React.createClass({
 
             series: [{
                 type: 'area',
-                name: 'Join Request',
+                name: this.state.messageType,
                 data: this.state.data,
             }]
         };
@@ -81,6 +170,7 @@ var LogGraph = React.createClass({
         return (
             <div className="content-wrapper">
                 <section className="content">
+                    <Settings messageType={this.state.messageType} />
                     <ReactHighcharts config = {config}></ReactHighcharts>
                 </section>
             </div>

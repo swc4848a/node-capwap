@@ -8,11 +8,12 @@
     4. create database monitor;
 */
 
-var mysql = require('mysql');
 var fs = require('fs');
+var mysql = require('mysql');
 var async = require('async');
 
 var connection;
+var collections = [];
 
 var options = {
     host: '172.16.94.163',
@@ -33,20 +34,44 @@ function mysqlQuery(sql, post, callback) {
 };
 
 function parseLine(line) {
-    var parts = line.match(/\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> JOIN_REQ \(\d+\) <== ws \((\d+)-(\w+)-(\d.+):(\d+)\)/);
+    var parts = line.match(/\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> (\w+) \(\d+\) <== ws \((\d+)-(\w+)-(\d.+):(\d+)\)/);
     if (parts) {
-        var row = {
-            time: parts[1],
-            apnetwork: parts[2],
-            ap: parts[3],
-            ip: parts[4],
-            port: parts[5],
-        };
-
-        var query = mysqlQuery('INSERT IGNORE INTO message SET ?', row, function(rows, fields) {
-
-        });
+        // time: parts[1],
+        // messageType: parts[2],
+        // apnetwork: parts[3],
+        // ap: parts[4],
+        // ip: parts[5],
+        // port: parts[6],
+        collections.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]]);
     }
+};
+
+var batchInsertSql = 'INSERT INTO message (time, messageType, apnetwork, ap, ip, port) VALUES ?';
+
+function parseFile(file, callback) {
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (!err) {
+            var lines = data.match(/[^\r\n]+/g);
+
+            lines.forEach(function(line, index) {
+                parseLine(line);
+                if (0 === index % 10000) {
+                    if (collections.length) {
+                        var query = mysqlQuery(batchInsertSql, [collections], function(rows, fields) {});
+                        collections = [];
+                    }
+                }
+            });
+
+            return callback();
+        } else {
+            if ('ENOENT' === err.code) {
+                return callback();
+            } else {
+                return callback(err);
+            }
+        }
+    });
 };
 
 var fileBase = 'D:\\Workspaces\\Project\\log\\monitor\\capwap.';
@@ -54,6 +79,7 @@ var fileBase = 'D:\\Workspaces\\Project\\log\\monitor\\capwap.';
 var sql = 'CREATE TABLE IF NOT EXISTS ' +
     'message (' +
     'time TIMESTAMP, ' +
+    'messageType varchar(64), ' +
     'apnetwork INT(10), ' +
     'ap varchar(64), ' +
     'ip varchar(15), ' +
@@ -67,7 +93,7 @@ function main() {
     mysqlQuery(sql, null, function(rows, fields) {});
 
     var start = 1;
-    var last = 10;
+    var last = 20;
 
     var fileArray = [];
 
@@ -75,29 +101,16 @@ function main() {
         fileArray.push(fileBase + i + '.log');
     }
 
-    async.each(fileArray, function(file, callback) {
-        fs.readFile(file, 'utf8', (err, data) => {
-            if (!err) {
-                var lines = data.match(/[^\r\n]+/g);
-
-                lines.forEach(function(line, index) {
-                    parseLine(line);
-                });
-
-                callback();
-            } else {
-                if ('ENOENT' === err.code) {
-                    callback();
-                } else {
-                    callback(err);
-                }
-            }
-        });
+    async.eachSeries(fileArray, function(file, callback) {
+        parseFile(file, callback);
     }, function(err) {
         if (err) {
             console.log(err);
         } else {
-            console.log('success');
+            if (collections.length) {
+                var query = mysqlQuery(batchInsertSql, [collections], function(rows, fields) {});
+            }
+            console.log('batch insert success!');
         }
         connection.end();
     });
