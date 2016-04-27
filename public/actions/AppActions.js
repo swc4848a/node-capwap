@@ -37,6 +37,32 @@ var AppActions = {
             key: key,
             condition: condition
         });
+    },
+    updateApnetwork: function(label, value) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_APNETWORK,
+            label: label,
+            value: value
+        });
+    },
+    updateAp: function(label, value) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_AP,
+            label: label,
+            value: value
+        });
+    },
+    updateMessageType: function(label, value) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_MESSAGE_TYPE,
+            label: label,
+            value: value
+        });
+    },
+    updateGraphData: function() {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_GRAPH_DATA,
+        });
     }
 };
 

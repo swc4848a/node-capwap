@@ -2,17 +2,20 @@ var React = require('react');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
 var Select = require('react-select');
+var AppActions = require('../actions/AppActions');
+var AppStore = require('../stores/AppStore');
 
 var CustomSelect = React.createClass({
-    getInitialState: function() {
-        return {
-            selectValue: this.props.value
-        };
-    },
     updateValue: function(newValue) {
-        this.setState({
-            selectValue: newValue
-        });
+        console.log(newValue);
+        if ('apnetwork' === this.props.name) {
+            AppActions.updateApnetwork(newValue.label, newValue.VALUE);
+        } else if ('ap' === this.props.name) {
+            AppActions.updateAp(newValue.label, newValue.VALUE);
+        } else if ('messageType' === this.props.name) {
+            AppActions.updateMessageType(newValue.label, newValue.value);
+        }
+        AppActions.updateGraphData();
     },
     getOptions: function(input, callback) {
         fetch('/Options/' + this.props.name).then(function(response) {
@@ -31,7 +34,7 @@ var CustomSelect = React.createClass({
                 <Select.Async 
                     name={this.props.name}
                     loadOptions={this.getOptions}
-                    value={this.state.selectValue}
+                    value={this.props.value}
                     searchable={true}
                     onChange={this.updateValue}
                 />
@@ -60,10 +63,10 @@ var SettingsBody = React.createClass({
             <div className="box-body">
                 <div className="row">
                     <div className="col-md-2">
-                        <CustomSelect label="AP Network" name="apnetwork" />
+                        <CustomSelect label="AP Network" value={this.props.apnetwork} name="apnetwork" />
                     </div>
                     <div className="col-md-2">
-                        <CustomSelect label="AP" name="ap" />
+                        <CustomSelect label="AP" value={this.props.ap} name="ap" />
                     </div>
                     <div className="col-md-2">
                         <CustomSelect label="Message Type" value={this.props.messageType} name="messageType" />
@@ -79,36 +82,33 @@ var Settings = React.createClass({
         return (
             <div className="box box-default">
                 <SettingsHeader />
-                <SettingsBody messageType={this.props.messageType} />
+                <SettingsBody messageType={this.props.messageType} apnetwork={this.props.apnetwork} ap={this.props.ap} />
             </div>
         );
     }
 });
 
+function getGraphStore() {
+    return {
+        messageType: AppStore.getMessageType(),
+        ap: AppStore.getAp(),
+        apnetwork: AppStore.getApnetwork(),
+        data: AppStore.getGraphData()
+    };
+};
+
 var LogGraph = React.createClass({
     getInitialState: function() {
-        return {
-            messageType: 'DISCOVERY_REQ',
-            data: []
-        };
+        return getGraphStore();
     },
     componentDidMount: function() {
-        var that = this;
-        var url = '/Graph?' +
-            'messageType=ECHO_REQ' +
-            '&apnetwork=761' +
-            '&ap=FC225C4N15000010';
-
-        fetch(url).then(function(response) {
-            response.json().then(function(json) {
-                that.setState({
-                    data: json
-                });
-            });
-        });
+        AppStore.addChangeListener(this._onChange);
     },
     componentWillUnmount: function() {
-
+        AppStore.removeChangeListener(this._onChange);
+    },
+    _onChange: function() {
+        this.setState(getGraphStore());
     },
     render: function() {
         var config = {
@@ -170,7 +170,7 @@ var LogGraph = React.createClass({
         return (
             <div className="content-wrapper">
                 <section className="content">
-                    <Settings messageType={this.state.messageType} />
+                    <Settings messageType={this.state.messageType} apnetwork={this.state.apnetwork} ap={this.state.ap} />
                     <ReactHighcharts config = {config}></ReactHighcharts>
                 </section>
             </div>

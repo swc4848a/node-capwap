@@ -15,7 +15,7 @@ router.get('/apnetwork', function(req, res) {
 
     connection.connect();
 
-    connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_network LIMIT 10', function(err, rows, fields) {
+    connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_network', function(err, rows, fields) {
         if (err) {
             console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
             res.json([]);
@@ -38,7 +38,7 @@ router.get('/ap', function(req, res) {
 
     connection.connect();
 
-    connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_ap LIMIT 10', function(err, rows, fields) {
+    connection.query('SELECT oid AS VALUE, NAME AS label FROM ap_ap', function(err, rows, fields) {
         if (err) {
             console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
             res.json([]);
