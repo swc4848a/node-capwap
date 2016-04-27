@@ -116,7 +116,7 @@ var LogGraph = React.createClass({
                 zoomType: 'x'
             },
             title: {
-                text: this.state.messageType + ' Statistics over time'
+                text: this.state.messageType.label + ' Statistics over time'
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
@@ -162,7 +162,7 @@ var LogGraph = React.createClass({
 
             series: [{
                 type: 'area',
-                name: this.state.messageType,
+                name: this.state.messageType.label,
                 data: this.state.data,
             }]
         };
