@@ -7,34 +7,27 @@ var AppStore = require('../stores/AppStore');
 
 var CustomSelect = React.createClass({
     updateValue: function(newValue) {
-        console.log(newValue);
         if ('apnetwork' === this.props.name) {
-            AppActions.updateApnetwork(newValue.label, newValue.VALUE);
+            AppActions.updateApnetwork(newValue.label, newValue.value);
+            AppActions.updateSeletctOptions('ap');
         } else if ('ap' === this.props.name) {
-            AppActions.updateAp(newValue.label, newValue.VALUE);
+            AppActions.updateAp(newValue.label, newValue.value);
         } else if ('messageType' === this.props.name) {
             AppActions.updateMessageType(newValue.label, newValue.value);
         }
         AppActions.updateGraphData();
     },
-    getOptions: function(input, callback) {
-        fetch('/Options/' + this.props.name).then(function(response) {
-            response.json().then(function(json) {
-                callback(null, {
-                    options: json,
-                    complete: true
-                });
-            });
-        });
+    componentDidMount: function() {
+        AppActions.updateSeletctOptions(this.props.name);
     },
     render: function() {
         return (
             <div className="form-group">
                 <label>{this.props.label}</label>
-                <Select.Async 
+                <Select 
                     name={this.props.name}
-                    loadOptions={this.getOptions}
-                    value={this.props.value}
+                    value={this.props.options.value}
+                    options={this.props.options.options}
                     searchable={true}
                     onChange={this.updateValue}
                 />
@@ -63,13 +56,13 @@ var SettingsBody = React.createClass({
             <div className="box-body">
                 <div className="row">
                     <div className="col-md-2">
-                        <CustomSelect label="AP Network" value={this.props.apnetwork} name="apnetwork" />
+                        <CustomSelect label="AP Network" options={this.props.apnetwork} name="apnetwork" />
                     </div>
                     <div className="col-md-2">
-                        <CustomSelect label="AP" value={this.props.ap} name="ap" />
+                        <CustomSelect label="AP" options={this.props.ap} name="ap" />
                     </div>
                     <div className="col-md-2">
-                        <CustomSelect label="Message Type" value={this.props.messageType} name="messageType" />
+                        <CustomSelect label="Message Type" options={this.props.messageType} name="messageType" />
                     </div>
                 </div>
             </div>

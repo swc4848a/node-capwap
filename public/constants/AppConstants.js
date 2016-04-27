@@ -11,4 +11,5 @@ module.exports = keyMirror({
     APP_UPDATE_AP: null,
     APP_UPDATE_MESSAGE_TYPE: null,
     APP_UPDATE_GRAPH_DATA: null,
+    APP_UPDATE_SELECT_OPTIONS: null,
 });

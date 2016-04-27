@@ -63,6 +63,12 @@ var AppActions = {
         AppDispatcher.dispatch({
             actionType: AppConstants.APP_UPDATE_GRAPH_DATA,
         });
+    },
+    updateSeletctOptions: function(module) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_SELECT_OPTIONS,
+            module: module
+        });
     }
 };
 

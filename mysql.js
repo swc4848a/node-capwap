@@ -2,7 +2,7 @@
 
 /*
     Setup mysql server (now: 172.16.94.163):
-    1. mysql -u root
+    1. mysql -u root -p
     2. grant all privileges on *.* to monitor@"172.16.94.161" identified by 'monitor';
     3. SET PASSWORD FOR 'monitor'@'172.16.94.161' = PASSWORD('pass');
     4. create database monitor;

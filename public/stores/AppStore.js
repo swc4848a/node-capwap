@@ -20,9 +20,15 @@ var _apps = {
         },
         list: []
     },
-    apnetwork: {},
-    ap: {},
-    messageType: {},
+    apnetwork: {
+        options: []
+    },
+    ap: {
+        options: []
+    },
+    messageType: {
+        options: []
+    },
     graphData: []
 };
 
@@ -78,6 +84,29 @@ function updateGraphData() {
     fetch(url).then(function(response) {
         response.json().then(function(json) {
             _apps.graphData = json;
+            AppStore.emitChange();
+        });
+    });
+}
+
+function updateSelectOptions(config) {
+    let module = config.module;
+    let query = ('ap' === module) ? ('?apnetwork=' + _apps.apnetwork.value) : '';
+    fetch('/Options/' + module + query).then(function(response) {
+        response.json().then(function(json) {
+            if ('apnetwork' === module) {
+                _apps.apnetwork = assign({}, _apps.apnetwork, {
+                    options: json
+                });
+            } else if ('ap' === module) {
+                _apps.ap = assign({}, _apps.ap, {
+                    options: json
+                });
+            } else if ('messageType' === module) {
+                _apps.messageType = assign({}, _apps.messageType, {
+                    options: json
+                });
+            }
             AppStore.emitChange();
         });
     });
@@ -176,6 +205,11 @@ AppDispatcher.register(function(action) {
             break;
         case AppConstants.APP_UPDATE_GRAPH_DATA:
             updateGraphData();
+            break;
+        case AppConstants.APP_UPDATE_SELECT_OPTIONS:
+            updateSelectOptions({
+                module: action.module
+            });
             break;
         default:
             console.log('Do not support action type [%s]', action.actionType);

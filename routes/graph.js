@@ -13,8 +13,6 @@ router.get('/', function(req, res) {
     };
     var connection = mysql.createConnection(options);
 
-    console.log(req.query);
-
     connection.connect();
 
     var whereCondition = 'messageType="' + req.query.messageType +
