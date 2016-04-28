@@ -5,11 +5,10 @@ var AppStore = require('../stores/AppStore');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
 
-function labelWithDash(ren, label, pos) {
+function labelWithDash(ren, label, pos, bottom) {
     var colors = Highcharts.getOptions().colors;
 
     var top = 40;
-    var bottom = 850;
 
     var label = ren.label(label, pos, top)
         .attr({
@@ -67,13 +66,16 @@ function arrow(ren, text, start, end, y) {
         .add();
 }
 
-var ren;
+var chart;
 
 function diagram() {
-    ren = this.renderer;
+    chart = this;
 
-    var server = labelWithDash(ren, 'AP Server', 100);
-    var ap = labelWithDash(ren, 'AP', 300);
+    var left = chart.containerWidth / 2 - 150;
+    var right = chart.containerWidth / 2 + 150;
+
+    var server = labelWithDash(chart.renderer, 'AP Server', left, 850);
+    var ap = labelWithDash(chart.renderer, 'AP', right, 850);
 
     var url = '/Diagram?apnetwork=' + AppStore.getApnetwork().value +
         '&ap=' + AppStore.getAp().value;
@@ -82,10 +84,14 @@ function diagram() {
         response.json().then(function(json) {
             json.forEach(function(item, index) {
                 if ('<==' === item.direction) {
-                    arrow(ren, item.label, ap, server, 100 + index * 30);
+                    arrow(chart.renderer, item.label, ap, server, 100 + index * 30);
                 } else if ('==>' === item.direction) {
-                    arrow(ren, item.label, server, ap, 100 + index * 30);
+                    arrow(chart.renderer, item.label, server, ap, 100 + index * 30);
                 }
+
+                labelWithDash(chart.renderer, 'AP Server', left, json.length * 30 + 80);
+                labelWithDash(chart.renderer, 'AP', right, json.length * 30 + 80);
+                chart.setSize(chart.containerWidth, json.length * 30 + 100);
             });
         });
     });
@@ -110,8 +116,6 @@ var LogGraph = React.createClass({
     },
     _onChange: function() {
         this.setState(getDiagramStore());
-        let chart = this.refs.chart.getChart();
-        chart.options.chart.height = 512;
     },
     render: function() {
         var config = {
