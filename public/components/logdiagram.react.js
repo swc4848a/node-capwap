@@ -67,8 +67,10 @@ function arrow(ren, text, start, end, y) {
         .add();
 }
 
+var ren;
+
 function diagram() {
-    var ren = this.renderer;
+    ren = this.renderer;
 
     var server = labelWithDash(ren, 'AP Server', 100);
     var ap = labelWithDash(ren, 'AP', 300);
@@ -108,6 +110,8 @@ var LogGraph = React.createClass({
     },
     _onChange: function() {
         this.setState(getDiagramStore());
+        let chart = this.refs.chart.getChart();
+        chart.options.chart.height = 512;
     },
     render: function() {
         var config = {
