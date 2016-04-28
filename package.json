@@ -34,6 +34,7 @@
     "mysql": "felixge/node-mysql",
     "object-assign": "^4.0.1",
     "packet": "0.0.6",
+    "progress": "^1.1.8",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-highcharts": "^8.2.0",

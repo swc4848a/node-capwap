@@ -11,6 +11,7 @@
 var fs = require('fs');
 var mysql = require('mysql');
 var async = require('async');
+var ProgressBar = require('progress');
 
 var connection;
 var raws = [];
@@ -54,7 +55,7 @@ function parseLine(line) {
             // time: parts[1],
             // level: parts[2],
             // thread: parts[3],
-            // log: parts[4],            
+            // log: parts[4],
             raws.push([parts[1], parts[2], parts[3], parts[4]]);
             break;
         }
@@ -79,10 +80,19 @@ function parseLine(line) {
 var batchInsertRawSql = 'INSERT INTO raw (time, level, thread, log) VALUES ?';
 var batchInsertColSql = 'INSERT INTO message (time, messageType, direction, apnetwork, ap, ip, port) VALUES ?';
 
+var bar;
+
 function parseFile(file, callback) {
     fs.readFile(file, 'utf8', (err, data) => {
         if (!err) {
             var lines = data.match(/[^\r\n]+/g);
+
+            bar = new ProgressBar('  processing [:bar] :current :total :elapsed :percent :etas', {
+                complete: '=',
+                incomplete: ' ',
+                width: 100,
+                total: lines.length
+            });
 
             lines.forEach(function(line, index) {
                 parseLine(line);
@@ -92,7 +102,9 @@ function parseFile(file, callback) {
                         collections = [];
                     }
                     if (raws.length) {
-                        mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {});
+                        mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {
+                            bar.tick(1000);
+                        });
                         raws = [];
                     }
                 }
@@ -158,7 +170,6 @@ function main() {
             if (raws.length) {
                 mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {});
             }
-            console.log('batch insert success!');
         }
         connection.end();
     });
