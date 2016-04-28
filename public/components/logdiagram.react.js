@@ -39,18 +39,19 @@ function labelWithDash(ren, label, pos, bottom) {
     };
 }
 
-function arrow(ren, text, start, end, y) {
+function arrow(ren, time, text, start, end, y) {
     var colors = Highcharts.getOptions().colors;
 
     var leftArrow = ['M', start.x, y, 'L', end.x, y, 'M', end.x, y, 'L', end.x + 5, y + 5, 'M', end.x, y, 'L', end.x + 5, y - 5];
     var rightArrow = ['M', start.x, y, 'L', end.x, y, 'M', end.x, y, 'L', end.x - 5, y - 5, 'M', end.x, y, 'L', end.x - 5, y + 5]
 
     var arrowPath = (start.x > end.x) ? leftArrow : rightArrow;
+    var pathColor = (start.x > end.x) ? colors[3] : colors[2];
 
     var ar = ren.path(arrowPath)
         .attr({
             'stroke-width': 2,
-            stroke: colors[3]
+            stroke: pathColor
         })
         .add();
 
@@ -62,6 +63,13 @@ function arrow(ren, text, start, end, y) {
         .css({
             fontSize: '10px',
             color: colors[3]
+        })
+        .add();
+
+    ren.label(time, pos - 160, y - 10)
+        .css({
+            fontSize: '10px',
+            color: colors[1]
         })
         .add();
 }
@@ -84,9 +92,9 @@ function diagram() {
         response.json().then(function(json) {
             json.forEach(function(item, index) {
                 if ('<==' === item.direction) {
-                    arrow(chart.renderer, item.label, ap, server, 100 + index * 30);
+                    arrow(chart.renderer, item.time, item.label, ap, server, 100 + index * 30);
                 } else if ('==>' === item.direction) {
-                    arrow(chart.renderer, item.label, server, ap, 100 + index * 30);
+                    arrow(chart.renderer, item.time, item.label, server, ap, 100 + index * 30);
                 }
 
                 labelWithDash(chart.renderer, 'AP Server', left, json.length * 30 + 80);

@@ -1,8 +1,8 @@
 var React = require('react');
+var _ = require('underscore');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
 var ReactTable = require('Reactable').Table;
-var Filter = require('./filter.react');
 
 var ContentHeader = React.createClass({
     render: function() {
@@ -25,9 +25,6 @@ var ContentHeader = React.createClass({
 function getAppStore() {
     return {
         collections: AppStore.getCollections(),
-        select: AppStore.getSelect(),
-        input: AppStore.getInput(),
-        list: AppStore.getList()
     };
 }
 
@@ -46,17 +43,17 @@ var Content = React.createClass({
     _onChange: function() {
         this.setState(getAppStore());
     },
+    _onPageChange: function(currentPage) {
+        if ((currentPage + 1) === this.state.collections.length / 10) {
+            AppActions.updateCollections();
+        }
+    },
     render: function() {
         return (
             <section className="content">
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="box">
-                            <Filter 
-                                select={this.state.select} 
-                                input={this.state.input} 
-                                list={this.state.list}
-                            />
                             <div className="box-body">
                                 <div className="table-responsive">
                                     <ReactTable 
@@ -64,7 +61,8 @@ var Content = React.createClass({
                                         data={this.state.collections} 
                                         sortable={true} 
                                         itemsPerPage={10} 
-                                        filterable={['time', 'level', 'thread', 'log']}
+                                        filterable={_.keys(this.state.collections[0])}
+                                        onPageChange={this._onPageChange}
                                     />
                                 </div>
                             </div>

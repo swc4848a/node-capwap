@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 
     connection.connect();
 
-    let sql = 'SELECT * FROM raw limit 100';
+    let sql = 'SELECT * FROM raw limit 10000';
 
     connection.query(sql, function(err, rows, fields) {
         if (err) {

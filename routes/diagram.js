@@ -18,7 +18,7 @@ router.get('/', function(req, res) {
     var whereCondition = 'apnetwork="' + req.query.apnetwork +
         '" and ap="' + req.query.ap + '"';
 
-    var sql = 'SELECT messageType AS label, direction FROM message WHERE ' + whereCondition + ' limit 100;';
+    var sql = 'SELECT time, messageType AS label, direction FROM message WHERE ' + whereCondition + ' limit 100;';
 
     connection.query(sql, function(err, rows, fields) {
         if (err) {
@@ -28,6 +28,7 @@ router.get('/', function(req, res) {
             var json = [];
             rows.forEach(function(item, index) {
                 json.push({
+                    time: item.time,
                     label: item.label,
                     direction: item.direction
                 });

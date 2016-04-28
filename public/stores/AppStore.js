@@ -9,17 +9,6 @@ var CHANGE_EVENT = 'change';
 var _apps = {
     serverRequest: null,
     collections: [],
-    filter: {
-        input: {
-            label: '',
-            status: false
-        },
-        select: {
-            options: [],
-            status: false
-        },
-        list: []
-    },
     apnetwork: {
         options: []
     },
@@ -32,35 +21,13 @@ var _apps = {
     graphData: []
 };
 
-function updateFilterInput(options) {
-    _apps.filter.input = assign({}, _apps.filter.input, options);
-}
-
-function updateFilterSelect(options) {
-    _apps.filter.select = assign({}, _apps.filter.select, options);
-}
-
 function updateCollections() {
     fetch('/Stores').then(function(response) {
         response.json().then(function(json) {
             _apps.collections = json;
-            updateFilterSelect({
-                options: _.keys(json[0]),
-                status: false
-            });
             AppStore.emitChange();
         });
     });
-}
-
-function toggleFilterSelect() {
-    _apps.filter.select = assign({}, _apps.filter.select, {
-        status: !_apps.filter.select.status
-    });
-}
-
-function addFilter(filter) {
-    _apps.filter.list.push(filter);
 }
 
 function updateApnetwork(apnetwork) {
@@ -119,15 +86,6 @@ var AppStore = assign({}, EventEmitter.prototype, {
     getCollections: function() {
         return _apps.collections;
     },
-    getSelect: function() {
-        return _apps.filter.select;
-    },
-    getInput: function() {
-        return _apps.filter.input;
-    },
-    getList: function() {
-        return _apps.filter.list;
-    },
     addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback);
     },
@@ -156,31 +114,6 @@ AppDispatcher.register(function(action) {
             break;
         case AppConstants.APP_SERVER_ABORT:
             AppStore.serverAbort();
-            break;
-        case AppConstants.APP_UPDATE_FILTER_INPUT:
-            updateFilterInput({
-                label: action.label,
-                status: action.status
-            });
-            AppStore.emitChange();
-            break;
-        case AppConstants.APP_UPDATE_FILTER_SELECT:
-            updateFilterSelect({
-                options: action.options,
-                status: action.status
-            });
-            AppStore.emitChange();
-            break;
-        case AppConstants.APP_TOGGLE_FILTER_SELECT:
-            toggleFilterSelect();
-            AppStore.emitChange();
-            break;
-        case AppConstants.APP_ADD_FILTER:
-            addFilter({
-                key: action.key,
-                condition: action.condition
-            });
-            AppStore.emitChange();
             break;
         case AppConstants.APP_UPDATE_APNETWORK:
             updateApnetwork({
