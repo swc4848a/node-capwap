@@ -13,6 +13,7 @@ var mysql = require('mysql');
 var async = require('async');
 
 var connection;
+var raws = [];
 var collections = [];
 
 var options = {
@@ -30,14 +31,34 @@ function mysqlQuery(sql, post, callback) {
             callback(rows, fields);
         }
     });
-    console.log(query.sql);
+    // console.log(query.sql);
 };
 
 function parseLine(line) {
+    var beforeRules = [
+        // for color log
+        /\(.*?\)\[(.*?)\s-\s+(.*?)\] \[thread:(\d+)\]\s+\[0;\d+m(.*)/,
+        // for raw log
+        /\(.*?\)\[(.*?)\s-\s+(.*?)\] \[thread:(\d+)\]\s+(.*)/,
+    ];
+
     var rules = [
+        // for capwap message
         /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> (\w+) \(\d+\) (<==|==>)\s+ws \((\d+)-(\w+)-(\d.+):(\d+)\)/,
         /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*? ws \(\d+-\d.+:\d+\)\s+<msg>\s+(\w+)\s+(==>|<==)\s+ws\s+\((\d+)-(\w+)-(\d.+):(\d+)\)/,
     ];
+
+    for (var i = 0; i < beforeRules.length; ++i) {
+        var parts = line.match(beforeRules[i]);
+        if (parts) {
+            // time: parts[1],
+            // level: parts[2],
+            // thread: parts[3],
+            // log: parts[4],            
+            raws.push([parts[1], parts[2], parts[3], parts[4]]);
+            break;
+        }
+    }
 
     for (var i = 0; i < rules.length; ++i) {
         var parts = line.match(rules[i]);
@@ -55,7 +76,8 @@ function parseLine(line) {
     }
 };
 
-var batchInsertSql = 'INSERT INTO message (time, messageType, direction, apnetwork, ap, ip, port) VALUES ?';
+var batchInsertRawSql = 'INSERT INTO raw (time, level, thread, log) VALUES ?';
+var batchInsertColSql = 'INSERT INTO message (time, messageType, direction, apnetwork, ap, ip, port) VALUES ?';
 
 function parseFile(file, callback) {
     fs.readFile(file, 'utf8', (err, data) => {
@@ -64,10 +86,14 @@ function parseFile(file, callback) {
 
             lines.forEach(function(line, index) {
                 parseLine(line);
-                if (0 === index % 10000) {
+                if (0 === index % 1000) {
                     if (collections.length) {
-                        var query = mysqlQuery(batchInsertSql, [collections], function(rows, fields) {});
+                        mysqlQuery(batchInsertColSql, [collections], function(rows, fields) {});
                         collections = [];
+                    }
+                    if (raws.length) {
+                        mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {});
+                        raws = [];
                     }
                 }
             });
@@ -85,7 +111,7 @@ function parseFile(file, callback) {
 
 var fileBase = 'D:\\Workspaces\\Project\\log\\monitor\\capwap.';
 
-var sql = 'CREATE TABLE IF NOT EXISTS ' +
+var createMessageTableSql = 'CREATE TABLE IF NOT EXISTS ' +
     'message (' +
     'time TIMESTAMP, ' +
     'messageType varchar(32), ' +
@@ -96,11 +122,20 @@ var sql = 'CREATE TABLE IF NOT EXISTS ' +
     'port smallint(5)' +
     ')';
 
+var createRawTableSql = 'CREATE TABLE IF NOT EXISTS ' +
+    'raw (' +
+    'time TIMESTAMP, ' +
+    'level varchar(16), ' +
+    'thread smallint(5), ' +
+    'log varchar(1024)' +
+    ')';
+
 function main() {
     connection = mysql.createConnection(options);
     connection.connect();
 
-    mysqlQuery(sql, null, function(rows, fields) {});
+    mysqlQuery(createRawTableSql, null, function(rows, fields) {});
+    mysqlQuery(createMessageTableSql, null, function(rows, fields) {});
 
     var start = 1;
     var last = 1;
@@ -118,7 +153,10 @@ function main() {
             console.log(err);
         } else {
             if (collections.length) {
-                var query = mysqlQuery(batchInsertSql, [collections], function(rows, fields) {});
+                mysqlQuery(batchInsertColSql, [collections], function(rows, fields) {});
+            }
+            if (raws.length) {
+                mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {});
             }
             console.log('batch insert success!');
         }

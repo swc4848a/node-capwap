@@ -64,7 +64,7 @@ var Content = React.createClass({
                                         data={this.state.collections} 
                                         sortable={true} 
                                         itemsPerPage={10} 
-                                        filterable={['oid']}
+                                        filterable={['time', 'level', 'thread', 'log']}
                                     />
                                 </div>
                             </div>
