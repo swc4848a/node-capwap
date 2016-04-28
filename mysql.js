@@ -34,19 +34,28 @@ function mysqlQuery(sql, post, callback) {
 };
 
 function parseLine(line) {
-    var parts = line.match(/\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> (\w+) \(\d+\) <== ws \((\d+)-(\w+)-(\d.+):(\d+)\)/);
-    if (parts) {
-        // time: parts[1],
-        // messageType: parts[2],
-        // apnetwork: parts[3],
-        // ap: parts[4],
-        // ip: parts[5],
-        // port: parts[6],
-        collections.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]]);
+    var rules = [
+        /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> (\w+) \(\d+\) (<==|==>)\s+ws \((\d+)-(\w+)-(\d.+):(\d+)\)/,
+        /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*? ws \(\d+-\d.+:\d+\)\s+<msg>\s+(\w+)\s+(==>|<==)\s+ws\s+\((\d+)-(\w+)-(\d.+):(\d+)\)/,
+    ];
+
+    for (var i = 0; i < rules.length; ++i) {
+        var parts = line.match(rules[i]);
+        if (parts) {
+            // time: parts[1],
+            // messageType: parts[2],
+            // direction: parts[3],
+            // apnetwork: parts[4],
+            // ap: parts[5],
+            // ip: parts[6],
+            // port: parts[7],
+            collections.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]]);
+            break;
+        }
     }
 };
 
-var batchInsertSql = 'INSERT INTO message (time, messageType, apnetwork, ap, ip, port) VALUES ?';
+var batchInsertSql = 'INSERT INTO message (time, messageType, direction, apnetwork, ap, ip, port) VALUES ?';
 
 function parseFile(file, callback) {
     fs.readFile(file, 'utf8', (err, data) => {
@@ -79,9 +88,10 @@ var fileBase = 'D:\\Workspaces\\Project\\log\\monitor\\capwap.';
 var sql = 'CREATE TABLE IF NOT EXISTS ' +
     'message (' +
     'time TIMESTAMP, ' +
-    'messageType varchar(64), ' +
+    'messageType varchar(32), ' +
+    'direction varchar(3), ' +
     'apnetwork INT(10), ' +
-    'ap varchar(64), ' +
+    'ap varchar(32), ' +
     'ip varchar(15), ' +
     'port smallint(5)' +
     ')';
@@ -93,7 +103,7 @@ function main() {
     mysqlQuery(sql, null, function(rows, fields) {});
 
     var start = 1;
-    var last = 20;
+    var last = 1;
 
     var fileArray = [];
 

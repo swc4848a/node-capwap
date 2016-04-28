@@ -1,5 +1,7 @@
 var React = require('react');
 var Select = require('react-select');
+var Settings = require('./logsettings.react');
+var AppStore = require('../stores/AppStore');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
 
@@ -44,9 +46,9 @@ function arrow(ren, text, start, end, y) {
     var leftArrow = ['M', start.x, y, 'L', end.x, y, 'M', end.x, y, 'L', end.x + 5, y + 5, 'M', end.x, y, 'L', end.x + 5, y - 5];
     var rightArrow = ['M', start.x, y, 'L', end.x, y, 'M', end.x, y, 'L', end.x - 5, y - 5, 'M', end.x, y, 'L', end.x - 5, y + 5]
 
-    var arrow = (start.x > end.x) ? leftArrow : rightArrow;
+    var arrowPath = (start.x > end.x) ? leftArrow : rightArrow;
 
-    var ar = ren.path(arrow)
+    var ar = ren.path(arrowPath)
         .attr({
             'stroke-width': 2,
             stroke: colors[3]
@@ -63,7 +65,6 @@ function arrow(ren, text, start, end, y) {
             color: colors[3]
         })
         .add();
-
 }
 
 function diagram() {
@@ -72,12 +73,15 @@ function diagram() {
     var server = labelWithDash(ren, 'AP Server', 100);
     var ap = labelWithDash(ren, 'AP', 300);
 
-    fetch('/Diagram').then(function(response) {
+    var url = '/Diagram?apnetwork=' + AppStore.getApnetwork().value +
+        '&ap=' + AppStore.getAp().value;
+
+    fetch(url).then(function(response) {
         response.json().then(function(json) {
             json.forEach(function(item, index) {
-                if ('<== ws' === item.direction) {
+                if ('<==' === item.direction) {
                     arrow(ren, item.label, ap, server, 100 + index * 30);
-                } else if ('==> ws' === item.direction) {
+                } else if ('==>' === item.direction) {
                     arrow(ren, item.label, server, ap, 100 + index * 30);
                 }
             });
@@ -85,86 +89,26 @@ function diagram() {
     });
 }
 
-var SettingsHeader = React.createClass({
-    render: function() {
-        return (
-            <div className="box-header with-border">
-                <h3 className="box-title">Settings</h3>
-                <div className="box-tools pull-right">
-                    <button type="button" className="btn btn-box-tool" data-widget="collapse"><i className="fa fa-minus"></i></button>
-                    <button type="button" className="btn btn-box-tool" data-widget="remove"><i className="fa fa-remove"></i></button>
-                </div>
-            </div>
-        );
-    }
-});
-
-var CustomSelect = React.createClass({
-    getInitialState: function() {
-        return {
-            selectValue: ''
-        };
-    },
-    updateValue: function(newValue) {
-        this.setState({
-            selectValue: newValue
-        });
-    },
-    getOptions: function(input, callback) {
-        fetch('/Options/' + this.props.name).then(function(response) {
-            response.json().then(function(json) {
-                callback(null, {
-                    options: json,
-                    complete: true
-                });
-            });
-        });
-    },
-    render: function() {
-        return (
-            <div className="form-group">
-                <label>{this.props.label}</label>
-                <Select.Async 
-                    name={this.props.name}
-                    loadOptions={this.getOptions}
-                    value={this.state.selectValue}
-                    searchable={true}
-                    onChange={this.updateValue}
-                />
-            </div>
-        );
-    }
-});
-
-var SettingsBody = React.createClass({
-    render: function() {
-        return (
-            <div className="box-body">
-                <div className="row">
-                    <div className="col-md-3">
-                        <CustomSelect label="AP Network" name="apnetwork" />
-                    </div>
-                    <div className="col-md-3">
-                        <CustomSelect label="AP" name="ap" />
-                    </div>
-                </div>
-            </div>
-        );
-    }
-});
-
-var Settings = React.createClass({
-    render: function() {
-        return (
-            <div className="box box-default">
-                <SettingsHeader />
-                <SettingsBody />
-            </div>
-        );
-    }
-});
+function getDiagramStore() {
+    return {
+        ap: AppStore.getAp(),
+        apnetwork: AppStore.getApnetwork()
+    };
+};
 
 var LogGraph = React.createClass({
+    getInitialState: function() {
+        return getDiagramStore();
+    },
+    componentDidMount: function() {
+        AppStore.addChangeListener(this._onChange);
+    },
+    componentWillUnmount: function() {
+        AppStore.removeChangeListener(this._onChange);
+    },
+    _onChange: function() {
+        this.setState(getDiagramStore());
+    },
     render: function() {
         var config = {
             chart: {
@@ -185,8 +129,8 @@ var LogGraph = React.createClass({
         return (
             <div className="content-wrapper">
                 <section className="content">
-                    <Settings />
-                    <ReactHighcharts config = {config}></ReactHighcharts>
+                    <Settings apnetwork={this.state.apnetwork} ap={this.state.ap} />
+                    <ReactHighcharts config = {config} ref="chart"></ReactHighcharts>
                 </section>
             </div>
         );
