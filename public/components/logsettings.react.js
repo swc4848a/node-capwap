@@ -62,7 +62,7 @@ var SettingsBody = React.createClass({
 
         var apSelect;
         if (this.props.ap) {
-            apSelect = <div className="col-md-2"><CustomSelect label="AP Network" options={this.props.ap} name="apnetwork" /></div>;
+            apSelect = <div className="col-md-2"><CustomSelect label="AP" options={this.props.ap} name="ap" /></div>;
         }
 
         return (
