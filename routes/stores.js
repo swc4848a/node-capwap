@@ -22,13 +22,15 @@ router.get('/Raws', function(req, res) {
 
         let sql = 'SELECT * FROM raw WHERE time BETWEEN from_unixtime(' + start / 1000 + ') and from_unixtime(' + end / 1000 + ');';
 
-        console.log(sql);
-
         connection.query(sql, function(err, rows, fields) {
             if (err) {
                 console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
                 res.json([]);
             } else {
+                rows.forEach(function(row, index) {
+                    var dateStr = new Date(row.time);
+                    row.time = dateStr.toLocaleString();
+                });
                 res.json(rows);
             }
         });
