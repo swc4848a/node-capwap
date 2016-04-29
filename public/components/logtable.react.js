@@ -3,6 +3,7 @@ var _ = require('underscore');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
 var ReactTable = require('Reactable').Table;
+var Settings = require('./logsettings.react');
 
 var ContentHeader = React.createClass({
     render: function() {
@@ -43,17 +44,18 @@ var Content = React.createClass({
     _onChange: function() {
         this.setState(getAppStore());
     },
-    _onPageChange: function(currentPage) {
-        if ((currentPage + 1) === this.state.collections.length / 10) {
-            AppActions.updateCollections();
-        }
-    },
     render: function() {
+        var total = this.state.collections.length;
+        var filter = _.keys(this.state.collections[0]);
         return (
             <section className="content">
+                <Settings />
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="box">
+                            <div className="box-header with-border">
+                                <h3 className="box-title">Raw Logs Table</h3>
+                            </div>
                             <div className="box-body">
                                 <div className="table-responsive">
                                     <ReactTable 
@@ -61,8 +63,7 @@ var Content = React.createClass({
                                         data={this.state.collections} 
                                         sortable={true} 
                                         itemsPerPage={10} 
-                                        filterable={_.keys(this.state.collections[0])}
-                                        onPageChange={this._onPageChange}
+                                        filterable={filter} 
                                     />
                                 </div>
                             </div>

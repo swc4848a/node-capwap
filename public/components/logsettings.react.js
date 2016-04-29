@@ -52,21 +52,25 @@ var SettingsBody = React.createClass({
     render: function() {
         var messageTypeSelect;
         if (this.props.messageType) {
-            messageTypeSelect = <CustomSelect label="Message Type" options={this.props.messageType} name="messageType" />;
+            messageTypeSelect = <div className="col-md-2"><CustomSelect label="Message Type" options={this.props.messageType} name="messageType" /></div>;
+        }
+
+        var apnetworkSelect;
+        if (this.props.apnetwork) {
+            apnetworkSelect = <div className="col-md-2"><CustomSelect label="AP Network" options={this.props.apnetwork} name="apnetwork" /></div>;
+        }
+
+        var apSelect;
+        if (this.props.ap) {
+            apSelect = <div className="col-md-2"><CustomSelect label="AP Network" options={this.props.ap} name="apnetwork" /></div>;
         }
 
         return (
             <div className="box-body">
                 <div className="row">
-                    <div className="col-md-2">
-                        <CustomSelect label="AP Network" options={this.props.apnetwork} name="apnetwork" />
-                    </div>
-                    <div className="col-md-2">
-                        <CustomSelect label="AP" options={this.props.ap} name="ap" />
-                    </div>
-                    <div className="col-md-2">
-                        {messageTypeSelect}
-                    </div>
+                    {apnetworkSelect}
+                    {apSelect}
+                    {messageTypeSelect}
                 </div>
             </div>
         );
