@@ -18,16 +18,21 @@ var _apps = {
     messageType: {
         options: []
     },
+    startTime: {},
+    endTime: {},
     graphData: []
 };
 
 function updateCollections() {
-    fetch('/Stores').then(function(response) {
-        response.json().then(function(json) {
-            _apps.collections = json;
-            AppStore.emitChange();
+    if (_apps.startTime.value && _apps.endTime.value) {
+        var url = '/Stores/Raws?start=' + _apps.startTime.value + '&end=' + _apps.endTime.value;
+        fetch(url).then(function(response) {
+            response.json().then(function(json) {
+                _apps.collections = json;
+                AppStore.emitChange();
+            });
         });
-    });
+    }
 }
 
 function updateApnetwork(apnetwork) {
@@ -40,6 +45,14 @@ function updateAp(ap) {
 
 function updateMessageType(messageType) {
     _apps.messageType = assign({}, _apps.messageType, messageType);
+}
+
+function updateStartTime(startTime) {
+    _apps.startTime = assign({}, _apps.startTime, startTime);
+}
+
+function updateEndTime(endTime) {
+    _apps.endTime = assign({}, _apps.endTime, endTime);
 }
 
 function updateGraphData() {
@@ -102,6 +115,12 @@ var AppStore = assign({}, EventEmitter.prototype, {
     getMessageType: function() {
         return _apps.messageType;
     },
+    getStartTime: function() {
+        return _apps.startTime;
+    },
+    getEndTime: function() {
+        return _apps.endTime;
+    },
     getGraphData: function() {
         return _apps.graphData;
     }
@@ -132,6 +151,18 @@ AppDispatcher.register(function(action) {
         case AppConstants.APP_UPDATE_MESSAGE_TYPE:
             updateMessageType({
                 label: action.label,
+                value: action.value
+            });
+            AppStore.emitChange();
+            break;
+        case AppConstants.APP_UDPATE_START_TIME:
+            updateStartTime({
+                value: action.value
+            });
+            AppStore.emitChange();
+            break;
+        case AppConstants.APP_UDPATE_END_TIME:
+            updateEndTime({
                 value: action.value
             });
             AppStore.emitChange();

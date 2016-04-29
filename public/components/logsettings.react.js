@@ -1,5 +1,6 @@
 var React = require('react');
 var Select = require('react-select');
+var DateTimeField = require('react-bootstrap-datetimepicker');
 var Settings = require('./logsettings.react');
 var AppActions = require('../actions/AppActions');
 
@@ -49,6 +50,15 @@ var SettingsHeader = React.createClass({
 });
 
 var SettingsBody = React.createClass({
+    handleStartChange: function(newDate) {
+        AppActions.updateStartTime(newDate);
+    },
+    handleEndChange: function(newDate) {
+        AppActions.updateEndTime(newDate);
+    },
+    handleFresh: function() {
+        AppActions.updateCollections();
+    },
     render: function() {
         var messageTypeSelect;
         if (this.props.messageType) {
@@ -65,12 +75,29 @@ var SettingsBody = React.createClass({
             apSelect = <div className="col-md-2"><CustomSelect label="AP" options={this.props.ap} name="ap" /></div>;
         }
 
+        var startTime;
+        var endTime;
+        var button;
+
+        if (this.props.start && this.props.end) {
+            var StartDateTime = <DateTimeField onChange={this.handleStartChange} dateTime={this.props.start.value} defaultText="Start Datetime"/>;
+            var EndDateTime = <DateTimeField onChange={this.handleEndChange} dateTime={this.props.end.value} defaultText="End Datetime"/>;
+            var buttonCore = <button type="button" className="btn btn-default refresh" onClick={this.handleFresh}>Refresh</button>;
+
+            startTime = <div className="col-md-2"><label>Start DataTime</label>{StartDateTime}</div>;
+            endTime = <div className="col-md-2"><label>End DataTime</label>{EndDateTime}</div>;
+            button = <div className="col-md-2"><label>Control</label><div>{buttonCore}</div></div>
+        }
+
         return (
             <div className="box-body">
                 <div className="row">
                     {apnetworkSelect}
                     {apSelect}
                     {messageTypeSelect}
+                    {startTime}
+                    {endTime}
+                    {button}
                 </div>
             </div>
         );
@@ -82,7 +109,13 @@ var Settings = React.createClass({
         return (
             <div className="box box-default">
                 <SettingsHeader />
-                <SettingsBody messageType={this.props.messageType} apnetwork={this.props.apnetwork} ap={this.props.ap} />
+                <SettingsBody 
+                    messageType={this.props.messageType} 
+                    apnetwork={this.props.apnetwork} 
+                    ap={this.props.ap} 
+                    start={this.props.start} 
+                    end={this.props.end} 
+                />
             </div>
         );
     }

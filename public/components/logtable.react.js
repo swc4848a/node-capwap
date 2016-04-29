@@ -26,6 +26,8 @@ var ContentHeader = React.createClass({
 function getAppStore() {
     return {
         collections: AppStore.getCollections(),
+        start: AppStore.getStartTime(),
+        end: AppStore.getEndTime()
     };
 }
 
@@ -49,7 +51,7 @@ var Content = React.createClass({
         var filter = _.keys(this.state.collections[0]);
         return (
             <section className="content">
-                <Settings />
+                <Settings start={this.state.start} end={this.state.end}/>
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="box">

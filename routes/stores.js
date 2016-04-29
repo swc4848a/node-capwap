@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 
-router.get('/', function(req, res) {
+router.get('/Raws', function(req, res) {
     var options = {
         host: '172.16.94.163',
         user: 'monitor',
@@ -12,22 +12,32 @@ router.get('/', function(req, res) {
         database: 'monitor'
     };
 
-    var connection = mysql.createConnection(options);
+    if (req.query.start && req.query.end) {
+        var start = req.query.start;
+        var end = req.query.end;
 
-    connection.connect();
+        var connection = mysql.createConnection(options);
 
-    let sql = 'SELECT * FROM raw limit 1000';
+        connection.connect();
 
-    connection.query(sql, function(err, rows, fields) {
-        if (err) {
-            console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
-            res.json([]);
-        } else {
-            res.json(rows);
-        }
-    });
+        let sql = 'SELECT * FROM raw WHERE time BETWEEN from_unixtime(' + start / 1000 + ') and from_unixtime(' + end / 1000 + ');';
 
-    connection.end();
+        console.log(sql);
+
+        connection.query(sql, function(err, rows, fields) {
+            if (err) {
+                console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
+                res.json([]);
+            } else {
+                res.json(rows);
+            }
+        });
+
+        connection.end();
+    } else {
+        console.log('require start and end: ' + req.query);
+        res.json([]);
+    }
 });
 
 module.exports = router;

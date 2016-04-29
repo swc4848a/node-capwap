@@ -59,6 +59,18 @@ var AppActions = {
             value: value
         });
     },
+    updateStartTime: function(value) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UDPATE_START_TIME,
+            value: value
+        });
+    },
+    updateEndTime: function(value) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UDPATE_END_TIME,
+            value: value
+        });
+    },
     updateGraphData: function() {
         AppDispatcher.dispatch({
             actionType: AppConstants.APP_UPDATE_GRAPH_DATA,
