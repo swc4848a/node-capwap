@@ -56,17 +56,25 @@ function updateEndTime(endTime) {
 }
 
 function updateGraphData() {
-    var url = '/Graph?' +
-        'messageType=' + _apps.messageType.value +
-        '&apnetwork=' + _apps.apnetwork.value +
-        '&ap=' + _apps.ap.label;
+    if (_apps.messageType.value &&
+        _apps.apnetwork.value &&
+        _apps.ap.label &&
+        _apps.startTime.value &&
+        _apps.endTime.value) {
+        var url = '/Graph?' +
+            'messageType=' + _apps.messageType.value +
+            '&apnetwork=' + _apps.apnetwork.value +
+            '&ap=' + _apps.ap.label +
+            '&start=' + _apps.startTime.value +
+            '&end=' + _apps.endTime.value;
 
-    fetch(url).then(function(response) {
-        response.json().then(function(json) {
-            _apps.graphData = json;
-            AppStore.emitChange();
+        fetch(url).then(function(response) {
+            response.json().then(function(json) {
+                _apps.graphData = json;
+                AppStore.emitChange();
+            });
         });
-    });
+    }
 }
 
 function updateSelectOptions(config) {

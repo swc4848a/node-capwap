@@ -56,9 +56,6 @@ var SettingsBody = React.createClass({
     handleEndChange: function(newDate) {
         AppActions.updateEndTime(newDate);
     },
-    handleFresh: function() {
-        AppActions.updateCollections();
-    },
     render: function() {
         var messageTypeSelect;
         if (this.props.messageType) {
@@ -80,12 +77,12 @@ var SettingsBody = React.createClass({
         var button;
 
         if (this.props.start && this.props.end) {
-            var StartDateTime = <DateTimeField onChange={this.handleStartChange} dateTime={this.props.start.value} defaultText="Start Datetime"/>;
-            var EndDateTime = <DateTimeField onChange={this.handleEndChange} dateTime={this.props.end.value} defaultText="End Datetime"/>;
-            var buttonCore = <button type="button" className="btn btn-default refresh" onClick={this.handleFresh}>Refresh</button>;
+            var StartDateTime = <DateTimeField onChange={this.handleStartChange} dateTime={this.props.start.value} />;
+            var EndDateTime = <DateTimeField onChange={this.handleEndChange} dateTime={this.props.end.value} />;
+            var buttonCore = <button type="button" className="btn btn-default refresh" onClick={this.props.handleClick}>Refresh</button>;
 
-            startTime = <div className="col-md-2"><label>Start DataTime</label>{StartDateTime}</div>;
-            endTime = <div className="col-md-2"><label>End DataTime</label>{EndDateTime}</div>;
+            startTime = <div className="col-md-2"><label>Start DateTime</label>{StartDateTime}</div>;
+            endTime = <div className="col-md-2"><label>End DateTime</label>{EndDateTime}</div>;
             button = <div className="col-md-2"><label>Control</label><div>{buttonCore}</div></div>
         }
 
@@ -115,6 +112,7 @@ var Settings = React.createClass({
                     ap={this.props.ap} 
                     start={this.props.start} 
                     end={this.props.end} 
+                    handleClick={this.props.handleClick}
                 />
             </div>
         );

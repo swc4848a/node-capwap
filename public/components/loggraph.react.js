@@ -2,6 +2,7 @@ var React = require('react');
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
 var AppStore = require('../stores/AppStore');
+var AppActions = require('../actions/AppActions');
 var Settings = require('./logsettings.react');
 
 function getGraphStore() {
@@ -9,7 +10,9 @@ function getGraphStore() {
         messageType: AppStore.getMessageType(),
         ap: AppStore.getAp(),
         apnetwork: AppStore.getApnetwork(),
-        data: AppStore.getGraphData()
+        data: AppStore.getGraphData(),
+        start: AppStore.getStartTime(),
+        end: AppStore.getEndTime(),
     };
 };
 
@@ -25,6 +28,9 @@ var LogGraph = React.createClass({
     },
     _onChange: function() {
         this.setState(getGraphStore());
+    },
+    handleClick: function() {
+        AppActions.updateGraphData();
     },
     render: function() {
         var config = {
@@ -86,7 +92,14 @@ var LogGraph = React.createClass({
         return (
             <div className="content-wrapper">
                 <section className="content">
-                    <Settings messageType={this.state.messageType} apnetwork={this.state.apnetwork} ap={this.state.ap} />
+                    <Settings 
+                        messageType={this.state.messageType} 
+                        apnetwork={this.state.apnetwork} 
+                        ap={this.state.ap} 
+                        start={this.state.start} 
+                        end={this.state.end}
+                        handleClick={this.handleClick}
+                    />
                     <ReactHighcharts config = {config}></ReactHighcharts>
                 </section>
             </div>

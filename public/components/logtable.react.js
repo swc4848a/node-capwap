@@ -46,12 +46,19 @@ var Content = React.createClass({
     _onChange: function() {
         this.setState(getAppStore());
     },
+    handleClick: function() {
+        AppActions.updateCollections();
+    },
     render: function() {
         var total = this.state.collections.length;
         var filter = _.keys(this.state.collections[0]);
         return (
             <section className="content">
-                <Settings start={this.state.start} end={this.state.end}/>
+                <Settings 
+                    start={this.state.start} 
+                    end={this.state.end}
+                    handleClick={this.handleClick}
+                />
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="box">

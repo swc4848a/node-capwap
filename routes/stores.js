@@ -28,8 +28,7 @@ router.get('/Raws', function(req, res) {
                 res.json([]);
             } else {
                 rows.forEach(function(row, index) {
-                    var dateStr = new Date(row.time);
-                    row.time = dateStr.toLocaleString();
+                    row.time = row.time.toLocaleString();
                 });
                 res.json(rows);
             }
