@@ -9,12 +9,14 @@ var CustomSelect = React.createClass({
         if ('apnetwork' === this.props.name) {
             AppActions.updateApnetwork(newValue.label, newValue.value);
             AppActions.updateSeletctOptions('ap');
+            // AppActions.updateGraphData();
         } else if ('ap' === this.props.name) {
             AppActions.updateAp(newValue.label, newValue.value);
+            // AppActions.updateGraphData();
         } else if ('messageType' === this.props.name) {
             AppActions.updateMessageType(newValue.label, newValue.value);
+            // AppActions.updateGraphData();
         }
-        AppActions.updateGraphData();
     },
     componentDidMount: function() {
         AppActions.updateSeletctOptions(this.props.name);

@@ -26,11 +26,11 @@ router.get('/', function(req, res) {
             res.json([]);
         } else {
             var json = [];
-            rows.forEach(function(item, index) {
+            rows.forEach(function(row, index) {
                 json.push({
-                    time: item.time,
-                    label: item.label,
-                    direction: item.direction
+                    time: row.time.toLocaleString(),
+                    label: row.label,
+                    direction: row.direction
                 });
             });
             res.json(json);
