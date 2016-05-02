@@ -21,7 +21,9 @@ router.get('/', function(req, res) {
             '" and ap="' + req.query.ap +
             '" and time between from_unixtime(' + req.query.start / 1000 + ') and from_unixtime(' + req.query.end / 1000 + ')';
 
-        var sql = 'SELECT time AS time, COUNT(*) AS count FROM message WHERE ' + whereCondition + ' GROUP BY UNIX_TIMESTAMP(time) DIV 3600;';
+        var sql = 'SELECT time, COUNT(*) as count FROM message WHERE ' + whereCondition + ' GROUP BY UNIX_TIMESTAMP(time) DIV 3600;';
+
+        console.log(sql);
 
         connection.query(sql, function(err, rows, fields) {
             if (err) {
@@ -30,7 +32,21 @@ router.get('/', function(req, res) {
             } else {
                 var json = [];
                 rows.forEach(function(row, index) {
-                    json.push([row.time.getTime(), row.count]);
+                    if (index !== rows.length - 1) {
+                        var now = Math.round(row.time.getTime() / 3600000);
+                        var next = Math.round(rows[index + 1].time.getTime() / 3600000);
+                        var diff = next - now;
+                        if (1 !== diff) {
+                            json.push([row.time.getTime(), row.count]);
+                            for (var i = 1; i < diff; ++i) {
+                                json.push([row.time.getTime() + i * 3600000, 0]);
+                            }
+                        } else {
+                            json.push([row.time.getTime(), row.count]);
+                        }
+                    } else {
+                        json.push([row.time.getTime(), row.count]);
+                    }
                 });
                 res.json(json);
             }

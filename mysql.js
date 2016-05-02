@@ -38,7 +38,7 @@ function mysqlQuery(sql, post, callback) {
 function parseLine(line) {
     var beforeRules = [
         // for color log
-        /\(.*?\)\[(.*?)\s-\s+(.*?)\] \[thread:(\d+)\]\s+\[0;\d+m(.*)/,
+        /\(.*?\)\[(.*?)\s-\s+(.*?)\] \[thread:(\d+)\]\s+\[\d;\d+m(.*)/,
         // for raw log
         /\(.*?\)\[(.*?)\s-\s+(.*?)\] \[thread:(\d+)\]\s+(.*)/,
     ];
