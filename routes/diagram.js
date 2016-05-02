@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
             '" and ap="' + req.query.ap +
             '" and time between from_unixtime(' + req.query.start / 1000 + ') and from_unixtime(' + req.query.end / 1000 + ')';
 
-        var sql = 'SELECT time, messageType AS label, direction FROM message WHERE ' + whereCondition + ' limit 200;';
+        var sql = 'SELECT time, messageType AS label, direction FROM message WHERE ' + whereCondition + ' limit 100;';
 
         connection.query(sql, function(err, rows, fields) {
             if (err) {
