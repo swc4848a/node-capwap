@@ -7,15 +7,24 @@ var AppActions = require('../actions/AppActions');
 var CustomSelect = React.createClass({
     updateValue: function(newValue) {
         if ('apnetwork' === this.props.name) {
-            AppActions.updateApnetwork(newValue.label, newValue.value);
+            if (newValue) {
+                AppActions.updateApnetwork(newValue.label, newValue.value);
+            } else {
+                AppActions.updateApnetwork(undefined, undefined);
+            }
             AppActions.updateSeletctOptions('ap');
-            // AppActions.updateGraphData();
         } else if ('ap' === this.props.name) {
-            AppActions.updateAp(newValue.label, newValue.value);
-            // AppActions.updateGraphData();
+            if (newValue) {
+                AppActions.updateAp(newValue.label, newValue.value);
+            } else {
+                AppActions.updateAp(undefined, undefined);
+            }
         } else if ('messageType' === this.props.name) {
-            AppActions.updateMessageType(newValue.label, newValue.value);
-            // AppActions.updateGraphData();
+            if (newValue) {
+                AppActions.updateMessageType(newValue.label, newValue.value);
+            } else {
+                AppActions.updateMessageType(undefined, undefined);
+            }
         }
     },
     componentDidMount: function() {
