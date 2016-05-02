@@ -5,17 +5,17 @@ var router = express.Router();
 var mysql = require('mysql');
 
 router.get('/', function(req, res) {
-    var options = {
-        host: '172.16.94.163',
-        user: 'monitor',
-        password: 'pass',
-        database: 'monitor'
-    };
-    var connection = mysql.createConnection(options);
-
-    connection.connect();
-
     if (req.query.messageType && req.query.apnetwork && req.query.ap && req.query.start && req.query.end) {
+        var options = {
+            host: '172.16.94.163',
+            user: 'monitor',
+            password: 'pass',
+            database: 'monitor'
+        };
+        var connection = mysql.createConnection(options);
+
+        connection.connect();
+
         var whereCondition = 'messageType="' + req.query.messageType +
             '" and apnetwork="' + req.query.apnetwork +
             '" and ap="' + req.query.ap +
@@ -35,10 +35,9 @@ router.get('/', function(req, res) {
                 res.json(json);
             }
         });
-
         connection.end();
     } else {
-        console.log('require start and end: ' + req.query);
+        console.log('missing require: ' + req.query);
         res.json([]);
     }
 });

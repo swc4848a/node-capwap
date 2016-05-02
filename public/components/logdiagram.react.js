@@ -82,33 +82,44 @@ function diagram() {
     var left = chart.containerWidth / 2 - 150;
     var right = chart.containerWidth / 2 + 150;
 
-    var server = labelWithDash(chart.renderer, 'AP Server', left, 850);
-    var ap = labelWithDash(chart.renderer, 'AP', right, 850);
+    var serverLabel = labelWithDash(chart.renderer, 'AP Server', left, 850);
+    var apLabel = labelWithDash(chart.renderer, 'AP', right, 850);
 
-    var url = '/Diagram?apnetwork=' + AppStore.getApnetwork().value +
-        '&ap=' + AppStore.getAp().value;
+    var apnetwork = AppStore.getApnetwork().value;
+    var ap = AppStore.getAp().value;
+    var start = AppStore.getStartTime().value;
+    var end = AppStore.getEndTime().value;
 
-    fetch(url).then(function(response) {
-        response.json().then(function(json) {
-            json.forEach(function(item, index) {
-                if ('<==' === item.direction) {
-                    arrow(chart.renderer, item.time, item.label, ap, server, 100 + index * 30);
-                } else if ('==>' === item.direction) {
-                    arrow(chart.renderer, item.time, item.label, server, ap, 100 + index * 30);
-                }
+    if (apnetwork && ap && start && end) {
+        var url = '/Diagram?apnetwork=' + apnetwork +
+            '&ap=' + ap +
+            '&start=' + start +
+            '&end=' + end;
 
-                labelWithDash(chart.renderer, 'AP Server', left, json.length * 30 + 80);
-                labelWithDash(chart.renderer, 'AP', right, json.length * 30 + 80);
-                chart.setSize(chart.containerWidth, json.length * 30 + 100);
+        fetch(url).then(function(response) {
+            response.json().then(function(json) {
+                json.forEach(function(item, index) {
+                    if ('<==' === item.direction) {
+                        arrow(chart.renderer, item.time, item.label, apLabel, serverLabel, 100 + index * 30);
+                    } else if ('==>' === item.direction) {
+                        arrow(chart.renderer, item.time, item.label, serverLabel, apLabel, 100 + index * 30);
+                    }
+
+                    labelWithDash(chart.renderer, 'AP Server', left, json.length * 30 + 80);
+                    labelWithDash(chart.renderer, 'AP', right, json.length * 30 + 80);
+                    chart.setSize(chart.containerWidth, json.length * 30 + 100);
+                });
             });
         });
-    });
+    }
 }
 
 function getDiagramStore() {
     return {
         ap: AppStore.getAp(),
-        apnetwork: AppStore.getApnetwork()
+        apnetwork: AppStore.getApnetwork(),
+        start: AppStore.getStartTime(),
+        end: AppStore.getEndTime(),
     };
 };
 
@@ -145,7 +156,12 @@ var LogGraph = React.createClass({
         return (
             <div className="content-wrapper">
                 <section className="content">
-                    <Settings apnetwork={this.state.apnetwork} ap={this.state.ap} />
+                    <Settings 
+                        apnetwork={this.state.apnetwork} 
+                        ap={this.state.ap} 
+                        start={this.state.start}
+                        end={this.state.end}
+                    />
                     <ReactHighcharts config = {config} ref="chart"></ReactHighcharts>
                 </section>
             </div>

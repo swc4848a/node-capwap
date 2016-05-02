@@ -36,7 +36,7 @@ router.get('/Raws', function(req, res) {
 
         connection.end();
     } else {
-        console.log('require start and end: ' + req.query);
+        console.log('missing require: ' + req.query);
         res.json([]);
     }
 });
