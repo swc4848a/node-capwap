@@ -49,6 +49,12 @@ function parseLine(line) {
         /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*? ws \(\d+-\d.+:\d+\)\s+<msg>\s+(\w+)\s+(==>|<==)\s+ws\s+\((\d+)-(\w+)-(\d.+):(\d+)\)/,
     ];
 
+    var exceptRules = [
+        // for some exception
+        // Join Response
+        /\(.*?\)\[(.*?)\s+-\s+.*?\]\s+\[thread:\d+\]\s+\d.+\s+ws\s+\((\d+)-(\d.+):\d+\)\s+CWAS_JOIN_enter: sending JOIN RESP msg. RC=0\(Success\)/,
+    ];
+
     for (var i = 0; i < beforeRules.length; ++i) {
         var parts = line.match(beforeRules[i]);
         if (parts) {
@@ -74,6 +80,14 @@ function parseLine(line) {
             collections.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]]);
             break;
         }
+    }
+
+    var parts = line.match(exceptRules[0]);
+    if (parts) {
+        // use last collection information
+        var ap = collections[collections.length - 1][4];
+        var port = collections[collections.length - 1][6];
+        collections.push([parts[1], 'JOIN_RESP', '==>', parts[2], ap, parts[3], port]);
     }
 };
 

@@ -211,7 +211,7 @@ router.get('/messageType', function(req, res) {
         label: 'Configuration Status Response',
         value: 'STA_CFG_RESP'
     }, {
-        label: 'Keep-Alive',
+        label: 'Keep Alive',
         value: 'DATA_CHAN_KEEP_ALIVE'
     }, {
         label: 'IEEE 802.11 WLAN Configuration Request',
