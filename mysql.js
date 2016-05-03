@@ -15,7 +15,8 @@ var ProgressBar = require('progress');
 
 var connection;
 var raws = [];
-var collections = [];
+var messages = [];
+var ieee80211mgmts = [];
 
 var options = {
     host: '172.16.94.163',
@@ -41,12 +42,20 @@ function parseLine(line) {
         /\(.*?\)\[(.*?)\s-\s+(.*?)\] \[thread:(\d+)\]\s+\[\d;\d+m(.*)/,
         // for raw log
         /\(.*?\)\[(.*?)\s-\s+(.*?)\] \[thread:(\d+)\]\s+(.*)/,
+        // support no thread version
+        /\(.*?\)\[(.*?)\s-\s+(.*?)\]\s+\[\d;\d+m(.*)/,
+        /\(.*?\)\[(.*?)\s-\s+(.*?)\]\s+(.*)/,
     ];
 
     var rules = [
         // for capwap message
         /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> (\w+) \(\d+\) (<==|==>)\s+ws \((\d+)-(\w+)-(\d.+):(\d+)\)/,
         /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*? ws \(\d+-\d.+:\d+\)\s+<msg>\s+(\w+)\s+(==>|<==)\s+ws\s+\((\d+)-(\w+)-(\d.+):(\d+)\)/,
+    ];
+
+    var ieee80211Rules = [
+        // for IEEE 802.11 mgmt
+        /\(.*?\)\[(.*?)\s-\s+.*?\]\s+\[\d;\d+m\d.+\s+(.*?)\s+<ih>\s+(.*?)\s+(<==|==>)\s+.*?\s+ws\s+\((\d+)\s+-(\d.+):(\d+)\)\s+vap\s+(\w+)\srId\s(\d+)\swId\s(\d+)\s+(.*:?)/
     ];
 
     var exceptRules = [
@@ -81,48 +90,68 @@ function parseLine(line) {
             // ap: parts[5],
             // ip: parts[6],
             // port: parts[7],
-            collections.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]]);
+            messages.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]]);
+            break;
+        }
+    }
+
+    for (var i = 0; i < ieee80211Rules.length; ++i) {
+        var parts = line.match(ieee80211Rules[i]);
+        if (parts) {
+            // time: parts[1],
+            // stamac: parts[2],
+            // messageType: parts[3],
+            // direction: parts[4],
+            // apnetwork: parts[5],
+            // ip: parts[6],
+            // port: parts[7],
+            // iface: parts[8],
+            // radioId: parts[9],
+            // wlanId: parts[10],
+            // bssid: parts[11],
+            ieee80211mgmts.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8], parts[9], parts[10], parts[11]]);
             break;
         }
     }
 
     var parts = line.match(exceptRules[0]);
-    if (parts && collections.length) {
+    if (parts && messages.length) {
         // use last collection information
-        var ap = collections[collections.length - 1][4];
-        var port = collections[collections.length - 1][6];
-        collections.push([parts[1], 'JOIN_RESP', '==>', parts[2], ap, parts[3], port]);
+        var ap = messages[messages.length - 1][4];
+        var port = messages[messages.length - 1][6];
+        messages.push([parts[1], 'JOIN_RESP', '==>', parts[2], ap, parts[3], port]);
         return;
     }
 
     parts = line.match(exceptRules[1]);
-    if (parts && collections.length) {
-        var ap = collections[collections.length - 1][4];
-        var port = collections[collections.length - 1][6];
-        collections.push([parts[1], 'CFG_STATUS_RESP', '==>', parts[2], ap, parts[3], port]);
+    if (parts && messages.length) {
+        var ap = messages[messages.length - 1][4];
+        var port = messages[messages.length - 1][6];
+        messages.push([parts[1], 'CFG_STATUS_RESP', '==>', parts[2], ap, parts[3], port]);
         return;
     }
 
     parts = line.match(exceptRules[2]);
-    if (parts && collections.length) {
-        var ap = collections[collections.length - 1][4];
-        var port = collections[collections.length - 1][6];
-        collections.push([parts[1], 'CFG_UPDATE_REQ', '==>', parts[2], ap, parts[3], port]);
+    if (parts && messages.length) {
+        var ap = messages[messages.length - 1][4];
+        var port = messages[messages.length - 1][6];
+        messages.push([parts[1], 'CFG_UPDATE_REQ', '==>', parts[2], ap, parts[3], port]);
         return;
     }
 };
 
 var batchInsertRawSql = 'INSERT INTO raw (time, level, thread, log) VALUES ?';
 var batchInsertColSql = 'INSERT INTO message (time, messageType, direction, apnetwork, ap, ip, port) VALUES ?';
-
-var bar;
+var batchInsertIeeeSql = 'INSERT INTO ieee80211mgmt (time, stamac, messageType, direction, apnetwork, ip, port, iface, radioId, wlanId, bssid) VALUES ?';
 
 function parseFile(file, callback) {
+    var bar;
+
     fs.readFile(file, 'utf8', (err, data) => {
         if (!err) {
             var lines = data.match(/[^\r\n]+/g);
 
-            bar = new ProgressBar('  processing [:bar] :current :total :elapsed :percent :etas', {
+            bar = new ProgressBar('  processing [' + file + '][:bar] :current :total :elapsed :percent :etas', {
                 complete: '=',
                 incomplete: ' ',
                 width: 100,
@@ -132,15 +161,19 @@ function parseFile(file, callback) {
             lines.forEach(function(line, index) {
                 parseLine(line);
                 if (0 === index % 1000) {
-                    if (collections.length) {
-                        mysqlQuery(batchInsertColSql, [collections], function(rows, fields) {});
-                        collections = [];
+                    if (messages.length) {
+                        mysqlQuery(batchInsertColSql, [messages], function(rows, fields) {});
+                        messages = [];
                     }
                     if (raws.length) {
                         mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {
                             bar.tick(1000);
                         });
                         raws = [];
+                    }
+                    if (ieee80211mgmts.length) {
+                        mysqlQuery(batchInsertIeeeSql, [ieee80211mgmts], function(rows, fields) {});
+                        ieee80211mgmts = [];
                     }
                 }
             });
@@ -169,6 +202,21 @@ var createMessageTableSql = 'CREATE TABLE IF NOT EXISTS ' +
     'port smallint(5)' +
     ')';
 
+var createIeeeMgmtTableSql = 'CREATE TABLE IF NOT EXISTS ' +
+    'ieee80211mgmt (' +
+    'time TIMESTAMP, ' +
+    'stamac varchar(18), ' +
+    'messageType varchar(32), ' +
+    'direction varchar(3), ' +
+    'apnetwork INT(10), ' +
+    'ip varchar(15), ' +
+    'port smallint(5), ' +
+    'iface varchar(12), ' +
+    'radioId smallint(5), ' +
+    'wlanId smallint(5), ' +
+    'bssid varchar(18)' +
+    ')';
+
 var createRawTableSql = 'CREATE TABLE IF NOT EXISTS ' +
     'raw (' +
     'time TIMESTAMP, ' +
@@ -183,9 +231,10 @@ function main() {
 
     mysqlQuery(createRawTableSql, null, function(rows, fields) {});
     mysqlQuery(createMessageTableSql, null, function(rows, fields) {});
+    mysqlQuery(createIeeeMgmtTableSql, null, function(rows, fields) {});
 
     var start = 1;
-    var last = 1;
+    var last = 4;
 
     var fileArray = [];
 
@@ -199,11 +248,14 @@ function main() {
         if (err) {
             console.log(err);
         } else {
-            if (collections.length) {
-                mysqlQuery(batchInsertColSql, [collections], function(rows, fields) {});
+            if (messages.length) {
+                mysqlQuery(batchInsertColSql, [messages], function(rows, fields) {});
             }
             if (raws.length) {
                 mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {});
+            }
+            if (ieee80211mgmts.length) {
+                mysqlQuery(batchInsertIeeeSql, [ieee80211mgmts], function(rows, fields) {});
             }
         }
         connection.end();
