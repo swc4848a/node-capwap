@@ -53,6 +53,10 @@ function parseLine(line) {
         // for some exception
         // Join Response
         /\(.*?\)\[(.*?)\s+-\s+.*?\]\s+\[thread:\d+\]\s+\d.+\s+ws\s+\((\d+)-(\d.+):\d+\)\s+CWAS_JOIN_enter: sending JOIN RESP msg. RC=0\(Success\)/,
+        // Configuration Status Response
+        /\(.*?\)\[(.*?)\s+-\s+.*?\]\s+\[thread:\d+\]\s+\d.+\s+ws\s+\((\d+)-(\d.+):\d+\)\s+CWAS_CONFIG_enter: sending CONFIG STATUS RESP msg./,
+        // Configuration Update Request
+        /\(.*?\)\[(.*?)\s+-\s+.*?\]\s+\[thread:\d+\]\s+\d.+\s+ws\s+\((\d+)-(\d.+):\d+\)\s+cwAcSend_REQ_MSG: sending CFG_UPDATE_REQ \(7\) msg./,
     ];
 
     for (var i = 0; i < beforeRules.length; ++i) {
@@ -83,11 +87,28 @@ function parseLine(line) {
     }
 
     var parts = line.match(exceptRules[0]);
-    if (parts) {
+    if (parts && collections.length) {
         // use last collection information
         var ap = collections[collections.length - 1][4];
         var port = collections[collections.length - 1][6];
         collections.push([parts[1], 'JOIN_RESP', '==>', parts[2], ap, parts[3], port]);
+        return;
+    }
+
+    parts = line.match(exceptRules[1]);
+    if (parts && collections.length) {
+        var ap = collections[collections.length - 1][4];
+        var port = collections[collections.length - 1][6];
+        collections.push([parts[1], 'CFG_STATUS_RESP', '==>', parts[2], ap, parts[3], port]);
+        return;
+    }
+
+    parts = line.match(exceptRules[2]);
+    if (parts && collections.length) {
+        var ap = collections[collections.length - 1][4];
+        var port = collections[collections.length - 1][6];
+        collections.push([parts[1], 'CFG_UPDATE_REQ', '==>', parts[2], ap, parts[3], port]);
+        return;
     }
 };
 
