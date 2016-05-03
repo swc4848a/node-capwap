@@ -23,8 +23,6 @@ router.get('/', function(req, res) {
 
         var sql = 'SELECT time, COUNT(*) as count FROM message WHERE ' + whereCondition + ' GROUP BY UNIX_TIMESTAMP(time) DIV 3600;';
 
-        console.log(sql);
-
         connection.query(sql, function(err, rows, fields) {
             if (err) {
                 console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
