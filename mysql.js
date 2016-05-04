@@ -55,7 +55,8 @@ function parseLine(line) {
 
     var ieee80211Rules = [
         // for IEEE 802.11 mgmt
-        /\(.*?\)\[(.*?)\s-\s+.*?\]\s+\[\d;\d+m\d.+\s+(.*?)\s+<ih>\s+(.*?)\s+(<==|==>)\s+.*?\s+ws\s+\((\d+)\s+-(\d.+):(\d+)\)\s+vap\s+(\w+)\srId\s(\d+)\swId\s(\d+)\s+(.*:?)/
+        /\(.*?\)\[(.*?)\s-\s+.*?\]\s+\[\d;\d+m\d.+\s+(.*?)\s+<ih>\s+(.*?)\s+(<==|==>)\s+.*?\s+ws\s+\((\d+)\s+-(\d.+):(\d+)\)\s+vap\s+(\w+)\srId\s(\d+)\swId\s(\d+)\s+(.*:?)/,
+        /\(.*?\)\[(.*?)\s-\s+.*?\]\s+\[\d;\d+m\d.+\s+(.*?)\s+<ih>\s+(.*?)\s+(<==|==>)\s+.*?\s+ws\s+\((\d+)-(\d.+):(\d+)\)\svap\s(\w+)\srId\s(\d)\swId\s(\d)\s(.*:?)\sresp\s\d+/
     ];
 
     var exceptRules = [
