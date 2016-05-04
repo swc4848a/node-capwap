@@ -25,4 +25,4 @@ server.on("close", function(err) {
     console.log("Server close");
 });
 
-server.bind(6000, '172.16.94.161');
+server.bind(6000);
