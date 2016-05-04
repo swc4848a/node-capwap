@@ -15,11 +15,13 @@ router.get('/', function(req, res) {
         var connection = mysql.createConnection(options);
 
         connection.connect();
-        var whereCondition = 'apnetwork="' + req.query.apnetwork +
-            '" and ap="' + req.query.ap +
-            '" and time between from_unixtime(' + req.query.start / 1000 + ') and from_unixtime(' + req.query.end / 1000 + ')';
+        var whereCondition = 'apnetwork_oid="' + req.query.apnetwork +
+            '" and ap_sn="' + req.query.ap +
+            '" and ts between from_unixtime(' + req.query.start / 1000 + ') and from_unixtime(' + req.query.end / 1000 + ')';
 
-        var sql = 'SELECT time, messageType AS label, direction FROM message WHERE ' + whereCondition + ' limit 100;';
+        var sql = 'SELECT ts AS time, msg_type AS label, direction FROM message WHERE ' + whereCondition + ' limit 100;';
+
+        console.log(sql);
 
         connection.query(sql, function(err, rows, fields) {
             if (err) {

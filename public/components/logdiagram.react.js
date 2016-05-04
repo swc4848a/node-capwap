@@ -76,6 +76,154 @@ function arrow(ren, time, text, start, end, y) {
 
 var chart;
 
+// {
+//     label: 'Discover Request',
+//     value: 1
+// }, {
+//     label: 'Discover Response',
+//     value: 2
+// }, {
+//     label: 'Join Request',
+//     value: 3
+// }, {
+//     label: 'Join Response',
+//     value: 4
+// }, {
+//     label: 'Configuration Status Request',
+//     value: 5
+// }, {
+//     label: 'Configuration Status Response',
+//     value: 6
+// }, {
+//     label: 'Configuration Update Request',
+//     value: 7
+// }, {
+//     label: 'Configuration Update Response',
+//     value: 8
+// }, {
+//     label: 'Wtp Event Request',
+//     value: 9
+// }, {
+//     label: 'Wtp Event Response',
+//     value: 10
+// }, {
+//     label: 'Change State Request',
+//     value: 11
+// }, {
+//     label: 'Change State Response',
+//     value: 12
+// }, {
+//     label: 'Echo Request',
+//     value: 13
+// }, {
+//     label: 'Echo Response',
+//     value: 14
+// }, {
+//     label: 'Image Data Request',
+//     value: 15
+// }, {
+//     label: 'Image Data Response',
+//     value: 16
+// }, {
+//     label: 'Reset Request',
+//     value: 17
+// }, {
+//     label: 'Reset Response',
+//     value: 18
+// }, {
+//     label: 'Primary Discovery Request',
+//     value: 19
+// }, {
+//     label: 'Primary Discovery Response',
+//     value: 20
+// }, {
+//     label: 'Data Transfer Request',
+//     value: 21
+// }, {
+//     label: 'Data Transfer Response',
+//     value: 22
+// }, {
+//     label: 'Clear Configuration Request',
+//     value: 23
+// }, {
+//     label: 'Clear Configuration Response',
+//     value: 24
+// }, {
+//     label: 'Configuration Status Request',
+//     value: 25
+// }, {
+//     label: 'Configuration Status Response',
+//     value: 26
+// }, {
+//     label: 'Keep Alive',
+//     value: 27
+// }, {
+//     label: 'IEEE 802.11 WLAN Configuration Request',
+//     value: 28
+// }, {
+//     label: 'IEEE 802.11 WLAN Configuration Response',
+//     value: 29
+// }
+
+function typeToString(type) {
+    switch (type) {
+        case 1:
+            return 'Discover Request';
+        case 2:
+            return 'Discover Response';
+        case 3:
+            return 'Join Request';
+        case 4:
+            return 'Join Response';
+        case 5:
+            return 'Configuration Status Request';
+        case 6:
+            return 'Configuration Status Response';
+        case 7:
+            return 'Configuration Update Request';
+        case 8:
+            return 'Configuration Update Response';
+        case 9:
+            return 'Wtp Event Request';
+        case 10:
+            return 'Wtp Event Response';
+        case 11:
+            return 'Change State Request';
+        case 12:
+            return 'Change State Response';
+        case 13:
+            return 'Echo Request';
+        case 14:
+            return 'Echo Response';
+        case 15:
+            return 'Image Data Request';
+        case 16:
+            return 'Image Data Response';
+        case 17:
+            return 'Reset Request';
+        case 18:
+            return 'Reset Response';
+        case 19:
+            return 'Primary Discovery Request';
+        case 20:
+            return 'Primary Discovery Response';
+        case 21:
+            return 'Data Transfer Request';
+        case 22:
+            return 'Data Transfer Response';
+        case 23:
+            return 'Clear Configuration Request';
+        case 24:
+            return 'Clear Configuration Response';
+        case 25:
+            return 'Configuration Status Request';
+        case 26:
+            return 'Configuration Status Response';
+        default:
+            return 'Unknown Type';
+    }
+}
+
 function diagram() {
     chart = this;
 
@@ -99,10 +247,10 @@ function diagram() {
         fetch(url).then(function(response) {
             response.json().then(function(json) {
                 json.forEach(function(item, index) {
-                    if ('<==' === item.direction) {
-                        arrow(chart.renderer, item.time, item.label, apLabel, serverLabel, 100 + index * 30);
-                    } else if ('==>' === item.direction) {
-                        arrow(chart.renderer, item.time, item.label, serverLabel, apLabel, 100 + index * 30);
+                    if (0 === item.direction) {
+                        arrow(chart.renderer, item.time, typeToString(item.label), apLabel, serverLabel, 100 + index * 30);
+                    } else if (1 === item.direction) {
+                        arrow(chart.renderer, item.time, typeToString(item.label), serverLabel, apLabel, 100 + index * 30);
                     }
 
                     labelWithDash(chart.renderer, 'AP Server', left, json.length * 30 + 80);

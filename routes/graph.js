@@ -16,12 +16,12 @@ router.get('/', function(req, res) {
 
         connection.connect();
 
-        var whereCondition = 'messageType="' + req.query.messageType +
-            '" and apnetwork="' + req.query.apnetwork +
-            '" and ap="' + req.query.ap +
-            '" and time between from_unixtime(' + req.query.start / 1000 + ') and from_unixtime(' + req.query.end / 1000 + ')';
+        var whereCondition = 'msg_type="' + req.query.messageType +
+            '" and apnetwork_oid="' + req.query.apnetwork +
+            '" and ap_sn="' + req.query.ap +
+            '" and ts between from_unixtime(' + req.query.start / 1000 + ') and from_unixtime(' + req.query.end / 1000 + ')';
 
-        var sql = 'SELECT time, COUNT(*) as count FROM message WHERE ' + whereCondition + ' GROUP BY UNIX_TIMESTAMP(time) DIV 3600;';
+        var sql = 'SELECT ts AS time, COUNT(*) as count FROM message WHERE ' + whereCondition + ' GROUP BY UNIX_TIMESTAMP(ts) DIV 3600;';
 
         connection.query(sql, function(err, rows, fields) {
             if (err) {

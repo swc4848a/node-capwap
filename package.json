@@ -11,7 +11,8 @@
     "build-css": "catw -c 'lessc -' 'public/theme/project/less/main.less' > public/theme/project/css/main.css",
     "build-js": "browserify public/main.js > public/bundle.js",
     "build": "npm run build-css && npm run build-js",
-    "start": "supervisor monitor.js"
+    "start": "supervisor monitor.js",
+    "start-logserver": "supervisor logserver.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "flux": "^2.1.1",
     "jquery": "^2.2.3",
     "keymirror": "^0.1.1",
+    "moment": "^2.13.0",
     "mysql": "felixge/node-mysql",
     "object-assign": "^4.0.1",
     "packet": "0.0.6",

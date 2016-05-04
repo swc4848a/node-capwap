@@ -15,7 +15,7 @@ router.get('/apnetwork', function(req, res) {
 
     connection.connect();
 
-    connection.query('SELECT DISTINCT(apnetwork) FROM message;', function(err, rows, fields) {
+    connection.query('SELECT DISTINCT(apnetwork_oid) FROM message;', function(err, rows, fields) {
         if (err) {
             console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
             res.json([]);
@@ -23,8 +23,8 @@ router.get('/apnetwork', function(req, res) {
             let json = [];
             rows.forEach(row =>
                 json.push({
-                    label: row.apnetwork,
-                    value: row.apnetwork
+                    label: row.apnetwork_oid,
+                    value: row.apnetwork_oid
                 })
             );
             res.json(json);
@@ -48,9 +48,9 @@ router.get('/ap', function(req, res) {
 
     let sql;
     if (req.query && req.query.apnetwork) {
-        sql = 'SELECT DISTINCT(ap) FROM message WHERE apnetwork="' + req.query.apnetwork + '";';
+        sql = 'SELECT DISTINCT(ap_sn) FROM message WHERE apnetwork_oid="' + req.query.apnetwork + '";';
     } else {
-        sql = 'SELECT DISTINCT(ap) FROM message;';
+        sql = 'SELECT DISTINCT(ap_sn) FROM message;';
     }
 
     connection.query(sql, function(err, rows, fields) {
@@ -61,8 +61,8 @@ router.get('/ap', function(req, res) {
             let json = [];
             rows.forEach(row =>
                 json.push({
-                    label: row.ap,
-                    value: row.ap
+                    label: row.ap_sn,
+                    value: row.ap_sn
                 })
             );
             res.json(json);
@@ -134,91 +134,91 @@ router.get('/ap', function(req, res) {
 router.get('/messageType', function(req, res) {
     res.json([{
         label: 'Discover Request',
-        value: 'DISCOVERY_REQ'
+        value: 1
     }, {
         label: 'Discover Response',
-        value: 'DISCOVERY_RESP'
+        value: 2
     }, {
         label: 'Join Request',
-        value: 'JOIN_REQ'
+        value: 3
     }, {
         label: 'Join Response',
-        value: 'JOIN_RESP'
+        value: 4
     }, {
         label: 'Configuration Status Request',
-        value: 'CFG_STATUS'
+        value: 5
     }, {
         label: 'Configuration Status Response',
-        value: 'CFG_STATUS_RESP'
+        value: 6
     }, {
         label: 'Configuration Update Request',
-        value: 'CFG_UPDATE_REQ'
+        value: 7
     }, {
         label: 'Configuration Update Response',
-        value: 'CFG_UPDATE_RESP'
+        value: 8
     }, {
         label: 'Wtp Event Request',
-        value: 'WTP_EVENT_REQ'
+        value: 9
     }, {
         label: 'Wtp Event Response',
-        value: 'WTP_EVENT_RESP'
+        value: 10
     }, {
         label: 'Change State Request',
-        value: 'CHG_STATE_EVENT_REQ'
+        value: 11
     }, {
         label: 'Change State Response',
-        value: 'CHG_STATE_EVENT_RESP'
+        value: 12
     }, {
         label: 'Echo Request',
-        value: 'ECHO_REQ'
+        value: 13
     }, {
         label: 'Echo Response',
-        value: 'ECHO_RESP'
+        value: 14
     }, {
         label: 'Image Data Request',
-        value: 'IMAGE_DATA_REQ'
+        value: 15
     }, {
         label: 'Image Data Response',
-        value: 'IMAGE_DATA_RESP'
+        value: 16
     }, {
         label: 'Reset Request',
-        value: 'RESET_REQ'
+        value: 17
     }, {
         label: 'Reset Response',
-        value: 'RESET_RESP'
+        value: 18
     }, {
         label: 'Primary Discovery Request',
-        value: 'PRIM_DISCOVERY_REQ'
+        value: 19
     }, {
         label: 'Primary Discovery Response',
-        value: 'PRIM_DISCOVERY_RESP'
+        value: 20
     }, {
         label: 'Data Transfer Request',
-        value: 'DATA_TRANSFER_REQ'
+        value: 21
     }, {
         label: 'Data Transfer Response',
-        value: 'DATA_TRANSFER_RESP'
+        value: 22
     }, {
         label: 'Clear Configuration Request',
-        value: 'CLR_CFG_REQ'
+        value: 23
     }, {
         label: 'Clear Configuration Response',
-        value: 'CLR_CFG_RESP'
+        value: 24
     }, {
         label: 'Configuration Status Request',
-        value: 'STA_CFG_REQ'
+        value: 25
     }, {
         label: 'Configuration Status Response',
-        value: 'STA_CFG_RESP'
+        value: 26
     }, {
         label: 'Keep Alive',
-        value: 'DATA_CHAN_KEEP_ALIVE'
+        value: 27
     }, {
         label: 'IEEE 802.11 WLAN Configuration Request',
-        value: '802.11 WLAN Config REQ'
+        value: 28
     }, {
         label: 'IEEE 802.11 WLAN Configuration Response',
-        value: '802.11 WLAN Config RESP'
+        value: 29
     }]);
 });
 
