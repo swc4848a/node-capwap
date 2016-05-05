@@ -255,6 +255,9 @@ function main() {
         if (err) {
             console.log(err);
         } else {
+            if (messages.length) {
+                logWorker.emit('send');
+            }
             console.log('success');
         }
     });
@@ -269,11 +272,5 @@ logWorker.on('send', () => {
         client.close();
     });
 });
-
-setInterval(() => {
-    if (messages.length) {
-        logWorker.emit('send');
-    }
-}, 1000);
 
 main();

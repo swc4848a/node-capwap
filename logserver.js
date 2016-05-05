@@ -28,10 +28,10 @@ var options = {
 var createMessageTableSql = 'CREATE TABLE IF NOT EXISTS ' +
     'message (' +
     'ts TIMESTAMP, ' +
-    'msg_type smallint(5), ' +
-    'direction smallint(5), ' +
-    'apnetwork_oid INT(10), ' +
-    'ap_sn varchar(32)' +
+    'msg_type INT UNSIGNED, ' +
+    'direction SMALLINT UNSIGNED, ' +
+    'apnetwork_oid INT UNSIGNED, ' +
+    'ap_sn VARCHAR(32)' +
     ')';
 
 var batchInsertMessageSql = 'INSERT INTO message (ts, msg_type, direction, apnetwork_oid, ap_sn) VALUES ?';
@@ -80,7 +80,13 @@ const logWorker = new Worker();
 
 server.on('message', function(message, remote) {
     var json = JSON.parse(message.toString('ascii'));
-    datas.push([moment.unix(json.ts).format('YYYY-MM-DD HH:mm:ss'), json.msg_type, json.direction, json.apnetwork_oid, json.ap_sn]);
+    if (Array.isArray(json)) {
+        json.forEach(function(item, index) {
+            datas.push([moment.unix(item.ts).format('YYYY-MM-DD HH:mm:ss'), item.msg_type, item.direction, item.apnetwork_oid, item.ap_sn]);
+        });
+    } else {
+        datas.push([moment.unix(json.ts).format('YYYY-MM-DD HH:mm:ss'), json.msg_type, json.direction, json.apnetwork_oid, json.ap_sn]);
+    }
     if (1000 === datas.length) {
         logWorker.emit('insert');
     }
