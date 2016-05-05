@@ -76,95 +76,6 @@ function arrow(ren, time, text, start, end, y) {
 
 var chart;
 
-// {
-//     label: 'Discover Request',
-//     value: 1
-// }, {
-//     label: 'Discover Response',
-//     value: 2
-// }, {
-//     label: 'Join Request',
-//     value: 3
-// }, {
-//     label: 'Join Response',
-//     value: 4
-// }, {
-//     label: 'Configuration Status Request',
-//     value: 5
-// }, {
-//     label: 'Configuration Status Response',
-//     value: 6
-// }, {
-//     label: 'Configuration Update Request',
-//     value: 7
-// }, {
-//     label: 'Configuration Update Response',
-//     value: 8
-// }, {
-//     label: 'Wtp Event Request',
-//     value: 9
-// }, {
-//     label: 'Wtp Event Response',
-//     value: 10
-// }, {
-//     label: 'Change State Request',
-//     value: 11
-// }, {
-//     label: 'Change State Response',
-//     value: 12
-// }, {
-//     label: 'Echo Request',
-//     value: 13
-// }, {
-//     label: 'Echo Response',
-//     value: 14
-// }, {
-//     label: 'Image Data Request',
-//     value: 15
-// }, {
-//     label: 'Image Data Response',
-//     value: 16
-// }, {
-//     label: 'Reset Request',
-//     value: 17
-// }, {
-//     label: 'Reset Response',
-//     value: 18
-// }, {
-//     label: 'Primary Discovery Request',
-//     value: 19
-// }, {
-//     label: 'Primary Discovery Response',
-//     value: 20
-// }, {
-//     label: 'Data Transfer Request',
-//     value: 21
-// }, {
-//     label: 'Data Transfer Response',
-//     value: 22
-// }, {
-//     label: 'Clear Configuration Request',
-//     value: 23
-// }, {
-//     label: 'Clear Configuration Response',
-//     value: 24
-// }, {
-//     label: 'Configuration Status Request',
-//     value: 25
-// }, {
-//     label: 'Configuration Status Response',
-//     value: 26
-// }, {
-//     label: 'Keep Alive',
-//     value: 27
-// }, {
-//     label: 'IEEE 802.11 WLAN Configuration Request',
-//     value: 28
-// }, {
-//     label: 'IEEE 802.11 WLAN Configuration Response',
-//     value: 29
-// }
-
 function typeToString(type) {
     switch (type) {
         case 1:
@@ -219,6 +130,16 @@ function typeToString(type) {
             return 'Configuration Status Request';
         case 26:
             return 'Configuration Status Response';
+        case 27:
+            return 'Keep Alive';
+        case 28:
+            return 'Association Request';
+        case 29:
+            return 'Association Response';
+        case 3398913:
+            return 'WLAN Configuration Request';
+        case 3398914:
+            return 'WLAN Configuration Response';
         default:
             return 'Unknown Type ' + type;
     }

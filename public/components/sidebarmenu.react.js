@@ -51,7 +51,7 @@ var graphNodes = [
 ];
 
 var settingsNodes = [
-    { to: 'LogSettings', icon: 'cogs', label: 'Log Settings' },
+    { to: 'LogConfig', icon: 'cogs', label: 'Log Config' },
 ];
 
 var SidebarMenu = React.createClass({
