@@ -128,8 +128,8 @@ router.get('/ap', function(req, res) {
 // {25, "STA_CFG_REQ"},    
 // {26, "STA_CFG_RESP"},
 
-// {1, "802.11 WLAN Config REQ"},
-// {2, "802.11 WLAN Config RESP"}, 
+// {3398913, "802.11 WLAN Config REQ"},
+// {3398914, "802.11 WLAN Config RESP"}, 
 
 router.get('/messageType', function(req, res) {
     res.json([{
@@ -215,10 +215,10 @@ router.get('/messageType', function(req, res) {
         value: 27
     }, {
         label: 'IEEE 802.11 WLAN Configuration Request',
-        value: 28
+        value: 3398913
     }, {
         label: 'IEEE 802.11 WLAN Configuration Response',
-        value: 29
+        value: 3398914
     }]);
 });
 

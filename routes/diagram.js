@@ -21,8 +21,6 @@ router.get('/', function(req, res) {
 
         var sql = 'SELECT ts AS time, msg_type AS label, direction FROM message WHERE ' + whereCondition + ' limit 100;';
 
-        console.log(sql);
-
         connection.query(sql, function(err, rows, fields) {
             if (err) {
                 console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
