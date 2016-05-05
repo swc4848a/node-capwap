@@ -140,7 +140,8 @@ function parseLine(line) {
                 msg_type: msg_type,
                 direction: direction,
                 apnetwork_oid: parts[4],
-                ap_sn: parts[5]
+                ap_sn: parts[5],
+                sta_mac: '00:00:00:00:00:00'
             };
 
             messages.push(obj);

@@ -18,6 +18,9 @@ var _apps = {
     messageType: {
         options: []
     },
+    stamac: {
+        options: []
+    },
     startTime: {},
     endTime: {},
     graphData: []
@@ -47,6 +50,10 @@ function updateMessageType(messageType) {
     _apps.messageType = assign({}, _apps.messageType, messageType);
 }
 
+function updateStamac(stamac) {
+    _apps.stamac = assign({}, _apps.stamac, stamac);
+}
+
 function updateStartTime(startTime) {
     _apps.startTime = assign({}, _apps.startTime, startTime);
 }
@@ -61,12 +68,20 @@ function updateGraphData() {
         _apps.ap.label &&
         _apps.startTime.value &&
         _apps.endTime.value) {
+
+        let stamacQuery;
+        // if association request or response
+        if (28 === _apps.messageType.value || 29 === _apps.messageType.value) {
+            stamacQuery = '&stamac=' + _apps.stamac.value;
+        }
+
         var url = '/Graph?' +
             'messageType=' + _apps.messageType.value +
             '&apnetwork=' + _apps.apnetwork.value +
             '&ap=' + _apps.ap.label +
             '&start=' + _apps.startTime.value +
-            '&end=' + _apps.endTime.value;
+            '&end=' + _apps.endTime.value +
+            (stamacQuery ? stamacQuery : '');
 
         fetch(url).then(function(response) {
             response.json().then(function(json) {
@@ -92,6 +107,10 @@ function updateSelectOptions(config) {
                 });
             } else if ('messageType' === module) {
                 _apps.messageType = assign({}, _apps.messageType, {
+                    options: json
+                });
+            } else if ('stamac' === module) {
+                _apps.stamac = assign({}, _apps.stamac, {
                     options: json
                 });
             }
@@ -122,6 +141,9 @@ var AppStore = assign({}, EventEmitter.prototype, {
     },
     getMessageType: function() {
         return _apps.messageType;
+    },
+    getStamac: function() {
+        return _apps.stamac;
     },
     getStartTime: function() {
         return _apps.startTime;
@@ -158,6 +180,13 @@ AppDispatcher.register(function(action) {
             break;
         case AppConstants.APP_UPDATE_MESSAGE_TYPE:
             updateMessageType({
+                label: action.label,
+                value: action.value
+            });
+            AppStore.emitChange();
+            break;
+        case AppConstants.APP_UPDATE_STA_MAC:
+            updateStamac({
                 label: action.label,
                 value: action.value
             });

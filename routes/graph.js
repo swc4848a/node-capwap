@@ -19,13 +19,14 @@ router.get('/', function(req, res) {
         var whereCondition = 'msg_type="' + req.query.messageType +
             '" and apnetwork_oid="' + req.query.apnetwork +
             '" and ap_sn="' + req.query.ap +
+            (req.query.stamac ? ('" and sta_mac="' + req.query.stamac) : '') +
             '" and ts between from_unixtime(' + req.query.start / 1000 + ') and from_unixtime(' + req.query.end / 1000 + ')';
 
         var sql = 'SELECT ts AS time, COUNT(*) as count FROM message WHERE ' + whereCondition + ' GROUP BY UNIX_TIMESTAMP(ts) DIV 3600;';
 
         connection.query(sql, function(err, rows, fields) {
             if (err) {
-                console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
+                console.log('connection [%s] db [%s] sql [%s]: %s', options.host, options.database, sql, err.message);
                 res.json([]);
             } else {
                 var json = [];

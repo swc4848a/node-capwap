@@ -214,12 +214,56 @@ router.get('/messageType', function(req, res) {
         label: 'Keep Alive',
         value: 27
     }, {
-        label: 'IEEE 802.11 WLAN Configuration Request',
+        label: 'Association Request',
+        value: 28
+    }, {
+        label: 'Association Response',
+        value: 29
+    }, {
+        label: 'WLAN Configuration Request',
         value: 3398913
     }, {
-        label: 'IEEE 802.11 WLAN Configuration Response',
+        label: 'WLAN Configuration Response',
         value: 3398914
     }]);
+});
+
+router.get('/stamac', function(req, res) {
+    var options = {
+        host: '172.16.94.163',
+        user: 'monitor',
+        password: 'pass',
+        database: 'monitor'
+    };
+
+    var connection = mysql.createConnection(options);
+
+    connection.connect();
+
+    let sql;
+    if (req.query && req.query.apnetwork && req.query.ap) {
+        sql = 'SELECT DISTINCT(sta_mac) FROM message WHERE apnetwork_oid="' + req.query.apnetwork + '" AND ap="' + req.query.ap + '";';
+    } else {
+        sql = 'SELECT DISTINCT(sta_mac) FROM message;';
+    }
+
+    connection.query(sql, function(err, rows, fields) {
+        if (err) {
+            console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
+            res.json([]);
+        } else {
+            let json = [];
+            rows.forEach(row =>
+                json.push({
+                    label: row.sta_mac,
+                    value: row.sta_mac
+                })
+            );
+            res.json(json);
+        }
+    });
+
+    connection.end();
 });
 
 module.exports = router;

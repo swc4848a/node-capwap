@@ -25,6 +25,12 @@ var CustomSelect = React.createClass({
             } else {
                 AppActions.updateMessageType(undefined, undefined);
             }
+        } else if ('stamac' === this.props.name) {
+            if (newValue) {
+                AppActions.updateStamac(newValue.label, newValue.value);
+            } else {
+                AppActions.updateStamac(undefined, undefined);
+            }
         }
     },
     componentDidMount: function() {
@@ -75,12 +81,17 @@ var SettingsBody = React.createClass({
 
         var apnetworkSelect;
         if (this.props.apnetwork) {
-            apnetworkSelect = <div className="col-md-2"><CustomSelect label="AP Network" options={this.props.apnetwork} name="apnetwork" /></div>;
+            apnetworkSelect = <div className="col-md-1"><CustomSelect label="AP Network" options={this.props.apnetwork} name="apnetwork" /></div>;
         }
 
         var apSelect;
         if (this.props.ap) {
             apSelect = <div className="col-md-2"><CustomSelect label="AP" options={this.props.ap} name="ap" /></div>;
+        }
+
+        var stamacSelect;
+        if (this.props.stamac) {
+            stamacSelect = <div className="col-md-2"><CustomSelect label="Sta Mac" options={this.props.stamac} name="stamac" /></div>;
         }
 
         var startTime;
@@ -94,7 +105,7 @@ var SettingsBody = React.createClass({
 
             startTime = <div className="col-md-2"><label>Start DateTime</label>{StartDateTime}</div>;
             endTime = <div className="col-md-2"><label>End DateTime</label>{EndDateTime}</div>;
-            button = <div className="col-md-2"><label>Control</label><div>{buttonCore}</div></div>
+            button = <div className="col-md-1"><label>Control</label><div>{buttonCore}</div></div>
         }
 
         return (
@@ -103,6 +114,7 @@ var SettingsBody = React.createClass({
                     {apnetworkSelect}
                     {apSelect}
                     {messageTypeSelect}
+                    {stamacSelect}
                     {startTime}
                     {endTime}
                     {button}
@@ -121,6 +133,7 @@ var Settings = React.createClass({
                     messageType={this.props.messageType} 
                     apnetwork={this.props.apnetwork} 
                     ap={this.props.ap} 
+                    stamac={this.props.stamac} 
                     start={this.props.start} 
                     end={this.props.end} 
                     handleClick={this.props.handleClick}

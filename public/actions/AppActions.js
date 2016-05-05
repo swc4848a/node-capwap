@@ -59,6 +59,13 @@ var AppActions = {
             value: value
         });
     },
+    updateStamac: function(label, value) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_STA_MAC,
+            label: label,
+            value: value
+        });
+    },
     updateStartTime: function(value) {
         AppDispatcher.dispatch({
             actionType: AppConstants.APP_UDPATE_START_TIME,

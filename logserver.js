@@ -31,10 +31,11 @@ var createMessageTableSql = 'CREATE TABLE IF NOT EXISTS ' +
     'msg_type INT UNSIGNED, ' +
     'direction SMALLINT UNSIGNED, ' +
     'apnetwork_oid INT UNSIGNED, ' +
-    'ap_sn VARCHAR(32)' +
+    'ap_sn VARCHAR(32), ' +
+    'sta_mac VARCHAR(18)' +
     ')';
 
-var batchInsertMessageSql = 'INSERT INTO message (ts, msg_type, direction, apnetwork_oid, ap_sn) VALUES ?';
+var batchInsertMessageSql = 'INSERT INTO message (ts, msg_type, direction, apnetwork_oid, ap_sn, sta_mac) VALUES ?';
 
 function mysqlQuery(conn, sql, post, callback) {
     var query = conn.query(sql, post, function(err, rows, fields) {
@@ -82,10 +83,10 @@ server.on('message', function(message, remote) {
     var json = JSON.parse(message.toString('ascii'));
     if (Array.isArray(json)) {
         json.forEach(function(item, index) {
-            datas.push([moment.unix(item.ts).format('YYYY-MM-DD HH:mm:ss'), item.msg_type, item.direction, item.apnetwork_oid, item.ap_sn]);
+            datas.push([moment.unix(item.ts).format('YYYY-MM-DD HH:mm:ss'), item.msg_type, item.direction, item.apnetwork_oid, item.ap_sn, item.sta_mac]);
         });
     } else {
-        datas.push([moment.unix(json.ts).format('YYYY-MM-DD HH:mm:ss'), json.msg_type, json.direction, json.apnetwork_oid, json.ap_sn]);
+        datas.push([moment.unix(json.ts).format('YYYY-MM-DD HH:mm:ss'), json.msg_type, json.direction, json.apnetwork_oid, json.ap_sn, json.sta_mac]);
     }
     if (1000 === datas.length) {
         logWorker.emit('insert');

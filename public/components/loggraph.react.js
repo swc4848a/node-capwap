@@ -10,6 +10,7 @@ function getGraphStore() {
         messageType: AppStore.getMessageType(),
         ap: AppStore.getAp(),
         apnetwork: AppStore.getApnetwork(),
+        stamac: AppStore.getStamac(),
         data: AppStore.getGraphData(),
         start: AppStore.getStartTime(),
         end: AppStore.getEndTime(),
@@ -96,6 +97,7 @@ var LogGraph = React.createClass({
                         messageType={this.state.messageType} 
                         apnetwork={this.state.apnetwork} 
                         ap={this.state.ap} 
+                        stamac={this.state.stamac} 
                         start={this.state.start} 
                         end={this.state.end}
                         handleClick={this.handleClick}
