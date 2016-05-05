@@ -88,6 +88,13 @@ var AppActions = {
             actionType: AppConstants.APP_UPDATE_SELECT_OPTIONS,
             module: module
         });
+    },
+    updateLogConfig: function(ip, status) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_SERVER_CONFIG,
+            ip: ip,
+            status: status
+        });
     }
 };
 

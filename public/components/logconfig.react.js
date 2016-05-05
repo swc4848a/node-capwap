@@ -1,4 +1,6 @@
 var React = require('react');
+var AppStore = require('../stores/AppStore');
+var AppActions = require('../actions/AppActions');
 
 var Header = React.createClass({
     render: function() {
@@ -20,9 +22,8 @@ var Header = React.createClass({
 
 function getConfigStore() {
     return {
-        ip: '',
-        port: '',
-        logEnable: false
+        ip: AppStore.getAPServerIp(),
+        logEnable: AppStore.getAPServerLogStatue()
     };
 };
 
@@ -35,18 +36,13 @@ var Content = React.createClass({
             ip: event.target.value
         });
     },
-    handlePortChange: function(event) {
-        this.setState({
-            port: event.target.value
-        });
-    },
     handleLogEnableChange: function(event) {
         this.setState({
             logEnable: !this.state.logEnable
         });
     },
     handleSubmit: function(event) {
-        console.log(this.state);
+        AppActions.updateLogConfig(this.state.ip, this.state.logEnable);
     },
     render: function() {
         return (
@@ -67,17 +63,6 @@ var Content = React.createClass({
                                     placeholder="Enter IP" 
                                     value={this.state.ip} 
                                     onChange={this.handleIpChange} 
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label for="ip">PORT</label>
-                                <input 
-                                    type="text"
-                                    className="form-control" 
-                                    id="port" 
-                                    placeholder="Enter PORT"
-                                    value={this.state.port}
-                                    onChange={this.handlePortChange}
                                 />
                             </div>
                             <div className="checkbox">

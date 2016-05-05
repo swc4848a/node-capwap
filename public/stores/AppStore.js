@@ -23,7 +23,9 @@ var _apps = {
     },
     startTime: {},
     endTime: {},
-    graphData: []
+    graphData: [],
+    apServerIp: '',
+    apServerLogStatue: false
 };
 
 function updateCollections() {
@@ -119,6 +121,16 @@ function updateSelectOptions(config) {
     });
 }
 
+function updateServerConfig(config) {
+    var query = '?ip=' + config.ip + '&status=' + (config.status ? 1 : 0);
+    fetch('/Config/apserver' + query).then(function(response) {
+        response.json().then(function(json) {
+            _apps.apServerIp = config.ip;
+            _apps.apServerLogStatue = config.status;
+        })
+    });
+}
+
 var AppStore = assign({}, EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT);
@@ -153,6 +165,12 @@ var AppStore = assign({}, EventEmitter.prototype, {
     },
     getGraphData: function() {
         return _apps.graphData;
+    },
+    getAPServerIp: function() {
+        return _apps.apServerIp;
+    },
+    getAPServerLogStatue: function() {
+        return _apps.apServerLogStatue;
     }
 });
 
@@ -210,6 +228,12 @@ AppDispatcher.register(function(action) {
         case AppConstants.APP_UPDATE_SELECT_OPTIONS:
             updateSelectOptions({
                 module: action.module
+            });
+            break;
+        case AppConstants.APP_UPDATE_SERVER_CONFIG:
+            updateServerConfig({
+                ip: action.ip,
+                status: action.status
             });
             break;
         default:

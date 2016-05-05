@@ -11,4 +11,5 @@ module.exports = keyMirror({
     APP_UDPATE_START_TIME: null,
     APP_UDPATE_END_TIME: null,
     APP_UPDATE_STA_MAC: null,
+    APP_UPDATE_SERVER_CONFIG: null,
 });
