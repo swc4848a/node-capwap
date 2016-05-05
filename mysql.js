@@ -1,40 +1,77 @@
 'use strict';
 
-/*
-    Setup mysql server (now: 172.16.94.163):
-    1. mysql -u root -p
-    2. grant all privileges on *.* to monitor@"172.16.94.161" identified by 'monitor';
-    3. SET PASSWORD FOR 'monitor'@'172.16.94.161' = PASSWORD('pass');
-    4. create database monitor;
-*/
-
 var fs = require('fs');
-var mysql = require('mysql');
 var async = require('async');
 var ProgressBar = require('progress');
+var dgram = require('dgram');
+const moment = require('moment');
+const EventEmitter = require('events');
 
-var connection;
 var raws = [];
 var messages = [];
 var ieee80211mgmts = [];
 
-var options = {
-    host: '172.16.94.163',
-    user: 'monitor',
-    password: 'pass',
-    database: 'monitor'
-};
+function stringToType(message) {
+    switch (message) {
+        case 'DISCOVERY_REQ':
+            return 1;
+        case 'DISCOVERY_RESP':
+            return 2;
+        case 'JOIN_REQ':
+            return 3;
+        case 'JOIN_RESP':
+            return 4;
+        case 'CFG_STATUS':
+            return 5;
+        case 'CFG_STATUS_RESP':
+            return 6;
+        case 'CFG_UPDATE_REQ':
+            return 7;
+        case 'CFG_UPDATE_RESP':
+            return 8;
+        case 'WTP_EVENT_REQ':
+            return 9;
+        case 'WTP_EVENT_RESP':
+            return 10;
+        case 'CHG_STATE_EVENT_REQ':
+            return 11;
+        case 'CHG_STATE_EVENT_RESP':
+            return 12;
+        case 'ECHO_REQ':
+            return 13;
+        case 'ECHO_RESP':
+            return 14;
+        case 'IMAGE_DATA_REQ':
+            return 15;
+        case 'IMAGE_DATA_RESP':
+            return 16;
+        case 'RESET_REQ':
+            return 17;
+        case 'RESET_RESP':
+            return 18;
+        case 'PRIM_DISCOVERY_REQ':
+            return 19;
+        case 'PRIM_DISCOVERY_RESP':
+            return 20;
+        case 'DATA_TRANSFER_REQ':
+            return 21;
+        case 'DATA_TRANSFER_RESP':
+            return 22;
+        case 'CLR_CFG_REQ':
+            return 23;
+        case 'CLR_CFG_RESP':
+            return 24;
+        case 'STA_CFG_REQ':
+            return 25;
+        case 'STA_CFG_RESP':
+            return 26;
+        default:
+            return 0;
+    }
+}
 
-function mysqlQuery(sql, post, callback) {
-    var query = connection.query(sql, post, function(err, rows, fields) {
-        if (err) {
-            console.log('connection [%s] db [%s]: %s', options.host, options.database, err.message);
-        } else {
-            callback(rows, fields);
-        }
-    });
-    // console.log(query.sql);
-};
+class Worker extends EventEmitter {};
+const logWorker = new Worker();
 
 function parseLine(line) {
     var beforeRules = [
@@ -91,7 +128,36 @@ function parseLine(line) {
             // ap: parts[5],
             // ip: parts[6],
             // port: parts[7],
-            messages.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]]);
+
+            // messages.push([parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]]);
+
+            let ts = moment(parts[1], 'YYYY-MM-DD HH:mm:ss').unix();
+            let msg_type = stringToType(parts[2]);
+            let direction = (parts[3] === '<==') ? 0 : 1;
+
+            let obj = {
+                ts: ts,
+                msg_type: msg_type,
+                direction: direction,
+                apnetwork_oid: parts[4],
+                ap_sn: parts[5]
+            };
+
+            messages.push(obj);
+
+            if (messages.length === 1000) {
+                logWorker.emit('send');
+            }
+
+            // var client = dgram.createSocket('udp4');
+            // let message = new Buffer(JSON.stringify(obj));
+
+            // client.send(message, 0, message.length, 6060, 'localhost', (err) => {
+            //     if (err) console.error(err);
+            //     console.log('udp send');
+            //     client.close();
+            // });
+
             break;
         }
     }
@@ -141,10 +207,6 @@ function parseLine(line) {
     }
 };
 
-var batchInsertRawSql = 'INSERT INTO raw (time, level, thread, log) VALUES ?';
-var batchInsertColSql = 'INSERT INTO message (time, messageType, direction, apnetwork, ap, ip, port) VALUES ?';
-var batchInsertIeeeSql = 'INSERT INTO ieee80211mgmt (time, stamac, messageType, direction, apnetwork, ip, port, iface, radioId, wlanId, bssid) VALUES ?';
-
 function parseFile(file, callback) {
     var bar;
 
@@ -161,22 +223,7 @@ function parseFile(file, callback) {
 
             lines.forEach(function(line, index) {
                 parseLine(line);
-                if (0 === index % 1000) {
-                    if (messages.length) {
-                        mysqlQuery(batchInsertColSql, [messages], function(rows, fields) {});
-                        messages = [];
-                    }
-                    if (raws.length) {
-                        mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {
-                            bar.tick(1000);
-                        });
-                        raws = [];
-                    }
-                    if (ieee80211mgmts.length) {
-                        mysqlQuery(batchInsertIeeeSql, [ieee80211mgmts], function(rows, fields) {});
-                        ieee80211mgmts = [];
-                    }
-                }
+                bar.tick(1);
             });
 
             return callback();
@@ -192,50 +239,9 @@ function parseFile(file, callback) {
 
 var fileBase = 'D:\\Workspaces\\Project\\log\\monitor\\capwap.';
 
-var createMessageTableSql = 'CREATE TABLE IF NOT EXISTS ' +
-    'message (' +
-    'time TIMESTAMP, ' +
-    'messageType varchar(32), ' +
-    'direction varchar(3), ' +
-    'apnetwork INT(10), ' +
-    'ap varchar(32), ' +
-    'ip varchar(15), ' +
-    'port smallint(5)' +
-    ')';
-
-var createIeeeMgmtTableSql = 'CREATE TABLE IF NOT EXISTS ' +
-    'ieee80211mgmt (' +
-    'time TIMESTAMP, ' +
-    'stamac varchar(18), ' +
-    'messageType varchar(32), ' +
-    'direction varchar(3), ' +
-    'apnetwork INT(10), ' +
-    'ip varchar(15), ' +
-    'port smallint(5), ' +
-    'iface varchar(12), ' +
-    'radioId smallint(5), ' +
-    'wlanId smallint(5), ' +
-    'bssid varchar(18)' +
-    ')';
-
-var createRawTableSql = 'CREATE TABLE IF NOT EXISTS ' +
-    'raw (' +
-    'time TIMESTAMP, ' +
-    'level varchar(16), ' +
-    'thread smallint(5), ' +
-    'log varchar(1024)' +
-    ')';
-
 function main() {
-    connection = mysql.createConnection(options);
-    connection.connect();
-
-    mysqlQuery(createRawTableSql, null, function(rows, fields) {});
-    mysqlQuery(createMessageTableSql, null, function(rows, fields) {});
-    mysqlQuery(createIeeeMgmtTableSql, null, function(rows, fields) {});
-
     var start = 1;
-    var last = 4;
+    var last = 2;
 
     var fileArray = [];
 
@@ -249,18 +255,25 @@ function main() {
         if (err) {
             console.log(err);
         } else {
-            if (messages.length) {
-                mysqlQuery(batchInsertColSql, [messages], function(rows, fields) {});
-            }
-            if (raws.length) {
-                mysqlQuery(batchInsertRawSql, [raws], function(rows, fields) {});
-            }
-            if (ieee80211mgmts.length) {
-                mysqlQuery(batchInsertIeeeSql, [ieee80211mgmts], function(rows, fields) {});
-            }
+            console.log('success');
         }
-        connection.end();
     });
 };
+
+logWorker.on('send', () => {
+    var client = dgram.createSocket('udp4');
+    let message = new Buffer(JSON.stringify(messages.splice(0)));
+    client.send(message, 0, message.length, 6060, 'localhost', (err) => {
+        if (err) console.error(err);
+        console.log('udp send ' + message.length);
+        client.close();
+    });
+});
+
+setInterval(() => {
+    if (messages.length) {
+        logWorker.emit('send');
+    }
+}, 1000);
 
 main();

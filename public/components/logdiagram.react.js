@@ -220,7 +220,7 @@ function typeToString(type) {
         case 26:
             return 'Configuration Status Response';
         default:
-            return 'Unknown Type';
+            return 'Unknown Type ' + type;
     }
 }
 
