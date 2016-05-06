@@ -73,7 +73,7 @@ function updateGraphData() {
 
         let stamacQuery;
         // if association request or response
-        if (28 === _apps.messageType.value || 29 === _apps.messageType.value) {
+        if (65538 === _apps.messageType.value || 65539 === _apps.messageType.value) {
             stamacQuery = '&stamac=' + _apps.stamac.value;
         }
 

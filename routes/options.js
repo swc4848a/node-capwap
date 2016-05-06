@@ -131,6 +131,35 @@ router.get('/ap', function(req, res) {
 // {3398913, "802.11 WLAN Config REQ"},
 // {3398914, "802.11 WLAN Config RESP"}, 
 
+// CAPWAP Data Message Type (only for udp log msg)
+// #define CW_DATA_MSG_TYPE_BASE     0xFFFF
+// #define CW_DATA_MSG_TYPE_KEEPALIVE_REQ       (CW_DATA_MSG_TYPE_BASE + 0)     65535
+// #define CW_DATA_MSG_TYPE_KEEPALIVE_RESP      (CW_DATA_MSG_TYPE_BASE + 1)     65536
+
+// #define CW_DATA_MSG_TYPE_80211_BASE          (CW_DATA_MSG_TYPE_BASE + 3)     65538
+// #define CW_DATA_MSG_TYPE_80211_ASSOC_REQ     (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_ASSOC_REQ)     65538 
+// #define CW_DATA_MSG_TYPE_80211_ASSOC_RESP    (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_ASSOC_RESP)    65539
+// #define CW_DATA_MSG_TYPE_80211_REASSOC_REQ   (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_REASSOC_REQ)   65540
+// #define CW_DATA_MSG_TYPE_80211_REASSOC_RESP  (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_REASSOC_RESP)  65541
+// #define CW_DATA_MSG_TYPE_80211_DISASSOC      (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_DISASSOC)      65548
+// #define CW_DATA_MSG_TYPE_80211_AUTH          (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_AUTH)          65549
+// #define CW_DATA_MSG_TYPE_80211_DEAUTH        (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_DEAUTH)        65550
+
+/* management */
+// #define WLAN_FC_STYPE_ASSOC_REQ     0
+// #define WLAN_FC_STYPE_ASSOC_RESP    1
+// #define WLAN_FC_STYPE_REASSOC_REQ   2
+// #define WLAN_FC_STYPE_REASSOC_RESP  3
+// #define WLAN_FC_STYPE_PROBE_REQ     4
+// #define WLAN_FC_STYPE_PROBE_RESP    5
+// #define WLAN_FC_STYPE_BEACON        8
+// #define WLAN_FC_STYPE_ATIM          9
+// #define WLAN_FC_STYPE_DISASSOC      10
+// #define WLAN_FC_STYPE_AUTH          11
+// #define WLAN_FC_STYPE_DEAUTH        12
+// #define WLAN_FC_STYPE_ACTION        13
+
+
 router.get('/messageType', function(req, res) {
     res.json([{
         label: 'Discover Request',
@@ -211,14 +240,17 @@ router.get('/messageType', function(req, res) {
         label: 'Configuration Status Response',
         value: 26
     }, {
-        label: 'Keep Alive',
-        value: 27
+        label: 'Keep Alive Request',
+        value: 65535
+    }, {
+        label: 'Keep Alive Response',
+        value: 65536
     }, {
         label: 'Association Request',
-        value: 28
+        value: 65538
     }, {
         label: 'Association Response',
-        value: 29
+        value: 65539
     }, {
         label: 'WLAN Configuration Request',
         value: 3398913
