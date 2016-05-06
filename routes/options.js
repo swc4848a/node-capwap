@@ -257,6 +257,36 @@ router.get('/messageType', function(req, res) {
         label: 'Association Response',
         value: 65539
     }, {
+        label: 'Reassociation Request',
+        value: 65540
+    }, {
+        label: 'Reassociation Response',
+        value: 65541
+    }, {
+        label: 'Probe Request',
+        value: 65542
+    }, {
+        label: 'Probe Response',
+        value: 65543
+    }, {
+        label: 'Beacon',
+        value: 65546
+    }, {
+        label: 'Atim',
+        value: 65547
+    }, {
+        label: 'Disassociate',
+        value: 65548
+    }, {
+        label: 'Auth',
+        value: 65549
+    }, {
+        label: 'Deauth',
+        value: 65550
+    }, {
+        label: 'Action',
+        value: 65551
+    }, {
         label: 'WLAN Configuration Request',
         value: 3398913
     }, {

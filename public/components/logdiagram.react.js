@@ -144,6 +144,26 @@ function typeToString(type) {
             return 'Association Request';
         case 65539:
             return 'Association Response';
+        case 65540:
+            return 'Reassociation Request';
+        case 65541:
+            return 'Reassociation Response';
+        case 65542:
+            return 'Probe Request';
+        case 65543:
+            return 'Probe Response';
+        case 65546:
+            return 'Beacon';
+        case 65547:
+            return 'Atim';
+        case 65548:
+            return 'Disassociate';
+        case 65549:
+            return 'Auth';
+        case 65550:
+            return 'Deauth';
+        case 65551:
+            return 'Action';
         case 3398913:
             return 'WLAN Configuration Request';
         case 3398914:
