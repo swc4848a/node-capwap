@@ -297,7 +297,7 @@ router.get('/messageType', function(req, res) {
 
 router.get('/stamac', function(req, res) {
     var options = {
-        host: '172.16.94.163',
+        host: '192.168.223.188',
         user: 'monitor',
         password: 'pass',
         database: 'monitor'

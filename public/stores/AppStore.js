@@ -74,7 +74,9 @@ function updateGraphData() {
         let stamacQuery;
         // if association request or response
         if (65538 === _apps.messageType.value || 65539 === _apps.messageType.value) {
-            stamacQuery = '&stamac=' + _apps.stamac.value;
+            if (_apps.stamac.value) {
+                stamacQuery = '&stamac=' + _apps.stamac.value;
+            }
         }
 
         var url = '/Graph?' +
