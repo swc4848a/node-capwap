@@ -101,7 +101,7 @@ setInterval(() => {
 
 logWorker.on('insert', () => {
     mysqlQuery(conn, batchInsertMessageSql, [datas.splice(0)], function(rows, fields) {
-        console.log('batch insert: ', rows.affectedRows);
+        console.log('[%s] batch insert: ', new Date(),rows.affectedRows);
     });
 });
 

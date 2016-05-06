@@ -13,7 +13,7 @@ function setIpPort(req) {
         type: 'log_server_config',
         ip: '172.16.94.161',
         port: 6060,
-        apNetworkOid: 651
+        apNetworkOid: 752
     }));
 
     client.send(message, 0, message.length, 9688, req.query.ip, (err) => {
@@ -34,7 +34,7 @@ function setSwitch(req, res) {
         method: 'put',
         type: 'log_switch',
         switch: Number(req.query.status),
-        apNetworkOid: 651
+        apNetworkOid: 752
     }));
 
     client.send(message, 0, message.length, 9688, req.query.ip, (err) => {
