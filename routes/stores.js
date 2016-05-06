@@ -6,7 +6,7 @@ var mysql = require('mysql');
 
 router.get('/Raws', function(req, res) {
     var options = {
-        host: '172.16.94.163',
+        host: '192.168.223.188',
         user: 'monitor',
         password: 'pass',
         database: 'monitor'
