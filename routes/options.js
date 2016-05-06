@@ -132,11 +132,11 @@ router.get('/ap', function(req, res) {
 // {3398914, "802.11 WLAN Config RESP"}, 
 
 // CAPWAP Data Message Type (only for udp log msg)
-// #define CW_DATA_MSG_TYPE_BASE     0xFFFF
-// #define CW_DATA_MSG_TYPE_KEEPALIVE_REQ       (CW_DATA_MSG_TYPE_BASE + 0)     65535
-// #define CW_DATA_MSG_TYPE_KEEPALIVE_RESP      (CW_DATA_MSG_TYPE_BASE + 1)     65536
+// #define CW_DATA_MSG_TYPE_BASE                0xFFFF                                                      65535
+// #define CW_DATA_MSG_TYPE_KEEPALIVE_REQ       (CW_DATA_MSG_TYPE_BASE + 0)                                 65535
+// #define CW_DATA_MSG_TYPE_KEEPALIVE_RESP      (CW_DATA_MSG_TYPE_BASE + 1)                                 65536
 
-// #define CW_DATA_MSG_TYPE_80211_BASE          (CW_DATA_MSG_TYPE_BASE + 3)     65538
+// #define CW_DATA_MSG_TYPE_80211_BASE          (CW_DATA_MSG_TYPE_BASE + 3)                                 65538
 // #define CW_DATA_MSG_TYPE_80211_ASSOC_REQ     (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_ASSOC_REQ)     65538 
 // #define CW_DATA_MSG_TYPE_80211_ASSOC_RESP    (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_ASSOC_RESP)    65539
 // #define CW_DATA_MSG_TYPE_80211_REASSOC_REQ   (CW_DATA_MSG_TYPE_80211_BASE + WLAN_FC_STYPE_REASSOC_REQ)   65540

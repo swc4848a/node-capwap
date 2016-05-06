@@ -136,6 +136,14 @@ function typeToString(type) {
             return 'Association Request';
         case 29:
             return 'Association Response';
+        case 65535:
+            return 'Keep Alive Request';
+        case 65536:
+            return 'Keep Alive Response';
+        case 65538:
+            return 'Association Request';
+        case 65539:
+            return 'Association Response';
         case 3398913:
             return 'WLAN Configuration Request';
         case 3398914:

@@ -71,7 +71,7 @@ var Content = React.createClass({
                                         className="table table-hover table-bordered" 
                                         data={this.state.collections} 
                                         sortable={true} 
-                                        itemsPerPage={10} 
+                                        itemsPerPage={15} 
                                         filterable={filter} 
                                     />
                                 </div>

@@ -32,8 +32,8 @@ function setSwitch(req, res) {
         id: 1,
         url: '/debug/udpLog/config/',
         method: 'put',
-        type: 'log_swtich',
-        swtich: Number(req.query.status),
+        type: 'log_switch',
+        switch: Number(req.query.status),
         apNetworkOid: 651
     }));
 

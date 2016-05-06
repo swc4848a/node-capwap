@@ -20,7 +20,7 @@ router.get('/Raws', function(req, res) {
 
         connection.connect();
 
-        let sql = 'SELECT * FROM message WHERE ts BETWEEN from_unixtime(' + start / 1000 + ') and from_unixtime(' + end / 1000 + ') limit 1000;';
+        let sql = 'SELECT * FROM message WHERE ts BETWEEN from_unixtime(' + start / 1000 + ') and from_unixtime(' + end / 1000 + ') limit 1500;';
 
         connection.query(sql, function(err, rows, fields) {
             if (err) {
