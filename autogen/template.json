@@ -1,0 +1,17 @@
+[{
+    "config": "router static",
+    "params": "routing",
+    "map": {
+        "dst": "dst",
+        "internetService": "internet-service",
+        "gateway": "gateway",
+        "device": "device",
+        "distance": "distance",
+        "priority": "priority",
+        "comment": "comment",
+        "status": "status"
+    },
+    "cb": {
+        "dst": "ipmask_to_argv"
+    }
+}]
