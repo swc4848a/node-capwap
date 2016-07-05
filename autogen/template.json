@@ -1,17 +1,13 @@
 [{
-    "config": "router static",
-    "params": "routing",
+    "config": "system global",
+    "type": "form",
+    "params": "settings",
     "map": {
-        "dst": "dst",
-        "internetService": "internet-service",
-        "gateway": "gateway",
-        "device": "device",
-        "distance": "distance",
-        "priority": "priority",
-        "comment": "comment",
-        "status": "status"
-    },
-    "cb": {
-        "dst": "ipmask_to_argv"
+        "adminPort": "admin-port",
+        "adminHttpsRedirect": "admin-https-redirect",
+        "adminsPort": "admin-sport",
+        "adminSshPort": "admin-ssh-port",
+        "adminTelnetPort": "admin-telnet-port",
+        "adminTimeout": "admintimeout"
     }
 }]

@@ -42,6 +42,102 @@ function createNode(config) {
     toSource('        conf_add_node(devctx->conf, devctx->conf->cli_ctx, parent, node);\r\n');
 };
 
+function buildTablePutHandler(item) {
+    let configFunctionName = S(item.config).replaceAll(' ', '_').s;
+
+    toSource('\r\nvoid ' + configFunctionName + '_put_handler(struct json_object *request, void *data) {\r\n');
+
+    toSource('    int len, err = -1, new_node = 0;\r\n');
+    toSource('    char pathname[128];\r\n');
+    toSource('    char *msg = "failed";\r\n');
+    toSource('    fgfm_event_handle_t *ctx = (fgfm_event_handle_t *)data;\r\n');
+    toSource('    dev_ctx_t *devctx = (dev_ctx_t *)ctx->data;\r\n');
+    toSource('    struct conf_node *parent, *child, *node = NULL;\r\n');
+    toSource('    struct list_head *l;\r\n');
+    toSource('    long my_id = 0, routing_id;\r\n');
+    toSource('    char real_name[100];\r\n');
+
+    toSource('    struct json_object *json_resp = json_object_new_object();\r\n');
+    toSource('    struct json_object *params = json_object_object_get(request, "params");\r\n');
+    toSource('    struct json_object *jrouting = json_object_object_get(params, "' + item.params + '");\r\n');
+    toSource('    struct json_object *jid = json_object_object_get(jrouting, "seqNum");\r\n');
+    toSource('    struct json_object *jreply_id;\r\n');
+
+    toSource('    if(jid) my_id = json_object_get_uint(jid);\r\n');
+
+    toSource('    if(my_id > 0) {\r\n');
+    getNode(item.config);
+    toSource('    } else {\r\n');
+    createNode(item.config);
+    toSource('    }\r\n');
+
+    for (p in item.map) {
+        let callback = 'NULL';
+        if (p in item.cb) {
+            callback = item.cb[p];
+        }
+        toSource('    json_to_conf_attr(jrouting, devctx->conf, node, "' + p + '", "' + item.map[p] + '", ' + callback + ');\r\n');
+    }
+
+    toSource('    err = 200; msg = "ok";\r\n');
+
+    toSource('out:\r\n');
+    toSource('    json_object_object_add(json_resp, "code", json_object_new_int(err));\r\n');
+    toSource('    json_object_object_add(json_resp, "message", json_object_new_string(msg));\r\n');
+    toSource('    if(err == 200 && new_node){\r\n');
+    toSource('        jreply_id = json_object_new_object();\r\n');
+    toSource('        json_object_object_add(jreply_id, "id", json_object_new_int(my_id));\r\n');
+    toSource('        json_object_object_add(json_resp, "result", jreply_id);\r\n');
+    toSource('    }\r\n');
+    toSource('    fcldd_jsonrpc_send_reply(ctx->fd, json_resp);\r\n');
+    toSource('    json_object_put(json_resp);\r\n');
+
+    toSource('}\r\n');
+};
+
+function buildFormGetHandler(item) {
+    let functionName = S(item.config + ' ' + item.params).replaceAll(' ', '_').s;
+    toSource('\r\nvoid ' + functionName + '_get_handler(struct json_object *request, void *data) {\r\n');
+
+    toSource('    fgfm_event_handle_t *ctx = (fgfm_event_handle_t *)data;\r\n');
+    toSource('    dev_ctx_t *devctx = (dev_ctx_t *)ctx->data;\r\n');
+    toSource('    struct json_object *json_resp = json_object_new_object();\r\n');
+    toSource('    struct json_object *jarray = json_object_new_array();\r\n');
+
+    toSource('    struct conf_node *cnode;\r\n');
+    toSource('    struct json_object *jobject;\r\n');
+    toSource('    char pathname[1024] = "system global";\r\n');
+    toSource('    int err = -1;\r\n');
+
+    toSource('    cnode = conf_find_node_by_path(devctx->conf->global, pathname);\r\n');
+    toSource('    if (cnode) {\r\n');
+    toSource('        jobject = json_object_new_object();\r\n');
+
+    for (p in item.map) {
+        let callback = 'NULL';
+        if (item.cb && p in item.cb) {
+            callback = item.cb[p];
+        }
+        toSource('        conf_to_json_attr(jobject, devctx->conf, cnode, "' + p + '", "' + item.map[p] + '", ' + callback + ');\r\n');
+    }
+
+    toSource('        json_object_array_add(jarray, jobject);\r\n');
+    toSource('        err = 200;\r\n');
+    toSource('    }\r\n');
+
+    toSource('    json_object_object_add(json_resp, "code", json_object_new_int(0));\r\n');
+    toSource('    json_object_object_add(json_resp, "message", json_object_new_string(err < 0 ? "dns not found" : "ok"));\r\n');
+    toSource('    if (err == 200) json_object_object_add(json_resp, "result", jarray);\r\n');
+    toSource('    fcldd_jsonrpc_send_reply(ctx->fd, json_resp);\r\n');
+    toSource('    json_object_put(json_resp);\r\n');
+
+    toSource('}\r\n');
+};
+
+function buildFormPutHandler(item) {
+
+};
+
 (() => {
     fs.readFile('./template.json', 'utf8', (err, data) => {
         if (err) throw err;
@@ -50,55 +146,12 @@ function createNode(config) {
         cleanAutoFile();
 
         template.forEach((item) => {
-            let configFunctionName = S(item.config).replaceAll(' ', '_').s;
-            toSource('void ' + configFunctionName + '_put_handler(struct json_object *request, void *data) {\r\n');
-
-            toSource('    int len, err = -1, new_node = 0;\r\n');
-            toSource('    char pathname[128];\r\n');
-            toSource('    char *msg = "failed";\r\n');
-            toSource('    fgfm_event_handle_t *ctx = (fgfm_event_handle_t *)data;\r\n');
-            toSource('    dev_ctx_t *devctx = (dev_ctx_t *)ctx->data;\r\n');
-            toSource('    struct conf_node *parent, *child, *node = NULL;\r\n');
-            toSource('    struct list_head *l;\r\n');
-            toSource('    long my_id = 0, routing_id;\r\n');
-            toSource('    char real_name[100];\r\n');
-
-            toSource('    struct json_object *json_resp = json_object_new_object();\r\n');
-            toSource('    struct json_object *params = json_object_object_get(request, "params");\r\n');
-            toSource('    struct json_object *jrouting = json_object_object_get(params, "' + item.params + '");\r\n');
-            toSource('    struct json_object *jid = json_object_object_get(jrouting, "seqNum");\r\n');
-            toSource('    struct json_object *jreply_id;\r\n');
-
-            toSource('    if(jid) my_id = json_object_get_uint(jid);\r\n');
-
-            toSource('    if(my_id > 0) {\r\n');
-            getNode(item.config);
-            toSource('    } else {\r\n');
-            createNode(item.config);
-            toSource('    }\r\n');
-
-            for (p in item.map) {
-                let callback = 'NULL';
-                if (p in item.cb) {
-                    callback = item.cb[p];
-                }
-                toSource('    json_to_conf_attr(jrouting, devctx->conf, node, "' + p + '", "' + item.map[p] + '", ' + callback + ');\r\n');
+            if ('table' === item.type) {
+                buildTablePutHandler(item);
+            } else if ('form' === item.type) {
+                buildFormGetHandler(item);
+                buildFormPutHandler(item);
             }
-
-            toSource('    err = 200; msg = "ok";\r\n');
-
-            toSource('out:\r\n');
-            toSource('    json_object_object_add(json_resp, "code", json_object_new_int(err));\r\n');
-            toSource('    json_object_object_add(json_resp, "message", json_object_new_string(msg));\r\n');
-            toSource('    if(err == 200 && new_node){\r\n');
-            toSource('        jreply_id = json_object_new_object();\r\n');
-            toSource('        json_object_object_add(jreply_id, "id", json_object_new_int(my_id));\r\n');
-            toSource('        json_object_object_add(json_resp, "result", jreply_id);\r\n');
-            toSource('    }\r\n');
-            toSource('    fcldd_jsonrpc_send_reply(ctx->fd, json_resp);\r\n');
-            toSource('    json_object_put(json_resp);\r\n');
-
-            toSource('}\r\n');
         });
     });
 })();
