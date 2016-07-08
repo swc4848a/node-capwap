@@ -8,6 +8,45 @@
         "adminsPort": "admin-sport",
         "adminSshPort": "admin-ssh-port",
         "adminTelnetPort": "admin-telnet-port",
-        "adminTimeout": "admintimeout"
+        "admintimeout": "admintimeout"
+    }
+}, {
+    "config": "firewall addrgrp",
+    "type": "table",
+    "key": "name",
+    "params": "addrgrp",
+    "map": {
+        "member": "member",
+        "visibility": "visibility",
+        "allowRouting": "allowRouting",
+        "comment": "comment"
+    }
+}, {
+    "config": "firewall address",
+    "type": "table",
+    "key": "name",
+    "params": "address",
+    "map": {
+        "type": "type",
+        "subnet": "subnet",
+        "startIp": "start-ip",
+        "endIp": "endip",
+        "fqdn": "fqdn",
+        "wildcardFqdn": "wildcard-fqdn",
+        "country": "country",
+        "associatedInterface": "associated-interface",
+        "visibility": "visibility",
+        "allowRouting": "allow-routing",
+        "comment": "comment"
+    }
+}, {
+    "config": "firewall schedule onetime",
+    "type": "table",
+    "key": "name",
+    "params": "onetime",
+    "map": {
+        "start": "start",
+        "end": "end",
+        "expirationDays": "expiration-days"
     }
 }]
