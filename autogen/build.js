@@ -24,6 +24,16 @@ function cleanAutoFile() {
     });
 };
 
+function getFunctionFromConfig(config) {
+    let fname = '';
+    if (S(config).contains('-')) {
+        fname = S(config).replaceAll('-', '_');
+    } else {
+        fname = config;
+    }
+    return S(fname).replaceAll(' ', '_').s;
+};
+
 function getNode(config) {
     toSource('        len = snprintf(pathname, sizeof(pathname), "root/' + config + '/%lu", my_id);\r\n');
     toSource('        node = conf_find_node_by_path(devctx->conf->vdom, pathname);\r\n');
@@ -50,7 +60,7 @@ function createNode(config) {
 };
 
 function buildTableIdPutHandler(item) {
-    let configFunctionName = S(item.config).replaceAll(' ', '_').s;
+    let configFunctionName = getFunctionFromConfig(item.config);
 
     toSource('\r\nvoid ' + configFunctionName + '_put_handler(struct json_object *request, void *data) {\r\n');
 
@@ -144,7 +154,7 @@ function buildFormGetHandler(item) {
 function buildFormPutHandler(item) {};
 
 function buildTableNamePutHandler(item) {
-    let configFunctionName = S(item.config).replaceAll(' ', '_').s;
+    let configFunctionName = getFunctionFromConfig(item.config);
     toSource('\r\nvoid ' + configFunctionName + '_put_handler(struct json_object *request, void *data) {\r\n');
 
     toSource('    int len, err = -1;\r\n');
@@ -201,7 +211,7 @@ function buildTableNamePutHandler(item) {
 };
 
 function buildTableNameGetHandler(item) {
-    let configFunctionName = S(item.config).replaceAll(' ', '_').s;
+    let configFunctionName = getFunctionFromConfig(item.config);
 
     toSource('\r\nvoid ' + configFunctionName + '_get_handler(struct json_object *request, void *data) {\r\n');
     toSource('    fgfm_event_handle_t *ctx = (fgfm_event_handle_t *)data;\r\n');
@@ -255,7 +265,7 @@ function buildTableNameGetHandler(item) {
 };
 
 function buildTableNameDeleteHandler(item) {
-    let configFunctionName = S(item.config).replaceAll(' ', '_').s;
+    let configFunctionName = getFunctionFromConfig(item.config);
 
     toSource('\r\nvoid ' + configFunctionName + '_delete_handler(struct json_object *request, void *data) {\r\n');
     toSource('    fgfm_event_handle_t *ctx = (fgfm_event_handle_t *)data;\r\n');
@@ -295,7 +305,7 @@ function buildTableNameDeleteHandler(item) {
 };
 
 function buildHeaderFile(item) {
-    let configFunctionName = S(item.config).replaceAll(' ', '_').s;
+    let configFunctionName = getFunctionFromConfig(item.config);
 
     toHeader('extern void ' + configFunctionName + '_put_handler(struct json_object *request, void *data);\r\n');
     toHeader('extern void ' + configFunctionName + '_get_handler(struct json_object *request, void *data);\r\n');
@@ -305,9 +315,14 @@ function buildHeaderFile(item) {
 function buildTestCase(item) {
     let query = S(item.config).parseCSV(' ');
     let module = query[query.length - 1];
+    let params = item.params;
+
+    if (S(module).contains('-')) {
+        module = S(module).camelize().s;
+    }
 
     let getAll = {
-        action: module + 'Get',
+        action: params + 'Get',
         sn: 'FGT60D4615007833'
     };
 
@@ -318,7 +333,7 @@ function buildTestCase(item) {
     });
 
     let get = {
-        action: module + 'Get',
+        action: params + 'Get',
         sn: 'FGT60D4615007833',
         params: {
             name: ['test']
@@ -332,12 +347,12 @@ function buildTestCase(item) {
     });
 
     let put = {
-        action: module + 'Put',
+        action: params + 'Put',
         sn: 'FGT60D4615007833',
         params: {}
     };
 
-    let body = put.params[module] = {};
+    let body = put.params[params] = {};
 
     if ('name' === item.key) {
         body.name = "test";
@@ -354,7 +369,7 @@ function buildTestCase(item) {
     });
 
     let del = {
-        action: module + 'Delete',
+        action: params + 'Delete',
         sn: 'FGT60D4615007833',
         params: {
             names: ['test']

@@ -49,4 +49,89 @@
         "end": "end",
         "expirationDays": "expiration-days"
     }
+}, {
+    "config": "firewall schedule recurring",
+    "type": "table",
+    "key": "name",
+    "params": "recurring",
+    "map": {
+        "day": "day",
+        "start": "start",
+        "end": "end"
+    }
+}, {
+    "config": "firewall schedule group",
+    "type": "table",
+    "key": "name",
+    "params": "scheduleGroup",
+    "map": {
+        "member": "member"
+    }
+}, {
+    "config": "firewall vip",
+    "type": "table",
+    "key": "name",
+    "params": "vip",
+    "map": {
+        "comment": "comment",
+        "srcFilter": "src-filter",
+        "extip": "extip",
+        "extintf": "extintf",
+        "portforward": "portforward",
+        "mappedip": "mappedip",
+        "protocol": "protocol",
+        "extport": "extport",
+        "mappedport": "mappedport"
+    }
+}, {
+    "config": "firewall vipgrp",
+    "type": "table",
+    "key": "name",
+    "params": "vipgrp",
+    "map": {
+        "comments": "comments",
+        "interface": "interface",
+        "member": "member"
+    }
+}, {
+    "config": "firewall ippool",
+    "type": "table",
+    "key": "name",
+    "params": "ippool",
+    "map": {
+        "type": "type",
+        "startip": "startip",
+        "endip": "endip",
+        "sourceStartip": "source-startip",
+        "sourceEndip": "source-endip",
+        "blockSize": "block-size",
+        "numBlocksPerUser": "num-blocks-per-user",
+        "arpReply": "arp-reply",
+        "comments": "comments"
+    }
+}, {
+    "config": "firewall shaper traffic-shaper",
+    "type": "table",
+    "key": "name",
+    "params": "trafficShaper",
+    "map": {
+        "guaranteedBandwidth": "guaranteed-bandwidth",
+        "maximumBandwidth": "maximum-bandwidth",
+        "priority": "priority",
+        "diffserv": "diffserv",
+        "diffservcode": "diffservcode"
+    }
+}, {
+    "config": "firewall shaper per-ip-shaper",
+    "type": "table",
+    "key": "name",
+    "params": "perIpShaper",
+    "map": {
+        "maxBandwidth": "max-bandwidth",
+        "maxConcurrentSession": "max-concurrent-session",
+        "diffservForward": "diffserv-forward",
+        "diffservReverse": "diffserv-reverse",
+        "diffservcodeForward": "diffservcode-forward",
+        "diffservcodeRev": "diffservcode-rev"
+    }
 }]
