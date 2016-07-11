@@ -134,4 +134,22 @@
         "diffservcodeForward": "diffservcode-forward",
         "diffservcodeRev": "diffservcode-rev"
     }
+}, {
+    "config": "firewall shaping-policy",
+    "type": "table",
+    "key": "id",
+    "params": "shapingPolicy",
+    "map": {
+        "status": "status",
+        "service": "service",
+        "application": "application",
+        "appCategory": "app-category",
+        "urlCategory": "url-category",
+        "dstintf": "dstintf",
+        "trafficShaper": "traffic-shaper",
+        "trafficShaperReverse": "traffic-shaper-reverse",
+        "perIpShaper": "per-ip-shaper",
+        "srcaddr": "srcaddr",
+        "dstaddr": "dstaddr"
+    }
 }]
