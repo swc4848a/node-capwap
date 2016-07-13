@@ -88,7 +88,7 @@ server.on('message', function(message, remote) {
     } else {
         datas.push([moment.unix(json.ts).format('YYYY-MM-DD HH:mm:ss'), json.msg_type, json.direction, json.apnetwork_oid, json.ap_sn, json.sta_mac]);
     }
-    if (1000 === datas.length) {
+    if (1000 >= datas.length) {
         logWorker.emit('insert');
     }
 });
@@ -101,7 +101,7 @@ setInterval(() => {
 
 logWorker.on('insert', () => {
     mysqlQuery(conn, batchInsertMessageSql, [datas.splice(0)], function(rows, fields) {
-        console.log('[%s] batch insert: ', new Date(),rows.affectedRows);
+        console.log('[%s] batch insert: ', new Date(), rows.affectedRows);
     });
 });
 
@@ -114,4 +114,7 @@ server.on("close", function(err) {
     console.log("Server close");
 });
 
-server.bind(6060);
+server.bind({
+    port: 6060,
+    address: '172.16.94.163'
+});

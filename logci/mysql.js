@@ -86,8 +86,8 @@ function parseLine(line) {
 
     var rules = [
         // for capwap message
-        /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> (\w+) \(\d+\) (<==|==>)\s+ws \((\d+)-(\w+)-(\d.+):(\d+)\)/,
-        /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*? ws \(\d+-\d.+:\d+\)\s+<msg>\s+(\w+)\s+(==>|<==)\s+ws\s+\((\d+)-(\w+)-(\d.+):(\d+)\)/,
+        /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*?: <msg> (\w+) \(\d+\) (<==|==>)\s+ws \((\d+)-(.*-?)-(\d.+):(\d+)\)/,
+        /\(.*?\)\[(.*?)\s-\s.*?\] \[.*?\] .*? ws \(\d+-\d.+:\d+\)\s+<msg>\s+(\w+)\s+(==>|<==)\s+ws\s+\((\d+)-(.*-?)-(\d.+):(\d+)\)/,
     ];
 
     var ieee80211Rules = [
@@ -146,7 +146,7 @@ function parseLine(line) {
 
             messages.push(obj);
 
-            if (messages.length === 1000) {
+            if (messages.length >= 500) {
                 logWorker.emit('send');
             }
 
@@ -173,30 +173,30 @@ function parseLine(line) {
         }
     }
 
-    var parts = line.match(exceptRules[0]);
-    if (parts && messages.length) {
-        // use last collection information
-        var ap = messages[messages.length - 1][4];
-        var port = messages[messages.length - 1][6];
-        messages.push([parts[1], 'JOIN_RESP', '==>', parts[2], ap, parts[3], port]);
-        return;
-    }
+    // var parts = line.match(exceptRules[0]);
+    // if (parts && messages.length) {
+    //     // use last collection information
+    //     var ap = messages[messages.length - 1][4];
+    //     var port = messages[messages.length - 1][6];
+    //     messages.push([parts[1], 'JOIN_RESP', '==>', parts[2], ap, parts[3], port]);
+    //     return;
+    // }
 
-    parts = line.match(exceptRules[1]);
-    if (parts && messages.length) {
-        var ap = messages[messages.length - 1][4];
-        var port = messages[messages.length - 1][6];
-        messages.push([parts[1], 'CFG_STATUS_RESP', '==>', parts[2], ap, parts[3], port]);
-        return;
-    }
+    // parts = line.match(exceptRules[1]);
+    // if (parts && messages.length) {
+    //     var ap = messages[messages.length - 1][4];
+    //     var port = messages[messages.length - 1][6];
+    //     messages.push([parts[1], 'CFG_STATUS_RESP', '==>', parts[2], ap, parts[3], port]);
+    //     return;
+    // }
 
-    parts = line.match(exceptRules[2]);
-    if (parts && messages.length) {
-        var ap = messages[messages.length - 1][4];
-        var port = messages[messages.length - 1][6];
-        messages.push([parts[1], 'CFG_UPDATE_REQ', '==>', parts[2], ap, parts[3], port]);
-        return;
-    }
+    // parts = line.match(exceptRules[2]);
+    // if (parts && messages.length) {
+    //     var ap = messages[messages.length - 1][4];
+    //     var port = messages[messages.length - 1][6];
+    //     messages.push([parts[1], 'CFG_UPDATE_REQ', '==>', parts[2], ap, parts[3], port]);
+    //     return;
+    // }
 };
 
 function parseFile(file, callback) {
@@ -206,16 +206,16 @@ function parseFile(file, callback) {
         if (!err) {
             var lines = data.match(/[^\r\n]+/g);
 
-            bar = new ProgressBar('  processing [' + file + '][:bar] :current :total :elapsed :percent :etas', {
-                complete: '=',
-                incomplete: ' ',
-                width: 100,
-                total: lines.length
-            });
+            // bar = new ProgressBar('  processing [' + file + '][:bar] :current :total :elapsed :percent :etas', {
+            //     complete: '=',
+            //     incomplete: ' ',
+            //     width: 100,
+            //     total: lines.length
+            // });
 
             lines.forEach(function(line, index) {
                 parseLine(line);
-                bar.tick(1);
+                // bar.tick(1);
             });
 
             return callback();
@@ -232,8 +232,8 @@ function parseFile(file, callback) {
 var fileBase = '/home/zqqiang/Workspace/logci/capwap.';
 
 function main() {
-    var start = 1;
-    var last = 2;
+    var start = 91;
+    var last = 98;
 
     var fileArray = [];
 
@@ -258,7 +258,7 @@ function main() {
 logWorker.on('send', () => {
     var client = dgram.createSocket('udp4');
     let message = new Buffer(JSON.stringify(messages.splice(0)));
-    client.send(message, 0, message.length, 6060, 'localhost', (err) => {
+    client.send(message, 0, message.length, 6060, '172.16.94.163', (err) => {
         if (err) console.error(err);
         console.log('udp send ' + message.length);
         client.close();
