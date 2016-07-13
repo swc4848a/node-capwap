@@ -12,7 +12,7 @@
     "build-js": "browserify public/main.js > public/bundle.js",
     "build": "npm run build-css && npm run build-js",
     "start": "supervisor monitor.js",
-    "start-logserver": "supervisor logserver.js"
+    "start-logserver": "supervisor logci/logserver.js"
   },
   "repository": {
     "type": "git",
