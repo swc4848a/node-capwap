@@ -19,7 +19,7 @@ const moment = require('moment');
 // var debug = require('debug')('node-capwap::logserver');
 
 var options = {
-    host: '172.16.94.163',
+    host: '172.16.94.162',
     user: 'monitor',
     password: 'pass',
     database: 'monitor'
@@ -116,5 +116,4 @@ server.on("close", function(err) {
 
 server.bind({
     port: 6060,
-    address: '172.16.94.163'
 });

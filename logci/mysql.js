@@ -229,15 +229,12 @@ function parseFile(file, callback) {
     });
 };
 
-var fileBase = '/home/zqqiang/Workspace/logci/capwap.';
+var fileBase = '/home/zqqiang/workspace/logci/capwap.';
 
-function main() {
-    var start = 91;
-    var last = 98;
-
+function batchProcess(start, last) {
     var fileArray = [];
 
-    for (var i = start; i <= last; ++i) {
+    for (var i = start; i <= start + 10; ++i) {
         fileArray.push(fileBase + i + '.log');
     }
 
@@ -250,15 +247,22 @@ function main() {
             if (messages.length) {
                 logWorker.emit('send');
             }
-            console.log('success');
+            console.log('[%d - %d] success', start, start + 10);
+            if (i < last) {
+                batchProcess(i, last);
+            }
         }
     });
+};
+
+function main() {
+    batchProcess(1, 100);
 };
 
 logWorker.on('send', () => {
     var client = dgram.createSocket('udp4');
     let message = new Buffer(JSON.stringify(messages.splice(0)));
-    client.send(message, 0, message.length, 6060, '172.16.94.163', (err) => {
+    client.send(message, 0, message.length, 6060, 'localhost', (err) => {
         if (err) console.error(err);
         console.log('udp send ' + message.length);
         client.close();
