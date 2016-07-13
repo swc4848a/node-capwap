@@ -150,15 +150,6 @@ function parseLine(line) {
                 logWorker.emit('send');
             }
 
-            // var client = dgram.createSocket('udp4');
-            // let message = new Buffer(JSON.stringify(obj));
-
-            // client.send(message, 0, message.length, 6060, 'localhost', (err) => {
-            //     if (err) console.error(err);
-            //     console.log('udp send');
-            //     client.close();
-            // });
-
             break;
         }
     }
