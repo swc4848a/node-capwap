@@ -229,7 +229,7 @@ function parseFile(file, callback) {
     });
 };
 
-var fileBase = 'D:\\Workspaces\\Project\\log\\monitor\\capwap.';
+var fileBase = '/home/zqqiang/Workspace/logci/capwap.';
 
 function main() {
     var start = 1;
