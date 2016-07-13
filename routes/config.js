@@ -11,7 +11,7 @@ function setIpPort(req) {
         url: '/debug/udpLog/config/',
         method: 'put',
         type: 'log_server_config',
-        ip: '192.168.223.188',
+        ip: '172.16.94.163',
         port: 6060,
         apNetworkOid: 752
     }));
