@@ -10,3 +10,9 @@
 |   |--- ci.sh
 |   |--- logci.sh
 |--- statistics
+
+### jenkins
+#### SSH Exec Command
+* cat /home/logsu/logci/statistics/logci.log.* | gawk -F ' ' '{if(length($2)==16) array[$2]+=$1} END {n = asort(array, dest); for (i in array) {sn=""i"";sql="select fwVersion,active from ap_ap where sn=\\\""sn"\\\""; cmd="mysql -u forticrm -pflzx3kc -s -N -h 192.168.223.37 portal -e \""sql"\""; while(cmd|getline){print array[i]" "i" "$1" "$2" "};close(cmd);}}' | sort -k1 -n -r; 
+
+* rm /home/logsu/logci/statistics/logci.log*;
