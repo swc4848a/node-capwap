@@ -1,26 +1,4 @@
-// const net = require('net');
-
-// const client = net.createConnection({
-//     port: 6020,
-//     host: '172.16.94.163'
-// }, () => {
-//     //'connect' listener
-//     console.log('connected to server!');
-//     let req = '{"action":"serviceCategoryGet","sn":"FGT60D4615007833"}\r\n';
-//     client.write(req);
-//     console.log(req);
-// });
-
-// client.on('data', (data) => {
-//     console.log(data.toString());
-//     client.end();
-// });
-
-// client.on('end', () => {
-//     console.log('disconnected from server');
-// });
-
-let assert = require('chai').assert;
+const S = require('string');
 let should = require('should');
 
 const net = require('net');
@@ -33,12 +11,58 @@ let options = {
 
 let path = 'D:\\Workspaces\\svn\\CfgServer\\src\\daemon\\cfgsvrd\\test';
 
-describe('Config', function() {
-    let client;
-    let put;
-    let get;
+let client;
+let put;
+let result;
 
-    beforeEach(function() {
+function factory(module, method, index) {
+    let finished = (req, rsp, done) => {
+        if ('getAll' === method && 0 == index) {
+            done(rsp.code);
+        } else if ('put' === method && 1 == index) {
+            put = req.params[module];
+            done(rsp.code);
+        } else if ('get' === method && 2 == index) {
+            result = rsp.result[0];
+            result.should.be.eql(put);
+            done(rsp.code);
+        } else if ('delete' === method && 3 == index) {
+            done(rsp.code);
+        } else if ('get' === method && 4 == index) {
+            rsp.should.containEql({ code: -1, result: [] });
+            done();
+        } else if ('put' === method && 0 == index) {
+            put = req.params[module];
+            done(rsp.code);
+        } else if ('get' === method && 1 == index) {
+            result = rsp.result[0];
+            result.should.be.eql(put);
+            done(rsp.code);
+        } else {
+            done(rsp.code);
+        }
+    };
+
+    describe(module + ' ' + method, function() {
+        it('should ' + method + ' success!', function(done) {
+            let file = path + '\\' + module + S('_' + method).camelize().s + '.json';
+            fs.readFile(file, (err, file) => {
+                if (err && 'ENOENT' === err.code) done();
+                if (err && 'ENOENT' !== err.code) done(err);
+                client.write(file);
+                client.on('data', (data) => {
+                    let req = JSON.parse(file);
+                    let rsp = JSON.parse(data.toString());
+                    finished(req, rsp, done);
+                });
+            });
+        });
+    });
+}
+
+describe('Config', function() {
+
+    beforeEach(() => {
         client = net.createConnection(options, () => {
             // console.log('connected to server!');
         });
@@ -48,77 +72,32 @@ describe('Config', function() {
         });
     });
 
-    afterEach(function() {
+    afterEach(() => {
         client.end();
     });
 
-    let modules = ['address\\group', 'address\\address'];
+    let modules = [
+        'address\\group',
+        // 'address\\address',
+        // 'schedule\\group',
+        // 'schedule\\onetime',
+        // 'schedule\\recurring',
+        // 'fortiGuard'
+    ];
+
+    let forms = [
+        'fortiGuard'
+    ];
 
     modules.forEach((item) => {
-        describe(item + ' getAll', function() {
-            it('should getAll success!', function(done) {
-                fs.readFile(path + '\\' + item + 'GetAll.json', (err, file) => {
-                    client.write(file);
-                    client.on('data', (data) => {
-                        let rsp = JSON.parse(data.toString());
-                        done(rsp.code);
-                    });
-                });
-            });
-        });
-
-        describe(item + ' put', () => {
-            it('should put success!', (done) => {
-                fs.readFile(path + '\\' + item + 'Put.json', (err, file) => {
-                    let req = JSON.parse(file);
-                    put = req.params['addrgrp'];
-                    client.write(file);
-                    client.on('data', (data) => {
-                        let rsp = JSON.parse(data.toString());
-                        done(rsp.code);
-                    });
-                });
-            });
-        });
-
-        describe(item + ' get', function() {
-            it('should get success!', function(done) {
-                fs.readFile(path + '\\' + item + 'Get.json', (err, file) => {
-                    client.write(file);
-                    client.on('data', (data) => {
-                        let rsp = JSON.parse(data.toString());
-                        get = rsp.result[0];
-                        get.should.be.eql(put);
-                        done(rsp.code);
-                    });
-                });
-            });
-        });
-
-        describe(item + ' delete', () => {
-            it('should delete success!', (done) => {
-                fs.readFile(path + '\\' + item + 'Delete.json', (err, file) => {
-                    client.write(file);
-                    client.on('data', (data) => {
-                        let rsp = JSON.parse(data.toString());
-                        done(rsp.code);
-                    });
-                });
-            });
-        });
-
-        describe(item + ' get', function() {
-            it('should not get delete item!', function(done) {
-                fs.readFile(path + '\\' + item + 'Get.json', (err, file) => {
-                    client.write(file);
-                    client.on('data', (data) => {
-                        let rsp = JSON.parse(data.toString());
-                        rsp.should.containEql({ code: -1, result: [] });
-                        done();
-                    });
-                });
-            });
+        ['getAll', 'put', 'get', 'delete', 'get'].forEach((method, index) => {
+            factory(item, method, index);
         });
     });
 
+    forms.forEach((item) => {
+        ['put', 'get'].forEach((method, index) => {
+            factory(item, method, index);
+        });
+    });
 });
