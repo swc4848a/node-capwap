@@ -16,30 +16,32 @@ let put;
 let result;
 
 function factory(module, method, index) {
+    let param = module.substring(module.indexOf('\\') + 1);
+
     let finished = (req, rsp, done) => {
         if ('getAll' === method && 0 == index) {
-            done(rsp.code);
+            done(200 === rsp.code ? 0 : rsp.code);
         } else if ('put' === method && 1 == index) {
-            put = req.params[module];
-            done(rsp.code);
+            put = req.params[param];
+            done(200 === rsp.code ? 0 : rsp.code);
         } else if ('get' === method && 2 == index) {
             result = rsp.result[0];
             result.should.be.eql(put);
-            done(rsp.code);
+            done(200 === rsp.code ? 0 : rsp.code);
         } else if ('delete' === method && 3 == index) {
-            done(rsp.code);
+            done(200 === rsp.code ? 0 : rsp.code);
         } else if ('get' === method && 4 == index) {
             rsp.should.containEql({ code: -1, result: [] });
             done();
         } else if ('put' === method && 0 == index) {
-            put = req.params[module];
-            done(rsp.code);
+            put = req.params[param];
+            done(200 === rsp.code ? 0 : rsp.code);
         } else if ('get' === method && 1 == index) {
             result = rsp.result[0];
             result.should.be.eql(put);
-            done(rsp.code);
+            done(200 === rsp.code ? 0 : rsp.code);
         } else {
-            done(rsp.code);
+            done(200 === rsp.code ? 0 : rsp.code);
         }
     };
 
@@ -77,12 +79,11 @@ describe('Config', function() {
     });
 
     let modules = [
-        'address\\group',
+        // 'address\\addrgrp',
         // 'address\\address',
         // 'schedule\\group',
         // 'schedule\\onetime',
         // 'schedule\\recurring',
-        // 'fortiGuard'
     ];
 
     let forms = [
