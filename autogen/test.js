@@ -51,7 +51,7 @@ function factory(module, method, index) {
             fs.readFile(file, (err, file) => {
                 if (err && 'ENOENT' === err.code) done();
                 if (err && 'ENOENT' !== err.code) done(err);
-                client.write(file);
+                client.end(file);
                 client.on('data', (data) => {
                     let req = JSON.parse(file);
                     let rsp = JSON.parse(data.toString());
@@ -84,6 +84,10 @@ describe('Config', function() {
         // 'schedule\\group',
         // 'schedule\\onetime',
         // 'schedule\\recurring',
+        // 'service\\custom',
+        'service\\group',
+        'service\\category',
+        'admin',
     ];
 
     let forms = [

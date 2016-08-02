@@ -152,4 +152,22 @@
         "srcaddr": "srcaddr",
         "dstaddr": "dstaddr"
     }
+}, {
+    "config": "system admin",
+    "type": "table",
+    "key": "name",
+    "params": "admin",
+    "map": {
+        "accprofile": "accprofile",
+        "comments": "comments",
+        "password": "password",
+        "trusthost1": "trusthost1",
+        "trusthost2": "trusthost2",
+        "trusthost3": "trusthost3",
+        "guestAuth": "guest-auth",
+        "guestUsergroups": "guest-usergroups",
+        "remoteAuth": "remote-auth",
+        "wildcard": "wildcard",
+        "remoteGroup": "remote-group"
+    }
 }]
