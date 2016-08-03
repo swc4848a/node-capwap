@@ -170,4 +170,25 @@
         "wildcard": "wildcard",
         "remoteGroup": "remote-group"
     }
+}, {
+    "config": "system accprofile",
+    "type": "table",
+    "key": "name",
+    "params": "accprofile",
+    "map": {
+        "comments": "comments",
+        "admingrp": "admingrp",
+        "updategrp": "updategrp",
+        "authgrp": "authgrp",
+        "sysgrp": "sysgrp",
+        "netgrp": "netgrp",
+        "loggrp": "loggrp",
+        "routegrp": "routegrp",
+        "fwgrp": "fwgrp",
+        "vpngrp": "vpngrp",
+        "utmgrp": "utmgrp",
+        "wanoptgrp": "wanoptgrp",
+        "endpoint-control-grp": "endpoint-control-grp",
+        "wifi": "wifi"
+    }
 }]

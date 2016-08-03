@@ -15,8 +15,9 @@ let client;
 let put;
 let result;
 
-function factory(module, method, index) {
-    let param = module.substring(module.indexOf('\\') + 1);
+function factory(options, method, index) {
+    let module = options.module;
+    let param = options.param ? options.param : module;
 
     let finished = (req, rsp, done) => {
         if ('getAll' === method && 0 == index) {
@@ -31,7 +32,8 @@ function factory(module, method, index) {
         } else if ('delete' === method && 3 == index) {
             done(200 === rsp.code ? 0 : rsp.code);
         } else if ('get' === method && 4 == index) {
-            rsp.should.containEql({ code: -1, result: [] });
+            // todo: check error code
+            rsp.should.containEql({ result: [] });
             done();
         } else if ('put' === method && 0 == index) {
             put = req.params[param];
@@ -52,7 +54,12 @@ function factory(module, method, index) {
                 if (err && 'ENOENT' === err.code) done();
                 if (err && 'ENOENT' !== err.code) done(err);
                 client.end(file);
+                let bufArray = [];
                 client.on('data', (data) => {
+                    bufArray.push(data);
+                });
+                client.on('end', () => {
+                    const data = Buffer.concat(bufArray);
                     let req = JSON.parse(file);
                     let rsp = JSON.parse(data.toString());
                     finished(req, rsp, done);
@@ -68,10 +75,6 @@ describe('Config', function() {
         client = net.createConnection(options, () => {
             // console.log('connected to server!');
         });
-
-        client.on('end', () => {
-            // console.log('disconnected from server');
-        });
     });
 
     afterEach(() => {
@@ -79,19 +82,20 @@ describe('Config', function() {
     });
 
     let modules = [
-        // 'address\\addrgrp',
-        // 'address\\address',
-        // 'schedule\\group',
-        // 'schedule\\onetime',
-        // 'schedule\\recurring',
-        // 'service\\custom',
-        'service\\group',
-        'service\\category',
-        'admin',
+        { module: 'address\\addrgrp', param: 'addrgrp' },
+        { module: 'address\\address', param: 'address' },
+        { module: 'schedule\\group', param: 'scheduleGroup' },
+        { module: 'schedule\\onetime', param: 'scheduleOnetime' },
+        { module: 'schedule\\recurring', param: 'scheduleRecurring' },
+        { module: 'service\\custom', param: 'serviceCustom' },
+        { module: 'service\\group', param: 'serviceGroup' },
+        { module: 'service\\category', param: 'serviceCategory' },
+        { module: 'admin' },
+        // { module: 'accprofile' }
     ];
 
     let forms = [
-        'fortiGuard'
+        // 'fortiGuard'
     ];
 
     modules.forEach((item) => {
