@@ -3,17 +3,26 @@ let should = require('should');
 
 const net = require('net');
 const fs = require('fs');
+const os = require('os');
 
 let options = {
     port: 6020,
     host: '172.16.94.163'
 };
 
-let path = 'D:\\Workspaces\\svn\\CfgServer\\src\\daemon\\cfgsvrd\\test';
+console.log(os.arch());
+
+let path = (
+    'x64' === os.arch() ?
+    'D:\\Workspaces\\svn\\CfgServer\\src\\daemon\\cfgsvrd\\test' :
+    '/home/zqqiang/workspace/gate-cloud/CfgServer/src/daemon/cfgsvrd/test'
+);
 
 let client;
 let put;
 let result;
+
+let sep = ('x64' === os.arch() ? '\\' : '/');
 
 function factory(options, method, index) {
     let module = options.module;
@@ -49,7 +58,7 @@ function factory(options, method, index) {
 
     describe(module + ' ' + method, function() {
         it('should ' + method + ' success!', function(done) {
-            let file = path + '\\' + module + S('_' + method).camelize().s + '.json';
+            let file = path + sep + module + S('_' + method).camelize().s + '.json';
             fs.readFile(file, (err, file) => {
                 if (err && 'ENOENT' === err.code) done();
                 if (err && 'ENOENT' !== err.code) done(err);
@@ -82,21 +91,27 @@ describe('Config', function() {
     });
 
     let modules = [
-        { module: 'address\\addrgrp', param: 'addrgrp' },
-        { module: 'address\\address', param: 'address' },
-        { module: 'schedule\\group', param: 'scheduleGroup' },
-        { module: 'schedule\\onetime', param: 'scheduleOnetime' },
-        { module: 'schedule\\recurring', param: 'scheduleRecurring' },
-        { module: 'service\\custom', param: 'serviceCustom' },
-        { module: 'service\\group', param: 'serviceGroup' },
-        { module: 'service\\category', param: 'serviceCategory' },
+        { module: 'address' + sep + 'addrgrp', param: 'addrgrp' },
+        { module: 'address' + sep + 'address', param: 'address' },
+        { module: 'schedule' + sep + 'group', param: 'scheduleGroup' },
+        { module: 'schedule' + sep + 'onetime', param: 'scheduleOnetime' },
+        { module: 'schedule' + sep + 'recurring', param: 'scheduleRecurring' },
+        { module: 'service' + sep + 'custom', param: 'serviceCustom' },
+        { module: 'service' + sep + 'group', param: 'serviceGroup' },
+        { module: 'service' + sep + 'category', param: 'serviceCategory' },
         { module: 'admin' },
-        { module: 'vip\\vip', param: 'vip' },
+        { module: 'vip' + sep + 'vip', param: 'vip' },
+        { module: 'ippool' + sep + 'ippool', param: 'ippool' },
+        { module: 'shaper' + sep + 'trafficShaper', param: 'trafficShaper' },
+        { module: 'shaper' + sep + 'perIpShaper', param: 'perIpShaper' },
+        // { module: 'shapingPolicy' },
         // { module: 'accprofile' }
     ];
 
     let forms = [
-        // 'fortiGuard'
+        { module: 'fortiGuard' },
+        { module: 'adminSettings' },
+        { module: 'advancedSettings' },
     ];
 
     modules.forEach((item) => {
