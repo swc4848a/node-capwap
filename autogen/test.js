@@ -91,6 +91,7 @@ describe('Config', function() {
         { module: 'service\\group', param: 'serviceGroup' },
         { module: 'service\\category', param: 'serviceCategory' },
         { module: 'admin' },
+        { module: 'vip\\vip', param: 'vip' },
         // { module: 'accprofile' }
     ];
 
