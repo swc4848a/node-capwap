@@ -10,10 +10,10 @@ let options = {
     host: '172.16.94.163'
 };
 
-console.log(os.arch());
+console.log(os.platform());
 
 let path = (
-    'x64' === os.arch() ?
+    'win32' === os.platform() ?
     'D:\\Workspaces\\svn\\CfgServer\\src\\daemon\\cfgsvrd\\test' :
     '/home/zqqiang/workspace/gate-cloud/CfgServer/src/daemon/cfgsvrd/test'
 );
@@ -22,7 +22,7 @@ let client;
 let put;
 let result;
 
-let sep = ('x64' === os.arch() ? '\\' : '/');
+let sep = ('win32' === os.platform() ? '\\' : '/');
 
 function factory(options, method, index) {
     let module = options.module;
