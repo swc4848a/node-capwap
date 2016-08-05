@@ -7,7 +7,7 @@ const os = require('os');
 
 let options = {
     port: 6020,
-    host: '172.16.94.163'
+    host: '172.16.94.162'
 };
 
 console.log(os.platform());
