@@ -5,18 +5,12 @@ const net = require('net');
 const fs = require('fs');
 const os = require('os');
 
-let options = {
-    port: 6020,
-    host: '172.16.94.162'
-};
+let config = JSON.parse(fs.readFileSync('config.json'));
+let options = config.configServer;
+let path = config.testcase;
 
+console.log(config);
 console.log(os.platform());
-
-let path = (
-    'win32' === os.platform() ?
-    'D:\\Workspaces\\svn\\CfgServer\\src\\daemon\\cfgsvrd\\test' :
-    '/home/zqqiang/workspace/gate-cloud/CfgServer/src/daemon/cfgsvrd/test'
-);
 
 let client;
 let put;
