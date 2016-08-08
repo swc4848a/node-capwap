@@ -16,37 +16,66 @@ console.log(os.platform());
 let client;
 let put;
 let result;
+let sn;
 
-function factory(options, method, index) {
+let finished = (req, rsp, done, index, method) => {
+    if ('getAll' === method && 0 == index) {
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('put' === method && 1 == index) {
+        put = req.params[_.keys(req.params)[0]];
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('get' === method && 2 == index) {
+        result = rsp.result[0];
+        result.should.be.eql(put);
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('delete' === method && 3 == index) {
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('get' === method && 4 == index) {
+        // todo: check error code
+        rsp.should.containEql({ result: [] });
+        done();
+    } else if ('put' === method && 0 == index) {
+        put = req.params[_.keys(req.params)[0]];
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('get' === method && 1 == index) {
+        result = rsp.result[0];
+        result.should.be.eql(put);
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else {
+        console.log('method %s, index %d', method, index);
+        done(200 === rsp.code ? 0 : rsp.code);
+    }
+};
+
+let finished7 = (req, rsp, done, index, method) => {
+    if ('get' === method && 0 == index) {
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('new' === method && 1 == index) {
+        put = req.params[_.keys(req.params)[0]];
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('get' === method && 2 == index) {
+        result = rsp.result[0];
+        result.should.be.eql(put);
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('put' === method && 3 == index) {
+        put = req.params[_.keys(req.params)[0]];
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('get' === method && 4 == index) {
+        result = rsp.result[0];
+        result.should.be.eql(put);
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('delete' === method && 0 == index) {
+        done(200 === rsp.code ? 0 : rsp.code);
+    } else if ('get' === method && 1 == index) {
+        rsp.should.containEql({ result: [] });
+        done();
+    } else {
+        done(200 === rsp.code ? 0 : rsp.code);
+    }
+};
+
+function factory(options, method, index, finished) {
     let module = options;
-
-    let finished = (req, rsp, done) => {
-        if ('getAll' === method && 0 == index) {
-            done(200 === rsp.code ? 0 : rsp.code);
-        } else if ('put' === method && 1 == index) {
-            put = req.params[_.keys(req.params)[0]];
-            done(200 === rsp.code ? 0 : rsp.code);
-        } else if ('get' === method && 2 == index) {
-            result = rsp.result[0];
-            result.should.be.eql(put);
-            done(200 === rsp.code ? 0 : rsp.code);
-        } else if ('delete' === method && 3 == index) {
-            done(200 === rsp.code ? 0 : rsp.code);
-        } else if ('get' === method && 4 == index) {
-            // todo: check error code
-            rsp.should.containEql({ result: [] });
-            done();
-        } else if ('put' === method && 0 == index) {
-            put = req.params[_.keys(req.params)[0]];
-            done(200 === rsp.code ? 0 : rsp.code);
-        } else if ('get' === method && 1 == index) {
-            result = rsp.result[0];
-            result.should.be.eql(put);
-            done(200 === rsp.code ? 0 : rsp.code);
-        } else {
-            done(200 === rsp.code ? 0 : rsp.code);
-        }
-    };
 
     describe(module + ' ' + method, function() {
         it('should ' + method + ' success!', function(done) {
@@ -54,16 +83,17 @@ function factory(options, method, index) {
             fs.readFile(file, (err, file) => {
                 if (err && 'ENOENT' === err.code) done();
                 if (err && 'ENOENT' !== err.code) done(err);
-                client.end(file);
+                let req = JSON.parse(file);
+                if (sn !== req.sn) req.sn = sn;
+                client.end(JSON.stringify(req));
                 let bufArray = [];
                 client.on('data', (data) => {
                     bufArray.push(data);
                 });
                 client.on('end', () => {
                     const data = Buffer.concat(bufArray);
-                    let req = JSON.parse(file);
                     let rsp = JSON.parse(data.toString());
-                    finished(req, rsp, done);
+                    finished(req, rsp, done, index, method);
                 });
             });
         });
@@ -82,18 +112,26 @@ describe('Config', function() {
         client.end();
     });
 
-    let modules = config.tables;
+    let tables = config.tables;
     let forms = config.forms;
+    let tablesWithNew = config.tablesWithNew;
+    sn = config.sn;
 
-    modules.forEach((item) => {
+    tablesWithNew.forEach((item) => {
+        ['get', 'new', 'get', 'put', 'get', 'delete', 'get'].forEach((method, index) => {
+            factory(item, method, index, finished7);
+        });
+    });
+
+    tables.forEach((item) => {
         ['getAll', 'put', 'get', 'delete', 'get'].forEach((method, index) => {
-            factory(item, method, index);
+            factory(item, method, index, finished);
         });
     });
 
     forms.forEach((item) => {
         ['put', 'get'].forEach((method, index) => {
-            factory(item, method, index);
+            factory(item, method, index, finished);
         });
     });
 });

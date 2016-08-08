@@ -3,6 +3,7 @@
         "port": 6020,
         "host": "172.16.94.163"
     },
+    "sn": "FGT60D4615007833",
     "testcase": "/home/zqqiang/Workspace/gateManager/CfgServer/src/daemon/cfgsvrd/test/",
     "tables": [
         "address/addrgrp",
@@ -15,13 +16,44 @@
         "service/category",
         "admin",
         "vip/vip",
+        "vip/vipgrp",
         "ippool/ippool",
         "shaper/trafficShaper",
-        "shaper/perIpShaper"
+        "shaper/perIpShaper",
+        "shapingPolicy"
     ],
     "forms": [
         "fortiGuard",
         "adminSettings",
+        "admin",
+        "dns",
+        "user/userSettings",
+        "utm/utmAntiVirus",
+        "utm/utmCloudAccess",
+        "utm/utmDnsFilter",
+        "utm/utmProxyOptions",
+        "utm/utmSslInspection",
         "advancedSettings"
+    ],
+    "tablesWithNew": [
+        "user/userDevice",
+        "user/userDeviceGroup",
+        "user/userFsso",
+        "user/userFssoPolling",
+        "user/userLdapServers",
+        "user/userRadiusServers",
+        "user/userRadiusSso",
+        "user/userUser",
+        "user/userUserGroup",
+        "utm/utmWebProfile",
+        "user/userDeviceCategory",
+        "dhcpServer",
+        "interface",
+        "routing",
+        "utm/utmWebRating"
+    ],
+    "todos": [
+        "accprofile: coredump if delete after put",
+        "utm/utmWebFilter"
     ]
 }
