@@ -4,6 +4,7 @@ let should = require('should');
 const net = require('net');
 const fs = require('fs');
 const os = require('os');
+const _ = require('underscore');
 
 let config = JSON.parse(fs.readFileSync('config.json'));
 let options = config.configServer;
@@ -16,17 +17,14 @@ let client;
 let put;
 let result;
 
-let sep = ('win32' === os.platform() ? '\\' : '/');
-
 function factory(options, method, index) {
-    let module = options.module;
-    let param = options.param ? options.param : module;
+    let module = options;
 
     let finished = (req, rsp, done) => {
         if ('getAll' === method && 0 == index) {
             done(200 === rsp.code ? 0 : rsp.code);
         } else if ('put' === method && 1 == index) {
-            put = req.params[param];
+            put = req.params[_.keys(req.params)[0]];
             done(200 === rsp.code ? 0 : rsp.code);
         } else if ('get' === method && 2 == index) {
             result = rsp.result[0];
@@ -39,7 +37,7 @@ function factory(options, method, index) {
             rsp.should.containEql({ result: [] });
             done();
         } else if ('put' === method && 0 == index) {
-            put = req.params[param];
+            put = req.params[_.keys(req.params)[0]];
             done(200 === rsp.code ? 0 : rsp.code);
         } else if ('get' === method && 1 == index) {
             result = rsp.result[0];
@@ -52,7 +50,7 @@ function factory(options, method, index) {
 
     describe(module + ' ' + method, function() {
         it('should ' + method + ' success!', function(done) {
-            let file = path + sep + module + S('_' + method).camelize().s + '.json';
+            let file = path + module + S('_' + method).camelize().s + '.json';
             fs.readFile(file, (err, file) => {
                 if (err && 'ENOENT' === err.code) done();
                 if (err && 'ENOENT' !== err.code) done(err);
@@ -84,29 +82,8 @@ describe('Config', function() {
         client.end();
     });
 
-    let modules = [
-        { module: 'address' + sep + 'addrgrp', param: 'addrgrp' },
-        { module: 'address' + sep + 'address', param: 'address' },
-        { module: 'schedule' + sep + 'group', param: 'scheduleGroup' },
-        { module: 'schedule' + sep + 'onetime', param: 'scheduleOnetime' },
-        { module: 'schedule' + sep + 'recurring', param: 'scheduleRecurring' },
-        { module: 'service' + sep + 'custom', param: 'serviceCustom' },
-        { module: 'service' + sep + 'group', param: 'serviceGroup' },
-        { module: 'service' + sep + 'category', param: 'serviceCategory' },
-        { module: 'admin' },
-        { module: 'vip' + sep + 'vip', param: 'vip' },
-        { module: 'ippool' + sep + 'ippool', param: 'ippool' },
-        { module: 'shaper' + sep + 'trafficShaper', param: 'trafficShaper' },
-        { module: 'shaper' + sep + 'perIpShaper', param: 'perIpShaper' },
-        // { module: 'shapingPolicy' },
-        // { module: 'accprofile' }
-    ];
-
-    let forms = [
-        { module: 'fortiGuard' },
-        { module: 'adminSettings' },
-        { module: 'advancedSettings' },
-    ];
+    let modules = config.tables;
+    let forms = config.forms;
 
     modules.forEach((item) => {
         ['getAll', 'put', 'get', 'delete', 'get'].forEach((method, index) => {
