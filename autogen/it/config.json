@@ -19,8 +19,7 @@
         "vip/vipgrp",
         "ippool/ippool",
         "shaper/trafficShaper",
-        "shaper/perIpShaper",
-        "shapingPolicy"
+        "shaper/perIpShaper"
     ],
     "forms": [
         "fortiGuard",
@@ -50,6 +49,7 @@
         "user/userDeviceCategory",
         "dhcpServer",
         "interface",
+        "shapingPolicy",
         "routing",
         "utm/utmWebRating"
     ],
