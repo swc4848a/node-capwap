@@ -33,6 +33,7 @@
         "utm/utmDnsFilter",
         "utm/utmProxyOptions",
         "utm/utmSslInspection",
+        "utm/utmWebFilter",
         "advancedSettings"
     ],
     "tablesWithNew": [
@@ -53,7 +54,6 @@
         "utm/utmWebRating"
     ],
     "todos": [
-        "accprofile: coredump if delete after put",
-        "utm/utmWebFilter"
+        "accprofile: coredump if delete after put"
     ]
 }
