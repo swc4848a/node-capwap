@@ -55,7 +55,7 @@ let finished7 = (req, rsp, done, index, method) => {
         done(200 === rsp.code ? 0 : rsp.code);
     } else if ('get' === method && 2 == index) {
         result = _.omit(rsp.result[0], 'id');
-        result.should.be.eql(_.omit(put, 'key'));
+        result.should.containEql(_.omit(put, 'key'));
         done(200 === rsp.code ? 0 : rsp.code);
     } else if ('put' === method && 3 == index) {
         put = req.params[_.keys(req.params)[0]];

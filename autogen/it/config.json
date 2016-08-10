@@ -41,18 +41,23 @@
         "user/userFsso",
         "user/userFssoPolling",
         "user/userLdapServers",
+        "utm/utmWebProfile",
+        "user/userDeviceCategory",
+        "interface",
         "user/userRadiusServers",
+        "utm/utmWebRating",
         "user/userRadiusSso",
         "user/userUser",
         "user/userUserGroup",
-        "utm/utmWebProfile",
-        "user/userDeviceCategory",
         "dhcpServer",
-        "interface",
         "shapingPolicy",
-        "routing",
-        "utm/utmWebRating"
+        "routing"
     ],
+    "success": {
+        "new": [],
+        "tables": [],
+        "forms": []
+    },
     "todos": [
         "accprofile: coredump if delete after put"
     ]
