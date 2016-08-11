@@ -17,6 +17,7 @@ let client;
 let put;
 let result;
 let sn;
+let newRsp;
 
 let finished = (req, rsp, done, index, method) => {
     if ('getAll' === method && 0 == index) {
@@ -52,6 +53,7 @@ let finished7 = (req, rsp, done, index, method) => {
         done(200 === rsp.code ? 0 : rsp.code);
     } else if ('new' === method && 1 == index) {
         put = req.params[_.keys(req.params)[0]];
+        newRsp = rsp.result;
         done(200 === rsp.code ? 0 : rsp.code);
     } else if ('get' === method && 2 == index) {
         result = _.omit(rsp.result[0], 'id');
@@ -62,7 +64,7 @@ let finished7 = (req, rsp, done, index, method) => {
         done(200 === rsp.code ? 0 : rsp.code);
     } else if ('get' === method && 4 == index) {
         result = rsp.result[0];
-        result.should.containEql(_.omit(put, 'key'));
+        result.should.containEql(_.omit(put, 'key', 'seqNum'));
         done(200 === rsp.code ? 0 : rsp.code);
     } else if ('delete' === method && 0 == index) {
         done(200 === rsp.code ? 0 : rsp.code);
@@ -85,6 +87,29 @@ function factory(options, method, index, finished) {
                 if (err && 'ENOENT' !== err.code) done(err);
                 let req = JSON.parse(file);
                 if (sn !== req.sn) req.sn = sn;
+                if ('put' === method) {
+                    let param = req.params[_.keys(req.params)[0]];
+                    if (param.id) {
+                        param.id = newRsp.id
+                    } else if (param.key) {
+                        if (_.isNumber(param.key)) {
+                            param.key = newRsp.id
+                        }
+                    } else if (param.name) {
+
+                    } else {
+                        newRsp.id ? (param.seqNum = newRsp.id) : (undefined);
+                    }
+                } else if ('get' === method) {
+                    let id = newRsp ? [newRsp.id] : [];
+                    if (req.params && req.params.id) {
+                        req.params.id = id;
+                    } else if (req.params && req.params.seqNum) {
+                        req.params.seqNum = id;
+                    }
+                } else if ('delete' === method) {
+                    req.params.id ? (req.params.id = [newRsp.id]) : (req.params.seqNum = [newRsp.id]);
+                }
                 client.end(JSON.stringify(req));
                 let bufArray = [];
                 client.on('data', (data) => {
