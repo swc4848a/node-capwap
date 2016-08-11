@@ -27,8 +27,12 @@
         "admin",
         "dns",
         "user/userSettings",
+        "utm/utmAntiVirus",
         "utm/utmProxyOptions",
-        "advancedSettings"
+        "utm/utmCloudAccess",
+        "advancedSettings",
+        "utm/utmDnsFilter",
+        "utm/utmSslInspection"
     ],
     "tablesWithNew": [
         "user/userDeviceGroup",
@@ -96,11 +100,6 @@
     "todos": [
         "accprofile: coredump if delete after put",
         "user/userRadiusServers",
-        "utm/utmAntiVirus",
-        "user/userUserGroup",
-        "utm/utmCloudAccess",
-        "utm/utmDnsFilter",
-        "utm/utmSslInspection",
-        "utm/utmWebFilter"
+        "user/userUserGroup"
     ]
 }
