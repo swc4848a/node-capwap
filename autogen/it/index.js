@@ -6,7 +6,7 @@ const fs = require('fs');
 const os = require('os');
 const _ = require('underscore');
 
-let config = JSON.parse(fs.readFileSync('config.json'));
+let config = JSON.parse(fs.readFileSync('/home/zqqiang/Workspace/github/node-capwap/autogen/it/config.json'));
 let options = config.configServer;
 let path = config.testcase;
 
@@ -98,7 +98,7 @@ function factory(options, method, index, finished) {
                     } else if (param.name) {
 
                     } else {
-                        newRsp.id ? (param.seqNum = newRsp.id) : (undefined);
+                        (newRsp && newRsp.id) ? (param.seqNum = newRsp.id) : (undefined);
                     }
                 } else if ('get' === method) {
                     let id = newRsp ? [newRsp.id] : [];

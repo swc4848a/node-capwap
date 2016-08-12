@@ -5,6 +5,21 @@
     },
     "sn": "FGT60D4615007833",
     "testcase": "/home/zqqiang/Workspace/gateManager/CfgServer/src/daemon/cfgsvrd/test/",
+    "tablesWithNew": [
+        "user/userDeviceGroup",
+        "user/userFsso",
+        "user/userFssoPolling",
+        "user/userLdapServers",
+        "utm/utmWebProfile",
+        "user/userDeviceCategory",
+        "utm/utmWebRating",
+        "user/userRadiusSso",
+        "user/userUser",
+        "dhcpServer",
+        "shapingPolicy",
+        "routing",
+        "user/userDevice"
+    ],
     "tables": [
         "address/addrgrp",
         "address/address",
@@ -28,24 +43,11 @@
         "dns",
         "user/userSettings",
         "utm/utmAntiVirus",
-        "utm/utmProxyOptions",
         "utm/utmCloudAccess",
-        "advancedSettings",
         "utm/utmDnsFilter",
-        "utm/utmSslInspection"
-    ],
-    "tablesWithNew": [
-        "user/userDeviceGroup",
-        "user/userFsso",
-        "user/userFssoPolling",
-        "user/userLdapServers",
-        "user/userDeviceCategory",
-        "user/userRadiusSso",
-        "user/userUser",
-        "dhcpServer",
-        "shapingPolicy",
-        "routing",
-        "user/userDevice"
+        "utm/utmProxyOptions",
+        "utm/utmSslInspection",
+        "advancedSettings"
     ],
     "success": {
         "new": [
@@ -100,6 +102,8 @@
     "todos": [
         "accprofile: coredump if delete after put",
         "user/userRadiusServers",
-        "user/userUserGroup"
+        "user/userUserGroup",
+        "interface",
+        "utm/utmWebFilter"
     ]
 }
