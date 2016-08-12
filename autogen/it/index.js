@@ -108,7 +108,11 @@ function factory(options, method, index, finished) {
                         req.params.seqNum = id;
                     }
                 } else if ('delete' === method) {
-                    req.params.id ? (req.params.id = [newRsp.id]) : (req.params.seqNum = [newRsp.id]);
+                    if (req.params.id) {
+                        req.params.id = [newRsp.id];
+                    } else if (req.params.seqNum) {
+                        req.params.seqNum = [newRsp.id]
+                    }
                 }
                 client.end(JSON.stringify(req));
                 let bufArray = [];

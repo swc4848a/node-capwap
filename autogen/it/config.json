@@ -12,9 +12,11 @@
         "user/userLdapServers",
         "utm/utmWebProfile",
         "user/userDeviceCategory",
+        "interface",
         "utm/utmWebRating",
         "user/userRadiusSso",
         "user/userUser",
+        "user/userUserGroup",
         "dhcpServer",
         "shapingPolicy",
         "routing",
@@ -34,7 +36,8 @@
         "vip/vipgrp",
         "ippool/ippool",
         "shaper/trafficShaper",
-        "shaper/perIpShaper"
+        "shaper/perIpShaper",
+        "accprofile"
     ],
     "forms": [
         "fortiGuard",
@@ -47,6 +50,7 @@
         "utm/utmDnsFilter",
         "utm/utmProxyOptions",
         "utm/utmSslInspection",
+        "utm/utmWebFilter",
         "advancedSettings"
     ],
     "success": {
@@ -66,7 +70,8 @@
             "dhcpServer",
             "shapingPolicy",
             "routing",
-            "user/userDevice"
+            "user/userDevice",
+            "accprofile"
         ],
         "tables": [
             "address/addrgrp",
@@ -100,10 +105,6 @@
         ]
     },
     "todos": [
-        "accprofile: coredump if delete after put",
-        "user/userRadiusServers",
-        "user/userUserGroup",
-        "interface",
-        "utm/utmWebFilter"
+        "user/userRadiusServers"
     ]
 }
