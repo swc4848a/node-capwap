@@ -1,0 +1,23 @@
+{
+    "action": "accprofilePut",
+    "sn": "FGT60D4615007833",
+    "params": {
+        "accprofile": {
+            "name": "test",
+            "comments": "one",
+            "admingrp": "read",
+            "updategrp": "read-write",
+            "authgrp": "read",
+            "sysgrp": "read-write",
+            "netgrp": "read",
+            "loggrp": "read-write",
+            "routegrp": "read",
+            "fwgrp": "read-write",
+            "vpngrp": "read",
+            "utmgrp": "read-write",
+            "wanoptgrp": "read",
+            "endpoint-control-grp": "read-write",
+            "wifi": "read"
+        }
+    }
+}

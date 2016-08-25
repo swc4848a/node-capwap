@@ -1,0 +1,1 @@
+{"action":"trafficShaperPut","sn":"FGT60D4615007833","params":{"trafficShaper":{"name":"test","guaranteedBandwidth":"","maximumBandwidth":"","priority":"","diffserv":"","diffservcode":""}}}
