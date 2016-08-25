@@ -1,1 +1,0 @@
-{"action":"shapingPolicyPut","sn":"FGT60D4615007833","params":{"shapingPolicy":{"seqNum":1,"status":"","service":"","application":"","appCategory":"","urlCategory":"","dstintf":"","trafficShaper":"","trafficShaperReverse":"","perIpShaper":"","srcaddr":"","dstaddr":""}}}

@@ -1,7 +1,0 @@
-{
-    "action": "accprofileGet",
-    "sn": "FGT60D4615007833",
-    "params": {
-        "name": ["test"]
-    }
-}

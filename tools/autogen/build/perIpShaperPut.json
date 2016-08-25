@@ -1,1 +1,0 @@
-{"action":"perIpShaperPut","sn":"FGT60D4615007833","params":{"perIpShaper":{"name":"test","maxBandwidth":"","maxConcurrentSession":"","diffservForward":"","diffservReverse":"","diffservcodeForward":"","diffservcodeRev":""}}}
