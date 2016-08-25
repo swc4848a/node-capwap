@@ -45,18 +45,26 @@ BEGIN {RS == ""} {
     map["SystemV/YST9YDT"]="US/Alaska"
     map["VST"]="Asia/Ho_Chi_Minh"
 
+    out = "";
+
     if (map[$1]) {
-        "tail -n 1 /usr/share/zoneinfo/"map[$1] | getline out;
+        cmd = "tail -n 1 /usr/share/zoneinfo/"map[$1]
+        cmd | getline out;
+        close(cmd)
+
         if (length(out)==0) {
-            print map[$1]" not exist"
-            # system("tail -n 1 /usr/share/zoneinfo/"map[$1])
+            print map[$1]" not exist for map"
+            system("tail -n 1 /usr/share/zoneinfo/"map[$1])
         }
     }
     else {
-        "tail -n 1 /usr/share/zoneinfo/"$1 | getline out;
+        cmd = "tail -n 1 /usr/share/zoneinfo/"$1
+        cmd | getline out;
+        close(cmd)
+
         if (length(out)==0) {
-            print $1" not exist"
-            # system("tail -n 1 /usr/share/zoneinfo/"$1)
+            print $1" not exist for ori"
+            system("tail -n 1 /usr/share/zoneinfo/"$1)
         }
     }
 
