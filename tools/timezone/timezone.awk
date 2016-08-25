@@ -44,6 +44,18 @@ BEGIN {RS == ""} {
     map["SystemV/YST9"]="Etc/GMT+9"
     map["SystemV/YST9YDT"]="US/Alaska"
     map["VST"]="Asia/Ho_Chi_Minh"
+    map["Chile/EasterIsland"]="CST6CDT"
+    map["Pacific/Easter"]="CST6CDT"
+    map["America/Santiago"]="America/Thule"
+    map["Chile/Continental"]="America/Thule"
+    map["Antarctica/Palmer"]="America/Thule"
+    map["America/Godthab"]="America/Miquelon"
+    map["Asia/Amman"]="Asia/Beirut"
+    map["Asia/Gaza"]="Asia/Beirut"
+    map["Asia/Hebron"]="Asia/Beirut"
+    map["Asia/Jerusalem"]="Asia/Beirut"
+    map["Asia/Tel_Aviv"]="Asia/Beirut"
+    map["Israel"]="Asia/Beirut"
 
     out = "";
 
