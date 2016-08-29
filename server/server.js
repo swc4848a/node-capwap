@@ -12,8 +12,11 @@ var debug = require('debug')('node-capwap::server::server');
 server.on('listening', function() {
 	var address = server.address();
 	debug('UDP Server listening on ' + address.address + ":" + address.port);
-	state.INIT_COMPLETE();
 });
+
+function startDiscovery(server, request) {
+	
+};
 
 server.on('message', function(message, remote) {
 	context.remote = remote;
@@ -21,6 +24,8 @@ server.on('message', function(message, remote) {
 		var type = request.controlHeader.messageType;
 		if (enumType.messageType.DISCOVERY_REQUEST == type) {
 			debug('Receive Discover Request');
+			startDiscovery(server, request);
+			state.INIT_COMPLETE();
 			state.LOCAL_WTP_CONN(server, request);
 		} else if (enumType.messageType.JOIN_REQUEST === type) {
 			debug('Receive Join Request');

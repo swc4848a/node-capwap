@@ -23,6 +23,7 @@ exports.discoveryRequestProcess = function(server, request) {
 	if (context.getWtpHashByIpControlPort(context.remote.address, context.remote.port)) {
 		// any discovery msg from this ip/port can take over previous wtp ws
 		// todo: shutdown already running session
+		debug("can not get wtp by ip port!");
 		return;
 	}
 

@@ -53,15 +53,21 @@ Changes for each release.
 Thu Oct 1 09:00:00 UTC 2015
 
  * CAPWAP control channel protocol realization, support basic message type for ap connect
- * use [fschaefer/Stately.js](https://github.com/fschaefer/Stately.js) as DSL state machine
- * replace console.log with [visionmedia/debug](https://github.com/visionmedia/debug)
+ * Use [fschaefer/Stately.js](https://github.com/fschaefer/Stately.js) as DSL state machine
+ * Replace console.log with [visionmedia/debug](https://github.com/visionmedia/debug)
 
 #### Version 0.0.2
 
 Thu Nov 4 09:00:00 UTC 2015
 
  * Add wtp-hash, account-context, wtp-session to manage protocol interaction  
- * Add config file,  
+ * Add config file  
+
+#### Version 0.0.3
+
+Thu Aug 29 09:00:00 UTC 2016
+
+ * Support multiple client connections
 
 
 # License
