@@ -14,19 +14,13 @@ server.on('listening', function() {
 	debug('UDP Server listening on ' + address.address + ":" + address.port);
 });
 
-function startDiscovery(server, request) {
-	
-};
-
 server.on('message', function(message, remote) {
-	context.remote = remote;
 	decoder.parse(message, function(request) {
 		var type = request.controlHeader.messageType;
 		if (enumType.messageType.DISCOVERY_REQUEST == type) {
 			debug('Receive Discover Request');
-			startDiscovery(server, request);
-			state.INIT_COMPLETE();
-			state.LOCAL_WTP_CONN(server, request);
+			var context = new Context();
+			context.state.LOCAL_WTP_CONN(server, request);
 		} else if (enumType.messageType.JOIN_REQUEST === type) {
 			debug('Receive Join Request');
 			state.JOIN_REQ_RECV(server, request);

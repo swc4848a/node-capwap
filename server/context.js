@@ -4,9 +4,18 @@ var _ = require('underscore');
 var enumType = require('../capwap/enum');
 var debug = require('debug')('node-capwap::server::context');
 
-var context = exports = module.exports = {};
+// var context = exports = module.exports = {};
 
-context.init = function init() {
+module.exports = Context;
+
+function Context(ip, port) {
+	this.ip = ip;
+	this.port = port;
+	this.state = new State();
+	this.setup();
+}
+
+Context.prototype.setup = function() {
 	this.sequenceNumber = 0;
 	this.wtpHash = [{
 		sn: 'FP320C3X14012026',
@@ -18,6 +27,7 @@ context.init = function init() {
 
 		}]
 	}];
+	this.state.INIT_COMPLETE();
 };
 
 context.getWtpHashByIpControlPort = function getWtpHashByIpControlPort(ip, port) {
@@ -36,3 +46,7 @@ context.getWtpHashBySn = function getWtpHashBySn(sn) {
 context.addIpControlPortToWtpHash = function addIpControlPortToWtpHash(wtpHash) {
 
 };
+
+context.addIpPortHashEntry = (ip, port) => {
+
+}
