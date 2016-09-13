@@ -2,6 +2,7 @@
 
 var _ = require('underscore');
 var enumType = require('../capwap/enum');
+var State = require('../server/state');
 var debug = require('debug')('node-capwap::server::context');
 
 // var context = exports = module.exports = {};
