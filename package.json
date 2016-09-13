@@ -43,7 +43,7 @@
     "react-highcharts": "^8.2.0",
     "react-router": "^2.2.2",
     "react-select": "^1.0.0-beta12",
-    "reactable": "^0.13.0",
+    "reactable": "^0.13.2",
     "serve-favicon": "^2.3.0",
     "stately.js": "fschaefer/Stately.js",
     "tap": "isaacs/node-tap",

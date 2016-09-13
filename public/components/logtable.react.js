@@ -2,7 +2,7 @@ var React = require('react');
 var _ = require('underscore');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
-var ReactTable = require('Reactable').Table;
+var ReactTable = require('reactable').Table;
 var Settings = require('./logsettings.react');
 
 var ContentHeader = React.createClass({
