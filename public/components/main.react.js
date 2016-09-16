@@ -11,7 +11,7 @@ var Main = React.createClass({
                 <MainHeader />
                 <MainRouter />
                 <MainFooter />
-        	</div>
+            </div>
         );
     }
 });
