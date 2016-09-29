@@ -28,9 +28,15 @@
 * 
 * FAP Version from build0330-0399, FAP-S Version from build0150-0199
 * 
-* DISCOVERY/JOIN SN VERSION ACTIVE ACCOUNT
+* ---------------------------------------------------------------------------------------------------------------------------
+* DISCOVERY SN VERSION ACTIVE ACCOUNT
 * 
-* ${BUILD_LOG_REGEX, regex="\\d+\\s+[\\w+]{16}", showTruncatedLines=false}
+* ${BUILD_LOG_REGEX, regex="\\d+\\s+[\\w+]{16}.*[=>]\\s+discovery", showTruncatedLines=false}
+* 
+* ---------------------------------------------------------------------------------------------------------------------------
+* JOIN SN VERSION ACTIVE ACCOUNT
+* 
+* ${BUILD_LOG_REGEX, regex="\\d+\\s+[\\w+]{16}.*[=>]\\s+join", showTruncatedLines=false}
 * 
 * Check console output at $BUILD_URL to view the results.
 
