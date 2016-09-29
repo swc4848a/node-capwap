@@ -10,44 +10,44 @@ var debug = require('debug')('node-capwap::server::context');
 module.exports = Context;
 
 function Context(ip, port) {
-	this.ip = ip;
-	this.port = port;
-	this.state = new State();
-	this.setup();
+    this.ip = ip;
+    this.port = port;
+    this.state = new State();
+    this.setup();
 }
 
 Context.prototype.setup = function() {
-	this.sequenceNumber = 0;
-	this.wtpHash = [{
-		sn: 'FP320C3X14012026',
-		adminState: 0,
-		radio: [{
-			mode: enumType.wtpRadioMode.RMODE_WTP,
-			type: enumType.wtpRadioType.CW_11_RADIO_TYPE_11a
-		}, {
+    this.sequenceNumber = 0;
+    this.wtpHash = [{
+        sn: 'FP320C3X14012026',
+        adminState: 0,
+        radio: [{
+            mode: enumType.wtpRadioMode.RMODE_WTP,
+            type: enumType.wtpRadioType.CW_11_RADIO_TYPE_11a
+        }, {
 
-		}]
-	}];
-	this.state.INIT_COMPLETE();
+        }]
+    }];
+    this.state.INIT_COMPLETE();
 };
 
-context.getWtpHashByIpControlPort = function getWtpHashByIpControlPort(ip, port) {
-	return _.findWhere(this.wtpHash, {
-		address: ip,
-		port: port
-	});
+context.prototype.getWtpHashByIpControlPort = function(ip, port) {
+    return _.findWhere(this.wtpHash, {
+        address: ip,
+        port: port
+    });
 };
 
-context.getWtpHashBySn = function getWtpHashBySn(sn) {
-	return _.findWhere(this.wtpHash, {
-		sn: sn
-	});
+context.prototype.getWtpHashBySn = function(sn) {
+    return _.findWhere(this.wtpHash, {
+        sn: sn
+    });
 };
 
-context.addIpControlPortToWtpHash = function addIpControlPortToWtpHash(wtpHash) {
+context.prototype.addIpControlPortToWtpHash = function(wtpHash) {
 
 };
 
-context.addIpPortHashEntry = (ip, port) => {
+context.prototype.addIpPortHashEntry = (ip, port) => {
 
 }
