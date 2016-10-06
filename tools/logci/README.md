@@ -13,11 +13,11 @@
 
 ### jenkins
 #### SSH Exec Command
-* cat /home/logsu/logci/statistics/discovery/logci.log.* | gawk -F ' ' '{if(length($2)==16) array[$2]+=$1} END {n = asort(array, dest); for (i in array) {sn=""i"";sql="SELECT ap.fwVersion,ap.active,a.email FROM ap_ap AS ap JOIN ap_network AS n ON ap.apNetworkOid = n.oid JOIN account AS a ON a.oid = n.accountOid WHERE ap.sn=\\\""sn"\\\""; cmd="mysql -u forticrm -pflzx3kc -s -N -h 192.168.223.37 portal -e \""sql"\""; while(cmd|getline){print array[i]" "i" "$1" "$2" "$3" => discovery"};close(cmd);}}' | grep -v 12345678 | grep -E "build03[3-9][0-9]|build01[5-9][0-9]" | sort -k1 -n -r;
+* cat /home/logsu/logci/statistics/discovery/logci.log.* | gawk -F ' ' '{if(length($2)==16) array[$2]+=$1} END {n = asort(array, dest); sql="SELECT ap.sn,ap.fwVersion,a.email FROM ap_ap AS ap JOIN ap_network AS n ON ap.apNetworkOid = n.oid JOIN account AS a ON a.oid = n.accountOid WHERE ap.active=1"; cmd="mysql -u forticrm -pflzx3kc -s -N -h 192.168.223.37 portal -e \""sql"\""; while(cmd|getline){version[$1]=$2;email[$1]=$3;};close(cmd); for (i in array) {sn=""i""; print array[i]" "sn" "version[sn]" 1 "email[sn]" => discovery";}}' | grep -v 12345678 | grep -E "build03[3-9][0-9]|build01[5-9][0-9]" | sort -k1 -n -r;
 
 * rm /home/logsu/logci/statistics/discovery/logci.log*;
 
-* cat /home/logsu/logci/statistics/join/logci.log.* | gawk -F ' ' '{if(length($2)==16) array[$2]+=$1} END {n = asort(array, dest); for (i in array) {sn=""i"";sql="SELECT ap.fwVersion,ap.active,a.email FROM ap_ap AS ap JOIN ap_network AS n ON ap.apNetworkOid = n.oid JOIN account AS a ON a.oid = n.accountOid WHERE ap.sn=\\\""sn"\\\""; cmd="mysql -u forticrm -pflzx3kc -s -N -h 192.168.223.37 portal -e \""sql"\""; while(cmd|getline){print array[i]" "i" "$1" "$2" "$3" => join"};close(cmd);}}' | grep -v 12345678 | grep -E "build03[3-9][0-9]|build01[5-9][0-9]" | sort -k1 -n -r;
+* cat /home/logsu/logci/statistics/join/logci.log.* | gawk -F ' ' '{if(length($2)==16) array[$2]+=$1} END {n = asort(array, dest); sql="SELECT ap.sn,ap.fwVersion,a.email FROM ap_ap AS ap JOIN ap_network AS n ON ap.apNetworkOid = n.oid JOIN account AS a ON a.oid = n.accountOid WHERE ap.active=1"; cmd="mysql -u forticrm -pflzx3kc -s -N -h 192.168.223.37 portal -e \""sql"\""; while(cmd|getline){version[$1]=$2;email[$1]=$3;};close(cmd); for (i in array) {sn=""i""; print array[i]" "sn" "version[sn]" 1 "email[sn]" => join";}}' | grep -v 12345678 | grep -E "build03[3-9][0-9]|build01[5-9][0-9]" | sort -k1 -n -r;
 
 * rm /home/logsu/logci/statistics/join/logci.log*;
 
