@@ -11,8 +11,8 @@ function log(event, oldState, newState) {
     debug(transition);
 }
 
-function State() {
-    this.session = new Session();
+function State(context) {
+    this.session = new Session(context);
     this.setup();
     this.machine = new Stately(this.statesObject);
     this.bind(log);

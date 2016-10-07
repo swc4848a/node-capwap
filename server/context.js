@@ -12,7 +12,7 @@ module.exports = Context;
 function Context(ip, port) {
     this.ip = ip;
     this.port = port;
-    this.state = new State();
+    this.state = new State(this);
     this.setup();
 }
 
@@ -31,23 +31,23 @@ Context.prototype.setup = function() {
     this.state.INIT_COMPLETE();
 };
 
-context.prototype.getWtpHashByIpControlPort = function(ip, port) {
+Context.prototype.getWtpHashByIpControlPort = function(ip, port) {
     return _.findWhere(this.wtpHash, {
         address: ip,
         port: port
     });
 };
 
-context.prototype.getWtpHashBySn = function(sn) {
+Context.prototype.getWtpHashBySn = function(sn) {
     return _.findWhere(this.wtpHash, {
         sn: sn
     });
 };
 
-context.prototype.addIpControlPortToWtpHash = function(wtpHash) {
+Context.prototype.addIpControlPortToWtpHash = function(wtpHash) {
 
 };
 
-context.prototype.addIpPortHashEntry = (ip, port) => {
+Context.prototype.addIpPortHashEntry = (ip, port) => {
 
 }

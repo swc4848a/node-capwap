@@ -14,8 +14,8 @@ var Context = require('./context');
 
 module.exports = Session;
 
-function Session() {
-    this.context = new Context();
+function Session(context) {
+    this.context = context;
 }
 
 Session.prototype.start = function start() {

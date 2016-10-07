@@ -1,58 +1,60 @@
 'use strict';
 
-var dgram = require('dgram');
-var server = dgram.createSocket('udp4');
+const dgram = require('dgram');
+const server = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
 var session = require('./session');
 var enumType = require('../capwap/enum');
 var state = require('./state');
-var context = require('./context');
+var Context = require('./context');
 var debug = require('debug')('node-capwap::server::server');
 
+let context;
+
 server.on('listening', function() {
-	var address = server.address();
-	debug('UDP Server listening on ' + address.address + ":" + address.port);
+    var address = server.address();
+    debug('UDP Server listening on ' + address.address + ":" + address.port);
 });
 
 server.on('message', function(message, remote) {
-	let key = remote.address + ':' + remote.port;
-	decoder.parse(message, function(request) {
-		var type = request.controlHeader.messageType;
-		if (enumType.messageType.DISCOVERY_REQUEST == type) {
-			debug('Receive Discover Request');
-			this.context[key] = new Context(remote.address, remote.port);
-			this.context[key].state.LOCAL_WTP_CONN(server, request);
-		} else if (enumType.messageType.JOIN_REQUEST === type) {
-			debug('Receive Join Request');
-			this.context[key].state.JOIN_REQ_RECV(server, request);
-		} else if (enumType.messageType.CONFIGURATION_STATUS_REQUEST === type) {
-			debug('Receive Configuration Status Request');
-			this.context[key].state.CFG_STATUS_REQ(server, request);
-		} else if (enumType.messageType.CHANGE_STATE_REQUEST === type) {
-			debug('Receive Change State Request');
-			this.context[key].state.CHG_STATE_EVENT_REQ_RECV(server, request);
-		} else if (enumType.messageType.CONFIGURATION_UPDATE_RESPONSE === type) {
-			debug('Receive Configuration Update Response');
-			this.context[key].state.CFG_UPDATE_RESP_RECV(server, request);
-		} else if (enumType.messageType.IEEE_80211_WLAN_CONFIGURATION_RESPONSE === type) {
-			debug('Receive IEEE 802.11 Configuration Response');
-			this.context[key].state.IEEE_80211_WLAN_CFG_RESP_RC_SUCC(server, request);
-		} else if (enumType.messageType.WTP_EVENT_REQUEST === type) {
-			debug('Receive WTP Event Request');
-			this.context[key].state.WTP_EVENT_REQ_RECV(server, request);
-		} else {
-			console.trace('unknow message [%d]', type);
-		}
-	});
+    let key = remote.address + ':' + remote.port;
+    decoder.parse(message, function(request) {
+        var type = request.controlHeader.messageType;
+        if (enumType.messageType.DISCOVERY_REQUEST == type) {
+            debug('Receive Discover Request');
+            context[key] = new Context(remote.address, remote.port);
+            context[key].state.LOCAL_WTP_CONN(server, request);
+        } else if (enumType.messageType.JOIN_REQUEST === type) {
+            debug('Receive Join Request');
+            context[key].state.JOIN_REQ_RECV(server, request);
+        } else if (enumType.messageType.CONFIGURATION_STATUS_REQUEST === type) {
+            debug('Receive Configuration Status Request');
+            context[key].state.CFG_STATUS_REQ(server, request);
+        } else if (enumType.messageType.CHANGE_STATE_REQUEST === type) {
+            debug('Receive Change State Request');
+            context[key].state.CHG_STATE_EVENT_REQ_RECV(server, request);
+        } else if (enumType.messageType.CONFIGURATION_UPDATE_RESPONSE === type) {
+            debug('Receive Configuration Update Response');
+            context[key].state.CFG_UPDATE_RESP_RECV(server, request);
+        } else if (enumType.messageType.IEEE_80211_WLAN_CONFIGURATION_RESPONSE === type) {
+            debug('Receive IEEE 802.11 Configuration Response');
+            context[key].state.IEEE_80211_WLAN_CFG_RESP_RC_SUCC(server, request);
+        } else if (enumType.messageType.WTP_EVENT_REQUEST === type) {
+            debug('Receive WTP Event Request');
+            context[key].state.WTP_EVENT_REQ_RECV(server, request);
+        } else {
+            console.trace('unknow message [%d]', type);
+        }
+    });
 });
 
 server.on("error", function(err) {
-	console.trace("Server Error:\n" + err.stack);
-	server.close();
+    console.trace("Server Error:\n" + err.stack);
+    server.close();
 });
 
 server.on("close", function(err) {
-	debug("Server close");
+    debug("Server close");
 });
 
 module.exports = server;
