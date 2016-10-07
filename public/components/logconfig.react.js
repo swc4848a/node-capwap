@@ -1,6 +1,8 @@
 var React = require('react');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
+var Select = require('react-select');
+var debug = require('debug')('node-capwap::public::components::logconfig');
 
 var Header = React.createClass({
     render: function() {
@@ -55,7 +57,7 @@ var Content = React.createClass({
                             </div>
                             <div className="box-body">
                             <div className="form-group">
-                                <label for="ip">IP</label>
+                                <label>IP</label>
                                 <input 
                                     type="text"
                                     className="form-control" 
@@ -77,6 +79,33 @@ var Content = React.createClass({
                             </div>
                             <div className="box-footer">
                                 <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="box box-primary">
+                            <div className="box-header with-border">
+                                <h3 className="box-title">Source Config</h3>
+                            </div>
+                            <div className="box-body">
+                                <div className="form-group">
+                                    <label>Data Source</label>
+                                    <Select 
+                                        name="data-source"
+                                        value="logfile"
+                                        options={[
+                                            { value: 'apserver', label: 'APServer' },
+                                            { value: 'logfile', label: 'LogFile' }
+                                        ]}
+                                        searchable={true}
+                                        onChange={(datasource) => {
+                                            debug("onChange: ", datasource);
+                                            this.state.dataSource = datasource;
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

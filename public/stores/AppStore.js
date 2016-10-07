@@ -25,7 +25,8 @@ var _apps = {
     endTime: {},
     graphData: [],
     apServerIp: '',
-    apServerLogStatue: false
+    apServerLogStatue: false,
+    dataSource: ''
 };
 
 function updateCollections() {
