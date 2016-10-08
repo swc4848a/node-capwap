@@ -28,7 +28,7 @@ Context.prototype.setup = function() {
 
         }]
     }];
-    this.state.INIT_COMPLETE();
+    this.state.machine.INIT_COMPLETE();
 };
 
 Context.prototype.getWtpHashByIpControlPort = function(ip, port) {

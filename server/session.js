@@ -6,11 +6,9 @@ var serializer = require('packet').createSerializer();
 var builder = require('../capwap/builder');
 var tool = require('../capwap/tool');
 var enumType = require('../capwap/enum');
-var state = require('./state');
 var message = require('./message');
 var config = require('./config');
 var debug = require('debug')('node-capwap::server::session');
-var Context = require('./context');
 
 module.exports = Session;
 
@@ -19,12 +17,12 @@ function Session(context) {
 }
 
 Session.prototype.start = function start() {
-    this.context.init();
+
 };
 
 Session.prototype.discoveryRequestProcess = function(server, request) {
     // 1. check if ip/port used by other wtp-session
-    if (this.context.getWtpHashByIpControlPort(this.context.remote.address, this.context.remote.port)) {
+    if (this.context.getWtpHashByIpControlPort(this.context.ip, this.context.port)) {
         // any discovery msg from this ip/port can take over previous wtp ws
         // todo: shutdown already running session
         debug("can not get wtp by ip port!");
@@ -40,8 +38,8 @@ Session.prototype.discoveryRequestProcess = function(server, request) {
     }
 
     // 3. udpate wtp hash ip and port
-    wtpHash.ip = this.context.remote.address;
-    wtpHash.port = this.context.remote.port;
+    wtpHash.ip = this.context.ip;
+    wtpHash.port = this.context.port;
 
     // 4. check account sta 
     // if request.messageElement.vsp has wbh sta
@@ -62,7 +60,7 @@ var isWtpSupportDFS = function isWtpSupportDFS(radio) {
 Session.prototype.joinRequestProcess = function(server, request) {
     // 1. update wtp capability
     var sn = request.messageElement.wtpBoardData.wtpSerialNumber.value;
-    var wtpHash = context.getWtpHashBySn(sn);
+    var wtpHash = this.context.getWtpHashBySn(sn);
     if (1 == request.messageElement.vspWtpCapabilities.value.venderData.version) {
         wtpHash.capability = request.messageElement.vspWtpCapabilities.value.venderData.wtpCapFlags;
     }
@@ -71,12 +69,12 @@ Session.prototype.joinRequestProcess = function(server, request) {
     // 4. received JOIN REQ from unmanaged WTP
     if (wtpHash.adminState < enumType.wtpAdminState.WTP_ADMIN_DISCOVERY) {
         debug('received JOIN REQ from unmanaged WTP %s', sn);
-        state.WTP_UNKNOWN();
+        this.context.state.machine.WTP_UNKNOWN();
     }
     // 5. received JOIN REQ from admin disabled WTP
     if (wtpHash.adminState < enumType.wtpAdminState.WTP_ADMIN_DISABLE) {
         debug('received JOIN REQ from admin disabled WTP %s', sn);
-        state.WTP_DISABLED();
+        this.context.state.machine.WTP_DISABLED();
     }
     // 6. we check if WTP support DFS here
     for (var i = 0; i < 2; ++i) {
@@ -126,7 +124,7 @@ Session.prototype.joinRequestProcess = function(server, request) {
             }
             if (0 === radio.type & enumType.wtpRadioType.CW_11_RADIO_TYPE_MASK & radio.radioTypeWtp) {
                 debug('received JOIN REQ from WTP with unsupported radio %d type %x AC %x', i, radio.radioTypeWtp, radio.radioType);
-                state.WTP_HW_UNSUPPORTED();
+                this.context.state.machine.WTP_HW_UNSUPPORTED();
                 // send response with resul code CW_RC_JOIN_FAILURE_WTP_HW_UNSUPPORTED
             }
         }
@@ -233,7 +231,7 @@ Session.prototype.dataChannelVerifiedProcess = function(server, request) {
         header: builder.getHeader(),
         controlHeader: {
             messageType: enumType.messageType.CONFIGURATION_UPDATE_REQUEST,
-            sequneceNumber: context.sequneceNumber++,
+            sequneceNumber: this.context.sequneceNumber++,
             messageElementLength: elementLength,
             flags: 0
         },
@@ -253,7 +251,7 @@ var addWlan = function(server, request) {
         header: builder.getHeader(),
         controlHeader: {
             messageType: enumType.messageType.IEEE_80211_WLAN_CONFIGURATION_REQUEST,
-            sequneceNumber: context.sequneceNumber++,
+            sequneceNumber: this.context.sequneceNumber++,
             messageElementLength: elementLength,
             flags: 0
         },

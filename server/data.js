@@ -4,7 +4,7 @@ var dgram = require('dgram');
 var data = dgram.createSocket('udp4');
 var decoder = require('../capwap/decoder');
 var tool = require('../capwap/tool');
-var state = require('./state');
+// var state = require('./state');
 var server = require('./server');
 var debug = require('debug')('node-capwap::server::data');
 
@@ -18,7 +18,7 @@ data.on('message', function(message, remote) {
         var headerFlags = request.header.headerFlags;
         if (headerFlags && 0x08) {
             debug('Receive Keep Alive');
-            state.DATA_CHAN_KEEP_ALIVE_RECV(server, data, request);
+            // state.DATA_CHAN_KEEP_ALIVE_RECV(server, data, request);
         }
     });
 });

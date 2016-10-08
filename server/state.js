@@ -13,32 +13,28 @@ function log(event, oldState, newState) {
 
 function State(context) {
     this.session = new Session(context);
-    this.setup();
-    this.machine = new Stately(this.statesObject);
-    this.bind(log);
-}
+    var that = this;
 
-State.prototype.setup = () => {
-    this.statesObject = {
+    var states = {
         'START': {
             'INIT_COMPLETE': function() {
-                this.session.start();
+                that.session.start();
                 return this.IDLE;
             }
         },
         'IDLE': {
             'LOCAL_WTP_CONN': function(server, request) {
-                this.session.discoveryRequestProcess(server, request);
+                that.session.discoveryRequestProcess(server, request);
                 return this.JOIN;
             }
         },
         'JOIN': {
             'JOIN_REQ_RECV': function(server, request) {
-                this.session.joinRequestProcess(server, request);
+                that.session.joinRequestProcess(server, request);
                 return this.JOIN;
             },
             'CFG_STATUS_REQ': function(server, request) {
-                this.session.configurationStatusRequestProcess(server, request);
+                that.session.configurationStatusRequestProcess(server, request);
                 return this.CONFIG;
             },
             'WTP_UNKNOWN': function() {
@@ -53,30 +49,33 @@ State.prototype.setup = () => {
         },
         'CONFIG': {
             'CHG_STATE_EVENT_REQ_RECV': function(server, request) {
-                this.session.changeStateRequestProcess(server, request);
+                that.session.changeStateRequestProcess(server, request);
                 return this.DATA_CHAN_SETUP;
             }
         },
         'DATA_CHAN_SETUP': {
             'DATA_CHAN_KEEP_ALIVE_RECV': function(server, data, request) {
-                this.session.keepAliveProcess(data, request);
-                this.session.dataChannelVerifiedProcess(server, request);
+                that.session.keepAliveProcess(data, request);
+                that.session.dataChannelVerifiedProcess(server, request);
                 return this.RUN;
             },
         },
         'RUN': {
             'CFG_UPDATE_RESP_RECV': function(server, response) {
-                this.session.startConfigurationProcess(server, response);
+                that.session.startConfigurationProcess(server, response);
                 return this.RUN;
             },
             'IEEE_80211_WLAN_CFG_RESP_RC_SUCC': function(server, response) {
-                this.session.ieee80211ConfigurationResponseProcess(server, response);
+                that.session.ieee80211ConfigurationResponseProcess(server, response);
                 return this.RUN;
             },
             'WTP_EVENT_REQ_RECV': function(server, request) {
-                this.session.wtpEventRequestProcess(server, request);
+                that.session.wtpEventRequestProcess(server, request);
                 return this.RUN;
             },
         }
-    };
+    }
+
+    this.machine = new Stately(states);
+    this.machine.bind(log);
 }
