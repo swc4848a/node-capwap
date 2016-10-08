@@ -18,6 +18,7 @@ data.on('message', function(message, remote) {
         var headerFlags = request.header.headerFlags;
         if (headerFlags && 0x08) {
             debug('Receive Keep Alive');
+            // todo: support data channel
             // state.DATA_CHAN_KEEP_ALIVE_RECV(server, data, request);
         }
     });
