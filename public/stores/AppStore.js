@@ -31,7 +31,8 @@ var _apps = {
 
 function updateCollections() {
     if (_apps.startTime.value && _apps.endTime.value) {
-        var url = '/Stores/Raws?start=' + _apps.startTime.value + '&end=' + _apps.endTime.value;
+        console.log(_apps.dataSource);
+        var url = '/Stores/Raws?dataSource=' + _apps.dataSource + '&start=' + _apps.startTime.value + '&end=' + _apps.endTime.value;
         fetch(url).then(function(response) {
             response.json().then(function(json) {
                 _apps.collections = json;

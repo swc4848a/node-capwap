@@ -43,6 +43,11 @@ var Content = React.createClass({
             logEnable: !this.state.logEnable
         });
     },
+    handleDataSourceChange: function(newValue){
+        this.setState({
+            dataSource: newValue.value
+        });
+    },
     handleSubmit: function(event) {
         AppActions.updateLogConfig(this.state.ip, this.state.logEnable);
     },
@@ -100,10 +105,7 @@ var Content = React.createClass({
                                             { value: 'logfile', label: 'LogFile' }
                                         ]}
                                         searchable={true}
-                                        onChange={(datasource) => {
-                                            debug("onChange: ", datasource);
-                                            this.state.dataSource = datasource;
-                                        }}
+                                        onChange={this.handleDataSourceChange}
                                     />
                                 </div>
                             </div>
