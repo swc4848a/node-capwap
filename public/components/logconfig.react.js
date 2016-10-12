@@ -44,9 +44,7 @@ var Content = React.createClass({
         });
     },
     handleDataSourceChange: function(newValue){
-        this.setState({
-            dataSource: newValue.value
-        });
+        AppActions.updateDataSource(newValue.value);
     },
     handleSubmit: function(event) {
         AppActions.updateLogConfig(this.state.ip, this.state.logEnable);

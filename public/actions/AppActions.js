@@ -95,6 +95,12 @@ var AppActions = {
             ip: ip,
             status: status
         });
+    },
+    updateDataSource: function(source) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.APP_UPDATE_DATA_SOURCE,
+            source: source
+        });
     }
 };
 
