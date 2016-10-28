@@ -7,7 +7,8 @@
 ```
 sequenceDiagram
     participant eap_proxy
-    participant hostapd
+    participant external_hostapd
+    participant internal_hostapd
     participant capwap
     participant wtp_wpa
     participant wpa_supplicant
@@ -20,13 +21,12 @@ sequenceDiagram
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ADD
     wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_ADDED
     wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_ASSOC
-    wtp_wpa-->>capwap: Association Request(SSID)
-    capwap->>capwap: CW_IPC_MSG_I2C_STA_ADD
-    Note right of capwap: internal hostapd to capwap
-    capwap-->>wtp_wpa: Association Request
+    wtp_wpa-->>internal_hostapd: Association Request(SSID)
+    internal_hostapd->>capwap: CW_IPC_MSG_I2C_STA_ADD
+    internal_hostapd-->>wtp_wpa: Association Request
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ASSOC
     capwap-->>wtp_wpa: Station Configuration Request
-    capwap->>hostapd: CW_IPC_MSG_C2E_STA_ADD
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_STA_ADD
 
     wtp_wpa-->>capwap: Station Configuration Response
     capwap-->>wtp_wpa: EAP Request Identity
