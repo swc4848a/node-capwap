@@ -515,16 +515,16 @@
 			"file": "doc/diagram.md",
 			"settings":
 			{
-				"buffer_size": 2865,
+				"buffer_size": 3612,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "doc/auth.md",
+			"file": "doc/monitor.md",
 			"settings":
 			{
-				"buffer_size": 607,
-				"encoding": "UTF-8",
+				"buffer_size": 314,
 				"line_ending": "Unix"
 			}
 		}
@@ -577,11 +577,12 @@
 	},
 	"expanded_folders":
 	[
-		"/F/github/node-capwap",
-		"/F/github/node-capwap/doc"
+		"/F/github/node-capwap"
 	],
 	"file_history":
 	[
+		"/F/github/node-capwap/.gitignore",
+		"/F/github/node-capwap/doc/auth.md",
 		"/F/github/node-capwap/doc/diagram.md",
 		"//ZQQIANG-VM4/workspaces/github/node-capwap/routes/stores.js",
 		"//ZQQIANG-VM4/workspaces/github/node-capwap/public/components/logconfig.react.js",
@@ -707,9 +708,7 @@
 		"//ZQQIANG-REDHAT/workspace/github/node-capwap/monitor.js",
 		"//ZQQIANG-REDHAT/workspace/github/node-capwap/app.js",
 		"//ZQQIANG-REDHAT/workspace/github/node-capwap/capwap/builder.js",
-		"//ZQQIANG-REDHAT/workspace/github/node-capwap/capwap/enum.js",
-		"//ZQQIANG-REDHAT/workspace/github/node-capwap/public/main.js",
-		"//ZQQIANG-REDHAT/workspace/github/node-capwap/public/index.html"
+		"//ZQQIANG-REDHAT/workspace/github/node-capwap/capwap/enum.js"
 	],
 	"find":
 	{
@@ -881,24 +880,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
 					"file": "doc/diagram.md",
-					"semi_transient": true,
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2865,
+						"buffer_size": 3612,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2478,
-								2478
+								401,
+								401
 							]
 						],
 						"settings":
@@ -909,27 +908,27 @@
 							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 648.0,
+						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "doc/auth.md",
-					"semi_transient": false,
+					"file": "doc/monitor.md",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 607,
+						"buffer_size": 314,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								607,
-								607
+								0,
+								0
 							]
 						],
 						"settings":
@@ -937,13 +936,13 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]

@@ -17,7 +17,20 @@ sequenceDiagram
     wtp_wpa-->>capwap: IEEE 802.11 WLAN Configuration Response
     
     Note over capwap,wtp_wpa: wtp connect success
-    
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_ADD
+    external_hostapd->>external_hostapd: INIT ==> SETUP1 ==> INIT2
+    external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_INIT
+    external_hostapd->>external_hostapd: INIT2 ==> WAITMAC
+
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_WLAN_KEY
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_CHG
+    external_hostapd->>external_hostapd: WAITMAC==> INIT3
+    external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_KEY
+    external_hostapd->>external_hostapd: INIT3==> IDLE
+
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_WLAN_KEY
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_CHG
+
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ADD
     wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_ADDED
     wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_ASSOC
@@ -27,8 +40,12 @@ sequenceDiagram
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ASSOC
     capwap-->>wtp_wpa: Station Configuration Request
     capwap->>external_hostapd: CW_IPC_MSG_C2E_STA_ADD
+    external_hostapd->>external_hostapd: IDLE ==> RUN
+    external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_KEY
+    Note over external_hostapd: EAP: Server state machine created
 
     wtp_wpa-->>capwap: Station Configuration Response
+    external_hostapd->>eap_proxy: RADIUS_AUTH
     capwap-->>wtp_wpa: EAP Request Identity
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_8021X
     wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_8021X
