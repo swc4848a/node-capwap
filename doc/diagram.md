@@ -44,13 +44,27 @@ sequenceDiagram
     external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_KEY
     Note over external_hostapd: EAP: Server state machine created
 
+    external_hostapd->>external_hostapd: BE_AUTH ==> IDLE
+
     wtp_wpa-->>capwap: Station Configuration Response
-    external_hostapd->>eap_proxy: RADIUS_AUTH
+
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_STA_KEY_CLR
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_8021X
+
+    external_hostapd->>capwap: EAP Packet (identifier 103)
     capwap-->>wtp_wpa: EAP Request Identity
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_8021X
     wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_8021X
 
     wtp_wpa-->>capwap: EAP Response Identity
+
+    capwap->>external_hostapd: EAP Response-Identity (1)
+    external_hostapd->>eap_proxy: Access-Request
+    eap_proxy->>external_hostapd: Access-Challenge
+
+    external_hostapd->>capwap: CW_IPC_MSG_E2C_8021X
+    capwap->>external_hostapd: CW_IPC_MSG_C2E_8021X
+
     capwap-->>wtp_wpa: EAP Request Tunneled TLS EAP (EAP-TTLS)
 
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_8021X

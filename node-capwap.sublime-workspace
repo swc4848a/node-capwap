@@ -515,7 +515,7 @@
 			"file": "doc/diagram.md",
 			"settings":
 			{
-				"buffer_size": 3612,
+				"buffer_size": 3734,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -889,15 +889,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3612,
+						"buffer_size": 3734,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								401,
-								401
+								3312,
+								3312
 							]
 						],
 						"settings":
@@ -908,7 +908,7 @@
 							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 108.0,
+						"translation.y": 535.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
