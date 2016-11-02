@@ -512,15 +512,6 @@
 	"buffers":
 	[
 		{
-			"file": "doc/diagram.md",
-			"settings":
-			{
-				"buffer_size": 3734,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "doc/monitor.md",
 			"settings":
 			{
@@ -581,9 +572,9 @@
 	],
 	"file_history":
 	[
+		"/F/github/node-capwap/doc/diagram.md",
 		"/F/github/node-capwap/.gitignore",
 		"/F/github/node-capwap/doc/auth.md",
-		"/F/github/node-capwap/doc/diagram.md",
 		"//ZQQIANG-VM4/workspaces/github/node-capwap/routes/stores.js",
 		"//ZQQIANG-VM4/workspaces/github/node-capwap/public/components/logconfig.react.js",
 		"//ZQQIANG-VM4/workspaces/github/node-capwap/public/stores/AppStore.js",
@@ -885,37 +876,6 @@
 			[
 				{
 					"buffer": 0,
-					"file": "doc/diagram.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3734,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3312,
-								3312
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 535.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "doc/monitor.md",
 					"semi_transient": true,
 					"settings":
@@ -927,8 +887,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								314,
+								314
 							]
 						],
 						"settings":
@@ -942,7 +902,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
