@@ -512,10 +512,19 @@
 	"buffers":
 	[
 		{
-			"file": "doc/monitor.md",
+			"file": "doc/diagram.md",
 			"settings":
 			{
-				"buffer_size": 314,
+				"buffer_size": 4182,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "doc/features.md",
+			"settings":
+			{
+				"buffer_size": 480,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -568,7 +577,8 @@
 	},
 	"expanded_folders":
 	[
-		"/F/github/node-capwap"
+		"/F/github/node-capwap",
+		"/F/github/node-capwap/doc"
 	],
 	"file_history":
 	[
@@ -871,24 +881,24 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "doc/monitor.md",
+					"file": "doc/diagram.md",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 314,
+						"buffer_size": 4182,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								314,
-								314
+								0,
+								0
 							]
 						],
 						"settings":
@@ -896,6 +906,35 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "doc/features.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 480,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								480,
+								480
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
 							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
 						},
 						"translation.x": 0.0,
