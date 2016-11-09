@@ -11,3 +11,7 @@ update portal.ap_platforms ap_platform_radios ap_platform_radio_band ap_channels
 
 Add Platform Profile
 Radio Channel checkbox config is from ap_channels column channels, the default selected checkbox maybe form GUI.
+
+Sta IP
+AC get sta ip from WTP EVENT REQ from vsp CW_ME_TYPE_VSP_STA_IP_LIST
+

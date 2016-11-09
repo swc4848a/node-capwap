@@ -17,19 +17,21 @@ sequenceDiagram
     wtp_wpa-->>capwap: IEEE 802.11 WLAN Configuration Response
     
     Note over capwap,wtp_wpa: wtp connect success
-    capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_ADD
-    external_hostapd->>external_hostapd: INIT ==> SETUP1 ==> INIT2
-    external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_INIT
-    external_hostapd->>external_hostapd: INIT2 ==> WAITMAC
 
-    capwap->>external_hostapd: CW_IPC_MSG_C2E_WLAN_KEY
-    capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_CHG
-    external_hostapd->>external_hostapd: WAITMAC==> INIT3
-    external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_KEY
-    external_hostapd->>external_hostapd: INIT3==> IDLE
+    loop 2 Times
+        capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_ADD
+        external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_INIT
+    end
 
-    capwap->>external_hostapd: CW_IPC_MSG_C2E_WLAN_KEY
-    capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_CHG
+    loop 2 Times
+        capwap->>external_hostapd: CW_IPC_MSG_C2E_WLAN_KEY
+        capwap->>external_hostapd: CW_IPC_MSG_C2E_VAP_CHG
+        external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_KEY
+    end
+
+    loop 2 Times
+        capwap->>external_hostapd: CW_IPC_MSG_C2E_WLAN_KEY
+    end
 
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ADD
     wpa_supplicant->>wtp_wpa: CW_WPA_MSG_E2C_STA_ADDED
