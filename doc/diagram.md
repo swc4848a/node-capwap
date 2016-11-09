@@ -42,11 +42,12 @@ sequenceDiagram
     wtp_wpa->>wpa_supplicant: CW_WPA_MSG_C2E_STA_ASSOC
     capwap-->>wtp_wpa: Station Configuration Request
     capwap->>external_hostapd: CW_IPC_MSG_C2E_STA_ADD
-    external_hostapd->>external_hostapd: IDLE ==> RUN
-    external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_KEY
-    Note over external_hostapd: EAP: Server state machine created
 
-    external_hostapd->>external_hostapd: BE_AUTH ==> IDLE
+    loop 2 Times
+        external_hostapd->>capwap: CW_IPC_MSG_E2C_WLAN_KEY
+    end
+
+    Note over external_hostapd: EAP: Server state machine created
 
     wtp_wpa-->>capwap: Station Configuration Response
 
@@ -60,10 +61,10 @@ sequenceDiagram
     wtp_wpa-->>capwap: EAP Response Identity
     capwap->>external_hostapd: CW_IPC_MSG_C2E_8021X [EAP Response-Identity]
 
-    external_hostapd->>eap_proxy: Access-Request
-    eap_proxy->>external_hostapd: Access-Challenge
+    external_hostapd->>eap_proxy: Access-Request[User-Name]
+    eap_proxy->>external_hostapd: Access-Challenge[EAP-Request-PEAP]
 
-    external_hostapd->>capwap: CW_IPC_MSG_E2C_8021X
+    external_hostapd->>capwap: CW_IPC_MSG_E2C_8021X[IEEE 802.1X]
     
 
     capwap-->>wtp_wpa: EAP Request Tunneled TLS EAP (EAP-PEAP)
@@ -82,14 +83,11 @@ sequenceDiagram
         wtp_wpa-->>capwap: EAP Response, Tunneled TLS EAP (EAP-PEAP)
     end
 
-    capwap->>external_hostapd: CW_IPC_MSG_C2E_8021X
-
     loop 3 Times
-        capwap->>external_hostapd: EAP Response-PEAP
-        external_hostapd->>eap_proxy: Access-Request
-        eap_proxy->>external_hostapd: Access-Challenge
-        external_hostapd->>capwap: CW_IPC_MSG_E2C_8021X
-        capwap->>external_hostapd: CW_IPC_MSG_C2E_8021X
+        capwap->>external_hostapd: CW_IPC_MSG_C2E_8021X[EAP Response-PEAP]
+        external_hostapd->>eap_proxy: Access-Request[EAP-Message]
+        eap_proxy->>external_hostapd: Access-Challenge[EAP-Message]
+        external_hostapd->>capwap: CW_IPC_MSG_E2C_8021X[EAP-Request-PEAP]
     end
 
     external_hostapd->>capwap: CW_IPC_MSG_E2C_WIDS_EAPOL_INFO
