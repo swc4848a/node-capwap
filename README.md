@@ -69,6 +69,8 @@ Thu Aug 29 09:00:00 UTC 2016
 
  * Support multiple client connections
 
+Thu Nov 22 09:00:00 UTC 2016
+ * 
 
 # License
 

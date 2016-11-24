@@ -2,7 +2,6 @@ var builder = require('../capwap/builder');
 var encoder = require('../capwap/encoder');
 var enumType = require('../capwap/enum');
 var tool = require('../capwap/tool');
-var context = require('./context');
 var debug = require('debug')('node-capwap::server::message');
 
 var message = exports = module.exports = {};
@@ -26,8 +25,6 @@ message.sendDiscoverResponse = function sendDiscoverResponse(server, request) {
         tlv: tlv
     });
     
-    debug("remote => ", context.remote);
-
     server.send(discoverResponse, 0, discoverResponse.length, enumType.socket.CLIENT_PORT, enumType.socket.CLIENT_IP /* error callback */ );
     debug('Send Discover Response');
 };
