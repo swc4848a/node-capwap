@@ -14,8 +14,36 @@ local ntypes = {
 }
 
 local stypes = {
+    [1] = "Discovery Request",
+    [2] = "Discovery Response",
+    [3] = "Join Request",
+    [4] = "Join Response",
+    [5] = "Configuration Status Request",
+    [6] = "Configuration Status Response",
+    [7] = "Configuration Update Request",
+    [8] = "Configuration Update Response",
+    [9] = "WTP Event Request",
+    [10] = "WTP Event Response",
+    [11] = "Change State Request",
+    [12] = "Change State Response",
     [13] = "Echo Request",
-    [14] = "Echo Response"
+    [14] = "Echo Response",
+    [15] = "Image Data Request",
+    [16] = "Image Data Response",
+    [17] = "Reset Request",
+    [18] = "Reset Response",
+    [19] = "Primary Discovery Request",
+    [20] = "Primary Discovery Response",
+    [21] = "Data Transfer Request",
+    [22] = "Data Transfer Response",
+    [23] = "Clear Configuration Request",
+    [24] = "Clear Configuration Response",
+    [25] = "Station Configuration Request",
+    [26] = "Station Configuration Response",
+
+ -- /* RFC5416 : Section 3 : IEEE 802.11 Specific CAPWAP Control Messages */
+    [3398913] = "IEEE 802.11 WLAN Configuration Request",
+    [3398914] = "IEEE 802.11 WLAN Configuration Response"
 }
 
 -- /* ************************************************************************* */
@@ -190,6 +218,17 @@ local tlvTypes = {
     [0] = "Unknown"
 }
 
+-- /* ************************************************************************* */
+-- /*                      Discovery Type                                       */
+-- /* ************************************************************************* */
+local discovery_type_vals = {
+    [0] = "Unknown",
+    [1] = "Static Configuration",
+    [2] = "DHCP",
+    [3] = "DNS",
+    [4] = "AC Referral"
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf_preamble_version = ProtoField.new   ("Version", "ftnt.capwap.preamble.version", ftypes.UINT8, nil, base.DEC, 0xf0)
@@ -214,13 +253,26 @@ local pf_control_header_message_flags = ProtoField.new("Flags", "ftnt.capwap.con
 local pf_tlv = ProtoField.new("Type", "ftnt.capwap.message.element.tlv", ftypes.NONE)
 local pf_tlv_type = ProtoField.new("Type", "ftnt.capwap.message.element.tlv.type", ftypes.UINT16, tlvTypes)
 local pf_tlv_length = ProtoField.new("Length", "ftnt.capwap.message.element.tlv.length", ftypes.UINT16)
+local pf_tlv_value = ProtoField.new("Value", "ftnt.capwap.message.element.tlv.value", ftypes.BYTES)
+
+-- message elements protocol fields
+local pf_tlv_discovery_type = ProtoField.new("Discovery Type", "ftnt.capwap.message.element.tlv.discovery.type", ftypes.UINT8, discovery_type_vals)
 
 capwap.fields = {
     pf_preamble_version, pf_preamble_type, pf_preamble_reserved,
     pf_header_length, pf_header_radio_id, pf_header_binding_id, pf_header_flags, pf_header_fragment_id, pf_header_fragment_offset, pf_header_reserved,
     pf_control_header_message_type, pf_control_header_message_type_enterprise_number, pf_control_header_message_type_enterprise_specific, 
     pf_control_header_sequence_number, pf_control_header_message_element_length, pf_control_header_message_flags,
-    pf_tlv, pf_tlv_type, pf_tlv_length
+    pf_tlv, pf_tlv_type, pf_tlv_length, pf_tlv_value,
+    pf_tlv_discovery_type
+}
+
+function discoveryTypeDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_discovery_type, tvbrange)
+end
+
+local messageElementDecoder = {
+    [TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder
 }
 
 function capwap.dissector(tvbuf,pktinfo,root)
@@ -261,6 +313,8 @@ function capwap.dissector(tvbuf,pktinfo,root)
     control_header:add(pf_control_header_message_element_length, tvbuf:range(13,2))
     control_header:add(pf_control_header_message_flags, tvbuf:range(15,1))
 
+    pktinfo.cols.info:set("FTNT-CAPWAP-Control - "..stypes[tvbuf:range(11,1):uint()])
+
     local message_element = tree:add("Message Element")
 
     local pos = CAPWAP_HDR_LEN
@@ -277,6 +331,11 @@ function capwap.dissector(tvbuf,pktinfo,root)
 
         tlv:add(pf_tlv_type, tvbuf:range(pos,2))
         tlv:add(pf_tlv_length, tvbuf:range(pos+2,2))
+        tlv:add(pf_tlv_value, tvbuf:range(pos+4,tlv_length))
+
+        if messageElementDecoder[tlv_type] then
+            messageElementDecoder[tlv_type](tlv, tvbuf:range(pos+4,tlv_length))
+        end
 
         pos = pos + tlv_length + 4
         pktlen_remaining = pktlen_remaining - tlv_length - 4
