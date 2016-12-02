@@ -229,6 +229,87 @@ local discovery_type_vals = {
     [4] = "AC Referral"
 };
 
+-- /* From FortiAP/WiFI 5.2.0 */
+local VSP_FORTINET_AP_SCAN = 16
+local VSP_FORTINET_PASSIVE = 24
+local VSP_FORTINET_DAEMON_RST = 32
+local VSP_FORTINET_MAC = 33
+local VSP_FORTINET_WTP_ALLOW = 34
+local VSP_FORTINET_WBH_STA = 36
+local VSP_FORTINET_HTCAP = 49
+local VSP_FORTINET_MGMT_VAP = 50
+local VSP_FORTINET_MODE = 51
+local VSP_FORTINET_COEXT = 52
+local VSP_FORTINET_AMSDU = 53
+local VSP_FORTINET_PS_OPT = 54
+local VSP_FORTINET_PURE = 55
+local VSP_FORTINET_EBP_TAG = 56
+local VSP_FORTINET_TELNET_ENABLE = 81
+local VSP_FORTINET_ADMIN_PASSWD = 82
+local VSP_FORTINET_REGCODE = 83
+local VSP_FORTINET_COUNTRYCODE = 84
+local VSP_FORTINET_STA_SCAN = 99
+local VSP_FORTINET_FHO = 103
+local VSP_FORTINET_APHO = 104
+local VSP_FORTINET_STA_LOCATE = 106
+local VSP_FORTINET_SPECTRUM_ANALYSIS = 108
+local VSP_FORTINET_DARRP_CFG = 112
+local VSP_FORTINET_AP_SUPPRESS_LIST = 128
+local VSP_FORTINET_WDS = 145
+local VSP_FORTINET_VAP_VLAN_TAG = 147
+local VSP_FORTINET_VAP_BITMAP = 148
+local VSP_FORTINET_MCAST_RATE = 149
+local VSP_FORTINET_CFG = 150
+local VSP_FORTINET_SPLIT_TUN_CFG = 151
+local VSP_FORTINET_MGMT_VLAN_TAG = 161
+local VSP_FORTINET_VAP_PSK_PASSWD = 167
+local VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE = 176
+local VSP_FORTINET_MESH_ETH_BRIDGE_TYPE = 177
+local VSP_FORTINET_WTP_CAP = 192
+local VSP_FORTINET_TXPWR = 193
+local VSP_FORTINET_WIDS_ENABLE = 209
+
+local fortinet_element_id_vals = {
+    [VSP_FORTINET_AP_SCAN] = "AP Scan",
+    [VSP_FORTINET_DAEMON_RST] = "Daemon Reset",
+    [VSP_FORTINET_MAC] = "MAC",
+    [VSP_FORTINET_PASSIVE] = "Passive",
+    [VSP_FORTINET_WTP_ALLOW] = "WTP Allow",
+    [VSP_FORTINET_WBH_STA] = "Mesh WBH STA",
+    [VSP_FORTINET_HTCAP] = "HT Capabilities",
+    [VSP_FORTINET_MGMT_VAP] = "Management VAP",
+    [VSP_FORTINET_MODE] = "Mode",
+    [VSP_FORTINET_COEXT] = "Coext",
+    [VSP_FORTINET_AMSDU] = "AMSDU",
+    [VSP_FORTINET_PS_OPT] = "PS OPT",
+    [VSP_FORTINET_PURE] = "Pure",
+    [VSP_FORTINET_EBP_TAG] = "EBP Tag",
+    [VSP_FORTINET_TELNET_ENABLE] = "Telnet Enable",
+    [VSP_FORTINET_ADMIN_PASSWD] = "Admin Password",
+    [VSP_FORTINET_REGCODE] = "Reg Code",
+    [VSP_FORTINET_COUNTRYCODE] = "Country Code",
+    [VSP_FORTINET_STA_SCAN] = "STA Scan",
+    [VSP_FORTINET_FHO] = "FHO",
+    [VSP_FORTINET_APHO] = "APHO",
+    [VSP_FORTINET_STA_LOCATE] = "STA Locate",
+    [VSP_FORTINET_SPECTRUM_ANALYSIS] = "Spectrum Analysis",
+    [VSP_FORTINET_DARRP_CFG] = "DARRP Configuration",
+    [VSP_FORTINET_AP_SUPPRESS_LIST] = "AP Suppress List",
+    [VSP_FORTINET_WDS] = "WDS",
+    [VSP_FORTINET_VAP_VLAN_TAG] = "VAP Vlan",
+    [VSP_FORTINET_VAP_BITMAP] = "VAP Bitmap",
+    [VSP_FORTINET_MCAST_RATE] = "Multicast Rate",
+    [VSP_FORTINET_CFG] = "Configuration",
+    [VSP_FORTINET_SPLIT_TUN_CFG] = "Split Tunnel Configuration",
+    [VSP_FORTINET_MGMT_VLAN_TAG] = "Management Vlan",
+    [VSP_FORTINET_VAP_PSK_PASSWD] = "VAP PSK Password",
+    [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = "Mesh Eth Bridge Enable",
+    [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = "Mesh Eth Bridge Type",
+    [VSP_FORTINET_WTP_CAP] = "WTP Capabilities",
+    [VSP_FORTINET_TXPWR] = "Tx Power",
+    [VSP_FORTINET_WIDS_ENABLE] = "WIDS Enable"
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf_preamble_version = ProtoField.new   ("Version", "ftnt.capwap.preamble.version", ftypes.UINT8, nil, base.DEC, 0xf0)
@@ -257,6 +338,13 @@ local pf_tlv_value = ProtoField.new("Value", "ftnt.capwap.message.element.tlv.va
 
 -- message elements protocol fields
 local pf_tlv_discovery_type = ProtoField.new("Discovery Type", "ftnt.capwap.message.element.tlv.discovery.type", ftypes.UINT8, discovery_type_vals)
+local pf_tlv_vendor_identifier = ProtoField.new("Vendor Identifier", "ftnt.capwap.message.element.tlv.vendor.identifier", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
+local pf_tlv_vendor_element_id = ProtoField.new("Vendor Element ID", "ftnt.capwap.message.element.tlv.vendor.element.id", ftypes.UINT16)
+local pf_tlv_vendor_data = ProtoField.new("Vendor Data", "ftnt.capwap.message.element.tlv.vendor.data", ftypes.BYTES)
+local pf_tlv_fortinet_element_id = ProtoField.new("Fortinet Element ID", "ftnt.capwap.message.element.tlv.fortinet.element.id", ftypes.UINT16, fortinet_element_id_vals)
+local pf_tlv_fortinet_value = ProtoField.new("Fortinet Value", "ftnt.capwap.message.element.tlv.fortinet.value", ftypes.BYTES)
+
+local pf_tlv_vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.tlv.fortinet.vlan.id", ftypes.UINT16)
 
 capwap.fields = {
     pf_preamble_version, pf_preamble_type, pf_preamble_reserved,
@@ -264,15 +352,41 @@ capwap.fields = {
     pf_control_header_message_type, pf_control_header_message_type_enterprise_number, pf_control_header_message_type_enterprise_specific, 
     pf_control_header_sequence_number, pf_control_header_message_element_length, pf_control_header_message_flags,
     pf_tlv, pf_tlv_type, pf_tlv_length, pf_tlv_value,
-    pf_tlv_discovery_type
+    pf_tlv_discovery_type, 
+    pf_tlv_vendor_identifier, pf_tlv_vendor_element_id, pf_tlv_vendor_data,
+    pf_tlv_fortinet_element_id, pf_tlv_fortinet_value,
+    pf_tlv_vsp_ftnt_vlanid
+}
+
+function mgmtVlanTagDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_vsp_ftnt_vlanid, tvbrange)
+end
+
+local ftntElementDecoder = {
+    [VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder
 }
 
 function discoveryTypeDecoder(tlv, tvbrange)
     tlv:add(pf_tlv_discovery_type, tvbrange)
 end
 
+function vendorSpecificPayloadDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf_tlv_vendor_identifier, tvb:range(0, 4))
+    tlv:add(pf_tlv_vendor_element_id, tvb:range(4, 2))
+    tlv:add(pf_tlv_vendor_data, tvb:range(6))
+    tlv:add(pf_tlv_fortinet_element_id, tvb:range(4, 2))
+    tlv:add(pf_tlv_fortinet_value, tvb:range(6))
+
+    local id = tvb:range(4, 2):uint()
+    if ftntElementDecoder[id] then
+        ftntElementDecoder[id](tlv, tvb:range(6))
+    end
+end
+
 local messageElementDecoder = {
-    [TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder
+    [TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder,
+    [TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder
 }
 
 function capwap.dissector(tvbuf,pktinfo,root)
