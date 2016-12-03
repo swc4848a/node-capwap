@@ -310,6 +310,23 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_WIDS_ENABLE] = "WIDS Enable"
 };
 
+-- /* ************************************************************************* */
+-- /*                      Board Data Type Value                                */
+-- /* ************************************************************************* */
+local BOARD_DATA_WTP_MODEL_NUMBER = 0
+local BOARD_DATA_WTP_SERIAL_NUMBER = 1
+local BOARD_DATA_BOARD_ID = 2
+local BOARD_DATA_BOARD_REVISION = 3
+local BOARD_DATA_BASE_MAC_ADDRESS = 4
+
+local board_data_type_vals = {
+    [BOARD_DATA_WTP_MODEL_NUMBER] = "WTP Model Number",
+    [BOARD_DATA_WTP_SERIAL_NUMBER] = "WTP Serial Number",
+    [BOARD_DATA_BOARD_ID] = "Board ID",
+    [BOARD_DATA_BOARD_REVISION] = "Board Revision",
+    [BOARD_DATA_BASE_MAC_ADDRESS] = "Base MAC Address",
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf_preamble_version = ProtoField.new   ("Version", "ftnt.capwap.preamble.version", ftypes.UINT8, nil, base.DEC, 0xf0)
@@ -345,6 +362,14 @@ local pf_tlv_fortinet_element_id = ProtoField.new("Fortinet Element ID", "ftnt.c
 local pf_tlv_fortinet_value = ProtoField.new("Fortinet Value", "ftnt.capwap.message.element.tlv.fortinet.value", ftypes.BYTES)
 
 local pf_tlv_vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.tlv.fortinet.vlan.id", ftypes.UINT16)
+local pf_tlv_vsp_ftnt_wtpcap = ProtoField.new("WTP CAP", "ftnt.capwap.message.element.tlv.fortinet.wtp.cap", ftypes.BYTES)
+
+local pf_tlv_wtp_board_data_vendor = ProtoField.new("WTP Board Data Vendor", "ftnt.capwap.message.element.tlv.wtp.board.data.vendor", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
+local pf_tlv_wtp_board_data_type = ProtoField.new("Board Data Type", "ftnt.capwap.message.element.tlv.wtp.board.data.type", ftypes.UINT16, board_data_type_vals)
+local pf_tlv_wtp_board_data_length = ProtoField.new("Board Data Length", "ftnt.capwap.message.element.tlv.wtp.board.data.length", ftypes.UINT16)
+local pf_tlv_wtp_board_data_value = ProtoField.new("Board Data Value", "ftnt.capwap.message.element.tlv.wtp.board.data.value", ftypes.BYTES)
+local pf_tlv_wtp_board_data_model_number = ProtoField.new("WTP Model Number", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.model.number", ftypes.STRING)
+local pf_tlv_wtp_board_data_serial_number = ProtoField.new("WTP Serial Number", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.serial.number", ftypes.STRING)
 
 capwap.fields = {
     pf_preamble_version, pf_preamble_type, pf_preamble_reserved,
@@ -355,15 +380,39 @@ capwap.fields = {
     pf_tlv_discovery_type, 
     pf_tlv_vendor_identifier, pf_tlv_vendor_element_id, pf_tlv_vendor_data,
     pf_tlv_fortinet_element_id, pf_tlv_fortinet_value,
-    pf_tlv_vsp_ftnt_vlanid
+    pf_tlv_vsp_ftnt_vlanid, pf_tlv_vsp_ftnt_wtpcap,
+    pf_tlv_wtp_board_data_vendor, 
+    pf_tlv_wtp_board_data_type, pf_tlv_wtp_board_data_length, pf_tlv_wtp_board_data_value,
+    pf_tlv_wtp_board_data_model_number, pf_tlv_wtp_board_data_serial_number
 }
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
     tlv:add(pf_tlv_vsp_ftnt_vlanid, tvbrange)
 end
 
+function wtpCapDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_vsp_ftnt_wtpcap, tvbrange)
+end
+
 local ftntElementDecoder = {
-    [VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder
+    [VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder,
+    [VSP_FORTINET_WTP_CAP] = wtpCapDecoder,
+}
+
+function boardDataWtpModelNumberDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_board_data_model_number, tvbrange)
+end
+
+function boardDataWtpSerialNumberDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_board_data_serial_number, tvbrange)
+end
+
+local boardDataValueDecoder = {
+    [BOARD_DATA_WTP_MODEL_NUMBER] = boardDataWtpModelNumberDecoder,
+    [BOARD_DATA_WTP_SERIAL_NUMBER] = boardDataWtpSerialNumberDecoder,
+    [BOARD_DATA_BOARD_ID] = nil,
+    [BOARD_DATA_BOARD_REVISION] = nil,
+    [BOARD_DATA_BASE_MAC_ADDRESS] = nil,
 }
 
 function discoveryTypeDecoder(tlv, tvbrange)
@@ -384,9 +433,116 @@ function vendorSpecificPayloadDecoder(tlv, tvbrange)
     end
 end
 
+function wtpBoardDataDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    local pktlen = tvb:reported_length_remaining()
+
+    tlv:add(pf_tlv_wtp_board_data_vendor, tvb:range(0, 4))
+    
+    local pos = 4
+    local pktlen_remaining = pktlen - pos
+
+    while pktlen_remaining > 0 do
+        local type = tvb:range(pos, 2):uint()
+        local length = tvb:range(pos + 2, 2):uint()
+
+        local data = tlv:add("WTP Board Data: (t="..type..",l="..length..") "..board_data_type_vals[type])
+        data:add(pf_tlv_wtp_board_data_type, tvb:range(pos, 2))
+        data:add(pf_tlv_wtp_board_data_length, tvb:range(pos+2, 2))
+        data:add(pf_tlv_wtp_board_data_value, tvb:range(pos+4, length))
+        
+        if boardDataValueDecoder[type] then
+            boardDataValueDecoder[type](data, tvb:range(pos+4, length))
+        end
+
+        pos = pos + (length + 4)
+        pktlen_remaining = pktlen_remaining - (length + 4)
+    end
+
+end
+
 local messageElementDecoder = {
+    [TYPE_AC_DESCRIPTOR] = nil,
+    [TYPE_AC_IPV4_LIST] = nil,
+    [TYPE_AC_IPV6_LIST] = nil,
+    [TYPE_AC_NAME] = nil,
+    [TYPE_AC_NAME_W_PRIORITY] = nil,
+    [TYPE_AC_TIMESTAMP] = nil,
+    [TYPE_ADD_MAC_ACL_ENTRY] = nil,
+    [TYPE_ADD_STATION] = nil,
+    [TYPE_RESERVED_9] = nil,
+    [TYPE_CAPWAP_CONTROL_IPV4_ADDRESS] = nil,
+    [TYPE_CAPWAP_CONTROL_IPV6_ADDRESS] = nil,
+    [TYPE_CAPWAP_TIMERS] = nil,
+    [TYPE_DATA_TRANSFER_DATA] = nil,
+    [TYPE_DATA_TRANSFER_MODE] = nil,
+    [TYPE_DESCRYPTION_ERROR_REPORT] = nil,
+    [TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = nil,
+    [TYPE_DELETE_MAC_ENTRY] = nil,
+    [TYPE_DELETE_STATION] = nil,
+    [TYPE_RESERVED_19] = nil,
     [TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder,
-    [TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder
+    [TYPE_DUPLICATE_IPV4_ADDRESS] = nil,
+    [TYPE_DUPLICATE_IPV6_ADDRESS] = nil,
+    [TYPE_IDLE_TIMEOUT] = nil,
+    [TYPE_IMAGE_DATA] = nil,
+    [TYPE_IMAGE_IDENTIFIER] = nil,
+    [TYPE_IMAGE_INFORMATION] = nil,
+    [TYPE_INITIATE_DOWNLOAD] = nil,
+    [TYPE_LOCATION_DATA] = nil,
+    [TYPE_MAXIMUM_MESSAGE_LENGTH] = nil,
+    [TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = nil,
+    [TYPE_RADIO_ADMINISTRATIVE_STATE] = nil,
+    [TYPE_RADIO_OPERATIONAL_STATE] = nil,
+    [TYPE_RESULT_CODE] = nil,
+    [TYPE_RETURNED_MESSAGE_ELEMENT] = nil,
+    [TYPE_SESSION_ID] = nil,
+    [TYPE_STATISTICS_TIMER] = nil,
+    [TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder,
+    [TYPE_WTP_BOARD_DATA] = wtpBoardDataDecoder,
+    [TYPE_WTP_DESCRIPTOR] = nil,
+    [TYPE_WTP_FALLBACK] = nil,
+    [TYPE_WTP_FRAME_TUNNEL_MODE] = nil,
+    [TYPE_RESERVED_42] = nil,
+    [TYPE_RESERVED_43] = nil,
+    [TYPE_WTP_MAC_TYPE] = nil,
+    [TYPE_WTP_NAME] = nil,
+    [TYPE_RESERVED_46] = nil,
+    [TYPE_WTP_RADIO_STATISTICS] = nil,
+    [TYPE_WTP_REBOOT_STATISTICS] = nil,
+    [TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION] = nil,
+    [TYPE_CAPWAP_LOCAL_IPV6_ADDRESS] = nil,
+    [TYPE_CAPWAP_TRANSPORT_PROTOCOL] = nil,
+    [TYPE_MTU_DISCOVERY_PADDING] = nil,
+    [TYPE_ECN_SUPPORT] = nil,
+
+    [IEEE80211_ADD_WLAN] = nil,
+    [IEEE80211_ANTENNA] = nil,
+    [IEEE80211_ASSIGNED_WTP_BSSID] = nil,
+    [IEEE80211_DELETE_WLAN] = nil,
+    [IEEE80211_DIRECT_SEQUENCE_CONTROL] = nil,
+    [IEEE80211_INFORMATION_ELEMENT] = nil,
+    [IEEE80211_MAC_OPERATION] = nil,
+    [IEEE80211_MIC_COUNTERMEASURES] = nil,
+    [IEEE80211_MULTI_DOMAIN_CAPABILITY] = nil,
+    [IEEE80211_OFDM_CONTROL] = nil,
+    [IEEE80211_RATE_SET] = nil,
+    [IEEE80211_RSNA_ERROR_REPORT_FROM_STATION] = nil,
+    [IEEE80211_STATION] = nil,
+    [IEEE80211_STATION_QOS_PROFILE] = nil,
+    [IEEE80211_STATION_SESSION_KEY] = nil,
+    [IEEE80211_STATISTICS] = nil,
+    [IEEE80211_SUPPORTED_RATES] = nil,
+    [IEEE80211_TX_POWER] = nil,
+    [IEEE80211_TX_POWER_LEVEL] = nil,
+    [IEEE80211_UPDATE_STATION_QOS] = nil,
+    [IEEE80211_UPDATE_WLAN] = nil,
+    [IEEE80211_WTP_QUALITY_OF_SERVICE] = nil,
+    [IEEE80211_WTP_RADIO_CONFIGURATION] = nil,
+    [IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION] = nil,
+    [IEEE80211_WTP_RADIO_INFORMATION] = nil,
+    [IEEE80211_SUPPORTED_MAC_PROFILES] = nil,
+    [IEEE80211_MAC_PROFILE] = nil,
 }
 
 function capwap.dissector(tvbuf,pktinfo,root)
