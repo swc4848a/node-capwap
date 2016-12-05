@@ -365,6 +365,7 @@ local pf_tlv_vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.el
 local pf_tlv_vsp_ftnt_wtpcap = ProtoField.new("WTP CAP", "ftnt.capwap.message.element.tlv.fortinet.wtp.cap", ftypes.BYTES)
 
 local pf_tlv_wtp_board_data_vendor = ProtoField.new("WTP Board Data Vendor", "ftnt.capwap.message.element.tlv.wtp.board.data.vendor", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
+local pf_tlv_vsp_wtp_board_data = ProtoField.new("WTP Board Data", "ftnt.capwap.message.element.tlv.wtp.board.data", ftypes.NONE)
 local pf_tlv_wtp_board_data_type = ProtoField.new("Board Data Type", "ftnt.capwap.message.element.tlv.wtp.board.data.type", ftypes.UINT16, board_data_type_vals)
 local pf_tlv_wtp_board_data_length = ProtoField.new("Board Data Length", "ftnt.capwap.message.element.tlv.wtp.board.data.length", ftypes.UINT16)
 local pf_tlv_wtp_board_data_value = ProtoField.new("Board Data Value", "ftnt.capwap.message.element.tlv.wtp.board.data.value", ftypes.BYTES)
@@ -382,6 +383,7 @@ capwap.fields = {
     pf_tlv_fortinet_element_id, pf_tlv_fortinet_value,
     pf_tlv_vsp_ftnt_vlanid, pf_tlv_vsp_ftnt_wtpcap,
     pf_tlv_wtp_board_data_vendor, 
+    pf_tlv_vsp_wtp_board_data,
     pf_tlv_wtp_board_data_type, pf_tlv_wtp_board_data_length, pf_tlv_wtp_board_data_value,
     pf_tlv_wtp_board_data_model_number, pf_tlv_wtp_board_data_serial_number
 }
@@ -446,7 +448,8 @@ function wtpBoardDataDecoder(tlv, tvbrange)
         local type = tvb:range(pos, 2):uint()
         local length = tvb:range(pos + 2, 2):uint()
 
-        local data = tlv:add("WTP Board Data: (t="..type..",l="..length..") "..board_data_type_vals[type])
+        local data = tlv:add(pf_tlv_vsp_wtp_board_data, tvb:range(pos, length + 4))
+        data:set_text("WTP Board Data: (t="..type..",l="..length..") "..board_data_type_vals[type])
         data:add(pf_tlv_wtp_board_data_type, tvb:range(pos, 2))
         data:add(pf_tlv_wtp_board_data_length, tvb:range(pos+2, 2))
         data:add(pf_tlv_wtp_board_data_value, tvb:range(pos+4, length))
