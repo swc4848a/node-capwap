@@ -371,6 +371,11 @@ local pf_tlv_wtp_board_data_length = ProtoField.new("Board Data Length", "ftnt.c
 local pf_tlv_wtp_board_data_value = ProtoField.new("Board Data Value", "ftnt.capwap.message.element.tlv.wtp.board.data.value", ftypes.BYTES)
 local pf_tlv_wtp_board_data_model_number = ProtoField.new("WTP Model Number", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.model.number", ftypes.STRING)
 local pf_tlv_wtp_board_data_serial_number = ProtoField.new("WTP Serial Number", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.serial.number", ftypes.STRING)
+local pf_tlv_wtp_board_data_board_id = ProtoField.new("WTP Board ID", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.board.id", ftypes.STRING)
+local pf_tlv_wtp_board_data_board_revision = ProtoField.new("WTP Board Revision", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.board.revision", ftypes.STRING)
+local pf_tlv_wtp_board_data_base_mac_address = ProtoField.new("Base Mac Address", "ftnt.capwap.message.element.tlv.wtp.board.data.base.mac.address", ftypes.STRING)
+
+local pf_tlv_wtp_descriptor_max_radios = ProtoField.new("Max Radios", "ftnt.capwap.message.element.tlv.wtp.descriptor.max.radios", ftypes.UINT8)
 
 capwap.fields = {
     pf_preamble_version, pf_preamble_type, pf_preamble_reserved,
@@ -385,7 +390,9 @@ capwap.fields = {
     pf_tlv_wtp_board_data_vendor, 
     pf_tlv_vsp_wtp_board_data,
     pf_tlv_wtp_board_data_type, pf_tlv_wtp_board_data_length, pf_tlv_wtp_board_data_value,
-    pf_tlv_wtp_board_data_model_number, pf_tlv_wtp_board_data_serial_number
+    pf_tlv_wtp_board_data_model_number, pf_tlv_wtp_board_data_serial_number, 
+    pf_tlv_wtp_board_data_board_id, pf_tlv_wtp_board_data_board_revision, pf_tlv_wtp_board_data_base_mac_address,
+    pf_tlv_wtp_descriptor_max_radios
 }
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -409,12 +416,29 @@ function boardDataWtpSerialNumberDecoder(tlv, tvbrange)
     tlv:add(pf_tlv_wtp_board_data_serial_number, tvbrange)
 end
 
+function boardDataBoardIdDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_board_data_board_id, tvbrange)
+end
+
+function boardDataBoardRevisionDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_board_data_board_revision, tvbrange)
+end
+
+function boardDataBaseMacAddressDecoder(tlv, tvbrange)
+    local base_mac_address = tlv:add(pf_tlv_wtp_board_data_base_mac_address, tvbrange)
+    local tvb = tvbrange:tvb()
+    local mac_string = string.format("%2x:%2x:%2x:%2x:%2x:%2x", -- todo: format 
+        tvb:range(0, 1):uint(),tvb:range(1, 1):uint(),tvb:range(2, 1):uint(), 
+        tvb:range(3, 1):uint(),tvb:range(4, 1):uint(),tvb:range(5, 1):uint())
+    base_mac_address:set_text("Base Mac Address: "..mac_string.." ("..mac_string..")")
+end
+
 local boardDataValueDecoder = {
     [BOARD_DATA_WTP_MODEL_NUMBER] = boardDataWtpModelNumberDecoder,
     [BOARD_DATA_WTP_SERIAL_NUMBER] = boardDataWtpSerialNumberDecoder,
-    [BOARD_DATA_BOARD_ID] = nil,
-    [BOARD_DATA_BOARD_REVISION] = nil,
-    [BOARD_DATA_BASE_MAC_ADDRESS] = nil,
+    [BOARD_DATA_BOARD_ID] = boardDataBoardIdDecoder,
+    [BOARD_DATA_BOARD_REVISION] = boardDataBoardRevisionDecoder,
+    [BOARD_DATA_BASE_MAC_ADDRESS] = boardDataBaseMacAddressDecoder,
 }
 
 function discoveryTypeDecoder(tlv, tvbrange)
@@ -461,7 +485,13 @@ function wtpBoardDataDecoder(tlv, tvbrange)
         pos = pos + (length + 4)
         pktlen_remaining = pktlen_remaining - (length + 4)
     end
+end
 
+function wtpDescriptorDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    local pktlen = tvb:reported_length_remaining()
+
+    tlv:add(pf_tlv_wtp_descriptor_max_radios, tvb:range(0, 1))
 end
 
 local messageElementDecoder = {
@@ -503,7 +533,7 @@ local messageElementDecoder = {
     [TYPE_STATISTICS_TIMER] = nil,
     [TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder,
     [TYPE_WTP_BOARD_DATA] = wtpBoardDataDecoder,
-    [TYPE_WTP_DESCRIPTOR] = nil,
+    [TYPE_WTP_DESCRIPTOR] = wtpDescriptorDecoder,
     [TYPE_WTP_FALLBACK] = nil,
     [TYPE_WTP_FRAME_TUNNEL_MODE] = nil,
     [TYPE_RESERVED_42] = nil,
