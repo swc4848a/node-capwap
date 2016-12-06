@@ -327,6 +327,21 @@ local board_data_type_vals = {
     [BOARD_DATA_BASE_MAC_ADDRESS] = "Base MAC Address",
 };
 
+-- /* ************************************************************************* */
+-- /*                      Descriptor WTP Type Value                            */
+-- /* ************************************************************************* */
+local WTP_DESCRIPTOR_HARDWARE_VERSION = 0
+local WTP_DESCRIPTOR_ACTIVE_SOFTWARE_VERSION = 1
+local WTP_DESCRIPTOR_BOOT_VERSION = 2
+local WTP_DESCRIPTOR_OTHER_SOFTWARE_VERSION = 3
+
+local value_string wtp_descriptor_type_vals = {
+    [WTP_DESCRIPTOR_HARDWARE_VERSION] = "WTP Hardware Version",
+    [WTP_DESCRIPTOR_ACTIVE_SOFTWARE_VERSION] = "WTP Active Software Version",
+    [WTP_DESCRIPTOR_BOOT_VERSION] = "WTP Boot Version",
+    [WTP_DESCRIPTOR_OTHER_SOFTWARE_VERSION] = "WTP Other Software Version",
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf_preamble_version = ProtoField.new   ("Version", "ftnt.capwap.preamble.version", ftypes.UINT8, nil, base.DEC, 0xf0)
@@ -383,6 +398,21 @@ local pf_tlv_wtp_descriptor_encryption_capabilities_reserved = ProtoField.new("R
 local pf_tlv_wtp_descriptor_encryption_capabilities_wbid = ProtoField.new("Encrypt WBID", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.wbid", ftypes.UINT8, btypes, base.DEC, 0x1f)
 local pf_tlv_wtp_descriptor_encryption_capabilities_values = ProtoField.new("Encryption Capabilities", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.values", ftypes.UINT16)
 
+local pf_tlv_wtp_descriptor_vendor = ProtoField.new("WTP Descriptor Vendor", "ftnt.capwap.message.element.tlv.wtp.descriptor.vendor", ftypes.UINT32)
+local pf_tlv_wtp_descriptor_type = ProtoField.new("Descriptor Type", "ftnt.capwap.message.element.tlv.wtp.descriptor.type", ftypes.UINT16, wtp_descriptor_type_vals)
+local pf_tlv_wtp_descriptor_length = ProtoField.new("Descriptor Length", "ftnt.capwap.message.element.tlv.wtp.descriptor.length", ftypes.UINT16)
+local pf_tlv_wtp_descriptor_value = ProtoField.new("Descriptor Value", "ftnt.capwap.message.element.tlv.wtp.descriptor.value", ftypes.BYTES)
+local pf_tlv_wtp_descriptor_hardware_version = ProtoField.new("WTP Hardware Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.hardware.version", ftypes.UINT8)
+local pf_tlv_wtp_descriptor_software_version = ProtoField.new("WTP Active Software Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.active.software.version", ftypes.STRING)
+local pf_tlv_wtp_descriptor_boot_version = ProtoField.new("WTP Boot Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.boot.version", ftypes.STRING)
+local pf_tlv_wtp_descriptor_other_software_version = ProtoField.new("WTP Other Software Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.other.software.version", ftypes.STRING)
+
+local pf_tlv_wtp_frame_tunnel_mode = ProtoField.new("WTP Frame Tunnel Mode", "ftnt.capwap.message.element.tlv.wtp.frame.tunnel.mode", ftypes.UINT8)
+local pf_tlv_wtp_native_frame_tunnel_mode = ProtoField.new("Native Frame Tunnel Mode", "ftnt.capwap.message.element.tlv.wtp.native.frame.tunnel.mode", ftypes.UINT8, {[0] = "False",[1] = "True"}, base.DEC, 0x08)
+local pf_tlv_wtp_8023_frame_tunnel_mode = ProtoField.new("802.3 Frame Tunnel Mode", "ftnt.capwap.message.element.tlv.wtp.8023.frame.tunnel.mode", ftypes.UINT8, {[0] = "False",[1] = "True"}, base.DEC, 0x04)
+local pf_tlv_wtp_frame_tunnel_mode_local_bridging = ProtoField.new("Local Bridging", "ftnt.capwap.message.element.tlv.wtp.frame.tunnel.mode.local.bridging", ftypes.UINT8, {[0] = "False",[1] = "True"}, base.DEC, 0x02)
+local pf_tlv_wtp_frame_tunnel_mode_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.tlv.wtp.native.frame.tunnel.mode.reserved", ftypes.UINT8, nil, base.DEC, 0xf1)
+
 capwap.fields = {
     pf_preamble_version, pf_preamble_type, pf_preamble_reserved,
     pf_header_length, pf_header_radio_id, pf_header_binding_id, pf_header_flags, pf_header_fragment_id, pf_header_fragment_offset, pf_header_reserved,
@@ -401,7 +431,13 @@ capwap.fields = {
     pf_tlv_wtp_descriptor_max_radios, pf_tlv_wtp_descriptor_radio_in_use,
     pf_tlv_wtp_descriptor_encryption_capabilities, pf_tlv_wtp_descriptor_encryption_capabilities_encryption_capabilities,
     pf_tlv_wtp_descriptor_encryption_capabilities_reserved, pf_tlv_wtp_descriptor_encryption_capabilities_wbid,
-    pf_tlv_wtp_descriptor_encryption_capabilities_values
+    pf_tlv_wtp_descriptor_encryption_capabilities_values,
+    pf_tlv_wtp_descriptor_vendor,
+    pf_tlv_wtp_descriptor_type, pf_tlv_wtp_descriptor_length, pf_tlv_wtp_descriptor_value,
+    pf_tlv_wtp_descriptor_hardware_version, pf_tlv_wtp_descriptor_software_version, 
+    pf_tlv_wtp_descriptor_boot_version, pf_tlv_wtp_descriptor_other_software_version,
+    pf_tlv_wtp_frame_tunnel_mode, pf_tlv_wtp_native_frame_tunnel_mode, pf_tlv_wtp_8023_frame_tunnel_mode,
+    pf_tlv_wtp_frame_tunnel_mode_local_bridging, pf_tlv_wtp_frame_tunnel_mode_reserved
 }
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -496,6 +532,29 @@ function wtpBoardDataDecoder(tlv, tvbrange)
     end
 end
 
+function wtpDescriptorHardwareVersionDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_descriptor_hardware_version, tvbrange)
+end
+
+function wtpDescriptorActiveSoftwareVersionDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_descriptor_software_version, tvbrange)
+end
+
+function wtpDescriptorBootVersionDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_descriptor_boot_version, tvbrange)
+end
+
+function wtpDescriptorOtherSoftwareVersionDecoder(tlv, tvbrange)
+    tlv:add(pf_tlv_wtp_descriptor_other_software_version, tvbrange)
+end
+
+local descriptorValueDecoder = {
+    [WTP_DESCRIPTOR_HARDWARE_VERSION] = wtpDescriptorHardwareVersionDecoder,
+    [WTP_DESCRIPTOR_ACTIVE_SOFTWARE_VERSION] = wtpDescriptorActiveSoftwareVersionDecoder,
+    [WTP_DESCRIPTOR_BOOT_VERSION] = wtpDescriptorBootVersionDecoder,
+    [WTP_DESCRIPTOR_OTHER_SOFTWARE_VERSION] = wtpDescriptorOtherSoftwareVersionDecoder,
+}
+
 function wtpDescriptorDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     local pktlen = tvb:reported_length_remaining()
@@ -509,6 +568,36 @@ function wtpDescriptorDecoder(tlv, tvbrange)
     sub_encryption_capabilities:add(pf_tlv_wtp_descriptor_encryption_capabilities_reserved, tvb:range(3, 1))
     sub_encryption_capabilities:add(pf_tlv_wtp_descriptor_encryption_capabilities_wbid, tvb:range(3, 1))
     sub_encryption_capabilities:add(pf_tlv_wtp_descriptor_encryption_capabilities_values, tvb:range(4, 2))
+
+    local pos = 6
+    local pktlen_remaining = pktlen - pos
+
+    while pktlen_remaining > 0 do
+        local type = tvb:range(pos + 4, 2):uint()
+        local length = tvb:range(pos + 6, 2):uint()
+
+        local value = tlv:add(pf_tlv_wtp_descriptor_value, tvb:range(pos, length + 8))
+        value:set_text("WTP Descriptor: (t="..type..",l="..length..") "..wtp_descriptor_type_vals[type])
+        value:add(pf_tlv_wtp_descriptor_vendor, tvb:range(pos, 4))
+        value:add(pf_tlv_wtp_descriptor_type, tvb:range(pos+4, 2))
+        value:add(pf_tlv_wtp_descriptor_length, tvb:range(pos+6, 2))
+        value:add(pf_tlv_wtp_descriptor_value, tvb:range(pos+8, length))
+
+        if descriptorValueDecoder[type] then
+            descriptorValueDecoder[type](value, tvb:range(pos+8, length))
+        end
+
+        pos = pos + (length + 8)
+        pktlen_remaining = pktlen_remaining - (length + 8)
+    end
+end
+
+function wtpFrameTunnelModeDecoder(tlv, tvbrange)
+    local mode = tlv:add(pf_tlv_wtp_frame_tunnel_mode, tvbrange)
+    mode:add(pf_tlv_wtp_native_frame_tunnel_mode, tvbrange)
+    mode:add(pf_tlv_wtp_8023_frame_tunnel_mode, tvbrange)
+    mode:add(pf_tlv_wtp_frame_tunnel_mode_local_bridging, tvbrange)
+    mode:add(pf_tlv_wtp_frame_tunnel_mode_reserved, tvbrange)
 end
 
 local messageElementDecoder = {
@@ -552,7 +641,7 @@ local messageElementDecoder = {
     [TYPE_WTP_BOARD_DATA] = wtpBoardDataDecoder,
     [TYPE_WTP_DESCRIPTOR] = wtpDescriptorDecoder,
     [TYPE_WTP_FALLBACK] = nil,
-    [TYPE_WTP_FRAME_TUNNEL_MODE] = nil,
+    [TYPE_WTP_FRAME_TUNNEL_MODE] = wtpFrameTunnelModeDecoder,
     [TYPE_RESERVED_42] = nil,
     [TYPE_RESERVED_43] = nil,
     [TYPE_WTP_MAC_TYPE] = nil,
