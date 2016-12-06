@@ -376,6 +376,12 @@ local pf_tlv_wtp_board_data_board_revision = ProtoField.new("WTP Board Revision"
 local pf_tlv_wtp_board_data_base_mac_address = ProtoField.new("Base Mac Address", "ftnt.capwap.message.element.tlv.wtp.board.data.base.mac.address", ftypes.STRING)
 
 local pf_tlv_wtp_descriptor_max_radios = ProtoField.new("Max Radios", "ftnt.capwap.message.element.tlv.wtp.descriptor.max.radios", ftypes.UINT8)
+local pf_tlv_wtp_descriptor_radio_in_use = ProtoField.new("Radio in use", "ftnt.capwap.message.element.tlv.wtp.descriptor.radio.in.use", ftypes.UINT8)
+local pf_tlv_wtp_descriptor_encryption_capabilities = ProtoField.new("Encryption Capabilities (Number)", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities", ftypes.UINT8)
+local pf_tlv_wtp_descriptor_encryption_capabilities_encryption_capabilities = ProtoField.new("Encryption Capabilities", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities", ftypes.UINT24)
+local pf_tlv_wtp_descriptor_encryption_capabilities_reserved = ProtoField.new("Reserved (Encrypt)", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.reserved", ftypes.UINT8, nil, base.DEC, 0xe0)
+local pf_tlv_wtp_descriptor_encryption_capabilities_wbid = ProtoField.new("Encrypt WBID", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.wbid", ftypes.UINT8, btypes, base.DEC, 0x1f)
+local pf_tlv_wtp_descriptor_encryption_capabilities_values = ProtoField.new("Encryption Capabilities", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.values", ftypes.UINT16)
 
 capwap.fields = {
     pf_preamble_version, pf_preamble_type, pf_preamble_reserved,
@@ -392,7 +398,10 @@ capwap.fields = {
     pf_tlv_wtp_board_data_type, pf_tlv_wtp_board_data_length, pf_tlv_wtp_board_data_value,
     pf_tlv_wtp_board_data_model_number, pf_tlv_wtp_board_data_serial_number, 
     pf_tlv_wtp_board_data_board_id, pf_tlv_wtp_board_data_board_revision, pf_tlv_wtp_board_data_base_mac_address,
-    pf_tlv_wtp_descriptor_max_radios
+    pf_tlv_wtp_descriptor_max_radios, pf_tlv_wtp_descriptor_radio_in_use,
+    pf_tlv_wtp_descriptor_encryption_capabilities, pf_tlv_wtp_descriptor_encryption_capabilities_encryption_capabilities,
+    pf_tlv_wtp_descriptor_encryption_capabilities_reserved, pf_tlv_wtp_descriptor_encryption_capabilities_wbid,
+    pf_tlv_wtp_descriptor_encryption_capabilities_values
 }
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -492,6 +501,14 @@ function wtpDescriptorDecoder(tlv, tvbrange)
     local pktlen = tvb:reported_length_remaining()
 
     tlv:add(pf_tlv_wtp_descriptor_max_radios, tvb:range(0, 1))
+    tlv:add(pf_tlv_wtp_descriptor_radio_in_use, tvb:range(1, 1))
+
+    local encryption_capabilities = tlv:add(pf_tlv_wtp_descriptor_encryption_capabilities, tvb:range(2, 1))
+    local sub_encryption_capabilities = encryption_capabilities:add(pf_tlv_wtp_descriptor_encryption_capabilities_encryption_capabilities, tvb:range(3, 3))
+    sub_encryption_capabilities:set_text("Encryption Capabilities: (WBID "..tvb:range(3,1):bitfield(3,5)..") "..tvb:range(4,2):uint())
+    sub_encryption_capabilities:add(pf_tlv_wtp_descriptor_encryption_capabilities_reserved, tvb:range(3, 1))
+    sub_encryption_capabilities:add(pf_tlv_wtp_descriptor_encryption_capabilities_wbid, tvb:range(3, 1))
+    sub_encryption_capabilities:add(pf_tlv_wtp_descriptor_encryption_capabilities_values, tvb:range(4, 2))
 end
 
 local messageElementDecoder = {
