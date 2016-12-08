@@ -354,163 +354,186 @@ local wtp_mac_vals = {
     [2] = "Both (Local and Split MAC)",
 };
 
+-- AC Information Type Value
+local AC_INFORMATION_HARDWARE_VERSION = 4
+local AC_INFORMATION_SOFTWARE_VERSION = 5
+
+local ac_information_type_vals = {
+    [AC_INFORMATION_HARDWARE_VERSION] = "AC Hardware Version",
+    [AC_INFORMATION_SOFTWARE_VERSION] = "AC Software Version",
+};
+
+local ecn_support_vals = {
+    [0] = "Limited ECN Support",
+    [1] = "Full and Limited ECN Support",
+};
+
+-- Result Code
+local result_code_vals = {
+    [0] = "Success",
+    [1] = "Failure (AC List Message Element MUST Be Present)",
+    [2] = "Success (NAT Detected)",
+    [3] = "Join Failure (Unspecified)",
+    [4] = "Join Failure (Resource Depletion)",
+    [5] = "Join Failure (Unknown Source)",
+    [6] = "Join Failure (Incorrect Data)",
+    [7] = "Join Failure (Session ID Already in Use)",
+    [8] = "Join Failure (WTP Hardware Not Supported)",
+    [9] = "Join Failure (Binding Not Supported)",
+    [10] = "Reset Failure (Unable to Reset)",
+    [11] = "Reset Failure (Firmware Write Error)",
+    [12] = "Configuration Failure (Unable to Apply Requested Configuration - Service Provided Anyhow)",
+    [13] = "Configuration Failure (Unable to Apply Requested Configuration - Service Not Provided)",
+    [14] = "Image Data Error (Invalid Checksum)",
+    [15] = "Image Data Error (Invalid Data Length)",
+    [16] = "Image Data Error (Other Error)",
+    [17] = "Image Data Error (Image Already Present)",
+    [18] = "Message Unexpected (Invalid in Current State)",
+    [19] = "Message Unexpected (Unrecognized Request)",
+    [20] = "Failure - Missing Mandatory Message Element",
+    [21] = "Failure - Unrecognized Message Element",
+    [22] = "Data Transfer Error (No Information to Transfer)",
+};
+
+-- /* ************************************************************************* */
+-- /*                     Last Failure Type                                     */
+-- /* ************************************************************************* */
+local last_failure_type_vals = {
+    [0] = "Not Supported",
+    [1] = "AC Initiated",
+    [2] = "Link Failure",
+    [3] = "Software Failure",
+    [4] = "Hardware Failure",
+    [5] = "Other Failure",
+    [2] =5, "Unknown (e.g., WTP doesn't keep track of info)",
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf = {}
 
-pf.pf_preamble_version = ProtoField.new   ("Version", "ftnt.capwap.preamble.version", ftypes.UINT8, nil, base.DEC, 0xf0)
-pf.pf_preamble_type = ProtoField.new   ("Type", "ftnt.capwap.preamble.type", ftypes.UINT8, ptypes, base.DEC, 0x0f)
-pf.pf_preamble_reserved = ProtoField.new   ("Reserved", "ftnt.capwap.preamble.reserved", ftypes.UINT24)
+pf.preamble_version = ProtoField.new("Version", "ftnt.capwap.preamble.version", ftypes.UINT8, nil, base.DEC, 0xf0)
+pf.preamble_type = ProtoField.new("Type", "ftnt.capwap.preamble.type", ftypes.UINT8, ptypes, base.DEC, 0x0f)
+pf.preamble_reserved = ProtoField.new("Reserved", "ftnt.capwap.preamble.reserved", ftypes.UINT24)
 
-pf.pf_header_length = ProtoField.new   ("Header Length", "ftnt.capwap.header.length", ftypes.UINT24, nil, base.DEC, 0xf80000)
-pf.pf_header_radio_id = ProtoField.new   ("Radio ID", "ftnt.capwap.header.radio.id", ftypes.UINT24, nil, base.DEC, 0x07c000)
-pf.pf_header_binding_id = ProtoField.new   ("Wireless Binding ID", "ftnt.capwap.header.binding.id", ftypes.UINT24, btypes, base.DEC, 0x003e00)
-pf.pf_header_flags = ProtoField.new   ("Header Flags", "ftnt.capwap.header.flags", ftypes.UINT24, nil, base.HEX, 0x0001ff)
-pf.pf_header_fragment_id = ProtoField.new   ("Fragment ID", "ftnt.capwap.header.fragment.id", ftypes.UINT16, nil, base.DEC)
-pf.pf_header_fragment_offset = ProtoField.new   ("Fragment Offset", "ftnt.capwap.header.fragment.offset", ftypes.UINT16, nil, base.DEC, 0xfff8)
-pf.pf_header_reserved = ProtoField.new   ("Reserved", "ftnt.capwap.header.reserved", ftypes.UINT16, nil, base.DEC, 0x0007)
+pf.header_length = ProtoField.new("Header Length", "ftnt.capwap.header.length", ftypes.UINT24, nil, base.DEC, 0xf80000)
+pf.header_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.header.radio.id", ftypes.UINT24, nil, base.DEC, 0x07c000)
+pf.header_binding_id = ProtoField.new("Wireless Binding ID", "ftnt.capwap.header.binding.id", ftypes.UINT24, btypes, base.DEC, 0x003e00)
+pf.header_flags = ProtoField.new("Header Flags", "ftnt.capwap.header.flags", ftypes.UINT24, nil, base.HEX, 0x0001ff)
+pf.header_fragment_id = ProtoField.new("Fragment ID", "ftnt.capwap.header.fragment.id", ftypes.UINT16, nil, base.DEC)
+pf.header_fragment_offset = ProtoField.new("Fragment Offset", "ftnt.capwap.header.fragment.offset", ftypes.UINT16, nil, base.DEC, 0xfff8)
+pf.header_reserved = ProtoField.new("Reserved", "ftnt.capwap.header.reserved", ftypes.UINT16, nil, base.DEC, 0x0007)
 
-pf.pf_control_header_message_type = ProtoField.new("Message Type", "ftnt.capwap.control.header.message.type", ftypes.UINT32)
-pf.pf_control_header_message_type_enterprise_number = ProtoField.new("Message Type (Enterprise Number)", "ftnt.capwap.control.header.message.type.enterprise.number", ftypes.UINT24, ntypes)
-pf.pf_control_header_message_type_enterprise_specific = ProtoField.new("Message Type (Enterprise Specific)", "ftnt.capwap.control.header.message.type.enterprise.specific", ftypes.UINT8, stypes)
-pf.pf_control_header_sequence_number = ProtoField.new("Sequence Number", "ftnt.capwap.control.header.sequence.number", ftypes.UINT8)
-pf.pf_control_header_message_element_length = ProtoField.new("Message Element Length", "ftnt.capwap.control.header.message.element.length", ftypes.UINT16)
-pf.pf_control_header_message_flags = ProtoField.new("Flags", "ftnt.capwap.control.header.flags", ftypes.UINT8)
+pf.control_header_message_type = ProtoField.new("Message Type", "ftnt.capwap.control.header.message.type", ftypes.UINT32)
+pf.control_header_message_type_enterprise_number = ProtoField.new("Message Type (Enterprise Number)", "ftnt.capwap.control.header.message.type.enterprise.number", ftypes.UINT24, ntypes)
+pf.control_header_message_type_enterprise_specific = ProtoField.new("Message Type (Enterprise Specific)", "ftnt.capwap.control.header.message.type.enterprise.specific", ftypes.UINT8, stypes)
+pf.control_header_sequence_number = ProtoField.new("Sequence Number", "ftnt.capwap.control.header.sequence.number", ftypes.UINT8)
+pf.control_header_message_element_length = ProtoField.new("Message Element Length", "ftnt.capwap.control.header.message.element.length", ftypes.UINT16)
+pf.control_header_message_flags = ProtoField.new("Flags", "ftnt.capwap.control.header.flags", ftypes.UINT8)
 
-pf.pf_tlv = ProtoField.new("Type", "ftnt.capwap.message.element.tlv", ftypes.NONE)
-pf.pf_tlv_type = ProtoField.new("Type", "ftnt.capwap.message.element.tlv.type", ftypes.UINT16, tlvTypes)
-pf.pf_tlv_length = ProtoField.new("Length", "ftnt.capwap.message.element.tlv.length", ftypes.UINT16)
-pf.pf_tlv_value = ProtoField.new("Value", "ftnt.capwap.message.element.tlv.value", ftypes.BYTES)
+pf.tlv = ProtoField.new("Type", "ftnt.capwap.message.element.tlv", ftypes.NONE)
+pf.tlv_type = ProtoField.new("Type", "ftnt.capwap.message.element.tlv.type", ftypes.UINT16, tlvTypes)
+pf.tlv_length = ProtoField.new("Length", "ftnt.capwap.message.element.tlv.length", ftypes.UINT16)
+pf.tlv_value = ProtoField.new("Value", "ftnt.capwap.message.element.tlv.value", ftypes.BYTES)
 
 -- message elements protocol fields
-pf.pf_tlv_discovery_type = ProtoField.new("Discovery Type", "ftnt.capwap.message.element.tlv.discovery.type", ftypes.UINT8, discovery_type_vals)
-pf.pf_tlv_vendor_identifier = ProtoField.new("Vendor Identifier", "ftnt.capwap.message.element.tlv.vendor.identifier", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
-pf.pf_tlv_vendor_element_id = ProtoField.new("Vendor Element ID", "ftnt.capwap.message.element.tlv.vendor.element.id", ftypes.UINT16)
-pf.pf_tlv_vendor_data = ProtoField.new("Vendor Data", "ftnt.capwap.message.element.tlv.vendor.data", ftypes.BYTES)
-pf.pf_tlv_fortinet_element_id = ProtoField.new("Fortinet Element ID", "ftnt.capwap.message.element.tlv.fortinet.element.id", ftypes.UINT16, fortinet_element_id_vals)
-pf.pf_tlv_fortinet_value = ProtoField.new("Fortinet Value", "ftnt.capwap.message.element.tlv.fortinet.value", ftypes.BYTES)
+pf.discovery_type = ProtoField.new("Discovery Type", "ftnt.capwap.message.element.discovery.type", ftypes.UINT8, discovery_type_vals)
+pf.vendor_identifier = ProtoField.new("Vendor Identifier", "ftnt.capwap.message.element.vendor.identifier", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
+pf.vendor_element_id = ProtoField.new("Vendor Element ID", "ftnt.capwap.message.element.vendor.element.id", ftypes.UINT16)
+pf.vendor_data = ProtoField.new("Vendor Data", "ftnt.capwap.message.element.vendor.data", ftypes.BYTES)
+pf.fortinet_element_id = ProtoField.new("Fortinet Element ID", "ftnt.capwap.message.element.fortinet.element.id", ftypes.UINT16, fortinet_element_id_vals)
+pf.fortinet_value = ProtoField.new("Fortinet Value", "ftnt.capwap.message.element.fortinet.value", ftypes.BYTES)
 
-pf.pf_tlv_vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.tlv.fortinet.vlan.id", ftypes.UINT16)
-pf.pf_tlv_vsp_ftnt_wtpcap = ProtoField.new("WTP CAP", "ftnt.capwap.message.element.tlv.fortinet.wtp.cap", ftypes.BYTES)
+pf.vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.fortinet.vlan.id", ftypes.UINT16)
+pf.vsp_ftnt_wtpcap = ProtoField.new("WTP CAP", "ftnt.capwap.message.element.fortinet.wtp.cap", ftypes.BYTES)
 
-pf.pf_tlv_wtp_board_data_vendor = ProtoField.new("WTP Board Data Vendor", "ftnt.capwap.message.element.tlv.wtp.board.data.vendor", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
-pf.pf_tlv_vsp_wtp_board_data = ProtoField.new("WTP Board Data", "ftnt.capwap.message.element.tlv.wtp.board.data", ftypes.NONE)
-pf.pf_tlv_wtp_board_data_type = ProtoField.new("Board Data Type", "ftnt.capwap.message.element.tlv.wtp.board.data.type", ftypes.UINT16, board_data_type_vals)
-pf.pf_tlv_wtp_board_data_length = ProtoField.new("Board Data Length", "ftnt.capwap.message.element.tlv.wtp.board.data.length", ftypes.UINT16)
-pf.pf_tlv_wtp_board_data_value = ProtoField.new("Board Data Value", "ftnt.capwap.message.element.tlv.wtp.board.data.value", ftypes.BYTES)
-pf.pf_tlv_wtp_board_data_model_number = ProtoField.new("WTP Model Number", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.model.number", ftypes.STRING)
-pf.pf_tlv_wtp_board_data_serial_number = ProtoField.new("WTP Serial Number", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.serial.number", ftypes.STRING)
-pf.pf_tlv_wtp_board_data_board_id = ProtoField.new("WTP Board ID", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.board.id", ftypes.STRING)
-pf.pf_tlv_wtp_board_data_board_revision = ProtoField.new("WTP Board Revision", "ftnt.capwap.message.element.tlv.wtp.board.data.wtp.board.revision", ftypes.STRING)
-pf.pf_tlv_wtp_board_data_base_mac_address = ProtoField.new("Base Mac Address", "ftnt.capwap.message.element.tlv.wtp.board.data.base.mac.address", ftypes.STRING)
+pf.wtp_board_data_vendor = ProtoField.new("WTP Board Data Vendor", "ftnt.capwap.message.element.wtp.board.data.vendor", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
+pf.vsp_wtp_board_data = ProtoField.new("WTP Board Data", "ftnt.capwap.message.element.wtp.board.data", ftypes.NONE)
+pf.wtp_board_data_type = ProtoField.new("Board Data Type", "ftnt.capwap.message.element.wtp.board.data.type", ftypes.UINT16, board_data_type_vals)
+pf.wtp_board_data_length = ProtoField.new("Board Data Length", "ftnt.capwap.message.element.wtp.board.data.length", ftypes.UINT16)
+pf.wtp_board_data_value = ProtoField.new("Board Data Value", "ftnt.capwap.message.element.wtp.board.data.value", ftypes.BYTES)
+pf.wtp_board_data_model_number = ProtoField.new("WTP Model Number", "ftnt.capwap.message.element.wtp.board.data.wtp.model.number", ftypes.STRING)
+pf.wtp_board_data_serial_number = ProtoField.new("WTP Serial Number", "ftnt.capwap.message.element.wtp.board.data.wtp.serial.number", ftypes.STRING)
+pf.wtp_board_data_board_id = ProtoField.new("WTP Board ID", "ftnt.capwap.message.element.wtp.board.data.wtp.board.id", ftypes.STRING)
+pf.wtp_board_data_board_revision = ProtoField.new("WTP Board Revision", "ftnt.capwap.message.element.wtp.board.data.wtp.board.revision", ftypes.STRING)
+pf.wtp_board_data_base_mac_address = ProtoField.new("Base Mac Address", "ftnt.capwap.message.element.wtp.board.data.base.mac.address", ftypes.STRING)
 
-pf.pf_tlv_wtp_descriptor_max_radios = ProtoField.new("Max Radios", "ftnt.capwap.message.element.tlv.wtp.descriptor.max.radios", ftypes.UINT8)
-pf.pf_tlv_wtp_descriptor_radio_in_use = ProtoField.new("Radio in use", "ftnt.capwap.message.element.tlv.wtp.descriptor.radio.in.use", ftypes.UINT8)
-pf.pf_tlv_wtp_descriptor_encryption_capabilities = ProtoField.new("Encryption Capabilities (Number)", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities", ftypes.UINT8)
-pf.pf_tlv_wtp_descriptor_encryption_capabilities_encryption_capabilities = ProtoField.new("Encryption Capabilities", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities", ftypes.UINT24)
-pf.pf_tlv_wtp_descriptor_encryption_capabilities_reserved = ProtoField.new("Reserved (Encrypt)", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.reserved", ftypes.UINT8, nil, base.DEC, 0xe0)
-pf.pf_tlv_wtp_descriptor_encryption_capabilities_wbid = ProtoField.new("Encrypt WBID", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.wbid", ftypes.UINT8, btypes, base.DEC, 0x1f)
-pf.pf_tlv_wtp_descriptor_encryption_capabilities_values = ProtoField.new("Encryption Capabilities", "ftnt.capwap.message.element.tlv.wtp.descriptor.encryption.capabilities.values", ftypes.UINT16)
+pf.wtp_descriptor_max_radios = ProtoField.new("Max Radios", "ftnt.capwap.message.element.wtp.descriptor.max.radios", ftypes.UINT8)
+pf.wtp_descriptor_radio_in_use = ProtoField.new("Radio in use", "ftnt.capwap.message.element.wtp.descriptor.radio.in.use", ftypes.UINT8)
+pf.wtp_descriptor_encryption_capabilities = ProtoField.new("Encryption Capabilities (Number)", "ftnt.capwap.message.element.wtp.descriptor.encryption.capabilities", ftypes.UINT8)
+pf.wtp_descriptor_encryption_capabilities_encryption_capabilities = ProtoField.new("Encryption Capabilities", "ftnt.capwap.message.element.wtp.descriptor.encryption.capabilities", ftypes.UINT24)
+pf.wtp_descriptor_encryption_capabilities_reserved = ProtoField.new("Reserved (Encrypt)", "ftnt.capwap.message.element.wtp.descriptor.encryption.capabilities.reserved", ftypes.UINT8, nil, base.DEC, 0xe0)
+pf.wtp_descriptor_encryption_capabilities_wbid = ProtoField.new("Encrypt WBID", "ftnt.capwap.message.element.wtp.descriptor.encryption.capabilities.wbid", ftypes.UINT8, btypes, base.DEC, 0x1f)
+pf.wtp_descriptor_encryption_capabilities_values = ProtoField.new("Encryption Capabilities", "ftnt.capwap.message.element.wtp.descriptor.encryption.capabilities.values", ftypes.UINT16)
 
-pf.pf_tlv_wtp_descriptor_vendor = ProtoField.new("WTP Descriptor Vendor", "ftnt.capwap.message.element.tlv.wtp.descriptor.vendor", ftypes.UINT32)
-pf.pf_tlv_wtp_descriptor_type = ProtoField.new("Descriptor Type", "ftnt.capwap.message.element.tlv.wtp.descriptor.type", ftypes.UINT16, wtp_descriptor_type_vals)
-pf.pf_tlv_wtp_descriptor_length = ProtoField.new("Descriptor Length", "ftnt.capwap.message.element.tlv.wtp.descriptor.length", ftypes.UINT16)
-pf.pf_tlv_wtp_descriptor_value = ProtoField.new("Descriptor Value", "ftnt.capwap.message.element.tlv.wtp.descriptor.value", ftypes.BYTES)
-pf.pf_tlv_wtp_descriptor_hardware_version = ProtoField.new("WTP Hardware Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.hardware.version", ftypes.UINT8)
-pf.pf_tlv_wtp_descriptor_software_version = ProtoField.new("WTP Active Software Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.active.software.version", ftypes.STRING)
-pf.pf_tlv_wtp_descriptor_boot_version = ProtoField.new("WTP Boot Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.boot.version", ftypes.STRING)
-pf.pf_tlv_wtp_descriptor_other_software_version = ProtoField.new("WTP Other Software Version", "ftnt.capwap.message.element.tlv.wtp.descriptor.other.software.version", ftypes.STRING)
+pf.wtp_descriptor_vendor = ProtoField.new("WTP Descriptor Vendor", "ftnt.capwap.message.element.wtp.descriptor.vendor", ftypes.UINT32)
+pf.wtp_descriptor_type = ProtoField.new("Descriptor Type", "ftnt.capwap.message.element.wtp.descriptor.type", ftypes.UINT16, wtp_descriptor_type_vals)
+pf.wtp_descriptor_length = ProtoField.new("Descriptor Length", "ftnt.capwap.message.element.wtp.descriptor.length", ftypes.UINT16)
+pf.wtp_descriptor_value = ProtoField.new("Descriptor Value", "ftnt.capwap.message.element.wtp.descriptor.value", ftypes.BYTES)
+pf.wtp_descriptor_hardware_version = ProtoField.new("WTP Hardware Version", "ftnt.capwap.message.element.wtp.descriptor.hardware.version", ftypes.UINT8)
+pf.wtp_descriptor_software_version = ProtoField.new("WTP Active Software Version", "ftnt.capwap.message.element.wtp.descriptor.active.software.version", ftypes.STRING)
+pf.wtp_descriptor_boot_version = ProtoField.new("WTP Boot Version", "ftnt.capwap.message.element.wtp.descriptor.boot.version", ftypes.STRING)
+pf.wtp_descriptor_other_software_version = ProtoField.new("WTP Other Software Version", "ftnt.capwap.message.element.wtp.descriptor.other.software.version", ftypes.STRING)
 
-pf.pf_tlv_wtp_frame_tunnel_mode = ProtoField.new("WTP Frame Tunnel Mode", "ftnt.capwap.message.element.tlv.wtp.frame.tunnel.mode", ftypes.UINT8)
-pf.pf_tlv_wtp_native_frame_tunnel_mode = ProtoField.new("Native Frame Tunnel Mode", "ftnt.capwap.message.element.tlv.wtp.native.frame.tunnel.mode", ftypes.UINT8, booltypes, base.DEC, 0x08)
-pf.pf_tlv_wtp_8023_frame_tunnel_mode = ProtoField.new("802.3 Frame Tunnel Mode", "ftnt.capwap.message.element.tlv.wtp.8023.frame.tunnel.mode", ftypes.UINT8, booltypes, base.DEC, 0x04)
-pf.pf_tlv_wtp_frame_tunnel_mode_local_bridging = ProtoField.new("Local Bridging", "ftnt.capwap.message.element.tlv.wtp.frame.tunnel.mode.local.bridging", ftypes.UINT8, booltypes, base.DEC, 0x02)
+pf.wtp_frame_tunnel_mode = ProtoField.new("WTP Frame Tunnel Mode", "ftnt.capwap.message.element.wtp.frame.tunnel.mode", ftypes.UINT8)
+pf.wtp_native_frame_tunnel_mode = ProtoField.new("Native Frame Tunnel Mode", "ftnt.capwap.message.element.wtp.native.frame.tunnel.mode", ftypes.UINT8, booltypes, base.DEC, 0x08)
+pf.wtp_8023_frame_tunnel_mode = ProtoField.new("802.3 Frame Tunnel Mode", "ftnt.capwap.message.element.wtp.8023.frame.tunnel.mode", ftypes.UINT8, booltypes, base.DEC, 0x04)
+pf.wtp_frame_tunnel_mode_local_bridging = ProtoField.new("Local Bridging", "ftnt.capwap.message.element.wtp.frame.tunnel.mode.local.bridging", ftypes.UINT8, booltypes, base.DEC, 0x02)
 
-pf.pf_tlv_wtp_frame_tunnel_mode_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.tlv.wtp.native.frame.tunnel.mode.reserved", ftypes.UINT8, nil, base.DEC, 0xf1)
-pf.pf_tlv_wtp_mac_type = ProtoField.new("WTP MAC Type", "ftnt.capwap.message.element.tlv.wtp.mac.type", ftypes.UINT8, wtp_mac_vals)
+pf.wtp_frame_tunnel_mode_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.wtp.native.frame.tunnel.mode.reserved", ftypes.UINT8, nil, base.DEC, 0xf1)
+pf.wtp_mac_type = ProtoField.new("WTP MAC Type", "ftnt.capwap.message.element.wtp.mac.type", ftypes.UINT8, wtp_mac_vals)
 
-pf.pf_tlv_wtp_radio_information_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.tlv.wtp.radio.information.radio.id", ftypes.UINT8)
-pf.pf_tlv_wtp_radio_information_radio_type_reserved = ProtoField.new("Radio Type Reserved", "ftnt.capwap.message.element.tlv.wtp.radio.information.radio.type.reserved", ftypes.BYTES)
-pf.pf_tlv_wtp_radio_information_radio_type_80211n = ProtoField.new("Radio Type 802.11n", "ftnt.capwap.message.element.tlv.wtp.radio.information.radio.type.80211n", ftypes.UINT8, booltypes, base.DEC, 0x08)
-pf.pf_tlv_wtp_radio_information_radio_type_80211g = ProtoField.new("Radio Type 802.11g", "ftnt.capwap.message.element.tlv.wtp.radio.information.radio.type.80211g", ftypes.UINT8, booltypes, base.DEC, 0x04)
-pf.pf_tlv_wtp_radio_information_radio_type_80211a = ProtoField.new("Radio Type 802.11a", "ftnt.capwap.message.element.tlv.wtp.radio.information.radio.type.80211a", ftypes.UINT8, booltypes, base.DEC, 0x02)
-pf.pf_tlv_wtp_radio_information_radio_type_80211b = ProtoField.new("Radio Type 802.11b", "ftnt.capwap.message.element.tlv.wtp.radio.information.radio.type.80211b", ftypes.UINT8, booltypes, base.DEC, 0x01)
+pf.wtp_radio_information_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.wtp.radio.information.radio.id", ftypes.UINT8)
+pf.wtp_radio_information_radio_type_reserved = ProtoField.new("Radio Type Reserved", "ftnt.capwap.message.element.wtp.radio.information.radio.type.reserved", ftypes.BYTES)
+pf.wtp_radio_information_radio_type_80211n = ProtoField.new("Radio Type 802.11n", "ftnt.capwap.message.element.wtp.radio.information.radio.type.80211n", ftypes.UINT8, booltypes, base.DEC, 0x08)
+pf.wtp_radio_information_radio_type_80211g = ProtoField.new("Radio Type 802.11g", "ftnt.capwap.message.element.wtp.radio.information.radio.type.80211g", ftypes.UINT8, booltypes, base.DEC, 0x04)
+pf.wtp_radio_information_radio_type_80211a = ProtoField.new("Radio Type 802.11a", "ftnt.capwap.message.element.wtp.radio.information.radio.type.80211a", ftypes.UINT8, booltypes, base.DEC, 0x02)
+pf.wtp_radio_information_radio_type_80211b = ProtoField.new("Radio Type 802.11b", "ftnt.capwap.message.element.wtp.radio.information.radio.type.80211b", ftypes.UINT8, booltypes, base.DEC, 0x01)
 
+pf.ac_descriptor_stations = ProtoField.new("Stations", "ftnt.capwap.message.element.ac.descriptor.stations", ftypes.UINT16)
+pf.ac_descriptor_limit_stations = ProtoField.new("Limit Stations", "ftnt.capwap.message.element.ac.descriptor.limit.stations", ftypes.UINT16)
+pf.ac_descriptor_active_wtps = ProtoField.new("Active WTPs", "ftnt.capwap.message.element.ac.descriptor.active.wtps", ftypes.UINT16)
+pf.ac_descriptor_max_wtps = ProtoField.new("Max WTPs", "ftnt.capwap.message.element.ac.descriptor.max.wtps", ftypes.UINT16)
+pf.ac_descriptor_security_flags = ProtoField.new("Security Flags", "ftnt.capwap.message.element.ac.descriptor.security.flags", ftypes.UINT8, nil, base.HEX)
+pf.ac_descriptor_security_flags_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.ac.descriptor.security.flags.reserved", ftypes.UINT8, nil, base.DEC, 0xf9)
+pf.ac_descriptor_security_flags_ac_supports_pre_shared = ProtoField.new("AC supports the pre-shared", "ftnt.capwap.message.element.ac.descriptor.security.flags.ac.supports.pre.shared", ftypes.UINT8, booltypes, base.DEC, 0x04)
+pf.ac_descriptor_security_flags_ac_supports_x509 = ProtoField.new("AC supports X.509 Certificate", "ftnt.capwap.message.element.ac.descriptor.security.flags.ac.supports.x509", ftypes.UINT8, booltypes, base.DEC, 0x02)
+pf.ac_descriptor_rmac_field = ProtoField.new("R-MAC Field", "ftnt.capwap.message.element.ac.descriptor.rmac.field", ftypes.UINT8, {[0] = "Reserved"})
+pf.ac_descriptor_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.ac.descriptor.reserved", ftypes.UINT8)
+pf.ac_descriptor_dtls_policy_flags = ProtoField.new("DTLS Policy Flags", "ftnt.capwap.message.element.ac.descriptor.dtls.policy.flags", ftypes.UINT8)
+pf.ac_descriptor_ac_information = ProtoField.new("AC Information", "ftnt.capwap.message.element.ac.descriptor.ac.information", ftypes.BYTES)
+pf.ac_descriptor_ac_information_vendor = ProtoField.new("AC Information Vendor", "ftnt.capwap.message.element.ac.descriptor.ac.information.vendor", ftypes.BYTES)
+pf.ac_descriptor_ac_information_type = ProtoField.new("AC Information Type", "ftnt.capwap.message.element.ac.descriptor.ac.information.type", ftypes.BYTES)
+pf.ac_descriptor_ac_information_length = ProtoField.new("AC Information Length", "ftnt.capwap.message.element.ac.descriptor.ac.information.length", ftypes.BYTES)
+pf.ac_descriptor_ac_information_value = ProtoField.new("AC Information Value", "ftnt.capwap.message.element.ac.descriptor.ac.information.value", ftypes.BYTES)
 
-capwap.fields = {
-    pf.pf_preamble_version,
-    pf.pf_preamble_type,
-    pf.pf_preamble_reserved,
-    pf.pf_header_length,
-    pf.pf_header_radio_id,
-    pf.pf_header_binding_id,
-    pf.pf_header_flags,
-    pf.pf_header_fragment_id,
-    pf.pf_header_fragment_offset,
-    pf.pf_header_reserved,
-    pf.pf_control_header_message_type,
-    pf.pf_control_header_message_type_enterprise_number,
-    pf.pf_control_header_message_type_enterprise_specific,
-    pf.pf_control_header_sequence_number,
-    pf.pf_control_header_message_element_length,
-    pf.pf_control_header_message_flags,
-    pf.pf_tlv,
-    pf.pf_tlv_type,
-    pf.pf_tlv_length,
-    pf.pf_tlv_value,
-    pf.pf_tlv_discovery_type,
-    pf.pf_tlv_vendor_identifier,
-    pf.pf_tlv_vendor_element_id,
-    pf.pf_tlv_vendor_data,
-    pf.pf_tlv_fortinet_element_id,
-    pf.pf_tlv_fortinet_value,
-    pf.pf_tlv_vsp_ftnt_vlanid,
-    pf.pf_tlv_vsp_ftnt_wtpcap,
-    pf.pf_tlv_wtp_board_data_vendor,
-    pf.pf_tlv_vsp_wtp_board_data,
-    pf.pf_tlv_wtp_board_data_type,
-    pf.pf_tlv_wtp_board_data_length,
-    pf.pf_tlv_wtp_board_data_value,
-    pf.pf_tlv_wtp_board_data_model_number,
-    pf.pf_tlv_wtp_board_data_serial_number,
-    pf.pf_tlv_wtp_board_data_board_id,
-    pf.pf_tlv_wtp_board_data_board_revision,
-    pf.pf_tlv_wtp_board_data_base_mac_address,
-    pf.pf_tlv_wtp_descriptor_max_radios,
-    pf.pf_tlv_wtp_descriptor_radio_in_use,
-    pf.pf_tlv_wtp_descriptor_encryption_capabilities,
-    pf.pf_tlv_wtp_descriptor_encryption_capabilities_encryption_capabilities,
-    pf.pf_tlv_wtp_descriptor_encryption_capabilities_reserved,
-    pf.pf_tlv_wtp_descriptor_encryption_capabilities_wbid,
-    pf.pf_tlv_wtp_descriptor_encryption_capabilities_values,
-    pf.pf_tlv_wtp_descriptor_vendor,
-    pf.pf_tlv_wtp_descriptor_type,
-    pf.pf_tlv_wtp_descriptor_length,
-    pf.pf_tlv_wtp_descriptor_value,
-    pf.pf_tlv_wtp_descriptor_hardware_version,
-    pf.pf_tlv_wtp_descriptor_software_version,
-    pf.pf_tlv_wtp_descriptor_boot_version,
-    pf.pf_tlv_wtp_descriptor_other_software_version,
-    pf.pf_tlv_wtp_frame_tunnel_mode,
-    pf.pf_tlv_wtp_native_frame_tunnel_mode,
-    pf.pf_tlv_wtp_8023_frame_tunnel_mode,
-    pf.pf_tlv_wtp_frame_tunnel_mode_local_bridging,
-    pf.pf_tlv_wtp_frame_tunnel_mode_reserved,
-    pf.pf_tlv_wtp_mac_type,
-    pf.pf_tlv_wtp_radio_information_radio_id,
-    pf.pf_tlv_wtp_radio_information_radio_type_reserved,
-    pf.pf_tlv_wtp_radio_information_radio_type_80211n,
-    pf.pf_tlv_wtp_radio_information_radio_type_80211g,
-    pf.pf_tlv_wtp_radio_information_radio_type_80211a,
-    pf.pf_tlv_wtp_radio_information_radio_type_80211b,
-}
+pf.ac_name = ProtoField.new("AC Name", "ftnt.capwap.message.element.ac.name", ftypes.STRING)
+pf.ac_timestamp = ProtoField.new("AC Timestamp", "ftnt.capwap.message.element.ac.timestamp", ftypes.STRING)
+pf.location_data = ProtoField.new("Location Data", "ftnt.capwap.message.element.location.data", ftypes.STRING)
+pf.wtp_name = ProtoField.new("WTP Name", "ftnt.capwap.message.element.wtp.name", ftypes.STRING)
+pf.session_id = ProtoField.new("Session ID", "ftnt.capwap.message.element.session.id", ftypes.BYTES)
+pf.ecn_support = ProtoField.new("ECN Support", "ftnt.capwap.message.element.ecn.support", ftypes.UINT8, ecn_support_vals)
+pf.capwap_local_ipv4_address = ProtoField.new("CAPWAP Local IPv4 Address", "ftnt.capwap.message.element.capwap.local.ipv4.address", ftypes.IPv4)
+pf.result_code = ProtoField.new("Result Code", "ftnt.capwap.message.element.result.code", ftypes.UINT32, result_code_vals)
+pf.statistics_timer = ProtoField.new("Statistics Timer (Sec)", "ftnt.capwap.message.element.statistics.timer", ftypes.UINT16)
+
+pf.wtp_reboot_statistics_reboot_count = ProtoField.new("Reboot Count", "ftnt.capwap.message.element.wtp.reboot.statistics.reboot.count", ftypes.UINT16)
+pf.wtp_reboot_statistics_ac_initiated_count =  ProtoField.new("AC Initiated Count", "ftnt.capwap.message.element.wtp.reboot.statistics.ac.initiated.count", ftypes.UINT16)
+pf.wtp_reboot_statistics_linked_failure_count = ProtoField.new("Link Failure Count", "ftnt.capwap.message.element.wtp.reboot.statistics.linked.failure.count", ftypes.UINT16)
+pf.wtp_reboot_statistics_sw_failure_count = ProtoField.new("SW Failure Count", "ftnt.capwap.message.element.wtp.reboot.statistics.sw.failure.count", ftypes.UINT16)
+pf.wtp_reboot_statistics_hw_failure_count = ProtoField.new("HW Failure Count", "ftnt.capwap.message.element.wtp.reboot.statistics.hw.failure.count", ftypes.UINT16)
+pf.wtp_reboot_statistics_other_failure_count = ProtoField.new("Other Failure Count", "ftnt.capwap.message.element.wtp.reboot.statistics.other.failure.count", ftypes.UINT16)
+pf.wtp_reboot_statistics_unknown_failure_count = ProtoField.new("Unknown Failure Count", "ftnt.capwap.message.element.wtp.reboot.statistics.unknown.failure.count", ftypes.UINT16)
+pf.wtp_reboot_statistics_last_failure_type = ProtoField.new("Last Failure Type", "ftnt.capwap.message.element.wtp.reboot.statistics.last.failure.type", ftypes.UINT16, last_failure_type_vals)
+
+capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_vsp_ftnt_vlanid, tvbrange)
+    tlv:add(pf.vsp_ftnt_vlanid, tvbrange)
 end
 
 function wtpCapDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_vsp_ftnt_wtpcap, tvbrange)
+    tlv:add(pf.vsp_ftnt_wtpcap, tvbrange)
 end
 
 local ftntElementDecoder = {
@@ -519,23 +542,23 @@ local ftntElementDecoder = {
 }
 
 function boardDataWtpModelNumberDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_board_data_model_number, tvbrange)
+    tlv:add(pf.wtp_board_data_model_number, tvbrange)
 end
 
 function boardDataWtpSerialNumberDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_board_data_serial_number, tvbrange)
+    tlv:add(pf.wtp_board_data_serial_number, tvbrange)
 end
 
 function boardDataBoardIdDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_board_data_board_id, tvbrange)
+    tlv:add(pf.wtp_board_data_board_id, tvbrange)
 end
 
 function boardDataBoardRevisionDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_board_data_board_revision, tvbrange)
+    tlv:add(pf.wtp_board_data_board_revision, tvbrange)
 end
 
 function boardDataBaseMacAddressDecoder(tlv, tvbrange)
-    local base_mac_address = tlv:add(pf.pf_tlv_wtp_board_data_base_mac_address, tvbrange)
+    local base_mac_address = tlv:add(pf.wtp_board_data_base_mac_address, tvbrange)
     local tvb = tvbrange:tvb()
     local mac_string = string.format("%2x:%2x:%2x:%2x:%2x:%2x", -- todo: format 
         tvb:range(0, 1):uint(),tvb:range(1, 1):uint(),tvb:range(2, 1):uint(), 
@@ -552,16 +575,16 @@ local boardDataValueDecoder = {
 }
 
 function discoveryTypeDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_discovery_type, tvbrange)
+    tlv:add(pf.discovery_type, tvbrange)
 end
 
 function vendorSpecificPayloadDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
-    tlv:add(pf.pf_tlv_vendor_identifier, tvb:range(0, 4))
-    tlv:add(pf.pf_tlv_vendor_element_id, tvb:range(4, 2))
-    tlv:add(pf.pf_tlv_vendor_data, tvb:range(6))
-    tlv:add(pf.pf_tlv_fortinet_element_id, tvb:range(4, 2))
-    tlv:add(pf.pf_tlv_fortinet_value, tvb:range(6))
+    tlv:add(pf.vendor_identifier, tvb:range(0, 4))
+    tlv:add(pf.vendor_element_id, tvb:range(4, 2))
+    tlv:add(pf.vendor_data, tvb:range(6))
+    tlv:add(pf.fortinet_element_id, tvb:range(4, 2))
+    tlv:add(pf.fortinet_value, tvb:range(6))
 
     local id = tvb:range(4, 2):uint()
     if ftntElementDecoder[id] then
@@ -573,7 +596,7 @@ function wtpBoardDataDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     local pktlen = tvb:reported_length_remaining()
 
-    tlv:add(pf.pf_tlv_wtp_board_data_vendor, tvb:range(0, 4))
+    tlv:add(pf.wtp_board_data_vendor, tvb:range(0, 4))
     
     local pos = 4
     local pktlen_remaining = pktlen - pos
@@ -582,11 +605,11 @@ function wtpBoardDataDecoder(tlv, tvbrange)
         local type = tvb:range(pos, 2):uint()
         local length = tvb:range(pos + 2, 2):uint()
 
-        local data = tlv:add(pf.pf_tlv_vsp_wtp_board_data, tvb:range(pos, length + 4))
+        local data = tlv:add(pf.vsp_wtp_board_data, tvb:range(pos, length + 4))
         data:set_text("WTP Board Data: (t="..type..",l="..length..") "..board_data_type_vals[type])
-        data:add(pf.pf_tlv_wtp_board_data_type, tvb:range(pos, 2))
-        data:add(pf.pf_tlv_wtp_board_data_length, tvb:range(pos+2, 2))
-        data:add(pf.pf_tlv_wtp_board_data_value, tvb:range(pos+4, length))
+        data:add(pf.wtp_board_data_type, tvb:range(pos, 2))
+        data:add(pf.wtp_board_data_length, tvb:range(pos+2, 2))
+        data:add(pf.wtp_board_data_value, tvb:range(pos+4, length))
         
         if boardDataValueDecoder[type] then
             boardDataValueDecoder[type](data, tvb:range(pos+4, length))
@@ -598,19 +621,19 @@ function wtpBoardDataDecoder(tlv, tvbrange)
 end
 
 function wtpDescriptorHardwareVersionDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_descriptor_hardware_version, tvbrange)
+    tlv:add(pf.wtp_descriptor_hardware_version, tvbrange)
 end
 
 function wtpDescriptorActiveSoftwareVersionDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_descriptor_software_version, tvbrange)
+    tlv:add(pf.wtp_descriptor_software_version, tvbrange)
 end
 
 function wtpDescriptorBootVersionDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_descriptor_boot_version, tvbrange)
+    tlv:add(pf.wtp_descriptor_boot_version, tvbrange)
 end
 
 function wtpDescriptorOtherSoftwareVersionDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_descriptor_other_software_version, tvbrange)
+    tlv:add(pf.wtp_descriptor_other_software_version, tvbrange)
 end
 
 local descriptorValueDecoder = {
@@ -624,15 +647,15 @@ function wtpDescriptorDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     local pktlen = tvb:reported_length_remaining()
 
-    tlv:add(pf.pf_tlv_wtp_descriptor_max_radios, tvb:range(0, 1))
-    tlv:add(pf.pf_tlv_wtp_descriptor_radio_in_use, tvb:range(1, 1))
+    tlv:add(pf.wtp_descriptor_max_radios, tvb:range(0, 1))
+    tlv:add(pf.wtp_descriptor_radio_in_use, tvb:range(1, 1))
 
-    local encryption_capabilities = tlv:add(pf.pf_tlv_wtp_descriptor_encryption_capabilities, tvb:range(2, 1))
-    local sub_encryption_capabilities = encryption_capabilities:add(pf.pf_tlv_wtp_descriptor_encryption_capabilities_encryption_capabilities, tvb:range(3, 3))
+    local encryption_capabilities = tlv:add(pf.wtp_descriptor_encryption_capabilities, tvb:range(2, 1))
+    local sub_encryption_capabilities = encryption_capabilities:add(pf.wtp_descriptor_encryption_capabilities_encryption_capabilities, tvb:range(3, 3))
     sub_encryption_capabilities:set_text("Encryption Capabilities: (WBID "..tvb:range(3,1):bitfield(3,5)..") "..tvb:range(4,2):uint())
-    sub_encryption_capabilities:add(pf.pf_tlv_wtp_descriptor_encryption_capabilities_reserved, tvb:range(3, 1))
-    sub_encryption_capabilities:add(pf.pf_tlv_wtp_descriptor_encryption_capabilities_wbid, tvb:range(3, 1))
-    sub_encryption_capabilities:add(pf.pf_tlv_wtp_descriptor_encryption_capabilities_values, tvb:range(4, 2))
+    sub_encryption_capabilities:add(pf.wtp_descriptor_encryption_capabilities_reserved, tvb:range(3, 1))
+    sub_encryption_capabilities:add(pf.wtp_descriptor_encryption_capabilities_wbid, tvb:range(3, 1))
+    sub_encryption_capabilities:add(pf.wtp_descriptor_encryption_capabilities_values, tvb:range(4, 2))
 
     local pos = 6
     local pktlen_remaining = pktlen - pos
@@ -641,12 +664,12 @@ function wtpDescriptorDecoder(tlv, tvbrange)
         local type = tvb:range(pos + 4, 2):uint()
         local length = tvb:range(pos + 6, 2):uint()
 
-        local value = tlv:add(pf.pf_tlv_wtp_descriptor_value, tvb:range(pos, length + 8))
+        local value = tlv:add(pf.wtp_descriptor_value, tvb:range(pos, length + 8))
         value:set_text("WTP Descriptor: (t="..type..",l="..length..") "..wtp_descriptor_type_vals[type])
-        value:add(pf.pf_tlv_wtp_descriptor_vendor, tvb:range(pos, 4))
-        value:add(pf.pf_tlv_wtp_descriptor_type, tvb:range(pos+4, 2))
-        value:add(pf.pf_tlv_wtp_descriptor_length, tvb:range(pos+6, 2))
-        value:add(pf.pf_tlv_wtp_descriptor_value, tvb:range(pos+8, length))
+        value:add(pf.wtp_descriptor_vendor, tvb:range(pos, 4))
+        value:add(pf.wtp_descriptor_type, tvb:range(pos+4, 2))
+        value:add(pf.wtp_descriptor_length, tvb:range(pos+6, 2))
+        value:add(pf.wtp_descriptor_value, tvb:range(pos+8, length))
 
         if descriptorValueDecoder[type] then
             descriptorValueDecoder[type](value, tvb:range(pos+8, length))
@@ -658,34 +681,121 @@ function wtpDescriptorDecoder(tlv, tvbrange)
 end
 
 function wtpFrameTunnelModeDecoder(tlv, tvbrange)
-    local mode = tlv:add(pf.pf_tlv_wtp_frame_tunnel_mode, tvbrange)
-    mode:add(pf.pf_tlv_wtp_native_frame_tunnel_mode, tvbrange)
-    mode:add(pf.pf_tlv_wtp_8023_frame_tunnel_mode, tvbrange)
-    mode:add(pf.pf_tlv_wtp_frame_tunnel_mode_local_bridging, tvbrange)
-    mode:add(pf.pf_tlv_wtp_frame_tunnel_mode_reserved, tvbrange)
+    local mode = tlv:add(pf.wtp_frame_tunnel_mode, tvbrange)
+    mode:add(pf.wtp_native_frame_tunnel_mode, tvbrange)
+    mode:add(pf.wtp_8023_frame_tunnel_mode, tvbrange)
+    mode:add(pf.wtp_frame_tunnel_mode_local_bridging, tvbrange)
+    mode:add(pf.wtp_frame_tunnel_mode_reserved, tvbrange)
 end
 
 function wtpMacTypeDecoder(tlv, tvbrange)
-    tlv:add(pf.pf_tlv_wtp_mac_type, tvbrange)
+    tlv:add(pf.wtp_mac_type, tvbrange)
 end
 
 function wtpRadioInformationDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
-    tlv:add(pf.pf_tlv_wtp_radio_information_radio_id, tvb:range(0, 1))
-    tlv:add(pf.pf_tlv_wtp_radio_information_radio_type_reserved, tvb:range(1, 3))
-    tlv:add(pf.pf_tlv_wtp_radio_information_radio_type_80211n, tvb:range(4, 1))
-    tlv:add(pf.pf_tlv_wtp_radio_information_radio_type_80211g, tvb:range(4, 1))
-    tlv:add(pf.pf_tlv_wtp_radio_information_radio_type_80211a, tvb:range(4, 1))
-    tlv:add(pf.pf_tlv_wtp_radio_information_radio_type_80211b, tvb:range(4, 1))
+    tlv:add(pf.wtp_radio_information_radio_id, tvb:range(0, 1))
+    tlv:add(pf.wtp_radio_information_radio_type_reserved, tvb:range(1, 3))
+    tlv:add(pf.wtp_radio_information_radio_type_80211n, tvb:range(4, 1))
+    tlv:add(pf.wtp_radio_information_radio_type_80211g, tvb:range(4, 1))
+    tlv:add(pf.wtp_radio_information_radio_type_80211a, tvb:range(4, 1))
+    tlv:add(pf.wtp_radio_information_radio_type_80211b, tvb:range(4, 1))
+end
+
+function acDescriptorDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    local pktlen = tvb:reported_length_remaining()
+
+    tlv:add(pf.ac_descriptor_stations, tvb:range(0, 2))
+    tlv:add(pf.ac_descriptor_limit_stations, tvb:range(2, 2))
+    tlv:add(pf.ac_descriptor_active_wtps, tvb:range(4, 2))
+    tlv:add(pf.ac_descriptor_max_wtps, tvb:range(6, 2))
+    
+    local security_flags = tlv:add(pf.ac_descriptor_security_flags, tvb:range(8, 1))
+    security_flags:add(pf.ac_descriptor_security_flags_reserved, tvb:range(8, 1))
+    security_flags:add(pf.ac_descriptor_security_flags_ac_supports_pre_shared, tvb:range(8, 1))
+    security_flags:add(pf.ac_descriptor_security_flags_ac_supports_x509, tvb:range(8, 1))
+
+    tlv:add(pf.ac_descriptor_rmac_field, tvb:range(9, 1))
+    tlv:add(pf.ac_descriptor_reserved, tvb:range(10, 1))
+    tlv:add(pf.ac_descriptor_dtls_policy_flags, tvb:range(11, 1))
+
+    local pos = 12
+    local pktlen_remaining = pktlen - pos
+
+    while pktlen_remaining > 0 do
+        local type = tvb:range(pos + 4, 2):uint()
+        local length = tvb:range(pos + 6, 2):uint()
+
+        local tlv = tlv:add(pf.ac_descriptor_ac_information, tvb:range(pos, length + 8))
+        tlv:set_text("AC Information: (t="..type..",l="..length..") "..ac_information_type_vals[type])
+        tlv:add(pf.ac_descriptor_ac_information_vendor, tvb:range(pos, 4))
+        tlv:add(pf.ac_descriptor_ac_information_type, tvb:range(pos+4, 2))
+        tlv:add(pf.ac_descriptor_ac_information_length, tvb:range(pos+6, 2))
+        tlv:add(pf.ac_descriptor_ac_information_value, tvb:range(pos+8, length))
+
+        -- todo: add value decoder
+
+        pos = pos + (length + 8)
+        pktlen_remaining = pktlen_remaining - (length + 8)
+    end
+end
+
+function acNameDecoder(tlv, tvbrange)
+    tlv:add(pf.ac_name, tvbrange)
+end
+
+function acTimestampDecoder(tlv, tvbrange)
+    tlv:add(pf.ac_timestamp, tvbrange)
+end
+
+function localDataDecoder(tlv, tvbrange)
+    tlv:add(pf.location_data, tvbrange)
+end
+
+function wtpNameDecoder(tlv, tvbrange)
+    tlv:add(pf.wtp_name, tvbrange)
+end
+
+function sessionIdDecoder(tlv, tvbrange)
+    tlv:add(pf.session_id, tvbrange)
+end
+
+function ecnSupportDecoder(tlv, tvbrange)
+    tlv:add(pf.ecn_support, tvbrange)
+end
+
+function capwapLocalIpv4AddressDecoder(tlv, tvbrange)
+    tlv:add(pf.capwap_local_ipv4_address, tvbrange)
+end
+
+function resultCodeDecoder(tlv, tvbrange)
+    tlv:add(pf.result_code, tvbrange)
+end
+
+function statisticsTimerDecoder(tlv, tvbrange)
+    tlv:add(pf.statistics_timer, tvbrange)
+end
+
+function wtpRebootStatisticsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.wtp_reboot_statistics_reboot_count, tvb:range(0, 2))
+    tlv:add(pf.wtp_reboot_statistics_ac_initiated_count, tvb:range(2, 2))
+    tlv:add(pf.wtp_reboot_statistics_linked_failure_count, tvb:range(4, 2))
+    tlv:add(pf.wtp_reboot_statistics_sw_failure_count, tvb:range(6, 2))
+    tlv:add(pf.wtp_reboot_statistics_hw_failure_count, tvb:range(8, 2))
+    tlv:add(pf.wtp_reboot_statistics_other_failure_count, tvb:range(10, 2))
+    tlv:add(pf.wtp_reboot_statistics_unknown_failure_count, tvb:range(12, 2))
+    tlv:add(pf.wtp_reboot_statistics_last_failure_type, tvb:range(14, 1))
 end
 
 local messageElementDecoder = {
-    [TYPE_AC_DESCRIPTOR] = nil,
+    [TYPE_AC_DESCRIPTOR] = acDescriptorDecoder,
     [TYPE_AC_IPV4_LIST] = nil,
     [TYPE_AC_IPV6_LIST] = nil,
-    [TYPE_AC_NAME] = nil,
+    [TYPE_AC_NAME] = acNameDecoder,
     [TYPE_AC_NAME_W_PRIORITY] = nil,
-    [TYPE_AC_TIMESTAMP] = nil,
+    [TYPE_AC_TIMESTAMP] = acTimestampDecoder,
     [TYPE_ADD_MAC_ACL_ENTRY] = nil,
     [TYPE_ADD_STATION] = nil,
     [TYPE_RESERVED_9] = nil,
@@ -707,15 +817,15 @@ local messageElementDecoder = {
     [TYPE_IMAGE_IDENTIFIER] = nil,
     [TYPE_IMAGE_INFORMATION] = nil,
     [TYPE_INITIATE_DOWNLOAD] = nil,
-    [TYPE_LOCATION_DATA] = nil,
+    [TYPE_LOCATION_DATA] = localDataDecoder,
     [TYPE_MAXIMUM_MESSAGE_LENGTH] = nil,
-    [TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = nil,
+    [TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = capwapLocalIpv4AddressDecoder,
     [TYPE_RADIO_ADMINISTRATIVE_STATE] = nil,
     [TYPE_RADIO_OPERATIONAL_STATE] = nil,
-    [TYPE_RESULT_CODE] = nil,
+    [TYPE_RESULT_CODE] = resultCodeDecoder,
     [TYPE_RETURNED_MESSAGE_ELEMENT] = nil,
-    [TYPE_SESSION_ID] = nil,
-    [TYPE_STATISTICS_TIMER] = nil,
+    [TYPE_SESSION_ID] = sessionIdDecoder,
+    [TYPE_STATISTICS_TIMER] = statisticsTimerDecoder,
     [TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder,
     [TYPE_WTP_BOARD_DATA] = wtpBoardDataDecoder,
     [TYPE_WTP_DESCRIPTOR] = wtpDescriptorDecoder,
@@ -724,15 +834,15 @@ local messageElementDecoder = {
     [TYPE_RESERVED_42] = nil,
     [TYPE_RESERVED_43] = nil,
     [TYPE_WTP_MAC_TYPE] = wtpMacTypeDecoder,
-    [TYPE_WTP_NAME] = nil,
+    [TYPE_WTP_NAME] = wtpNameDecoder,
     [TYPE_RESERVED_46] = nil,
     [TYPE_WTP_RADIO_STATISTICS] = nil,
-    [TYPE_WTP_REBOOT_STATISTICS] = nil,
+    [TYPE_WTP_REBOOT_STATISTICS] = wtpRebootStatisticsDecoder,
     [TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION] = nil,
     [TYPE_CAPWAP_LOCAL_IPV6_ADDRESS] = nil,
     [TYPE_CAPWAP_TRANSPORT_PROTOCOL] = nil,
     [TYPE_MTU_DISCOVERY_PADDING] = nil,
-    [TYPE_ECN_SUPPORT] = nil,
+    [TYPE_ECN_SUPPORT] = ecnSupportDecoder,
 
     [IEEE80211_ADD_WLAN] = nil,
     [IEEE80211_ANTENNA] = nil,
@@ -772,12 +882,12 @@ function capwap.dissector(tvbuf,pktinfo,root)
 
     local preamble_range = tvbuf:range(0,1)
     local preamble_tree = tree:add("Preamble")
-    preamble_tree:add(pf.pf_preamble_version, preamble_range)
-    preamble_tree:add(pf.pf_preamble_type, preamble_range)
+    preamble_tree:add(pf.preamble_version, preamble_range)
+    preamble_tree:add(pf.preamble_type, preamble_range)
 
     local ptype = tvbuf:range(0,1):bitfield(4,4)
     if ptype == 1 then
-        preamble_tree:add(pf.pf_preamble_reserved, tvbuf:range(1,3))
+        preamble_tree:add(pf.preamble_reserved, tvbuf:range(1,3))
         local dtls = Dissector.get("dtls")
         dtls:call(tvbuf:range(4):tvb(), pktinfo, root)
         return
@@ -785,21 +895,21 @@ function capwap.dissector(tvbuf,pktinfo,root)
 
     local header_tree = tree:add("Header")
     local header_flags_range = tvbuf:range(1,3)
-    header_tree:add(pf.pf_header_length, header_flags_range)
-    header_tree:add(pf.pf_header_radio_id, header_flags_range)
-    header_tree:add(pf.pf_header_binding_id, header_flags_range)
-    header_tree:add(pf.pf_header_flags, header_flags_range)
-    header_tree:add(pf.pf_header_fragment_id, tvbuf:range(4,2))
-    header_tree:add(pf.pf_header_fragment_offset, tvbuf:range(6,2))
-    header_tree:add(pf.pf_header_reserved, tvbuf:range(6,2))
+    header_tree:add(pf.header_length, header_flags_range)
+    header_tree:add(pf.header_radio_id, header_flags_range)
+    header_tree:add(pf.header_binding_id, header_flags_range)
+    header_tree:add(pf.header_flags, header_flags_range)
+    header_tree:add(pf.header_fragment_id, tvbuf:range(4,2))
+    header_tree:add(pf.header_fragment_offset, tvbuf:range(6,2))
+    header_tree:add(pf.header_reserved, tvbuf:range(6,2))
 
     local control_header = tree:add("Control Header")
-    local message_type = control_header:add(pf.pf_control_header_message_type, tvbuf:range(8,4))
-    message_type:add(pf.pf_control_header_message_type_enterprise_number, tvbuf:range(8,3))
-    message_type:add(pf.pf_control_header_message_type_enterprise_specific, tvbuf:range(11,1))
-    control_header:add(pf.pf_control_header_sequence_number, tvbuf:range(12,1))
-    control_header:add(pf.pf_control_header_message_element_length, tvbuf:range(13,2))
-    control_header:add(pf.pf_control_header_message_flags, tvbuf:range(15,1))
+    local message_type = control_header:add(pf.control_header_message_type, tvbuf:range(8,4))
+    message_type:add(pf.control_header_message_type_enterprise_number, tvbuf:range(8,3))
+    message_type:add(pf.control_header_message_type_enterprise_specific, tvbuf:range(11,1))
+    control_header:add(pf.control_header_sequence_number, tvbuf:range(12,1))
+    control_header:add(pf.control_header_message_element_length, tvbuf:range(13,2))
+    control_header:add(pf.control_header_message_flags, tvbuf:range(15,1))
 
     pktinfo.cols.info:set("FTNT-CAPWAP-Control - "..stypes[tvbuf:range(11,1):uint()])
 
@@ -810,23 +920,23 @@ function capwap.dissector(tvbuf,pktinfo,root)
 
     while pktlen_remaining > 0 do
         -- todo: error length check
-        local tlv_type = tvbuf:range(pos,2):uint()
-        local tlv_length = tvbuf:range(pos+2,2):uint()
-        local tlv_value = tvbuf:range(pos+4,tlv_length)
+        local type = tvbuf:range(pos,2):uint()
+        local length = tvbuf:range(pos+2,2):uint()
+        local value = tvbuf:range(pos+4,length)
 
-        local tlv = message_element:add(pf.pf_tlv, tvbuf:range(pos, tlv_length+4))
-        tlv:set_text("Type: (t="..tlv_type..",l="..tlv_length..") "..tlvTypes[tlv_type])
+        local tlv = message_element:add(pf.tlv, tvbuf:range(pos, length+4))
+        tlv:set_text("Type: (t="..type..",l="..length..") "..tlvTypes[type])
 
-        tlv:add(pf.pf_tlv_type, tvbuf:range(pos,2))
-        tlv:add(pf.pf_tlv_length, tvbuf:range(pos+2,2))
-        tlv:add(pf.pf_tlv_value, tvbuf:range(pos+4,tlv_length))
+        tlv:add(pf.tlv_type, tvbuf:range(pos,2))
+        tlv:add(pf.tlv_length, tvbuf:range(pos+2,2))
+        tlv:add(pf.tlv_value, tvbuf:range(pos+4,length))
 
-        if messageElementDecoder[tlv_type] then
-            messageElementDecoder[tlv_type](tlv, tvbuf:range(pos+4,tlv_length))
+        if messageElementDecoder[type] then
+            messageElementDecoder[type](tlv, tvbuf:range(pos+4,length))
         end
 
-        pos = pos + tlv_length + 4
-        pktlen_remaining = pktlen_remaining - tlv_length - 4
+        pos = pos + length + 4
+        pktlen_remaining = pktlen_remaining - length - 4
     end
 
 end
