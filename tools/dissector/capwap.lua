@@ -408,6 +408,43 @@ local last_failure_type_vals = {
     [2] =5, "Unknown (e.g., WTP doesn't keep track of info)",
 };
 
+-- /* ************************************************************************* */
+-- /*                      Radio Administrative State                           */
+-- /* ************************************************************************* */
+local radio_admin_state_vals = {
+    [1] = "Enabled",
+    [2] = "Disabled",
+};
+
+-- /* ************************************************************************* */
+-- /*                     IEE8011 Antenna                                       */
+-- /* ************************************************************************* */
+local ieee80211_antenna_diversity_vals = {
+    [0] = "Disabled",
+    [1] = "Enabled",
+};
+
+local ieee80211_antenna_combiner_vals = {
+    [1] = "Sectorized (Left)",
+    [2] = "Sectorized (Right)",
+    [3] = "Omni",
+    [4] = "Multiple Input/Multiple Output (MIMO)",
+};
+
+local ieee80211_antenna_selection_vals = {
+    [1] = "Internal Antenna",
+    [2] = "External Antenna",
+};
+
+-- /* ************************************************************************* */
+-- /*                      WTP Fallback                                         */
+-- /* ************************************************************************* */
+local wtp_fallback_vals = {
+    [0] =  "Reserved",
+    [1] =  "Enabled",
+    [2] =  "Disabled",
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf = {}
@@ -435,6 +472,11 @@ pf.tlv = ProtoField.new("Type", "ftnt.capwap.message.element.tlv", ftypes.NONE)
 pf.tlv_type = ProtoField.new("Type", "ftnt.capwap.message.element.tlv.type", ftypes.UINT16, tlvTypes)
 pf.tlv_length = ProtoField.new("Length", "ftnt.capwap.message.element.tlv.length", ftypes.UINT16)
 pf.tlv_value = ProtoField.new("Value", "ftnt.capwap.message.element.tlv.value", ftypes.BYTES)
+
+-- message elements protocol common fields
+pf.radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.radio.id", ftypes.UINT8)
+pf.reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.reserved", ftypes.UINT8)
+pf.current_channel = ProtoField.new("Current Channel", "ftnt.capwap.message.element.current.channel", ftypes.UINT8)
 
 -- message elements protocol fields
 pf.discovery_type = ProtoField.new("Discovery Type", "ftnt.capwap.message.element.discovery.type", ftypes.UINT8, discovery_type_vals)
@@ -483,7 +525,7 @@ pf.wtp_frame_tunnel_mode_local_bridging = ProtoField.new("Local Bridging", "ftnt
 pf.wtp_frame_tunnel_mode_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.wtp.native.frame.tunnel.mode.reserved", ftypes.UINT8, nil, base.DEC, 0xf1)
 pf.wtp_mac_type = ProtoField.new("WTP MAC Type", "ftnt.capwap.message.element.wtp.mac.type", ftypes.UINT8, wtp_mac_vals)
 
-pf.wtp_radio_information_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.wtp.radio.information.radio.id", ftypes.UINT8)
+-- pf.wtp_radio_information_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.wtp.radio.information.radio.id", ftypes.UINT8)
 pf.wtp_radio_information_radio_type_reserved = ProtoField.new("Radio Type Reserved", "ftnt.capwap.message.element.wtp.radio.information.radio.type.reserved", ftypes.BYTES)
 pf.wtp_radio_information_radio_type_80211n = ProtoField.new("Radio Type 802.11n", "ftnt.capwap.message.element.wtp.radio.information.radio.type.80211n", ftypes.UINT8, booltypes, base.DEC, 0x08)
 pf.wtp_radio_information_radio_type_80211g = ProtoField.new("Radio Type 802.11g", "ftnt.capwap.message.element.wtp.radio.information.radio.type.80211g", ftypes.UINT8, booltypes, base.DEC, 0x04)
@@ -499,7 +541,7 @@ pf.ac_descriptor_security_flags_reserved = ProtoField.new("Reserved", "ftnt.capw
 pf.ac_descriptor_security_flags_ac_supports_pre_shared = ProtoField.new("AC supports the pre-shared", "ftnt.capwap.message.element.ac.descriptor.security.flags.ac.supports.pre.shared", ftypes.UINT8, booltypes, base.DEC, 0x04)
 pf.ac_descriptor_security_flags_ac_supports_x509 = ProtoField.new("AC supports X.509 Certificate", "ftnt.capwap.message.element.ac.descriptor.security.flags.ac.supports.x509", ftypes.UINT8, booltypes, base.DEC, 0x02)
 pf.ac_descriptor_rmac_field = ProtoField.new("R-MAC Field", "ftnt.capwap.message.element.ac.descriptor.rmac.field", ftypes.UINT8, {[0] = "Reserved"})
-pf.ac_descriptor_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.ac.descriptor.reserved", ftypes.UINT8)
+-- pf.ac_descriptor_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.ac.descriptor.reserved", ftypes.UINT8)
 pf.ac_descriptor_dtls_policy_flags = ProtoField.new("DTLS Policy Flags", "ftnt.capwap.message.element.ac.descriptor.dtls.policy.flags", ftypes.UINT8)
 pf.ac_descriptor_ac_information = ProtoField.new("AC Information", "ftnt.capwap.message.element.ac.descriptor.ac.information", ftypes.BYTES)
 pf.ac_descriptor_ac_information_vendor = ProtoField.new("AC Information Vendor", "ftnt.capwap.message.element.ac.descriptor.ac.information.vendor", ftypes.BYTES)
@@ -525,6 +567,61 @@ pf.wtp_reboot_statistics_hw_failure_count = ProtoField.new("HW Failure Count", "
 pf.wtp_reboot_statistics_other_failure_count = ProtoField.new("Other Failure Count", "ftnt.capwap.message.element.wtp.reboot.statistics.other.failure.count", ftypes.UINT16)
 pf.wtp_reboot_statistics_unknown_failure_count = ProtoField.new("Unknown Failure Count", "ftnt.capwap.message.element.wtp.reboot.statistics.unknown.failure.count", ftypes.UINT16)
 pf.wtp_reboot_statistics_last_failure_type = ProtoField.new("Last Failure Type", "ftnt.capwap.message.element.wtp.reboot.statistics.last.failure.type", ftypes.UINT16, last_failure_type_vals)
+
+pf.radio_administrative_id = ProtoField.new("Radio Administrative ID", "ftnt.capwap.message.element.radio.administrative.id", ftypes.UINT8)
+pf.radio_administrative_state = ProtoField.new("Radio Administrative State", "ftnt.capwap.message.element.radio.administrative.state", ftypes.UINT8, radio_admin_state_vals)
+
+-- pf.ieee_80211_antenna_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.ieee.80211.antenna.radio.id", ftypes.UINT8)
+pf.ieee_80211_antenna_diversity = ProtoField.new("Diversity", "ftnt.capwap.message.element.ieee.80211.antenna.diversity", ftypes.UINT8, ieee80211_antenna_diversity_vals)
+pf.ieee_80211_antenna_combiner = ProtoField.new("Combiner", "ftnt.capwap.message.element.ieee.80211.antenna.combiner", ftypes.UINT8, ieee80211_antenna_combiner_vals)
+pf.ieee_80211_antenna_count = ProtoField.new("Antenna Count", "ftnt.capwap.message.element.ieee.80211.antenna.count", ftypes.UINT8)
+pf.ieee_80211_antenna_selection = ProtoField.new("Selection", "ftnt.capwap.message.element.ieee.80211.antenna.selection", ftypes.UINT8, ieee80211_antenna_selection_vals)
+
+-- pf.ieee_80211_tx_power_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.ieee.80211.tx.power.radio.id", ftypes.UINT8)
+-- pf.ieee_80211_tx_power_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.ieee.80211.tx.power.reserved", ftypes.UINT8)
+pf.ieee_80211_tx_power_current_tx_power = ProtoField.new("Current Tx Power", "ftnt.capwap.message.element.ieee.80211.tx.power.current.tx.power", ftypes.UINT16)
+
+-- pf.ieee_80211_tx_power_level_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.ieee.80211.tx.power.level.radio.id", ftypes.UINT8)
+pf.ieee_80211_tx_power_level_num_levels = ProtoField.new("Num Levels", "ftnt.capwap.message.element.ieee.80211.tx.power.level.num.levels", ftypes.UINT8)
+pf.ieee_80211_tx_power_level_power_level = ProtoField.new("Power Level", "ftnt.capwap.message.element.ieee.80211.tx.power.level.power.level", ftypes.UINT16)
+
+-- pf.ieee_80211_wtp_radio_configuration_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.ieee.80211.wtp.radio.configuration.radio.id", ftypes.UINT8)
+pf.ieee_80211_wtp_radio_configuration_short_preamble = ProtoField.new("Short Preamble", "ftnt.capwap.message.element.ieee.80211.wtp.radio.configuration.short.preamble", ftypes.UINT8)
+pf.ieee_80211_wtp_radio_configuration_num_of_bssids = ProtoField.new("Num of BSSIDs", "ftnt.capwap.message.element.ieee.80211.wtp.radio.configuration.num.of.bssids", ftypes.UINT8)
+pf.ieee_80211_wtp_radio_configuration_dtim_period = ProtoField.new("DTIM Period", "ftnt.capwap.message.element.ieee.80211.wtp.radio.configuration.dtim.period", ftypes.UINT8)
+pf.ieee_80211_wtp_radio_configuration_bssid = ProtoField.new("BSSID", "ftnt.capwap.message.element.ieee.80211.wtp.radio.configuration.bssid", ftypes.BYTES)
+pf.ieee_80211_wtp_radio_configuration_beacon_period = ProtoField.new("Beacon Period", "ftnt.capwap.message.element.ieee.80211.wtp.radio.configuration.beacon.period", ftypes.UINT16)
+pf.ieee_80211_wtp_radio_configuration_country_string = ProtoField.new("Country String", "ftnt.capwap.message.element.ieee.80211.wtp.radio.configuration.country.string", ftypes.STRING)
+
+-- pf.ieee_80211_mac_operation_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.ieee.80211.mac.operation.radio.id", ftypes.UINT8)
+-- pf.ieee_80211_mac_operation_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.ieee.80211.mac.operation.reserved", ftypes.UINT8)
+pf.ieee_80211_mac_operation_rts_threshold = ProtoField.new("RTS Threshold", "ftnt.capwap.message.element.ieee.80211.mac.operation.rts.threshold", ftypes.UINT16)
+pf.ieee_80211_mac_operation_short_retry = ProtoField.new("Short Retry", "ftnt.capwap.message.element.ieee.80211.mac.operation.short.retry", ftypes.UINT8)
+pf.ieee_80211_mac_operation_long_retry = ProtoField.new("Long Retry", "ftnt.capwap.message.element.ieee.80211.mac.operation.long.retry", ftypes.UINT8)
+pf.ieee_80211_mac_operation_fragmentation_threshold = ProtoField.new("Fragmentation Threshold", "ftnt.capwap.message.element.ieee.80211.mac.operation.fragmentation.threshold", ftypes.UINT16)
+pf.ieee_80211_mac_operation_tx_mdsu_lifetime = ProtoField.new("Tx MDSU Lifetime", "ftnt.capwap.message.element.ieee.80211.mac.operation.tx.mdsu.lifetime", ftypes.UINT24)
+pf.ieee_80211_mac_operation_rx_mdsu_lifetime = ProtoField.new("Rx MDSU Lifetime", "ftnt.capwap.message.element.ieee.80211.mac.operation.rx.mdsu.lifetime", ftypes.UINT24)
+
+pf.capwap_timers_discovery = ProtoField.new("CAPWAP Timers Discovery (Sec)", "ftnt.capwap.message.element.capwap.timers.discovery", ftypes.UINT8)
+pf.capwap_timers_echo_request = ProtoField.new("CAPWAP Timers Echo Request (Sec)", "ftnt.capwap.message.element.capwap.timers.echo.request", ftypes.UINT8)
+
+pf.decryption_error_report_period_radio_id = ProtoField.new("Decryption Error Report Period Radio ID", "ftnt.capwap.message.element.decryption.error.report.period.radio.id", ftypes.UINT8)
+pf.decryption_error_report_report_interval = ProtoField.new("Decryption Error Report Report Interval (Sec)", "ftnt.capwap.message.element.decryption.error.report.report.interval", ftypes.UINT8)
+
+pf.idle_timeout = ProtoField.new("Idle Timeout", "ftnt.capwap.message.element.idle.timeout", ftypes.UINT32)
+pf.wtp_fallback = ProtoField.new("WTP Fallback", "ftnt.capwap.message.element.wtp.fallback", ftypes.UINT8, wtp_fallback_vals)
+
+-- pf.ieee_80211_multi_domain_capability_radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.ieee.80211.multi.domain.capability.radio.id", ftypes.UINT8)
+-- pf.ieee_80211_multi_domain_capability_reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.ieee.80211.multi.domain.capability.reserved", ftypes.UINT8)
+pf.ieee_80211_multi_domain_capability_first_channel = ProtoField.new("First Channel", "ftnt.capwap.message.element.ieee.80211.multi.domain.capability.first.channel", ftypes.UINT16)
+pf.ieee_80211_multi_domain_capability_number_of_channels = ProtoField.new("Number of Channels", "ftnt.capwap.message.element.ieee.80211.multi.domain.capability.number.of.channels", ftypes.UINT16)
+pf.ieee_80211_multi_domain_capability_max_tx_power_level = ProtoField.new("Max Tx Power Level", "ftnt.capwap.message.element.ieee.80211.multi.domain.capability.max.tx.power.level", ftypes.UINT16)
+
+pf.ieee_80211_direct_sequence_control_current_cca = ProtoField.new("Current CCA", "ftnt.capwap.message.element.ieee.80211.direct.sequence.control.current.cca", ftypes.UINT8)
+pf.ieee_80211_direct_sequence_control_energy_detect_threshold = ProtoField.new("Energy Detect Threshold", "ftnt.capwap.message.element.ieee.80211.direct.sequence.control.energy.detect.threshold", ftypes.UINT32)
+
+pf.ieee_80211_ofdm_control_band_support = ProtoField.new("Band Support", "ftnt.capwap.message.element.ieee.80211.ofdm.control.band.support", ftypes.UINT8)
+pf.ieee_80211_ofdm_control_ti_threshold = ProtoField.new("TI Threshold", "ftnt.capwap.message.element.ieee.80211.ofdm.control.ti.threshold", ftypes.UINT32)
 
 capwap.fields = pf
 
@@ -694,7 +791,7 @@ end
 
 function wtpRadioInformationDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
-    tlv:add(pf.wtp_radio_information_radio_id, tvb:range(0, 1))
+    tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.wtp_radio_information_radio_type_reserved, tvb:range(1, 3))
     tlv:add(pf.wtp_radio_information_radio_type_80211n, tvb:range(4, 1))
     tlv:add(pf.wtp_radio_information_radio_type_80211g, tvb:range(4, 1))
@@ -717,7 +814,7 @@ function acDescriptorDecoder(tlv, tvbrange)
     security_flags:add(pf.ac_descriptor_security_flags_ac_supports_x509, tvb:range(8, 1))
 
     tlv:add(pf.ac_descriptor_rmac_field, tvb:range(9, 1))
-    tlv:add(pf.ac_descriptor_reserved, tvb:range(10, 1))
+    tlv:add(pf.reserved, tvb:range(10, 1))
     tlv:add(pf.ac_descriptor_dtls_policy_flags, tvb:range(11, 1))
 
     local pos = 12
@@ -789,30 +886,175 @@ function wtpRebootStatisticsDecoder(tlv, tvbrange)
     tlv:add(pf.wtp_reboot_statistics_last_failure_type, tvb:range(14, 1))
 end
 
+function radioAdministrativeStateDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_administrative_id, tvb:range(0, 1))
+    tlv:add(pf.radio_administrative_state, tvb:range(1, 1))
+end
+
+function ieee80211AntennaDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.ieee_80211_antenna_diversity, tvb:range(1, 1))
+    tlv:add(pf.ieee_80211_antenna_combiner, tvb:range(2, 1))
+    tlv:add(pf.ieee_80211_antenna_count, tvb:range(3, 1))
+    tlv:add(pf.ieee_80211_antenna_selection, tvb:range(4, 1))
+    tlv:add(pf.ieee_80211_antenna_selection, tvb:range(5, 1))
+end
+
+function ieee80211TxPowerDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.reserved, tvb:range(1, 1))
+    tlv:add(pf.ieee_80211_tx_power_current_tx_power, tvb:range(2, 2))
+end
+
+function ieee80211TxPowerLevelDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.ieee_80211_tx_power_level_num_levels, tvb:range(1, 1))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(2, 2))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(4, 2))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(6, 2))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(8, 2))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(10, 2))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(12, 2))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(14, 2))
+    tlv:add(pf.ieee_80211_tx_power_level_power_level, tvb:range(16, 2))
+end
+
+function ieee80211WtpRadioConfigurationDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.ieee_80211_wtp_radio_configuration_short_preamble, tvb:range(1, 1))
+    tlv:add(pf.ieee_80211_wtp_radio_configuration_num_of_bssids, tvb:range(2, 1))
+    tlv:add(pf.ieee_80211_wtp_radio_configuration_dtim_period, tvb:range(3, 1))
+    tlv:add(pf.ieee_80211_wtp_radio_configuration_bssid, tvb:range(4, 6))
+    tlv:add(pf.ieee_80211_wtp_radio_configuration_beacon_period, tvb:range(10, 2))
+    tlv:add(pf.ieee_80211_wtp_radio_configuration_country_string, tvb:range(12, 4))
+end
+
+function ieee80211MacOperation(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.reserved, tvb:range(1, 1))
+    tlv:add(pf.ieee_80211_mac_operation_rts_threshold, tvb:range(2, 2))
+    tlv:add(pf.ieee_80211_mac_operation_short_retry, tvb:range(4, 1))
+    tlv:add(pf.ieee_80211_mac_operation_long_retry, tvb:range(5, 1))
+    tlv:add(pf.ieee_80211_mac_operation_fragmentation_threshold, tvb:range(6, 2))
+    tlv:add(pf.ieee_80211_mac_operation_tx_mdsu_lifetime, tvb:range(8, 4))
+    tlv:add(pf.ieee_80211_mac_operation_rx_mdsu_lifetime, tvb:range(12, 4))
+end
+
+function ieee80211MultiDomainCapabilityDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.reserved, tvb:range(1, 1))
+    tlv:add(pf.ieee_80211_multi_domain_capability_first_channel, tvb:range(2, 2))
+    tlv:add(pf.ieee_80211_multi_domain_capability_number_of_channels, tvb:range(4, 2))
+    tlv:add(pf.ieee_80211_multi_domain_capability_max_tx_power_level, tvb:range(6, 2))
+end
+
+function capwapTimersDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.capwap_timers_discovery, tvb:range(0, 1))
+    tlv:add(pf.capwap_timers_echo_request, tvb:range(1, 1))
+end
+
+function decrptionErrorReportPeriodDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.decryption_error_report_report_interval, tvb:range(1, 2))
+end
+
+function idleTimeoutDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.idle_timeout, tvb:range(0, 4))
+end
+
+function wtpFallbackDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.wtp_fallback, tvb:range(0, 1))
+end
+
+function AcIpv4ListDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function AcIpv6ListDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function AddMacAclEklDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function AddStationDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function Reserved9(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function CapwapControlIpv4AddressDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function CapwapControlIpv6AddressDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function DataTransferDataDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function DataTransferModeDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+end
+
+function ieee80211DirectSequenceControlDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.reserved, tvb:range(1, 1))
+    tlv:add(pf.current_channel, tvb:range(2, 1))
+    tlv:add(pf.ieee_80211_direct_sequence_control_current_cca, tvb:range(3, 1))
+    tlv:add(pf.ieee_80211_direct_sequence_control_energy_detect_threshold, tvb:range(4, 4))
+end
+
+function ieee80211OfdmControlDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.reserved, tvb:range(1, 1))
+    tlv:add(pf.current_channel, tvb:range(2, 1))
+    tlv:add(pf.ieee_80211_ofdm_control_band_support, tvb:range(3, 1))
+    tlv:add(pf.ieee_80211_ofdm_control_ti_threshold, tvb:range(4, 4))
+end
+
 local messageElementDecoder = {
     [TYPE_AC_DESCRIPTOR] = acDescriptorDecoder,
-    [TYPE_AC_IPV4_LIST] = nil,
-    [TYPE_AC_IPV6_LIST] = nil,
+    [TYPE_AC_IPV4_LIST] = AcIpv4ListDecoder,
+    [TYPE_AC_IPV6_LIST] = AcIpv6ListDecoder,
     [TYPE_AC_NAME] = acNameDecoder,
-    [TYPE_AC_NAME_W_PRIORITY] = nil,
+    [TYPE_AC_NAME_W_PRIORITY] = AcNameWPriorityDecoder,
     [TYPE_AC_TIMESTAMP] = acTimestampDecoder,
-    [TYPE_ADD_MAC_ACL_ENTRY] = nil,
-    [TYPE_ADD_STATION] = nil,
-    [TYPE_RESERVED_9] = nil,
-    [TYPE_CAPWAP_CONTROL_IPV4_ADDRESS] = nil,
-    [TYPE_CAPWAP_CONTROL_IPV6_ADDRESS] = nil,
-    [TYPE_CAPWAP_TIMERS] = nil,
-    [TYPE_DATA_TRANSFER_DATA] = nil,
-    [TYPE_DATA_TRANSFER_MODE] = nil,
-    [TYPE_DESCRYPTION_ERROR_REPORT] = nil,
-    [TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = nil,
+    [TYPE_ADD_MAC_ACL_ENTRY] = AddMacAclEklDecoder,
+    [TYPE_ADD_STATION] = AddStationDecoder,
+    [TYPE_RESERVED_9] = Reserved9,
+    [TYPE_CAPWAP_CONTROL_IPV4_ADDRESS] = CapwapControlIpv4AddressDecoder,
+    [TYPE_CAPWAP_CONTROL_IPV6_ADDRESS] = CapwapControlIpv6AddressDecoder,
+    [TYPE_CAPWAP_TIMERS] = capwapTimersDecoder,
+    [TYPE_DATA_TRANSFER_DATA] = DataTransferDataDecoder,
+    [TYPE_DATA_TRANSFER_MODE] = DataTransferModeDecoder,
+    [TYPE_DESCRYPTION_ERROR_REPORT] = DescryptionErrorReportDecoder,
+    [TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = decrptionErrorReportPeriodDecoder,
     [TYPE_DELETE_MAC_ENTRY] = nil,
     [TYPE_DELETE_STATION] = nil,
     [TYPE_RESERVED_19] = nil,
     [TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder,
     [TYPE_DUPLICATE_IPV4_ADDRESS] = nil,
     [TYPE_DUPLICATE_IPV6_ADDRESS] = nil,
-    [TYPE_IDLE_TIMEOUT] = nil,
+    [TYPE_IDLE_TIMEOUT] = idleTimeoutDecoder,
     [TYPE_IMAGE_DATA] = nil,
     [TYPE_IMAGE_IDENTIFIER] = nil,
     [TYPE_IMAGE_INFORMATION] = nil,
@@ -820,7 +1062,7 @@ local messageElementDecoder = {
     [TYPE_LOCATION_DATA] = localDataDecoder,
     [TYPE_MAXIMUM_MESSAGE_LENGTH] = nil,
     [TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = capwapLocalIpv4AddressDecoder,
-    [TYPE_RADIO_ADMINISTRATIVE_STATE] = nil,
+    [TYPE_RADIO_ADMINISTRATIVE_STATE] = radioAdministrativeStateDecoder,
     [TYPE_RADIO_OPERATIONAL_STATE] = nil,
     [TYPE_RESULT_CODE] = resultCodeDecoder,
     [TYPE_RETURNED_MESSAGE_ELEMENT] = nil,
@@ -829,7 +1071,7 @@ local messageElementDecoder = {
     [TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder,
     [TYPE_WTP_BOARD_DATA] = wtpBoardDataDecoder,
     [TYPE_WTP_DESCRIPTOR] = wtpDescriptorDecoder,
-    [TYPE_WTP_FALLBACK] = nil,
+    [TYPE_WTP_FALLBACK] = wtpFallbackDecoder,
     [TYPE_WTP_FRAME_TUNNEL_MODE] = wtpFrameTunnelModeDecoder,
     [TYPE_RESERVED_42] = nil,
     [TYPE_RESERVED_43] = nil,
@@ -845,15 +1087,15 @@ local messageElementDecoder = {
     [TYPE_ECN_SUPPORT] = ecnSupportDecoder,
 
     [IEEE80211_ADD_WLAN] = nil,
-    [IEEE80211_ANTENNA] = nil,
+    [IEEE80211_ANTENNA] = ieee80211AntennaDecoder,
     [IEEE80211_ASSIGNED_WTP_BSSID] = nil,
     [IEEE80211_DELETE_WLAN] = nil,
-    [IEEE80211_DIRECT_SEQUENCE_CONTROL] = nil,
+    [IEEE80211_DIRECT_SEQUENCE_CONTROL] = ieee80211DirectSequenceControlDecoder,
     [IEEE80211_INFORMATION_ELEMENT] = nil,
-    [IEEE80211_MAC_OPERATION] = nil,
+    [IEEE80211_MAC_OPERATION] = ieee80211MacOperation,
     [IEEE80211_MIC_COUNTERMEASURES] = nil,
-    [IEEE80211_MULTI_DOMAIN_CAPABILITY] = nil,
-    [IEEE80211_OFDM_CONTROL] = nil,
+    [IEEE80211_MULTI_DOMAIN_CAPABILITY] = ieee80211MultiDomainCapabilityDecoder,
+    [IEEE80211_OFDM_CONTROL] = ieee80211OfdmControlDecoder,
     [IEEE80211_RATE_SET] = nil,
     [IEEE80211_RSNA_ERROR_REPORT_FROM_STATION] = nil,
     [IEEE80211_STATION] = nil,
@@ -861,12 +1103,12 @@ local messageElementDecoder = {
     [IEEE80211_STATION_SESSION_KEY] = nil,
     [IEEE80211_STATISTICS] = nil,
     [IEEE80211_SUPPORTED_RATES] = nil,
-    [IEEE80211_TX_POWER] = nil,
-    [IEEE80211_TX_POWER_LEVEL] = nil,
+    [IEEE80211_TX_POWER] = ieee80211TxPowerDecoder,
+    [IEEE80211_TX_POWER_LEVEL] = ieee80211TxPowerLevelDecoder,
     [IEEE80211_UPDATE_STATION_QOS] = nil,
     [IEEE80211_UPDATE_WLAN] = nil,
     [IEEE80211_WTP_QUALITY_OF_SERVICE] = nil,
-    [IEEE80211_WTP_RADIO_CONFIGURATION] = nil,
+    [IEEE80211_WTP_RADIO_CONFIGURATION] = ieee80211WtpRadioConfigurationDecoder,
     [IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION] = nil,
     [IEEE80211_WTP_RADIO_INFORMATION] = wtpRadioInformationDecoder,
     [IEEE80211_SUPPORTED_MAC_PROFILES] = nil,
