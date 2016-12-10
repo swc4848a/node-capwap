@@ -236,6 +236,7 @@ local discovery_type_vals = {
 
 -- /* From FortiAP/WiFI 5.2.0 */
 local VSP_FORTINET_AP_SCAN = 16
+local VSP_FORTINET_AP_LIST = 17
 local VSP_FORTINET_PASSIVE = 24
 local VSP_FORTINET_DAEMON_RST = 32
 local VSP_FORTINET_MAC = 33
@@ -268,14 +269,23 @@ local VSP_FORTINET_CFG = 150
 local VSP_FORTINET_SPLIT_TUN_CFG = 151
 local VSP_FORTINET_MGMT_VLAN_TAG = 161
 local VSP_FORTINET_VAP_PSK_PASSWD = 167
+local VSP_FORTINET_IP_FRAG = 170
+local VSP_FORTINET_MAX_DISTANCE = 171
 local VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE = 176
 local VSP_FORTINET_MESH_ETH_BRIDGE_TYPE = 177
 local VSP_FORTINET_WTP_CAP = 192
 local VSP_FORTINET_TXPWR = 193
+local VSP_FORTINET_AC_CAP = 194
+local VSP_FORTINET_VAP_STATS = 196
+local VSP_FORTINET_WTP_STATS = 197
+local VSP_FORTINET_STA_STATS_INTERVAL = 201
+local VSP_FORTINET_STA_CAP_INTERVAL = 202
+local VSP_FORTINET_TXPWR_DBM = 205
 local VSP_FORTINET_WIDS_ENABLE = 209
 
 local fortinet_element_id_vals = {
     [VSP_FORTINET_AP_SCAN] = "AP Scan",
+    [VSP_FORTINET_AP_LIST] = "AP List",
     [VSP_FORTINET_DAEMON_RST] = "Daemon Reset",
     [VSP_FORTINET_MAC] = "MAC",
     [VSP_FORTINET_PASSIVE] = "Passive",
@@ -308,10 +318,18 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_SPLIT_TUN_CFG] = "Split Tunnel Configuration",
     [VSP_FORTINET_MGMT_VLAN_TAG] = "Management Vlan",
     [VSP_FORTINET_VAP_PSK_PASSWD] = "VAP PSK Password",
+    [VSP_FORTINET_IP_FRAG] = "IP Frag",
+    [VSP_FORTINET_MAX_DISTANCE] = "Max Distance",
     [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = "Mesh Eth Bridge Enable",
     [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = "Mesh Eth Bridge Type",
     [VSP_FORTINET_WTP_CAP] = "WTP Capabilities",
     [VSP_FORTINET_TXPWR] = "Tx Power",
+    [VSP_FORTINET_AC_CAP] = "AC Capabilities",
+    [VSP_FORTINET_VAP_STATS] = "VAP Statistics",
+    [VSP_FORTINET_WTP_STATS] = "WTP Statistics",
+    [VSP_FORTINET_STA_STATS_INTERVAL] = "STA Statistics Interval",
+    [VSP_FORTINET_STA_CAP_INTERVAL] = "STA Capabilities Interval",
+    [VSP_FORTINET_TXPWR_DBM] = "TxPower dbm",
     [VSP_FORTINET_WIDS_ENABLE] = "WIDS Enable"
 };
 
@@ -445,6 +463,25 @@ local wtp_fallback_vals = {
     [2] =  "Disabled",
 };
 
+-- /* ************************************************************************* */
+-- /*                      Radio Operational State                              */
+-- /* ************************************************************************* */
+local radio_op_state_vals = {
+    [0] = "Reserved",
+    [1] = "Enabled",
+    [2] = "Disabled",
+};
+
+-- /* ************************************************************************* */
+-- /*                      Radio Operational Cause                              */
+-- /* ************************************************************************* */
+local radio_op_cause_vals = {
+    [0] = "Normal",
+    [1] = "Radio Failure",
+    [2] = "Software Failure",
+    [3] = "Administratively Set",
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf = {}
@@ -477,6 +514,12 @@ pf.tlv_value = ProtoField.new("Value", "ftnt.capwap.message.element.tlv.value", 
 pf.radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.radio.id", ftypes.UINT8)
 pf.reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.reserved", ftypes.UINT8)
 pf.current_channel = ProtoField.new("Current Channel", "ftnt.capwap.message.element.current.channel", ftypes.UINT8)
+pf.length = ProtoField.new("Length", "ftnt.capwap.message.element.length", ftypes.UINT8)
+pf.sta_mac = ProtoField.new("STA MAC", "ftnt.capwap.message.element.sta.mac", ftypes.BYTES)
+pf.bssid = ProtoField.new("BSSID", "ftnt.capwap.message.element.bssid", ftypes.BYTES)
+pf.mhc = ProtoField.new("MHC", "ftnt.capwap.message.element.mhc", ftypes.UINT8)
+pf.country_code = ProtoField.new("Country Code", "ftnt.capwap.message.element.country.code", ftypes.UINT16)
+pf.country_code_string = ProtoField.new("Country Code", "ftnt.capwap.message.element.country.code.string", ftypes.STRING)
 
 -- message elements protocol fields
 pf.discovery_type = ProtoField.new("Discovery Type", "ftnt.capwap.message.element.discovery.type", ftypes.UINT8, discovery_type_vals)
@@ -486,19 +529,16 @@ pf.vendor_data = ProtoField.new("Vendor Data", "ftnt.capwap.message.element.vend
 pf.fortinet_element_id = ProtoField.new("Fortinet Element ID", "ftnt.capwap.message.element.fortinet.element.id", ftypes.UINT16, fortinet_element_id_vals)
 pf.fortinet_value = ProtoField.new("Fortinet Value", "ftnt.capwap.message.element.fortinet.value", ftypes.BYTES)
 
-pf.vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.fortinet.vlan.id", ftypes.UINT16)
-pf.vsp_ftnt_wtpcap = ProtoField.new("WTP CAP", "ftnt.capwap.message.element.fortinet.wtp.cap", ftypes.BYTES)
-
 pf.wtp_board_data_vendor = ProtoField.new("WTP Board Data Vendor", "ftnt.capwap.message.element.wtp.board.data.vendor", ftypes.UINT32, {[12356] = "Fortinet, Inc."})
-pf.vsp_wtp_board_data = ProtoField.new("WTP Board Data", "ftnt.capwap.message.element.wtp.board.data", ftypes.NONE)
-pf.wtp_board_data_type = ProtoField.new("Board Data Type", "ftnt.capwap.message.element.wtp.board.data.type", ftypes.UINT16, board_data_type_vals)
-pf.wtp_board_data_length = ProtoField.new("Board Data Length", "ftnt.capwap.message.element.wtp.board.data.length", ftypes.UINT16)
-pf.wtp_board_data_value = ProtoField.new("Board Data Value", "ftnt.capwap.message.element.wtp.board.data.value", ftypes.BYTES)
-pf.wtp_board_data_model_number = ProtoField.new("WTP Model Number", "ftnt.capwap.message.element.wtp.board.data.wtp.model.number", ftypes.STRING)
-pf.wtp_board_data_serial_number = ProtoField.new("WTP Serial Number", "ftnt.capwap.message.element.wtp.board.data.wtp.serial.number", ftypes.STRING)
-pf.wtp_board_data_board_id = ProtoField.new("WTP Board ID", "ftnt.capwap.message.element.wtp.board.data.wtp.board.id", ftypes.STRING)
-pf.wtp_board_data_board_revision = ProtoField.new("WTP Board Revision", "ftnt.capwap.message.element.wtp.board.data.wtp.board.revision", ftypes.STRING)
-pf.wtp_board_data_base_mac_address = ProtoField.new("Base Mac Address", "ftnt.capwap.message.element.wtp.board.data.base.mac.address", ftypes.STRING)
+pf.wtp_board_data = ProtoField.new("WTP Board Data", "ftnt.capwap.message.element.wtp.board.data", ftypes.NONE)
+pf.board_data_type = ProtoField.new("Board Data Type", "ftnt.capwap.message.element.wtp.board.data.type", ftypes.UINT16, board_data_type_vals)
+pf.board_data_length = ProtoField.new("Board Data Length", "ftnt.capwap.message.element.wtp.board.data.length", ftypes.UINT16)
+pf.board_data_value = ProtoField.new("Board Data Value", "ftnt.capwap.message.element.wtp.board.data.value", ftypes.BYTES)
+pf.wtp_model_number = ProtoField.new("WTP Model Number", "ftnt.capwap.message.element.wtp.board.data.wtp.model.number", ftypes.STRING)
+pf.wtp_serial_number = ProtoField.new("WTP Serial Number", "ftnt.capwap.message.element.wtp.board.data.wtp.serial.number", ftypes.STRING)
+pf.wtp_board_id = ProtoField.new("WTP Board ID", "ftnt.capwap.message.element.wtp.board.data.wtp.board.id", ftypes.STRING)
+pf.wtp_board_revision = ProtoField.new("WTP Board Revision", "ftnt.capwap.message.element.wtp.board.data.wtp.board.revision", ftypes.STRING)
+pf.base_mac_address = ProtoField.new("Base Mac Address", "ftnt.capwap.message.element.wtp.board.data.base.mac.address", ftypes.STRING)
 
 pf.wtp_descriptor_max_radios = ProtoField.new("Max Radios", "ftnt.capwap.message.element.wtp.descriptor.max.radios", ftypes.UINT8)
 pf.wtp_descriptor_radio_in_use = ProtoField.new("Radio in use", "ftnt.capwap.message.element.wtp.descriptor.radio.in.use", ftypes.UINT8)
@@ -623,6 +663,40 @@ pf.ieee_80211_direct_sequence_control_energy_detect_threshold = ProtoField.new("
 pf.ieee_80211_ofdm_control_band_support = ProtoField.new("Band Support", "ftnt.capwap.message.element.ieee.80211.ofdm.control.band.support", ftypes.UINT8)
 pf.ieee_80211_ofdm_control_ti_threshold = ProtoField.new("TI Threshold", "ftnt.capwap.message.element.ieee.80211.ofdm.control.ti.threshold", ftypes.UINT32)
 
+pf.radio_operational_id = ProtoField.new("Radio Operational ID", "ftnt.capwap.message.element.radio.operation.id", ftypes.UINT8)
+pf.radio_operational_state = ProtoField.new("Radio Operational State", "ftnt.capwap.message.element.radio.operation.state", ftypes.UINT8, radio_op_state_vals)
+pf.radio_operational_cause = ProtoField.new("Radio Operational Cause", "ftnt.capwap.message.element.radio.operation.cause", ftypes.UINT8, radio_op_cause_vals)
+
+pf.vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.fortinet.vlan.id", ftypes.UINT16)
+pf.vsp_ftnt_wtpcap = ProtoField.new("WTP CAP", "ftnt.capwap.message.element.fortinet.wtp.cap", ftypes.BYTES)
+pf.serial_number = ProtoField.new("Serial Number", "ftnt.capwap.message.element.fortinet.serial.number", ftypes.STRING)
+pf.allowed = ProtoField.new("Allowed", "ftnt.capwap.message.element.fortinet.allowed", ftypes.UINT8)
+pf.ip_frag_enable = ProtoField.new("IP Frag Enable", "ftnt.capwap.message.element.fortinet.ip.frag.enable", ftypes.UINT8)
+pf.tun_mtu_uplink = ProtoField.new("Tun Mtu Uplink", "ftnt.capwap.message.element.fortinet.tun.mtu.uplink", ftypes.UINT16)
+pf.tun_mtu_downlink = ProtoField.new("Tun Mtu Downlink", "ftnt.capwap.message.element.fortinet.tun.mtu.downlink", ftypes.UINT16)
+pf.regcode = ProtoField.new("Reg Code", "ftnt.capwap.message.element.fortinet.regcode", ftypes.STRING)
+pf.version = ProtoField.new("Version", "ftnt.capwap.message.element.fortinet.version", ftypes.UINT8)
+pf.ac_capbilities = ProtoField.new("AC Capabilities", "ftnt.capwap.message.element.fortinet.ac.capbilities", ftypes.BYTES)
+pf.telnet_enable = ProtoField.new("Telnet Enable", "ftnt.capwap.message.element.fortinet.telnet.enable", ftypes.UINT32)
+pf.sn_length= ProtoField.new("SN Length", "ftnt.capwap.message.element.fortinet.sn.length", ftypes.UINT16)
+pf.sn = ProtoField.new("SN", "ftnt.capwap.message.element.fortinet.sn", ftypes.STRING)
+pf.prev_r32 = ProtoField.new("Prev R32", "ftnt.capwap.message.element.fortinet.prev.r32", ftypes.UINT32)
+pf.curr_r32 = ProtoField.new("Curr R32", "ftnt.capwap.message.element.fortinet.curr.r32", ftypes.UINT32)
+pf.age = ProtoField.new("Age", "ftnt.capwap.message.element.fortinet.age", ftypes.UINT32)
+pf.period = ProtoField.new("Period", "ftnt.capwap.message.element.fortinet.period", ftypes.UINT32)
+pf.vfid = ProtoField.new("Vfid", "ftnt.capwap.message.element.fortinet.vfid", ftypes.UINT32)
+pf.mesh_eth_bridge_type = ProtoField.new("Mesh Eth Bridge Type", "ftnt.capwap.message.element.fortinet.mesh.eth.bridge.type", ftypes.UINT16)
+pf.sta_stats_interval = ProtoField.new("STA Statistics Report Interval", "ftnt.capwap.message.element.fortinet.sta.stats.interval", ftypes.UINT16)
+pf.sta_cap_interval = ProtoField.new("STA Capabilities Report Interval", "ftnt.capwap.message.element.fortinet.sta.cap.interval", ftypes.UINT16)
+pf.max_distance = ProtoField.new("Max Distance", "ftnt.capwap.message.element.fortinet.max.distance", ftypes.UINT32)
+pf.txpower_dbm = ProtoField.new("TxPower dbm", "ftnt.capwap.message.element.fortinet.txpower.dbm", ftypes.UINT16)
+pf.vap_stats = ProtoField.new("Vap Statistics", "ftnt.capwap.message.element.fortinet.vap.stats", ftypes.BYTES)
+pf.cpu_load = ProtoField.new("CPU Load", "ftnt.capwap.message.element.fortinet.cpu.load", ftypes.UINT8)
+pf.mem_total = ProtoField.new("Memory Total", "ftnt.capwap.message.element.fortinet.memory.total", ftypes.UINT32)
+pf.mem_free = ProtoField.new("Memory Free", "ftnt.capwap.message.element.fortinet.memory.free", ftypes.UINT32)
+pf.ap_list = ProtoField.new("AP List", "ftnt.capwap.message.element.fortinet.ap.list", ftypes.BYTES)
+
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -633,29 +707,176 @@ function wtpCapDecoder(tlv, tvbrange)
     tlv:add(pf.vsp_ftnt_wtpcap, tvbrange)
 end
 
+
+function wtpAllowDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.serial_number, tvb:range(0, 16))
+    tlv:add(pf.allowed, tvb:range(16, 1))
+end
+
+function ipFragDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.ip_frag_enable, tvb:range(0, 1))
+    tlv:add(pf.tun_mtu_uplink, tvb:range(1, 2))
+    tlv:add(pf.tun_mtu_downlink, tvb:range(3, 2))
+end
+
+function wbhStaDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.length, tvb:range(1, 1))
+    tlv:add(pf.sta_mac, tvb:range(2, 6))
+    tlv:add(pf.bssid, tvb:range(8, 6))
+    tlv:add(pf.mhc, tvb:range(14, 1))
+end
+
+function regcodeDecoder(tlv, tvbrange)
+    tlv:add(pf.regcode, tvbrange)
+end
+
+function telnetEnableDecoder(tlv, tvbrange)
+    tlv:add(pf.telnet_enable, tvbrange)
+end
+
+function meshEthBridgeTypeDecoder(tlv, tvbrange)
+    tlv:add(pf.mesh_eth_bridge_type, tvbrange)
+end
+
+function staStatsIntervalDecoder(tlv, tvbrange)
+    tlv:add(pf.sta_stats_interval, tvbrange)
+end
+
+function staCapIntervalDecoder(tlv, tvbrange)
+    tlv:add(pf.sta_cap_interval, tvbrange)
+end
+
+function acCapDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version, tvb:range(0, 1))
+    tlv:add(pf.radio_id, tvb:range(1, 1))
+    tlv:add(pf.ac_capbilities, tvb:range(2))
+end
+
+function vapStatsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version, tvb:range(0, 1))
+    tlv:add(pf.radio_id, tvb:range(1, 1))
+    tlv:add(pf.vap_stats, tvb:range(2))
+end
+
+function apListDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version, tvb:range(0, 1))
+    tlv:add(pf.radio_id, tvb:range(1, 1))
+    tlv:add(pf.ap_list, tvb:range(2))
+end
+
+function wtpStatsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.cpu_load, tvb:range(0, 1))
+    tlv:add(pf.mem_total, tvb:range(1, 4))
+    tlv:add(pf.mem_free, tvb:range(5, 4))
+end
+
+function countryCodeDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.country_code, tvb:range(1, 2))
+    tlv:add(pf.country_code_string, tvb:range(3, 3))
+end
+
+function maxDistanceDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.max_distance, tvb:range(1, 4))
+end
+
+function txPowerDbmDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.txpower_dbm, tvb:range(1, 2))
+end
+
+function mgmtVapDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.sn_length, tvb:range(0, 2))
+    local sn_length = tvb:range(0,2):uint();
+    tlv:add(pf.sn, tvb:range(2, sn_length))
+    tlv:add(pf.prev_r32, tvb:range(2+sn_length, 4))
+    tlv:add(pf.curr_r32, tvb:range(6+sn_length, 4))
+    tlv:add(pf.age, tvb:range(10+sn_length, 4))
+    tlv:add(pf.period, tvb:range(14+sn_length, 4))
+    tlv:add(pf.vfid, tvb:range(18+sn_length, 4))
+end
+
 local ftntElementDecoder = {
+    [VSP_FORTINET_AP_SCAN] = nil,
+    [VSP_FORTINET_AP_LIST] = apListDecoder,
+    [VSP_FORTINET_PASSIVE] = nil,
+    [VSP_FORTINET_DAEMON_RST] = nil,
+    [VSP_FORTINET_MAC] = nil,
+    [VSP_FORTINET_WTP_ALLOW] = wtpAllowDecoder,
+    [VSP_FORTINET_WBH_STA] = wbhStaDecoder,
+    [VSP_FORTINET_HTCAP] = nil,
+    [VSP_FORTINET_MGMT_VAP] = mgmtVapDecoder,
+    [VSP_FORTINET_MODE] = nil,
+    [VSP_FORTINET_COEXT] = nil,
+    [VSP_FORTINET_AMSDU] = nil,
+    [VSP_FORTINET_PS_OPT] = nil,
+    [VSP_FORTINET_PURE] = nil,
+    [VSP_FORTINET_EBP_TAG] = nil,
+    [VSP_FORTINET_TELNET_ENABLE] = telnetEnableDecoder,
+    [VSP_FORTINET_ADMIN_PASSWD] = nil,
+    [VSP_FORTINET_REGCODE] = regcodeDecoder,
+    [VSP_FORTINET_COUNTRYCODE] = countryCodeDecoder,
+    [VSP_FORTINET_STA_SCAN] = nil,
+    [VSP_FORTINET_FHO] = nil,
+    [VSP_FORTINET_APHO] = nil,
+    [VSP_FORTINET_STA_LOCATE] = nil,
+    [VSP_FORTINET_SPECTRUM_ANALYSIS] = nil,
+    [VSP_FORTINET_DARRP_CFG] = nil,
+    [VSP_FORTINET_AP_SUPPRESS_LIST] = nil,
+    [VSP_FORTINET_WDS] = nil,
+    [VSP_FORTINET_VAP_VLAN_TAG] = nil,
+    [VSP_FORTINET_VAP_BITMAP] = nil,
+    [VSP_FORTINET_MCAST_RATE] = nil,
+    [VSP_FORTINET_CFG] = nil,
+    [VSP_FORTINET_SPLIT_TUN_CFG] = nil,
     [VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder,
+    [VSP_FORTINET_VAP_PSK_PASSWD] = nil,
+    [VSP_FORTINET_IP_FRAG] = ipFragDecoder,
+    [VSP_FORTINET_MAX_DISTANCE] = maxDistanceDecoder,
+    [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = nil,
+    [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = meshEthBridgeTypeDecoder,
     [VSP_FORTINET_WTP_CAP] = wtpCapDecoder,
+    [VSP_FORTINET_TXPWR] = nil,
+    [VSP_FORTINET_AC_CAP] = acCapDecoder,
+    [VSP_FORTINET_VAP_STATS] = vapStatsDecoder,
+    [VSP_FORTINET_WTP_STATS] = wtpStatsDecoder,
+    [VSP_FORTINET_STA_STATS_INTERVAL] = staStatsIntervalDecoder,
+    [VSP_FORTINET_STA_CAP_INTERVAL] = staCapIntervalDecoder,
+    [VSP_FORTINET_TXPWR_DBM] = txPowerDbmDecoder,
+    [VSP_FORTINET_WIDS_ENABLE] = nil,
 }
 
 function boardDataWtpModelNumberDecoder(tlv, tvbrange)
-    tlv:add(pf.wtp_board_data_model_number, tvbrange)
+    tlv:add(pf.wtp_model_number, tvbrange)
 end
 
 function boardDataWtpSerialNumberDecoder(tlv, tvbrange)
-    tlv:add(pf.wtp_board_data_serial_number, tvbrange)
+    tlv:add(pf.wtp_serial_number, tvbrange)
 end
 
 function boardDataBoardIdDecoder(tlv, tvbrange)
-    tlv:add(pf.wtp_board_data_board_id, tvbrange)
+    tlv:add(pf.wtp_board_id, tvbrange)
 end
 
 function boardDataBoardRevisionDecoder(tlv, tvbrange)
-    tlv:add(pf.wtp_board_data_board_revision, tvbrange)
+    tlv:add(pf.wtp_board_revision, tvbrange)
 end
 
 function boardDataBaseMacAddressDecoder(tlv, tvbrange)
-    local base_mac_address = tlv:add(pf.wtp_board_data_base_mac_address, tvbrange)
+    local base_mac_address = tlv:add(pf.base_mac_address, tvbrange)
     local tvb = tvbrange:tvb()
     local mac_string = string.format("%2x:%2x:%2x:%2x:%2x:%2x", -- todo: format 
         tvb:range(0, 1):uint(),tvb:range(1, 1):uint(),tvb:range(2, 1):uint(), 
@@ -702,11 +923,11 @@ function wtpBoardDataDecoder(tlv, tvbrange)
         local type = tvb:range(pos, 2):uint()
         local length = tvb:range(pos + 2, 2):uint()
 
-        local data = tlv:add(pf.vsp_wtp_board_data, tvb:range(pos, length + 4))
+        local data = tlv:add(pf.wtp_board_data, tvb:range(pos, length + 4))
         data:set_text("WTP Board Data: (t="..type..",l="..length..") "..board_data_type_vals[type])
-        data:add(pf.wtp_board_data_type, tvb:range(pos, 2))
-        data:add(pf.wtp_board_data_length, tvb:range(pos+2, 2))
-        data:add(pf.wtp_board_data_value, tvb:range(pos+4, length))
+        data:add(pf.board_data_type, tvb:range(pos, 2))
+        data:add(pf.board_data_length, tvb:range(pos+2, 2))
+        data:add(pf.board_data_value, tvb:range(pos+4, length))
         
         if boardDataValueDecoder[type] then
             boardDataValueDecoder[type](data, tvb:range(pos+4, length))
@@ -1031,6 +1252,13 @@ function ieee80211OfdmControlDecoder(tlv, tvbrange)
     tlv:add(pf.ieee_80211_ofdm_control_ti_threshold, tvb:range(4, 4))
 end
 
+function radioOperationStateDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_operational_id, tvb:range(0, 1))
+    tlv:add(pf.radio_operational_state, tvb:range(1, 1))
+    tlv:add(pf.radio_operational_cause, tvb:range(2, 1))
+end
+
 local messageElementDecoder = {
     [TYPE_AC_DESCRIPTOR] = acDescriptorDecoder,
     [TYPE_AC_IPV4_LIST] = AcIpv4ListDecoder,
@@ -1063,7 +1291,7 @@ local messageElementDecoder = {
     [TYPE_MAXIMUM_MESSAGE_LENGTH] = nil,
     [TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = capwapLocalIpv4AddressDecoder,
     [TYPE_RADIO_ADMINISTRATIVE_STATE] = radioAdministrativeStateDecoder,
-    [TYPE_RADIO_OPERATIONAL_STATE] = nil,
+    [TYPE_RADIO_OPERATIONAL_STATE] = radioOperationStateDecoder,
     [TYPE_RESULT_CODE] = resultCodeDecoder,
     [TYPE_RETURNED_MESSAGE_ELEMENT] = nil,
     [TYPE_SESSION_ID] = sessionIdDecoder,
@@ -1153,7 +1381,12 @@ function capwap.dissector(tvbuf,pktinfo,root)
     control_header:add(pf.control_header_message_element_length, tvbuf:range(13,2))
     control_header:add(pf.control_header_message_flags, tvbuf:range(15,1))
 
-    pktinfo.cols.info:set("FTNT-CAPWAP-Control - "..stypes[tvbuf:range(11,1):uint()])
+    local binding_id = header_flags_range:bitfield(10, 5)
+    if 1 == binding_id then
+        pktinfo.cols.info:set("FTNT-CAPWAP-Control - "..stypes[tvbuf:range(8,4):uint()])
+    else
+        pktinfo.cols.info:set("FTNT-CAPWAP-Control - "..stypes[tvbuf:range(11,1):uint()])
+    end
 
     local message_element = tree:add("Message Element")
 
@@ -1167,7 +1400,18 @@ function capwap.dissector(tvbuf,pktinfo,root)
         local value = tvbuf:range(pos+4,length)
 
         local tlv = message_element:add(pf.tlv, tvbuf:range(pos, length+4))
-        tlv:set_text("Type: (t="..type..",l="..length..") "..tlvTypes[type])
+
+        if type ~= TYPE_VENDOR_SPECIFIC_PAYLOAD then
+            tlv:set_text("Type: (t="..type..",l="..length..") "..tlvTypes[type])
+        else
+            local ftntElementId = tvbuf:range(pos+8, 2):uint()
+            if fortinet_element_id_vals[ftntElementId] then
+                tlv:set_text("Type: (t="..type..",l="..length..") "..tlvTypes[type]..": Fortinet "..fortinet_element_id_vals[ftntElementId])
+            else
+                tlv:set_text("Type: (t="..type..",l="..length..") "..tlvTypes[type]..": Fortinet Unknown")
+                tlv:add_expert_info(PI_MALFORMED, PI_ERROR, "no decoder for ftnt element id "..ftntElementId)
+            end
+        end
 
         tlv:add(pf.tlv_type, tvbuf:range(pos,2))
         tlv:add(pf.tlv_length, tvbuf:range(pos+2,2))
