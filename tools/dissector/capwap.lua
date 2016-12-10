@@ -237,6 +237,7 @@ local discovery_type_vals = {
 -- /* From FortiAP/WiFI 5.2.0 */
 local VSP_FORTINET_AP_SCAN = 16
 local VSP_FORTINET_AP_LIST = 17
+local VSP_FORTINET_AP_SCAN_IDLE = 23
 local VSP_FORTINET_PASSIVE = 24
 local VSP_FORTINET_DAEMON_RST = 32
 local VSP_FORTINET_MAC = 33
@@ -250,24 +251,29 @@ local VSP_FORTINET_AMSDU = 53
 local VSP_FORTINET_PS_OPT = 54
 local VSP_FORTINET_PURE = 55
 local VSP_FORTINET_EBP_TAG = 56
+local VSP_FORTINET_AUTO_CHAN = 65
 local VSP_FORTINET_TELNET_ENABLE = 81
 local VSP_FORTINET_ADMIN_PASSWD = 82
 local VSP_FORTINET_REGCODE = 83
 local VSP_FORTINET_COUNTRYCODE = 84
 local VSP_FORTINET_STA_SCAN = 99
+local VSP_FORTINET_STA_CAP_LIST = 101
 local VSP_FORTINET_FHO = 103
 local VSP_FORTINET_APHO = 104
 local VSP_FORTINET_STA_LOCATE = 106
 local VSP_FORTINET_SPECTRUM_ANALYSIS = 108
 local VSP_FORTINET_DARRP_CFG = 112
+local VSP_FORTINET_DARRP_OPER_CHAN = 114
 local VSP_FORTINET_AP_SUPPRESS_LIST = 128
 local VSP_FORTINET_WDS = 145
+local VSP_FORTINET_VAP_FLAGS = 146
 local VSP_FORTINET_VAP_VLAN_TAG = 147
 local VSP_FORTINET_VAP_BITMAP = 148
 local VSP_FORTINET_MCAST_RATE = 149
 local VSP_FORTINET_CFG = 150
 local VSP_FORTINET_SPLIT_TUN_CFG = 151
 local VSP_FORTINET_MGMT_VLAN_TAG = 161
+local VSP_FORTINET_DISABLE_THRESH = 163
 local VSP_FORTINET_VAP_PSK_PASSWD = 167
 local VSP_FORTINET_IP_FRAG = 170
 local VSP_FORTINET_MAX_DISTANCE = 171
@@ -278,6 +284,8 @@ local VSP_FORTINET_TXPWR = 193
 local VSP_FORTINET_AC_CAP = 194
 local VSP_FORTINET_VAP_STATS = 196
 local VSP_FORTINET_WTP_STATS = 197
+local VSP_FORTINET_WTP_UPTIME = 198
+local VSP_FORTINET_RADIO_STATS = 200
 local VSP_FORTINET_STA_STATS_INTERVAL = 201
 local VSP_FORTINET_STA_CAP_INTERVAL = 202
 local VSP_FORTINET_TXPWR_DBM = 205
@@ -288,6 +296,7 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_AP_LIST] = "AP List",
     [VSP_FORTINET_DAEMON_RST] = "Daemon Reset",
     [VSP_FORTINET_MAC] = "MAC",
+    [VSP_FORTINET_AP_SCAN_IDLE] = "AP Scan Idle",
     [VSP_FORTINET_PASSIVE] = "Passive",
     [VSP_FORTINET_WTP_ALLOW] = "WTP Allow",
     [VSP_FORTINET_WBH_STA] = "Mesh WBH STA",
@@ -299,17 +308,21 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_PS_OPT] = "PS OPT",
     [VSP_FORTINET_PURE] = "Pure",
     [VSP_FORTINET_EBP_TAG] = "EBP Tag",
+    [VSP_FORTINET_AUTO_CHAN] = "Auto Channel",
     [VSP_FORTINET_TELNET_ENABLE] = "Telnet Enable",
     [VSP_FORTINET_ADMIN_PASSWD] = "Admin Password",
     [VSP_FORTINET_REGCODE] = "Reg Code",
     [VSP_FORTINET_COUNTRYCODE] = "Country Code",
     [VSP_FORTINET_STA_SCAN] = "STA Scan",
+    [VSP_FORTINET_STA_CAP_LIST] = "STA Capability List",
     [VSP_FORTINET_FHO] = "FHO",
     [VSP_FORTINET_APHO] = "APHO",
     [VSP_FORTINET_STA_LOCATE] = "STA Locate",
     [VSP_FORTINET_SPECTRUM_ANALYSIS] = "Spectrum Analysis",
     [VSP_FORTINET_DARRP_CFG] = "DARRP Configuration",
+    [VSP_FORTINET_DARRP_OPER_CHAN] = "DARRP Operation Channel",
     [VSP_FORTINET_AP_SUPPRESS_LIST] = "AP Suppress List",
+    [VSP_FORTINET_VAP_FLAGS] = "VAP Flags",
     [VSP_FORTINET_WDS] = "WDS",
     [VSP_FORTINET_VAP_VLAN_TAG] = "VAP Vlan",
     [VSP_FORTINET_VAP_BITMAP] = "VAP Bitmap",
@@ -317,6 +330,7 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_CFG] = "Configuration",
     [VSP_FORTINET_SPLIT_TUN_CFG] = "Split Tunnel Configuration",
     [VSP_FORTINET_MGMT_VLAN_TAG] = "Management Vlan",
+    [VSP_FORTINET_DISABLE_THRESH] = "Disable Threshold",
     [VSP_FORTINET_VAP_PSK_PASSWD] = "VAP PSK Password",
     [VSP_FORTINET_IP_FRAG] = "IP Frag",
     [VSP_FORTINET_MAX_DISTANCE] = "Max Distance",
@@ -327,6 +341,8 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_AC_CAP] = "AC Capabilities",
     [VSP_FORTINET_VAP_STATS] = "VAP Statistics",
     [VSP_FORTINET_WTP_STATS] = "WTP Statistics",
+    [VSP_FORTINET_WTP_UPTIME] = "WTP Uptime",
+    [VSP_FORTINET_RADIO_STATS] = "Radio Statistics",
     [VSP_FORTINET_STA_STATS_INTERVAL] = "STA Statistics Interval",
     [VSP_FORTINET_STA_CAP_INTERVAL] = "STA Capabilities Interval",
     [VSP_FORTINET_TXPWR_DBM] = "TxPower dbm",
@@ -695,7 +711,26 @@ pf.cpu_load = ProtoField.new("CPU Load", "ftnt.capwap.message.element.fortinet.c
 pf.mem_total = ProtoField.new("Memory Total", "ftnt.capwap.message.element.fortinet.memory.total", ftypes.UINT32)
 pf.mem_free = ProtoField.new("Memory Free", "ftnt.capwap.message.element.fortinet.memory.free", ftypes.UINT32)
 pf.ap_list = ProtoField.new("AP List", "ftnt.capwap.message.element.fortinet.ap.list", ftypes.BYTES)
-
+pf.ap_scan_idle = ProtoField.new("AP Scan Idle", "ftnt.capwap.message.element.fortinet.ap.scan.idle", ftypes.UINT16)
+pf.auto_chan = ProtoField.new("Auto Channel", "ftnt.capwap.message.element.fortinet.auto.channel", ftypes.UINT16)
+pf.wlan_id = ProtoField.new("Wlan ID", "ftnt.capwap.message.element.fortinet.wlan.id", ftypes.UINT8)
+pf.disable_thresh = ProtoField.new("Auto Channel", "ftnt.capwap.message.element.fortinet.disable.thresh", ftypes.UINT16)
+pf.vap_flags = ProtoField.new("VAP Flags", "ftnt.capwap.message.element.fortinet.vap.flags", ftypes.UINT32)
+pf.wtp_up_time = ProtoField.new("WTP Up Time", "ftnt.capwap.message.element.fortinet.wtp.up.time", ftypes.UINT32)
+pf.daemon_up_time = ProtoField.new("Daemon Up Time", "ftnt.capwap.message.element.fortinet.daemon.up.time", ftypes.UINT32)
+pf.session_up_time = ProtoField.new("Session Up Time", "ftnt.capwap.message.element.fortinet.session.up.time", ftypes.UINT32)
+pf.oper_chan = ProtoField.new("Operation Channel", "ftnt.capwap.message.element.fortinet.oper.chan", ftypes.UINT8)
+pf.sta_cap_list = ProtoField.new("Station Capability List", "ftnt.capwap.message.element.fortinet.sta.cap.list", ftypes.BYTES)
+pf.radio_stats = ProtoField.new("Radio Statistics", "ftnt.capwap.message.element.fortinet.radio.stats", ftypes.BYTES)
+pf.mesh_eth_bridge_enable = ProtoField.new("Mesh Eth Bridge Enable", "ftnt.capwap.message.element.fortinet.mesh.eth.bridge.enable", ftypes.UINT8)
+pf.ps_opt = ProtoField.new("PS OPT", "ftnt.capwap.message.element.fortinet.ps.opt", ftypes.UINT8)
+pf.pure = ProtoField.new("Pure", "ftnt.capwap.message.element.fortinet.pure", ftypes.UINT8)
+pf.mode = ProtoField.new("Mode", "ftnt.capwap.message.element.fortinet.mode", ftypes.UINT8)
+pf.amsdu = ProtoField.new("AMSDU", "ftnt.capwap.message.element.fortinet.amsdu", ftypes.UINT8)
+pf.coext = ProtoField.new("Coext", "ftnt.capwap.message.element.fortinet.coext", ftypes.UINT8)
+pf.mcs = ProtoField.new("MCS", "ftnt.capwap.message.element.fortinet.mcs", ftypes.UINT8)
+pf.ht_short_gi = ProtoField.new("HT Short GI", "ftnt.capwap.message.element.fortinet.ht.short.gi", ftypes.UINT8)
+pf.bandwidth = ProtoField.new("Bandwidth", "ftnt.capwap.message.element.fortinet.bandwidth", ftypes.UINT8)
 
 capwap.fields = pf
 
@@ -750,6 +785,10 @@ function staCapIntervalDecoder(tlv, tvbrange)
     tlv:add(pf.sta_cap_interval, tvbrange)
 end
 
+function meshEthBridgeEnableDecoder(tlv, tvbrange)
+    tlv:add(pf.mesh_eth_bridge_enable, tvbrange)
+end
+
 function acCapDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.version, tvb:range(0, 1))
@@ -769,6 +808,20 @@ function apListDecoder(tlv, tvbrange)
     tlv:add(pf.version, tvb:range(0, 1))
     tlv:add(pf.radio_id, tvb:range(1, 1))
     tlv:add(pf.ap_list, tvb:range(2))
+end
+
+function staCapListDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version, tvb:range(0, 1))
+    tlv:add(pf.radio_id, tvb:range(1, 1))
+    tlv:add(pf.sta_cap_list, tvb:range(2))
+end
+
+function radioStatsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version, tvb:range(0, 1))
+    tlv:add(pf.radio_id, tvb:range(1, 1))
+    tlv:add(pf.radio_stats, tvb:range(2))
 end
 
 function wtpStatsDecoder(tlv, tvbrange)
@@ -797,6 +850,85 @@ function txPowerDbmDecoder(tlv, tvbrange)
     tlv:add(pf.txpower_dbm, tvb:range(1, 2))
 end
 
+function apScanIdleDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.ap_scan_idle, tvb:range(1, 2))
+end
+
+function autoChanDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.auto_chan, tvb:range(1, 2))
+end
+
+function disableThreshDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.disable_thresh, tvb:range(2, 2))
+end
+
+function vapFlagsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.vap_flags, tvb:range(2, 4))
+end
+
+function psOptDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.ps_opt, tvb:range(1, 1))
+end
+
+function modeDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.mode, tvb:range(1, 1))
+end
+
+function pureDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.pure, tvb:range(1, 1))
+end
+
+function amsduDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.amsdu, tvb:range(1, 1))
+end
+
+function coextDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.coext, tvb:range(1, 1))
+end
+
+function wtpUptimeDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.wtp_up_time, tvb:range(0, 4))
+    tlv:add(pf.daemon_up_time, tvb:range(4, 4))
+    tlv:add(pf.session_up_time, tvb:range(8, 4))
+end
+
+function darryOperChanDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.sn, tvb:range(0, 16))
+    tlv:add(pf.radio_id, tvb:range(16, 1))
+    tlv:add(pf.base_mac_address, tvb:range(17, 6))
+    tlv:add(pf.oper_chan, tvb:range(23, 1))
+end
+
+function htcapDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.mcs, tvb:range(1, 1))
+    tlv:add(pf.ht_short_gi, tvb:range(2, 1))
+    tlv:add(pf.bandwidth, tvb:range(3, 1))
+end
+
 function mgmtVapDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.sn_length, tvb:range(0, 2))
@@ -812,30 +944,35 @@ end
 local ftntElementDecoder = {
     [VSP_FORTINET_AP_SCAN] = nil,
     [VSP_FORTINET_AP_LIST] = apListDecoder,
+    [VSP_FORTINET_AP_SCAN_IDLE] = apScanIdleDecoder,
     [VSP_FORTINET_PASSIVE] = nil,
     [VSP_FORTINET_DAEMON_RST] = nil,
     [VSP_FORTINET_MAC] = nil,
     [VSP_FORTINET_WTP_ALLOW] = wtpAllowDecoder,
     [VSP_FORTINET_WBH_STA] = wbhStaDecoder,
-    [VSP_FORTINET_HTCAP] = nil,
+    [VSP_FORTINET_HTCAP] = htcapDecoder,
     [VSP_FORTINET_MGMT_VAP] = mgmtVapDecoder,
-    [VSP_FORTINET_MODE] = nil,
-    [VSP_FORTINET_COEXT] = nil,
-    [VSP_FORTINET_AMSDU] = nil,
-    [VSP_FORTINET_PS_OPT] = nil,
-    [VSP_FORTINET_PURE] = nil,
+    [VSP_FORTINET_MODE] = modeDecoder,
+    [VSP_FORTINET_COEXT] = coextDecoder,
+    [VSP_FORTINET_AMSDU] = amsduDecoder,
+    [VSP_FORTINET_PS_OPT] = psOptDecoder,
+    [VSP_FORTINET_PURE] = pureDecoder,
     [VSP_FORTINET_EBP_TAG] = nil,
+    [VSP_FORTINET_AUTO_CHAN] = autoChanDecoder,
     [VSP_FORTINET_TELNET_ENABLE] = telnetEnableDecoder,
     [VSP_FORTINET_ADMIN_PASSWD] = nil,
     [VSP_FORTINET_REGCODE] = regcodeDecoder,
     [VSP_FORTINET_COUNTRYCODE] = countryCodeDecoder,
     [VSP_FORTINET_STA_SCAN] = nil,
+    [VSP_FORTINET_STA_CAP_LIST] = staCapListDecoder,
     [VSP_FORTINET_FHO] = nil,
     [VSP_FORTINET_APHO] = nil,
     [VSP_FORTINET_STA_LOCATE] = nil,
     [VSP_FORTINET_SPECTRUM_ANALYSIS] = nil,
     [VSP_FORTINET_DARRP_CFG] = nil,
+    [VSP_FORTINET_DARRP_OPER_CHAN] = darryOperChanDecoder,
     [VSP_FORTINET_AP_SUPPRESS_LIST] = nil,
+    [VSP_FORTINET_VAP_FLAGS] = vapFlagsDecoder,
     [VSP_FORTINET_WDS] = nil,
     [VSP_FORTINET_VAP_VLAN_TAG] = nil,
     [VSP_FORTINET_VAP_BITMAP] = nil,
@@ -843,16 +980,19 @@ local ftntElementDecoder = {
     [VSP_FORTINET_CFG] = nil,
     [VSP_FORTINET_SPLIT_TUN_CFG] = nil,
     [VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder,
+    [VSP_FORTINET_DISABLE_THRESH] = disableThreshDecoder,
     [VSP_FORTINET_VAP_PSK_PASSWD] = nil,
     [VSP_FORTINET_IP_FRAG] = ipFragDecoder,
     [VSP_FORTINET_MAX_DISTANCE] = maxDistanceDecoder,
-    [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = nil,
+    [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = meshEthBridgeEnableDecoder,
     [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = meshEthBridgeTypeDecoder,
     [VSP_FORTINET_WTP_CAP] = wtpCapDecoder,
     [VSP_FORTINET_TXPWR] = nil,
     [VSP_FORTINET_AC_CAP] = acCapDecoder,
     [VSP_FORTINET_VAP_STATS] = vapStatsDecoder,
     [VSP_FORTINET_WTP_STATS] = wtpStatsDecoder,
+    [VSP_FORTINET_WTP_UPTIME] = wtpUptimeDecoder,
+    [VSP_FORTINET_RADIO_STATS] = radioStatsDecoder,
     [VSP_FORTINET_STA_STATS_INTERVAL] = staStatsIntervalDecoder,
     [VSP_FORTINET_STA_CAP_INTERVAL] = staCapIntervalDecoder,
     [VSP_FORTINET_TXPWR_DBM] = txPowerDbmDecoder,
@@ -907,6 +1047,8 @@ function vendorSpecificPayloadDecoder(tlv, tvbrange)
     local id = tvb:range(4, 2):uint()
     if ftntElementDecoder[id] then
         ftntElementDecoder[id](tlv, tvb:range(6))
+    else
+        tlv:add_expert_info(PI_MALFORMED, PI_ERROR, "Unknown Element ID "..id)
     end
 end
 
