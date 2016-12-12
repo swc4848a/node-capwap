@@ -10,6 +10,11 @@ local booltypes = {
     [1] = "True"
 }
 
+local yntypes = {
+    [0] = "No",
+    [1] = "Yes"
+}
+
 local btypes = {
     [1] = "IEEE 802.11"
 }
@@ -498,6 +503,51 @@ local radio_op_cause_vals = {
     [3] = "Administratively Set",
 };
 
+-- /* ************************************************************************* */
+-- /*                     Add/Update WLAN : Key Status                          */
+-- /* ************************************************************************* */
+local ieee80211_wlan_key_status_vals = {
+    [0] = "SN Information Element means that the WLAN uses per-station encryption keys",
+    [1] = "static WEP Key",
+    [2] = "Rekeying the GTK with the STA's in the BSS",
+    [3] = "Rekeying the GTK and broadcast",
+};
+
+-- /* ************************************************************************* */
+-- /*                     Add WLAN : QoS                                        */
+-- /* ************************************************************************* */
+local ieee80211_add_wlan_qos_vals = {
+    [0] = "Best Effort",
+    [1] = "Video",
+    [2] = "Voice",
+    [3] = "Background",
+};
+
+-- /* ************************************************************************* */
+-- /*                     Add WLAN : Auth Type                                  */
+-- /* ************************************************************************* */
+local ieee80211_add_wlan_auth_type_vals = {
+    [0] = "Open System",
+    [1] = "WEP Shared Key",
+};
+
+-- /* ************************************************************************* */
+-- /*                     Add WLAN : MAC Mode                                   */
+-- /* ************************************************************************* */
+local ieee80211_add_wlan_mac_mode_vals = {
+    [0] = "Local MAC",
+    [1] = "Split MAC",
+};
+
+-- /* ************************************************************************* */
+-- /*                     Add WLAN : Tunnel Mode                                */
+-- /* ************************************************************************* */
+local ieee80211_add_wlan_tunnel_mode_vals = {
+    [0] = "Local Bridging",
+    [1] = "802.3 Tunnel",
+    [2] = "802.11 Tunnel",
+};
+
 local CAPWAP_HDR_LEN = 16
 
 local pf = {}
@@ -731,6 +781,45 @@ pf.coext = ProtoField.new("Coext", "ftnt.capwap.message.element.fortinet.coext",
 pf.mcs = ProtoField.new("MCS", "ftnt.capwap.message.element.fortinet.mcs", ftypes.UINT8)
 pf.ht_short_gi = ProtoField.new("HT Short GI", "ftnt.capwap.message.element.fortinet.ht.short.gi", ftypes.UINT8)
 pf.bandwidth = ProtoField.new("Bandwidth", "ftnt.capwap.message.element.fortinet.bandwidth", ftypes.UINT8)
+pf.bg_scan_interval = ProtoField.new("bg scan interval", "ftnt.capwap.message.element.fortinet.bg.scan.interval", ftypes.UINT16)
+pf.bg_scan_idle = ProtoField.new("bg scan idle", "ftnt.capwap.message.element.fortinet.bg.scan.idle", ftypes.UINT24)
+pf.bg_scan_rpt_interval = ProtoField.new("bg scan rpt interval", "ftnt.capwap.message.element.fortinet.bg.scan.rpt.interval", ftypes.UINT16)
+pf.fg_scan_rpt_interval = ProtoField.new("fg scan rpt interval", "ftnt.capwap.message.element.fortinet.fg.scan.rpt.interval", ftypes.UINT16)
+pf.passive = ProtoField.new("Passive", "ftnt.capwap.message.element.fortinet.passive", ftypes.UINT8)
+pf.sta_scan = ProtoField.new("STA Scan", "ftnt.capwap.message.element.fortinet.sta.scan", ftypes.UINT16)
+pf.spectrum_analysis_enable = ProtoField.new("Spectrum Analysis Enable", "ftnt.capwap.message.element.fortinet.spectrum.analysis.enable", ftypes.UINT8)
+pf.ssid = ProtoField.new("SSID", "ftnt.capwap.message.element.fortinet.ssid", ftypes.STRING)
+pf.darrp_cfg_enable = ProtoField.new("DARRP CFG Enable", "ftnt.capwap.message.element.fortinet.darrp.cfg.enable", ftypes.UINT8)
+pf.darrp_cfg_interval = ProtoField.new("DARRP CFG Interval", "ftnt.capwap.message.element.fortinet.darrp.cfg.interval", ftypes.UINT8)
+pf.fho = ProtoField.new("FHO", "ftnt.capwap.message.element.fortinet.fho", ftypes.UINT8)
+pf.apho = ProtoField.new("APHO", "ftnt.capwap.message.element.fortinet.apho", ftypes.UINT8)
+pf.locate_enable = ProtoField.new("Locate Enable", "ftnt.capwap.message.element.fortinet.locate.enable", ftypes.UINT8)
+pf.locate_interval = ProtoField.new("Locate Interval", "ftnt.capwap.message.element.fortinet.locate.interval", ftypes.UINT16)
+pf.wids_enable = ProtoField.new("WIDS Enable", "ftnt.capwap.message.element.fortinet.wids.enable", ftypes.UINT32)
+pf.bitmap = ProtoField.new("Bitmap", "ftnt.capwap.message.element.fortinet.bitmap", ftypes.UINT16, nil, base.HEX)
+pf.enable_local_subnet = ProtoField.new("Enable Local Subnet", "ftnt.capwap.message.element.fortinet.enable.local.subnet", ftypes.UINT8)
+pf.cnt = ProtoField.new("CNT", "ftnt.capwap.message.element.fortinet.cnt", ftypes.UINT8)
+pf.wlan_id = ProtoField.new("WLAN ID", "ftnt.capwap.message.element.fortinet.wlan.id", ftypes.UINT8)
+pf.wds_enable = ProtoField.new("WDS Enable", "ftnt.capwap.message.element.fortinet.wds.enable", ftypes.UINT8)
+pf.multicast_rate = ProtoField.new("Multicast Rate", "ftnt.capwap.message.element.fortinet.multicast.rate", ftypes.UINT32)
+pf.vlan_id = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.fortinet.vlan.id", ftypes.UINT16)
+pf.ip = ProtoField.new("IP", "ftnt.capwap.message.element.fortinet.ip", ftypes.IPv4)
+pf.mask = ProtoField.new("MASK", "ftnt.capwap.message.element.fortinet.mask", ftypes.IPv4)
+
+pf.capability = ProtoField.new("Capability", "ftnt.capwap.message.element.capability", ftypes.UINT16)
+pf.key_index = ProtoField.new("Key-Index", "ftnt.capwap.message.element.key.index", ftypes.UINT8)
+pf.key_status = ProtoField.new("Key Status", "ftnt.capwap.message.element.key.status", ftypes.UINT8, ieee80211_wlan_key_status_vals)
+pf.key_length = ProtoField.new("Key Length", "ftnt.capwap.message.element.key.length", ftypes.UINT16)
+pf.key = ProtoField.new("Key", "ftnt.capwap.message.element.key", ftypes.BYTES)
+pf.group_tsc = ProtoField.new("Group TSC", "ftnt.capwap.message.element.group.tsc", ftypes.BYTES, nil) -- todo:
+pf.qos = ProtoField.new("QoS", "ftnt.capwap.message.element.qos", ftypes.UINT8, ieee80211_add_wlan_qos_vals)
+pf.auth_type = ProtoField.new("Auth Type", "ftnt.capwap.message.element.auth.type", ftypes.UINT8, ieee80211_add_wlan_auth_type_vals)
+pf.mac_mode = ProtoField.new("MAC Mode", "ftnt.capwap.message.element.mac.mode", ftypes.UINT8, ieee80211_add_wlan_mac_mode_vals)
+pf.tunnel_mode = ProtoField.new("Tunnel Mode", "ftnt.capwap.message.element.tunnel.mode", ftypes.UINT8, ieee80211_add_wlan_tunnel_mode_vals)
+pf.suppress_ssid = ProtoField.new("Suppress SSID", "ftnt.capwap.message.element.suppress.ssid", ftypes.UINT8, yntypes, base.HEX, 0x01)
+pf.key = ProtoField.new("Key", "ftnt.capwap.message.element.key", ftypes.STRING)
+pf.flags = ProtoField.new("Flags", "ftnt.capwap.message.element.flags", ftypes.UINT8)
+pf.tag = ProtoField.new("Tag", "ftnt.capwap.message.element.tag", ftypes.BYTES)
 
 capwap.fields = pf
 
@@ -906,6 +995,37 @@ function coextDecoder(tlv, tvbrange)
     tlv:add(pf.coext, tvb:range(1, 1))
 end
 
+function passiveDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.passive, tvb:range(1, 1))
+end
+
+function fhoDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.fho, tvb:range(1, 1))
+end
+
+function aphoDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.apho, tvb:range(1, 1))
+end
+
+function staScanDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.sta_scan, tvb:range(1, 2))
+end
+
+function spectrumAnalysisDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.spectrum_analysis_enable, tvb:range(1, 1))
+    tlv:add(pf.ssid, tvb:range(2))
+end
+
 function wtpUptimeDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.wtp_up_time, tvb:range(0, 4))
@@ -921,12 +1041,89 @@ function darryOperChanDecoder(tlv, tvbrange)
     tlv:add(pf.oper_chan, tvb:range(23, 1))
 end
 
+function darrpCfgDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.darrp_cfg_enable, tvb:range(1, 1))
+    tlv:add(pf.darrp_cfg_interval, tvb:range(2, 1))
+end
+
+function staLocateDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.locate_enable, tvb:range(1, 1))
+    tlv:add(pf.locate_interval, tvb:range(2, 2))
+end
+
+function widsEnableDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wids_enable, tvb:range(1, 4))
+end
+
+function vapBitmapDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.bitmap, tvb:range(1, 2))
+end
+
+function splitTunCfgDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.enable_local_subnet, tvb:range(0, 1))
+    tlv:add(pf.cnt, tvb:range(1, 1))
+end
+
 function htcapDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.mcs, tvb:range(1, 1))
     tlv:add(pf.ht_short_gi, tvb:range(2, 1))
     tlv:add(pf.bandwidth, tvb:range(3, 1))
+end
+
+function wdsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.wds_enable, tvb:range(2, 1))
+end
+
+function mcastRateDeocder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.multicast_rate, tvb:range(2, 4))
+end
+
+function vapVlanTagDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.vlan_id, tvb:range(2, 2))
+end
+
+function cfgDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.ip, tvb:range(2, 4))
+    tlv:add(pf.mask, tvb:range(6, 4))
+end
+
+function vapPskPasswdDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.key, tvb:range(2))
+end
+
+function apScanDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.bg_scan_interval, tvb:range(1, 2))
+    tlv:add(pf.bg_scan_idle, tvb:range(3, 3))
+    tlv:add(pf.bg_scan_rpt_interval, tvb:range(6, 2))
+    tlv:add(pf.fg_scan_rpt_interval, tvb:range(8, 2))
 end
 
 function mgmtVapDecoder(tlv, tvbrange)
@@ -942,10 +1139,10 @@ function mgmtVapDecoder(tlv, tvbrange)
 end
 
 local ftntElementDecoder = {
-    [VSP_FORTINET_AP_SCAN] = nil,
+    [VSP_FORTINET_AP_SCAN] = apScanDecoder,
     [VSP_FORTINET_AP_LIST] = apListDecoder,
     [VSP_FORTINET_AP_SCAN_IDLE] = apScanIdleDecoder,
-    [VSP_FORTINET_PASSIVE] = nil,
+    [VSP_FORTINET_PASSIVE] = passiveDecoder,
     [VSP_FORTINET_DAEMON_RST] = nil,
     [VSP_FORTINET_MAC] = nil,
     [VSP_FORTINET_WTP_ALLOW] = wtpAllowDecoder,
@@ -963,25 +1160,25 @@ local ftntElementDecoder = {
     [VSP_FORTINET_ADMIN_PASSWD] = nil,
     [VSP_FORTINET_REGCODE] = regcodeDecoder,
     [VSP_FORTINET_COUNTRYCODE] = countryCodeDecoder,
-    [VSP_FORTINET_STA_SCAN] = nil,
+    [VSP_FORTINET_STA_SCAN] = staScanDecoder,
     [VSP_FORTINET_STA_CAP_LIST] = staCapListDecoder,
-    [VSP_FORTINET_FHO] = nil,
-    [VSP_FORTINET_APHO] = nil,
-    [VSP_FORTINET_STA_LOCATE] = nil,
-    [VSP_FORTINET_SPECTRUM_ANALYSIS] = nil,
-    [VSP_FORTINET_DARRP_CFG] = nil,
+    [VSP_FORTINET_FHO] = fhoDecoder,
+    [VSP_FORTINET_APHO] = aphoDecoder,
+    [VSP_FORTINET_STA_LOCATE] = staLocateDecoder,
+    [VSP_FORTINET_SPECTRUM_ANALYSIS] = spectrumAnalysisDecoder,
+    [VSP_FORTINET_DARRP_CFG] = darrpCfgDecoder,
     [VSP_FORTINET_DARRP_OPER_CHAN] = darryOperChanDecoder,
     [VSP_FORTINET_AP_SUPPRESS_LIST] = nil,
     [VSP_FORTINET_VAP_FLAGS] = vapFlagsDecoder,
-    [VSP_FORTINET_WDS] = nil,
-    [VSP_FORTINET_VAP_VLAN_TAG] = nil,
-    [VSP_FORTINET_VAP_BITMAP] = nil,
-    [VSP_FORTINET_MCAST_RATE] = nil,
-    [VSP_FORTINET_CFG] = nil,
-    [VSP_FORTINET_SPLIT_TUN_CFG] = nil,
+    [VSP_FORTINET_WDS] = wdsDecoder,
+    [VSP_FORTINET_VAP_VLAN_TAG] = vapVlanTagDecoder,
+    [VSP_FORTINET_VAP_BITMAP] = vapBitmapDecoder,
+    [VSP_FORTINET_MCAST_RATE] = mcastRateDeocder,
+    [VSP_FORTINET_CFG] = cfgDecoder,
+    [VSP_FORTINET_SPLIT_TUN_CFG] = splitTunCfgDecoder,
     [VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder,
     [VSP_FORTINET_DISABLE_THRESH] = disableThreshDecoder,
-    [VSP_FORTINET_VAP_PSK_PASSWD] = nil,
+    [VSP_FORTINET_VAP_PSK_PASSWD] = vapPskPasswdDecoder,
     [VSP_FORTINET_IP_FRAG] = ipFragDecoder,
     [VSP_FORTINET_MAX_DISTANCE] = maxDistanceDecoder,
     [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = meshEthBridgeEnableDecoder,
@@ -996,7 +1193,7 @@ local ftntElementDecoder = {
     [VSP_FORTINET_STA_STATS_INTERVAL] = staStatsIntervalDecoder,
     [VSP_FORTINET_STA_CAP_INTERVAL] = staCapIntervalDecoder,
     [VSP_FORTINET_TXPWR_DBM] = txPowerDbmDecoder,
-    [VSP_FORTINET_WIDS_ENABLE] = nil,
+    [VSP_FORTINET_WIDS_ENABLE] = widsEnableDecoder,
 }
 
 function boardDataWtpModelNumberDecoder(tlv, tvbrange)
@@ -1265,6 +1462,24 @@ function ieee80211AntennaDecoder(tlv, tvbrange)
     tlv:add(pf.ieee_80211_antenna_selection, tvb:range(5, 1))
 end
 
+function ieee0211AddWlanDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.capability, tvb:range(2, 2))
+    tlv:add(pf.key_index, tvb:range(4, 1))
+    tlv:add(pf.key_status, tvb:range(5, 1))
+    tlv:add(pf.key_length, tvb:range(6, 2))
+    tlv:add(pf.key, tvb:range(8, 0))
+    tlv:add(pf.group_tsc, tvb:range(8, 6))
+    tlv:add(pf.qos, tvb:range(14, 1))
+    tlv:add(pf.auth_type, tvb:range(15, 1))
+    tlv:add(pf.mac_mode, tvb:range(16, 1))
+    tlv:add(pf.tunnel_mode, tvb:range(17, 1))
+    tlv:add(pf.suppress_ssid, tvb:range(18, 1))
+    tlv:add(pf.ssid, tvb:range(19))
+end
+
 function ieee80211TxPowerDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1394,6 +1609,27 @@ function ieee80211OfdmControlDecoder(tlv, tvbrange)
     tlv:add(pf.ieee_80211_ofdm_control_ti_threshold, tvb:range(4, 4))
 end
 
+function ieee80211AssignedWtpBssidDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.bssid, tvb:range(2, 6))
+end
+
+function ieee80211InformationElementDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.flags, tvb:range(2, 2))
+
+    local tag_number = tvb:range(4, 1):uint()
+    local tag_length = tvb:range(5, 1):uint()
+
+    local tag = tlv:add(pf.tag, tvb:range(4))
+    tag:set_text("Tag: ".."RSN Information")
+    -- todo
+end
+
 function radioOperationStateDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_operational_id, tvb:range(0, 1))
@@ -1456,12 +1692,12 @@ local messageElementDecoder = {
     [TYPE_MTU_DISCOVERY_PADDING] = nil,
     [TYPE_ECN_SUPPORT] = ecnSupportDecoder,
 
-    [IEEE80211_ADD_WLAN] = nil,
+    [IEEE80211_ADD_WLAN] = ieee0211AddWlanDecoder,
     [IEEE80211_ANTENNA] = ieee80211AntennaDecoder,
-    [IEEE80211_ASSIGNED_WTP_BSSID] = nil,
+    [IEEE80211_ASSIGNED_WTP_BSSID] = ieee80211AssignedWtpBssidDecoder,
     [IEEE80211_DELETE_WLAN] = nil,
     [IEEE80211_DIRECT_SEQUENCE_CONTROL] = ieee80211DirectSequenceControlDecoder,
-    [IEEE80211_INFORMATION_ELEMENT] = nil,
+    [IEEE80211_INFORMATION_ELEMENT] = ieee80211InformationElementDecoder,
     [IEEE80211_MAC_OPERATION] = ieee80211MacOperation,
     [IEEE80211_MIC_COUNTERMEASURES] = nil,
     [IEEE80211_MULTI_DOMAIN_CAPABILITY] = ieee80211MultiDomainCapabilityDecoder,
@@ -1561,6 +1797,8 @@ function capwap.dissector(tvbuf,pktinfo,root)
 
         if messageElementDecoder[type] then
             messageElementDecoder[type](tlv, tvbuf:range(pos+4,length))
+        else
+            tlv:add_expert_info(PI_MALFORMED, PI_ERROR, "no decoder for ftnt element type "..type)
         end
 
         pos = pos + length + 4
