@@ -5,8 +5,8 @@
 ### Development Step
 
 #### vm image create
-* set network connection to bridge mode
-use nmtui change ipv4 to manual mode and set your own ip and dns
+* set network connection to bridge mode 
+1. use nmtui change ipv4 to manual mode and set your own ip and dns
 
 * disable firewall
 ~~~~

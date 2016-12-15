@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # while-menu: a menu-driven system information program
-DELAY=1 # Number of seconds to display results
-DELAY_LONG=10 # Number of seconds to display results for long
 RESPONDER_CONF="/etc/fdresponder/fdresponder.properties"
 DEPLOY_RULES="/etc/fdresponder/deploy_rules.conf"
 FGFMSD_LOG="/var/log/fgfmsd.log"
@@ -12,27 +10,34 @@ FDRESPONDER_LOG="/opt/fortinet/forticloud/fdresponder.log"
 trap ctrl_c INT
 
 function ctrl_c() {
-    echo "Invalid entry."
+    return
 }
 
+function menu() {
+    echo "Please Select:"
+    echo ""
+    echo "1. Set IP Address"
+    echo "2. Set External FortiManager Server IP Address (Default FortiManager)"
+    echo "3. Set Different FortiManager IP Address base on SN"
+    echo "4. Show Configuration"
+    echo "5. Change Password For Admin"
+    echo "6. Delete FortiManager IP Entry base on SN"
+    echo "7. Logout"
+}
+
+menu
+
 while true; do
-  clear
-  cat << _EOF_
-Please Select:
+  # clear
 
-1. Set IP Address
-2. Set External FortiManager Server IP Address (Default FortiManager)
-3. Set Different FortiManager IP Address base on SN
-4. Show Configuration
-5. Change Password For Admin
-6. Delete FortiManager IP Entry base on SN
+  read -p "Enter selection [0-7] (0 for menu) > "
 
-_EOF_
-
-  read -p "Enter selection [1-6] > "
-
-  if [[ $REPLY =~ ^[1-6]$ ]]; then
+  if [[ $REPLY =~ ^[0-7]$ ]]; then
     case $REPLY in
+      0)
+        menu
+        continue
+        ;;
       1)
         nmtui
         IP=$(ip addr | grep global | cut -d' ' -f 6 | cut -d'/' -f 1)
@@ -40,7 +45,6 @@ _EOF_
         cat $RESPONDER_CONF | grep fdmgrsvr
         systemctl restart fdresponder
         systemctl restart fgfmsd
-        sleep $DELAY
         continue
         ;;
       2)
@@ -48,11 +52,10 @@ _EOF_
         if [[ $REPLY =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
             sed -i -e '/external_fmg_server/cexternal_fmg_server='$REPLY'   # the IP address of external FortiManager server (default FMG)/' $RESPONDER_CONF
             cat $RESPONDER_CONF | grep external_fmg_server
-            systemctl restart fdresponder
+            systemctl restart fgfmsd
         else
             echo "IP Format Invalid"
         fi
-        sleep $DELAY
         continue
         ;;
       3)
@@ -70,7 +73,6 @@ _EOF_
         else
             echo "IP Format Invalid"
         fi
-        sleep $DELAY
         continue
         ;;
       4)
@@ -79,25 +81,25 @@ _EOF_
         echo "===================================="
         echo "FortiManager IP Address base on SN: "
         cat $DEPLOY_RULES
-        sleep $DELAY_LONG
         continue
         ;;
       5)
         passwd admin
-        sleep $DELAY
         continue
         ;;
       6)
         read -p "Enter FortiGate SN > "
         sed -i '/'$REPLY'/ d' $DEPLOY_RULES
         cat $DEPLOY_RULES
-        sleep $DELAY
+        continue
+        ;;
+      7)
+        exit
         continue
         ;;
     esac
   else
     echo "Invalid entry."
-    sleep $DELAY
   fi
 done
 echo "Program terminated."
