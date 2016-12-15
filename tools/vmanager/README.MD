@@ -11,20 +11,9 @@ use nmtui change ipv4 to manual mode and set your own ip and dns
 * disable firewall
 ~~~~
 systemctl disable firewalld
-iptables -L
-iptables -F
 ~~~~
 
-* disable selinux:
-edit /etc/selinux/config and change the SELINUX line to SELINUX=disabled:
-
-* verify
-~~~~
-cd /selinux/
-ls
-~~~~
-
-* add service
+* add service 
 create /etc/systemd/system/vmanager.service
 put in the following contents and save the file
 ~~~~
@@ -37,7 +26,6 @@ Type=simple
 User=iperf
 ExecStart=/usr/bin/node /home/zqqiang/node-capwap/monitor.js
 Restart=on-abort
-
 
 [Install]
 WantedBy=multi-user.target
@@ -56,15 +44,15 @@ edit /etc/systemd/system/getty.target.wants/getty@tty1.service
 change to "ExecStart=-/sbin/agetty --autologin username --noclear %I $TERM"
 
 * set user nologin
-change to certain shell: 
+change to certain shell:
 ~~~~
 usermod -s /sbin/nologin username
 ~~~~
-list all shell: 
+list all shell:
 ~~~~
 chsh -l
 ~~~~
-show current user shell: 
+show current user shell:
 ~~~~
 echo $SHELL
 ~~~~
