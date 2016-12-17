@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# while-menu: a menu-driven system information program
+RESPONDER_CONF="/etc/fdresponder/fdresponder.properties"
+DEPLOY_RULES="/etc/fdresponder/deploy_rules.conf"
+FGFMSD_LOG="/var/log/fgfmsd.log"
+FDRESPONDER_LOG="/opt/fortinet/forticloud/fdresponder.log"
+
+# trap ctrl-c and call ctrl_c()
+trap ctrl_c INT
+
+function ctrl_c() {
+    return
+}
+
+function menu() {
+    echo "Please Select:"
+    echo ""
+    echo "1. Set IP Address"
+    echo "2. Set External FortiManager Server IP Address (Default FortiManager)"
+    echo "3. Set Different FortiManager IP Address base on SN"
+    echo "4. Show Configuration"
+    echo "5. Change Password For Admin"
+    echo "6. Delete FortiManager IP Entry base on SN"
+    echo "7. Logout"
+}
+
+menu
+
+while true; do
+  # clear
+
+  read -p "Enter selection [0-7] (0 for menu) > "
+
+  if [[ $REPLY =~ ^[0-7]$ ]]; then
+    case $REPLY in
+      0)
+        menu
+        continue
+        ;;
+      1)
+        nmtui
+        IP=$(ip addr | grep global | cut -d' ' -f 6 | cut -d'/' -f 1)
+        sed -i -e '/fdmgrsvr/cfdmgrsvr='$IP':541    # the IP address of forticloud responder tool/' $RESPONDER_CONF
+        cat $RESPONDER_CONF | grep fdmgrsvr
+        systemctl restart fdresponder
+        systemctl restart fgfmsd
+        continue
+        ;;
+      2)
+        read -p "Enter External FortiManager Server IP Address (Default FortiManager) > "
+        if [[ $REPLY =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            sed -i -e '/external_fmg_server/cexternal_fmg_server='$REPLY'   # the IP address of external FortiManager server (default FMG)/' $RESPONDER_CONF
+            cat $RESPONDER_CONF | grep external_fmg_server
+            systemctl restart fgfmsd
+        else
+            echo "IP Format Invalid"
+        fi
+        continue
+        ;;
+      3)
+        read -p "Enter FortiManager IP Address base on SN > "
+        if [[ $REPLY =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            IP=$REPLY
+            read -p "Enter FortiGate SN > "
+            if [[ $REPLY =~ ^[A-Z0-9]{16}$ ]]; then
+                echo $REPLY" "$IP >> $DEPLOY_RULES
+                cat $DEPLOY_RULES
+                systemctl restart fgfmsd
+            else
+                echo "SN Format Invalid"
+            fi
+        else
+            echo "IP Format Invalid"
+        fi
+        continue
+        ;;
+      4)
+        echo "External FortiManager Server Configuration: "
+        cat $RESPONDER_CONF
+        echo "===================================="
+        echo "FortiManager IP Address base on SN: "
+        cat $DEPLOY_RULES
+        continue
+        ;;
+      5)
+        passwd admin
+        continue
+        ;;
+      6)
+        read -p "Enter FortiGate SN > "
+        sed -i '/'$REPLY'/ d' $DEPLOY_RULES
+        cat $DEPLOY_RULES
+        continue
+        ;;
+      7)
+        exit
+        continue
+        ;;
+    esac
+  else
+    echo "Invalid entry."
+  fi
+done
+echo "Program terminated."
