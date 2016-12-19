@@ -15,8 +15,9 @@ function ctrl_c() {
 
 function help() {
     echo "ipaddr                                    Configure ip addr."
-    echo "set default <fmg-ip> <fmg-sn>             Configure default FortiManager ip addr and SN."
-    echo "set option <fmg-ip> <fgt-sn> <group-id>   Configure FortiGate SN and FortiManager ip addr."
+    echo "set default <fmg-ip>-<fmg-sn>             Configure default FortiManager ip addr and SN."
+    echo "set <fgt-sn> <fmg-ip>-<fmg-sn>            Configure FortiGate SN and FortiManager ip addr, SN."
+    echo "set <fgt-sn>-<fgt-backup-sn> <fmg-ip>-<fmg-sn> <ha-group> <ha-passwd> <ha-mode> <intf1>,<port1>,<intf2>,<port2>   Configure FortiGate SN and FortiManager ip addr, SN For HA."
     echo "delete <fgt-sn>                           Delete FortiManager IP Entry base on SN."
     echo "password                                  Change Password For Admin."
     echo "show                                      Show Configuration."
@@ -24,16 +25,15 @@ function help() {
 }
 
 function config_ip() {
-    IP=$(ip addr | grep global | cut -d' ' -f 6 | cut -d'/' -f 1)
-    sed -i -e '/fdmgrsvr/cfdmgrsvr='$IP':541    # the IP address of forticloud responder tool/' $RESPONDER_CONF
-    cat $RESPONDER_CONF | grep fdmgrsvr
+    IP=$(ip addr | grep "global eno" | cut -d' ' -f 6 | cut -d'/' -f 1)
+    sed -i -e '/fdmgrsvr/cfdmgrsvr='$IP':541    # the IP address of forticloud responder tool' $RESPONDER_CONF
     systemctl restart fdresponder
     systemctl restart fgfmsd
 }
 
 while true; do
 
-    read -p "#" key sub para1 para2 para3
+    read -p "#" key para1 para2 para3 para4 para5 para6 
 
     case "$key" in
         "?")
@@ -50,24 +50,14 @@ while true; do
             continue
             ;;
         "set")
-            case "$sub" in
+            case "$para1" in
                 "default")
-                    if [[ $para1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-                        if [[ $para2 =~ ^[A-Z0-9]{16}$ ]]; then
-                            sed -i -e '/default_fmg_ip/cdefault_fmg_ip='$para1'   # the IP address of external FortiManager server (default FMG)/' $RESPONDER_CONF
-                            sed -i -e '/default_fmg_sn/cdefault_fmg_sn='$para2'   # the SN of external FortiManager server (default FMG SN)/' $RESPONDER_CONF
-                            systemctl restart fgfmsd
-                        else
-                            echo "SN Format Invalid"
-                        fi
-                    else
-                        echo "IP Format Invalid"
-                    fi
-                    ;;
-                "option")
-                    if [[ $para1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-                        if [[ $para2 =~ ^[A-Z0-9]{16}$ ]]; then
-                            echo $para1" "$para2" "$para3 >> $DEPLOY_RULES
+                    IP=$(echo $para2 | cut -f1 -d-)
+                    SN=$(echo $para2 | cut -f2 -d-)
+                    if [[ $IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+                        if [[ $SN =~ ^[A-Z0-9]{16}$ ]]; then
+                            sed -i -e '/default_fmg_ip/cdefault_fmg_ip='$IP'   # the IP address of external FortiManager server (default FMG)' $RESPONDER_CONF
+                            sed -i -e '/default_fmg_sn/cdefault_fmg_sn='$SN'   # the SN of external FortiManager server (default FMG SN)' $RESPONDER_CONF
                             systemctl restart fgfmsd
                         else
                             echo "SN Format Invalid"
@@ -77,8 +67,19 @@ while true; do
                     fi
                     ;;
                 *)
-                    echo "Unknown action"
-                    ;;
+                    if [[ $para1 =~ ^[A-Z0-9]{16}$ ]]; then
+                        # todo: replace old config 
+                        # sed -i 's/^$para1/$para1 $para2/' $DEPLOY_RULES || echo $para1 $para2 >> $DEPLOY_RULES
+                        systemctl restart fgfmsd
+                    else
+                        if [[ $para1 =~ ^[A-Z0-9]{16}-[A-Z0-9]{16}$ ]]; then
+                            # todo: replace old config 
+                            # sed -i -e '/'$para1'/c'$para1' '$para2' '$para3' '$para4' '$para5' '$para6'' $DEPLOY_RULES || echo $para1 $para2 $para3 $para4 $para5 $para6 >> $DEPLOY_RULES
+                            systemctl restart fgfmsd
+                        else
+                            echo "set <fgt-sn> | <fgt-sn>-<fgt-backup-sn>"
+                        fi
+                    fi
             esac
             continue
             ;;
@@ -91,11 +92,16 @@ while true; do
             continue
             ;;
         "delete")
-            if [[ $sub =~ ^[A-Z0-9]{16}$ ]]; then
-                sed -i '/'$sub'/ d' $DEPLOY_RULES
+            if [[ $para1 =~ ^[A-Z0-9]{16}$ ]]; then
+                sed -i '/'$para1'/ d' $DEPLOY_RULES
                 systemctl restart fgfmsd
             else
-                echo "SN Format Invalid"
+                if [[ $para1 =~ ^[A-Z0-9]{16}-[A-Z0-9]{16}$ ]]; then
+                    sed -i '/'$para1'/ d' $DEPLOY_RULES
+                    systemctl restart fgfmsd
+                else
+                    echo "SN Format Invalid"
+                fi
             fi
             continue
             ;;
@@ -107,7 +113,7 @@ while true; do
             continue
             ;;
         *)
-            echo "Usage: {ipaddr|set default|set option|exit}"
+            echo "Usage: {ipaddr|set default|set|delete|password|show|exit}"
             continue
             ;;
     esac
