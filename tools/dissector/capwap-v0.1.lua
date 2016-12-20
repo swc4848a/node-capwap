@@ -252,6 +252,8 @@ local VSP_FORTINET_DAEMON_RST = 32
 local VSP_FORTINET_MAC = 33
 local VSP_FORTINET_WTP_ALLOW = 34
 local VSP_FORTINET_WBH_STA = 36
+local VSP_FORTINET_STA_IP_LIST = 38
+local VSP_FORTINET_ADD_STA = 40
 local VSP_FORTINET_HTCAP = 49
 local VSP_FORTINET_MGMT_VAP = 50
 local VSP_FORTINET_MODE = 51
@@ -326,6 +328,8 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_PASSIVE] = "Passive",
     [VSP_FORTINET_WTP_ALLOW] = "WTP Allow",
     [VSP_FORTINET_WBH_STA] = "Mesh WBH STA",
+    [VSP_FORTINET_STA_IP_LIST] = "STA IP List",
+    [VSP_FORTINET_ADD_STA] = "Add STA",
     [VSP_FORTINET_HTCAP] = "HT Capabilities",
     [VSP_FORTINET_MGMT_VAP] = "Management VAP",
     [VSP_FORTINET_MODE] = "Mode",
@@ -779,6 +783,7 @@ pf.tun_mtu_uplink = ProtoField.new("Tun Mtu Uplink", "ftnt.capwap.message.elemen
 pf.tun_mtu_downlink = ProtoField.new("Tun Mtu Downlink", "ftnt.capwap.message.element.fortinet.tun.mtu.downlink", ftypes.UINT16)
 pf.regcode = ProtoField.new("Reg Code", "ftnt.capwap.message.element.fortinet.regcode", ftypes.STRING)
 pf.version = ProtoField.new("Version", "ftnt.capwap.message.element.fortinet.version", ftypes.UINT8)
+pf.version_16 = ProtoField.new("Version", "ftnt.capwap.message.element.fortinet.version16", ftypes.UINT16)
 pf.ac_capbilities = ProtoField.new("AC Capabilities", "ftnt.capwap.message.element.fortinet.ac.capbilities", ftypes.BYTES)
 pf.telnet_enable = ProtoField.new("Telnet Enable", "ftnt.capwap.message.element.fortinet.telnet.enable", ftypes.UINT32)
 pf.sn_length= ProtoField.new("SN Length", "ftnt.capwap.message.element.fortinet.sn.length", ftypes.UINT16)
@@ -875,6 +880,7 @@ pf.av_db_version = ProtoField.new("AV DB Version", "ftnt.capwap.message.element.
 pf.ips_engine_version = ProtoField.new("IPS Engine Version", "ftnt.capwap.message.element.ips.engine.version", ftypes.STRING)
 pf.ips_db_version = ProtoField.new("IPS DB Version", "ftnt.capwap.message.element.ips.db.version", ftypes.STRING)
 pf.botnet_db_version = ProtoField.new("Botnet DB Version", "ftnt.capwap.message.element.botnet.db.version", ftypes.STRING)
+pf.sta_ip = ProtoField.new("Sta IP list", "ftnt.capwap.message.element.sta.ip.list", ftypes.IPv4)
 
 local CW_UTM_AV_ENGINE_VER = 1
 local CW_UTM_AV_DB_VER = 2
@@ -893,6 +899,8 @@ local utypes = {
 pf.utm_version_type = ProtoField.new("Utm Version Type", "ftnt.capwap.message.element.utm.version.type", ftypes.UINT16, utypes)
 pf.utm_verson_time = ProtoField.new("Utm Version Time", "ftnt.capwap.message.element.utm.version.time", ftypes.ABSOLUTE_TIME)
 pf.utm_verson_len = ProtoField.new("Utm Version Length", "ftnt.capwap.message.element.utm.version.len", ftypes.UINT16)
+
+pf.ip_list = ProtoField.new("IP List", "ftnt.capwap.message.element.ip.list", ftypes.BYTES)
 
 capwap.fields = pf
 
@@ -925,6 +933,26 @@ function wbhStaDecoder(tlv, tvbrange)
     tlv:add(pf.sta_mac, tvb:range(2, 6))
     tlv:add(pf.bssid, tvb:range(8, 6))
     tlv:add(pf.mhc, tvb:range(14, 1))
+end
+
+function staIpListDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version_16, tvb:range(0, 2))
+    tlv:add(pf.radio_id, tvb:range(2, 1))
+    local iplist = tlv:add(pf.ip_list, tvb:range(3))
+    local pos = 3
+    repeat
+        iplist:add(pf.sta_ip, tvb:range(pos, 4))
+        pos = pos + 4
+    until pos + 4 >= tvbrange:len()
+end
+
+function addStaDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.length, tvb:range(2, 1))
+    tlv:add(pf.mac, tvb:range(3))
 end
 
 function regcodeDecoder(tlv, tvbrange)
@@ -1271,7 +1299,7 @@ function userGroupDecoder(tlv, tvbrange)
 end
 
 function roamingSuccessDecoder(tlv, tvbrange)
-
+    tlv:add_expert_info(PI_MALFORMED, PI_ERROR, "Unknown Roadming Success")
 end
 
 function fortiguardImageIdDecoder(tlv, tvbrange)
@@ -1393,6 +1421,8 @@ local ftntElementDecoder = {
     [VSP_FORTINET_MAC] = nil,
     [VSP_FORTINET_WTP_ALLOW] = wtpAllowDecoder,
     [VSP_FORTINET_WBH_STA] = wbhStaDecoder,
+    [VSP_FORTINET_STA_IP_LIST] = staIpListDecoder,
+    [VSP_FORTINET_ADD_STA] = addStaDecoder,
     [VSP_FORTINET_HTCAP] = htcapDecoder,
     [VSP_FORTINET_MGMT_VAP] = mgmtVapDecoder,
     [VSP_FORTINET_MODE] = modeDecoder,
