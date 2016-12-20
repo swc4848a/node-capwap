@@ -59,172 +59,176 @@ local stypes = {
 -- /* ************************************************************************* */
 -- /*                      Message Element Type                                 */
 -- /* ************************************************************************* */
-local TYPE_AC_DESCRIPTOR = 1
-local TYPE_AC_IPV4_LIST = 2
-local TYPE_AC_IPV6_LIST = 3
-local TYPE_AC_NAME = 4
-local TYPE_AC_NAME_W_PRIORITY = 5
-local TYPE_AC_TIMESTAMP = 6
-local TYPE_ADD_MAC_ACL_ENTRY = 7
-local TYPE_ADD_STATION = 8
-local TYPE_RESERVED_9 = 9
-local TYPE_CAPWAP_CONTROL_IPV4_ADDRESS = 10
-local TYPE_CAPWAP_CONTROL_IPV6_ADDRESS = 11
-local TYPE_CAPWAP_TIMERS = 12
-local TYPE_DATA_TRANSFER_DATA = 13
-local TYPE_DATA_TRANSFER_MODE = 14
-local TYPE_DESCRYPTION_ERROR_REPORT = 15
-local TYPE_DECRYPTION_ERROR_REPORT_PERIOD = 16
-local TYPE_DELETE_MAC_ENTRY = 17
-local TYPE_DELETE_STATION = 18
-local TYPE_RESERVED_19 = 19
-local TYPE_DISCOVERY_TYPE = 20
-local TYPE_DUPLICATE_IPV4_ADDRESS = 21
-local TYPE_DUPLICATE_IPV6_ADDRESS = 22
-local TYPE_IDLE_TIMEOUT = 23
-local TYPE_IMAGE_DATA = 24
-local TYPE_IMAGE_IDENTIFIER = 25
-local TYPE_IMAGE_INFORMATION = 26
-local TYPE_INITIATE_DOWNLOAD = 27
-local TYPE_LOCATION_DATA = 28
-local TYPE_MAXIMUM_MESSAGE_LENGTH = 29
-local TYPE_CAPWAP_LOCAL_IPV4_ADDRESS = 30
-local TYPE_RADIO_ADMINISTRATIVE_STATE = 31
-local TYPE_RADIO_OPERATIONAL_STATE = 32
-local TYPE_RESULT_CODE = 33
-local TYPE_RETURNED_MESSAGE_ELEMENT = 34
-local TYPE_SESSION_ID = 35
-local TYPE_STATISTICS_TIMER = 36
-local TYPE_VENDOR_SPECIFIC_PAYLOAD = 37
-local TYPE_WTP_BOARD_DATA = 38
-local TYPE_WTP_DESCRIPTOR = 39
-local TYPE_WTP_FALLBACK = 40
-local TYPE_WTP_FRAME_TUNNEL_MODE = 41
-local TYPE_RESERVED_42 = 42
-local TYPE_RESERVED_43 = 43
-local TYPE_WTP_MAC_TYPE = 44
-local TYPE_WTP_NAME = 45
-local TYPE_RESERVED_46 = 46
-local TYPE_WTP_RADIO_STATISTICS = 47
-local TYPE_WTP_REBOOT_STATISTICS = 48
-local TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION = 49
-local TYPE_CAPWAP_LOCAL_IPV6_ADDRESS = 50
-local TYPE_CAPWAP_TRANSPORT_PROTOCOL = 51
-local TYPE_MTU_DISCOVERY_PADDING = 52
-local TYPE_ECN_SUPPORT = 53
+local elementTypes = {
+    ["TYPE_AC_DESCRIPTOR"] = 1,
+    ["TYPE_AC_IPV4_LIST"] = 2,
+    ["TYPE_AC_IPV6_LIST"] = 3,
+    ["TYPE_AC_NAME"] = 4,
+    ["TYPE_AC_NAME_W_PRIORITY"] = 5,
+    ["TYPE_AC_TIMESTAMP"] = 6,
+    ["TYPE_ADD_MAC_ACL_ENTRY"] = 7,
+    ["TYPE_ADD_STATION"] = 8,
+    ["TYPE_RESERVED_9"] = 9,
+    ["TYPE_CAPWAP_CONTROL_IPV4_ADDRESS"] = 10,
+    ["TYPE_CAPWAP_CONTROL_IPV6_ADDRESS"] = 11,
+    ["TYPE_CAPWAP_TIMERS"] = 12,
+    ["TYPE_DATA_TRANSFER_DATA"] = 13,
+    ["TYPE_DATA_TRANSFER_MODE"] = 14,
+    ["TYPE_DESCRYPTION_ERROR_REPORT"] = 15,
+    ["TYPE_DECRYPTION_ERROR_REPORT_PERIOD"] = 16,
+    ["TYPE_DELETE_MAC_ENTRY"] = 17,
+    ["TYPE_DELETE_STATION"] = 18,
+    ["TYPE_RESERVED_19"] = 19,
+    ["TYPE_DISCOVERY_TYPE"] = 20,
+    ["TYPE_DUPLICATE_IPV4_ADDRESS"] = 21,
+    ["TYPE_DUPLICATE_IPV6_ADDRESS"] = 22,
+    ["TYPE_IDLE_TIMEOUT"] = 23,
+    ["TYPE_IMAGE_DATA"] = 24,
+    ["TYPE_IMAGE_IDENTIFIER"] = 25,
+    ["TYPE_IMAGE_INFORMATION"] = 26,
+    ["TYPE_INITIATE_DOWNLOAD"] = 27,
+    ["TYPE_LOCATION_DATA"] = 28,
+    ["TYPE_MAXIMUM_MESSAGE_LENGTH"] = 29,
+    ["TYPE_CAPWAP_LOCAL_IPV4_ADDRESS"] = 30,
+    ["TYPE_RADIO_ADMINISTRATIVE_STATE"] = 31,
+    ["TYPE_RADIO_OPERATIONAL_STATE"] = 32,
+    ["TYPE_RESULT_CODE"] = 33,
+    ["TYPE_RETURNED_MESSAGE_ELEMENT"] = 34,
+    ["TYPE_SESSION_ID"] = 35,
+    ["TYPE_STATISTICS_TIMER"] = 36,
+    ["TYPE_VENDOR_SPECIFIC_PAYLOAD"] = 37,
+    ["TYPE_WTP_BOARD_DATA"] = 38,
+    ["TYPE_WTP_DESCRIPTOR"] = 39,
+    ["TYPE_WTP_FALLBACK"] = 40,
+    ["TYPE_WTP_FRAME_TUNNEL_MODE"] = 41,
+    ["TYPE_RESERVED_42"] = 42,
+    ["TYPE_RESERVED_43"] = 43,
+    ["TYPE_WTP_MAC_TYPE"] = 44,
+    ["TYPE_WTP_NAME"] = 45,
+    ["TYPE_RESERVED_46"] = 46,
+    ["TYPE_WTP_RADIO_STATISTICS"] = 47,
+    ["TYPE_WTP_REBOOT_STATISTICS"] = 48,
+    ["TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION"] = 49,
+    ["TYPE_CAPWAP_LOCAL_IPV6_ADDRESS"] = 50,
+    ["TYPE_CAPWAP_TRANSPORT_PROTOCOL"] = 51,
+    ["TYPE_MTU_DISCOVERY_PADDING"] = 52,
+    ["TYPE_ECN_SUPPORT"] = 53,
 
-local IEEE80211_ADD_WLAN = 1024
-local IEEE80211_ANTENNA = 1025
-local IEEE80211_ASSIGNED_WTP_BSSID = 1026
-local IEEE80211_DELETE_WLAN = 1027
-local IEEE80211_DIRECT_SEQUENCE_CONTROL = 1028
-local IEEE80211_INFORMATION_ELEMENT = 1029
-local IEEE80211_MAC_OPERATION = 1030
-local IEEE80211_MIC_COUNTERMEASURES = 1031
-local IEEE80211_MULTI_DOMAIN_CAPABILITY = 1032
-local IEEE80211_OFDM_CONTROL = 1033
-local IEEE80211_RATE_SET = 1034
-local IEEE80211_RSNA_ERROR_REPORT_FROM_STATION = 1035
-local IEEE80211_STATION = 1036
-local IEEE80211_STATION_QOS_PROFILE = 1037
-local IEEE80211_STATION_SESSION_KEY = 1038
-local IEEE80211_STATISTICS = 1039
-local IEEE80211_SUPPORTED_RATES = 1040
-local IEEE80211_TX_POWER = 1041
-local IEEE80211_TX_POWER_LEVEL = 1042
-local IEEE80211_UPDATE_STATION_QOS = 1043
-local IEEE80211_UPDATE_WLAN = 1044
-local IEEE80211_WTP_QUALITY_OF_SERVICE = 1045
-local IEEE80211_WTP_RADIO_CONFIGURATION = 1046
-local IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION = 1047
-local IEEE80211_WTP_RADIO_INFORMATION = 1048
-local IEEE80211_SUPPORTED_MAC_PROFILES = 1060
-local IEEE80211_MAC_PROFILE = 1061
+    ["IEEE80211_ADD_WLAN"] = 1024,
+    ["IEEE80211_ANTENNA"] = 1025,
+    ["IEEE80211_ASSIGNED_WTP_BSSID"] = 1026,
+    ["IEEE80211_DELETE_WLAN"] = 1027,
+    ["IEEE80211_DIRECT_SEQUENCE_CONTROL"] = 1028,
+    ["IEEE80211_INFORMATION_ELEMENT"] = 1029,
+    ["IEEE80211_MAC_OPERATION"] = 1030,
+    ["IEEE80211_MIC_COUNTERMEASURES"] = 1031,
+    ["IEEE80211_MULTI_DOMAIN_CAPABILITY"] = 1032,
+    ["IEEE80211_OFDM_CONTROL"] = 1033,
+    ["IEEE80211_RATE_SET"] = 1034,
+    ["IEEE80211_RSNA_ERROR_REPORT_FROM_STATION"] = 1035,
+    ["IEEE80211_STATION"] = 1036,
+    ["IEEE80211_STATION_QOS_PROFILE"] = 1037,
+    ["IEEE80211_STATION_SESSION_KEY"] = 1038,
+    ["IEEE80211_STATISTICS"] = 1039,
+    ["IEEE80211_SUPPORTED_RATES"] = 1040,
+    ["IEEE80211_TX_POWER"] = 1041,
+    ["IEEE80211_TX_POWER_LEVEL"] = 1042,
+    ["IEEE80211_UPDATE_STATION_QOS"] = 1043,
+    ["IEEE80211_UPDATE_WLAN"] = 1044,
+    ["IEEE80211_WTP_QUALITY_OF_SERVICE"] = 1045,
+    ["IEEE80211_WTP_RADIO_CONFIGURATION"] = 1046,
+    ["IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION"] = 1047,
+    ["IEEE80211_WTP_RADIO_INFORMATION"] = 1048,
+    ["IEEE80211_SUPPORTED_MAC_PROFILES"] = 1060,
+    ["IEEE80211_MAC_PROFILE"] = 1061,
+}
+
+
 -- /* ************************************************************************* */
 -- /*                      Message Element Type Value                           */
 -- /* ************************************************************************* */
 local tlvTypes = {
-    [TYPE_AC_DESCRIPTOR] = "AC Descriptor",
-    [TYPE_AC_IPV4_LIST] = "AC IPv4 List",
-    [TYPE_AC_IPV6_LIST] = "AC IPv6 List",
-    [TYPE_AC_NAME] = "AC Name",
-    [TYPE_AC_NAME_W_PRIORITY] = "AC Name With Priority",
-    [TYPE_AC_TIMESTAMP] = "AC Timestamp",
-    [TYPE_ADD_MAC_ACL_ENTRY] = "Add MAC ACL Entry",
-    [TYPE_ADD_STATION] = "Add Station",
-    [TYPE_RESERVED_9] = "Reserved",
-    [TYPE_CAPWAP_CONTROL_IPV4_ADDRESS] = "CAPWAP Control IPv4 Address",
-    [TYPE_CAPWAP_CONTROL_IPV6_ADDRESS] = "CAPWAP Control IPv6 Address",
-    [TYPE_CAPWAP_TIMERS] = "CAPWAP Timers",
-    [TYPE_DATA_TRANSFER_DATA] = "Data Transfer Data",
-    [TYPE_DATA_TRANSFER_MODE] = "Data Transfer Mode",
-    [TYPE_DESCRYPTION_ERROR_REPORT] = "Decryption Error Report",
-    [TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = "Decryption Error Report Period",
-    [TYPE_DELETE_MAC_ENTRY] = "Delete MAC ACL Entry",
-    [TYPE_DELETE_STATION] = "Delete Station",
-    [TYPE_RESERVED_19] = "Reserved",
-    [TYPE_DISCOVERY_TYPE] = "Discovery Type",
-    [TYPE_DUPLICATE_IPV4_ADDRESS] = "Duplicate IPv4 Address",
-    [TYPE_DUPLICATE_IPV6_ADDRESS] = "Duplicate IPv6 Address",
-    [TYPE_IDLE_TIMEOUT] = "Idle Timeout",
-    [TYPE_IMAGE_DATA] = "Image Data",
-    [TYPE_IMAGE_IDENTIFIER] = "Image Identifier",
-    [TYPE_IMAGE_INFORMATION] = "Image Information",
-    [TYPE_INITIATE_DOWNLOAD] = "Initiate Download",
-    [TYPE_LOCATION_DATA] = "Location Data",
-    [TYPE_MAXIMUM_MESSAGE_LENGTH] = "Maximum Message Length",
-    [TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = "CAPWAP Local IPv4 Address",
-    [TYPE_RADIO_ADMINISTRATIVE_STATE] = "Radio Administrative State ",
-    [TYPE_RADIO_OPERATIONAL_STATE] = "Radio Operational State",
-    [TYPE_RESULT_CODE] = "Result Code",
-    [TYPE_RETURNED_MESSAGE_ELEMENT] = "Returned Message Element",
-    [TYPE_SESSION_ID] = "Session ID",
-    [TYPE_STATISTICS_TIMER] = "Statistics Timer",
-    [TYPE_VENDOR_SPECIFIC_PAYLOAD] = "Vendor Specific Payload",
-    [TYPE_WTP_BOARD_DATA] = "WTP Board Data",
-    [TYPE_WTP_DESCRIPTOR] = "WTP Descriptor",
-    [TYPE_WTP_FALLBACK] = "WTP Fallback ",
-    [TYPE_WTP_FRAME_TUNNEL_MODE] = "WTP Frame Tunnel Mode ",
-    [TYPE_RESERVED_42] = "Reserved",
-    [TYPE_RESERVED_43] = "Reserved",
-    [TYPE_WTP_MAC_TYPE] = "WTP MAC Type",
-    [TYPE_WTP_NAME] = "WTP Name",
-    [TYPE_RESERVED_46] = "Unused/Reserved",
-    [TYPE_WTP_RADIO_STATISTICS] = "WTP Radio Statistics",
-    [TYPE_WTP_REBOOT_STATISTICS] = "WTP Reboot Statistics",
-    [TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION] = "WTP Static IP Address Information",
-    [TYPE_CAPWAP_LOCAL_IPV6_ADDRESS] = "CAPWAP Local IPv6 Address",
-    [TYPE_CAPWAP_TRANSPORT_PROTOCOL] = "CAPWAP Transport Protocol",
-    [TYPE_MTU_DISCOVERY_PADDING] = "MTU Discovery Padding",
-    [TYPE_ECN_SUPPORT] = "ECN Support",
+    [elementTypes.TYPE_AC_DESCRIPTOR] = "AC Descriptor",
+    [elementTypes.TYPE_AC_IPV4_LIST] = "AC IPv4 List",
+    [elementTypes.TYPE_AC_IPV6_LIST] = "AC IPv6 List",
+    [elementTypes.TYPE_AC_NAME] = "AC Name",
+    [elementTypes.TYPE_AC_NAME_W_PRIORITY] = "AC Name With Priority",
+    [elementTypes.TYPE_AC_TIMESTAMP] = "AC Timestamp",
+    [elementTypes.TYPE_ADD_MAC_ACL_ENTRY] = "Add MAC ACL Entry",
+    [elementTypes.TYPE_ADD_STATION] = "Add Station",
+    [elementTypes.TYPE_RESERVED_9] = "Reserved",
+    [elementTypes.TYPE_CAPWAP_CONTROL_IPV4_ADDRESS] = "CAPWAP Control IPv4 Address",
+    [elementTypes.TYPE_CAPWAP_CONTROL_IPV6_ADDRESS] = "CAPWAP Control IPv6 Address",
+    [elementTypes.TYPE_CAPWAP_TIMERS] = "CAPWAP Timers",
+    [elementTypes.TYPE_DATA_TRANSFER_DATA] = "Data Transfer Data",
+    [elementTypes.TYPE_DATA_TRANSFER_MODE] = "Data Transfer Mode",
+    [elementTypes.TYPE_DESCRYPTION_ERROR_REPORT] = "Decryption Error Report",
+    [elementTypes.TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = "Decryption Error Report Period",
+    [elementTypes.TYPE_DELETE_MAC_ENTRY] = "Delete MAC ACL Entry",
+    [elementTypes.TYPE_DELETE_STATION] = "Delete Station",
+    [elementTypes.TYPE_RESERVED_19] = "Reserved",
+    [elementTypes.TYPE_DISCOVERY_TYPE] = "Discovery Type",
+    [elementTypes.TYPE_DUPLICATE_IPV4_ADDRESS] = "Duplicate IPv4 Address",
+    [elementTypes.TYPE_DUPLICATE_IPV6_ADDRESS] = "Duplicate IPv6 Address",
+    [elementTypes.TYPE_IDLE_TIMEOUT] = "Idle Timeout",
+    [elementTypes.TYPE_IMAGE_DATA] = "Image Data",
+    [elementTypes.TYPE_IMAGE_IDENTIFIER] = "Image Identifier",
+    [elementTypes.TYPE_IMAGE_INFORMATION] = "Image Information",
+    [elementTypes.TYPE_INITIATE_DOWNLOAD] = "Initiate Download",
+    [elementTypes.TYPE_LOCATION_DATA] = "Location Data",
+    [elementTypes.TYPE_MAXIMUM_MESSAGE_LENGTH] = "Maximum Message Length",
+    [elementTypes.TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = "CAPWAP Local IPv4 Address",
+    [elementTypes.TYPE_RADIO_ADMINISTRATIVE_STATE] = "Radio Administrative State ",
+    [elementTypes.TYPE_RADIO_OPERATIONAL_STATE] = "Radio Operational State",
+    [elementTypes.TYPE_RESULT_CODE] = "Result Code",
+    [elementTypes.TYPE_RETURNED_MESSAGE_ELEMENT] = "Returned Message Element",
+    [elementTypes.TYPE_SESSION_ID] = "Session ID",
+    [elementTypes.TYPE_STATISTICS_TIMER] = "Statistics Timer",
+    [elementTypes.TYPE_VENDOR_SPECIFIC_PAYLOAD] = "Vendor Specific Payload",
+    [elementTypes.TYPE_WTP_BOARD_DATA] = "WTP Board Data",
+    [elementTypes.TYPE_WTP_DESCRIPTOR] = "WTP Descriptor",
+    [elementTypes.TYPE_WTP_FALLBACK] = "WTP Fallback ",
+    [elementTypes.TYPE_WTP_FRAME_TUNNEL_MODE] = "WTP Frame Tunnel Mode ",
+    [elementTypes.TYPE_RESERVED_42] = "Reserved",
+    [elementTypes.TYPE_RESERVED_43] = "Reserved",
+    [elementTypes.TYPE_WTP_MAC_TYPE] = "WTP MAC Type",
+    [elementTypes.TYPE_WTP_NAME] = "WTP Name",
+    [elementTypes.TYPE_RESERVED_46] = "Unused/Reserved",
+    [elementTypes.TYPE_WTP_RADIO_STATISTICS] = "WTP Radio Statistics",
+    [elementTypes.TYPE_WTP_REBOOT_STATISTICS] = "WTP Reboot Statistics",
+    [elementTypes.TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION] = "WTP Static IP Address Information",
+    [elementTypes.TYPE_CAPWAP_LOCAL_IPV6_ADDRESS] = "CAPWAP Local IPv6 Address",
+    [elementTypes.TYPE_CAPWAP_TRANSPORT_PROTOCOL] = "CAPWAP Transport Protocol",
+    [elementTypes.TYPE_MTU_DISCOVERY_PADDING] = "MTU Discovery Padding",
+    [elementTypes.TYPE_ECN_SUPPORT] = "ECN Support",
 
-    [IEEE80211_ADD_WLAN] = "IEEE 802.11 Add WLAN",
-    [IEEE80211_ANTENNA] = "IEEE 802.11 Antenna",
-    [IEEE80211_ASSIGNED_WTP_BSSID] = "IEEE 802.11 Assigned WTP BSSID",
-    [IEEE80211_DELETE_WLAN] = "IEEE 802.11 Delete WLAN",
-    [IEEE80211_DIRECT_SEQUENCE_CONTROL] = "IEEE 802.11 Direct Sequence Control",
-    [IEEE80211_INFORMATION_ELEMENT] = "IEEE 802.11 Information Element",
-    [IEEE80211_MAC_OPERATION] = "IEEE 802.11 MAC Operation",
-    [IEEE80211_MIC_COUNTERMEASURES] = "IEEE 802.11 MIC Countermeasures",
-    [IEEE80211_MULTI_DOMAIN_CAPABILITY] = "IEEE 802.11 Multi-Domain Capability",
-    [IEEE80211_OFDM_CONTROL] = "IEEE 802.11 OFDM Control",
-    [IEEE80211_RATE_SET] = "IEEE 802.11 Rate Set",
-    [IEEE80211_RSNA_ERROR_REPORT_FROM_STATION] = "IEEE 802.11 RSNA Error Report From Station",
-    [IEEE80211_STATION] = "IEEE 802.11 Station",
-    [IEEE80211_STATION_QOS_PROFILE] = "IEEE 802.11 Station QoS Profile",
-    [IEEE80211_STATION_SESSION_KEY] = "IEEE 802.11 Station Session Key",
-    [IEEE80211_STATISTICS] = "IEEE 802.11 Statistics",
-    [IEEE80211_SUPPORTED_RATES] = "IEEE 802.11 Supported Rates",
-    [IEEE80211_TX_POWER] = "IEEE 802.11 Tx Power",
-    [IEEE80211_TX_POWER_LEVEL] = "IEEE 802.11 Tx Power Level",
-    [IEEE80211_UPDATE_STATION_QOS] = "IEEE 802.11 Update Station QoS",
-    [IEEE80211_UPDATE_WLAN] = "IEEE 802.11 Update WLAN",
-    [IEEE80211_WTP_QUALITY_OF_SERVICE] = "IEEE 802.11 WTP Quality of Service",
-    [IEEE80211_WTP_RADIO_CONFIGURATION] = "IEEE 802.11 WTP Radio Configuration",
-    [IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION] = "IEEE 802.11 WTP Radio Fail Alarm Indication",
-    [IEEE80211_WTP_RADIO_INFORMATION] = "IEEE 802.11 WTP Radio Information",
-    [IEEE80211_SUPPORTED_MAC_PROFILES] = "IEEE 802.11 Supported MAC Profiles",
-    [IEEE80211_MAC_PROFILE] = "IEEE 802.11 MAC Profile",
+    [elementTypes.IEEE80211_ADD_WLAN] = "IEEE 802.11 Add WLAN",
+    [elementTypes.IEEE80211_ANTENNA] = "IEEE 802.11 Antenna",
+    [elementTypes.IEEE80211_ASSIGNED_WTP_BSSID] = "IEEE 802.11 Assigned WTP BSSID",
+    [elementTypes.IEEE80211_DELETE_WLAN] = "IEEE 802.11 Delete WLAN",
+    [elementTypes.IEEE80211_DIRECT_SEQUENCE_CONTROL] = "IEEE 802.11 Direct Sequence Control",
+    [elementTypes.IEEE80211_INFORMATION_ELEMENT] = "IEEE 802.11 Information Element",
+    [elementTypes.IEEE80211_MAC_OPERATION] = "IEEE 802.11 MAC Operation",
+    [elementTypes.IEEE80211_MIC_COUNTERMEASURES] = "IEEE 802.11 MIC Countermeasures",
+    [elementTypes.IEEE80211_MULTI_DOMAIN_CAPABILITY] = "IEEE 802.11 Multi-Domain Capability",
+    [elementTypes.IEEE80211_OFDM_CONTROL] = "IEEE 802.11 OFDM Control",
+    [elementTypes.IEEE80211_RATE_SET] = "IEEE 802.11 Rate Set",
+    [elementTypes.IEEE80211_RSNA_ERROR_REPORT_FROM_STATION] = "IEEE 802.11 RSNA Error Report From Station",
+    [elementTypes.IEEE80211_STATION] = "IEEE 802.11 Station",
+    [elementTypes.IEEE80211_STATION_QOS_PROFILE] = "IEEE 802.11 Station QoS Profile",
+    [elementTypes.IEEE80211_STATION_SESSION_KEY] = "IEEE 802.11 Station Session Key",
+    [elementTypes.IEEE80211_STATISTICS] = "IEEE 802.11 Statistics",
+    [elementTypes.IEEE80211_SUPPORTED_RATES] = "IEEE 802.11 Supported Rates",
+    [elementTypes.IEEE80211_TX_POWER] = "IEEE 802.11 Tx Power",
+    [elementTypes.IEEE80211_TX_POWER_LEVEL] = "IEEE 802.11 Tx Power Level",
+    [elementTypes.IEEE80211_UPDATE_STATION_QOS] = "IEEE 802.11 Update Station QoS",
+    [elementTypes.IEEE80211_UPDATE_WLAN] = "IEEE 802.11 Update WLAN",
+    [elementTypes.IEEE80211_WTP_QUALITY_OF_SERVICE] = "IEEE 802.11 WTP Quality of Service",
+    [elementTypes.IEEE80211_WTP_RADIO_CONFIGURATION] = "IEEE 802.11 WTP Radio Configuration",
+    [elementTypes.IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION] = "IEEE 802.11 WTP Radio Fail Alarm Indication",
+    [elementTypes.IEEE80211_WTP_RADIO_INFORMATION] = "IEEE 802.11 WTP Radio Information",
+    [elementTypes.IEEE80211_SUPPORTED_MAC_PROFILES] = "IEEE 802.11 Supported MAC Profiles",
+    [elementTypes.IEEE80211_MAC_PROFILE] = "IEEE 802.11 MAC Profile",
     [0] = "Unknown"
 }
 
@@ -372,19 +376,19 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_TXPWR_DBM] = "TxPower dbm",
     [VSP_FORTINET_WIDS_ENABLE] = "WIDS Enable",
     [VSP_FORTINET_WALLED_GARDEN] = "Walled Garden",
-    [VSP_FORTINET_UTM_INFO] = "",
-    [VSP_FORTINET_UTM_DATA] = "",
-    [VSP_FORTINET_UTM_JSON_INFO] = "",
-    [VSP_FORTINET_UTM_JSON_DATA] = "",
-    [VSP_FORTINET_UTM_VERSION] = "",
-    [VSP_FORTINET_UPLOAD_LOG_NOW] = "",
-    [VSP_FORTINET_USER_GROUP] = "",
-    [VSP_FORTINET_ROAMING_SUCCESS] = "",
-    [VSP_FORTINET_FORTIGUARD_IMAGE_ID] = "",
-    [VSP_FORTINET_FCLD_FIRMWWARE_INFO_URL] = "",
-    [VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL] = "",
-    [VSP_FORTINET_FCLD_FIRMWARE_RESULT] = "",
-    [VSP_FORTINET_TIMEZONE_INFO] = "",
+    [VSP_FORTINET_UTM_INFO] = "Utm Info",
+    [VSP_FORTINET_UTM_DATA] = "Utm Data",
+    [VSP_FORTINET_UTM_JSON_INFO] = "Utm Json Info",
+    [VSP_FORTINET_UTM_JSON_DATA] = "Utm Json Data",
+    [VSP_FORTINET_UTM_VERSION] = "Utm Version",
+    [VSP_FORTINET_UPLOAD_LOG_NOW] = "Upload Log Now",
+    [VSP_FORTINET_USER_GROUP] = "User Group",
+    [VSP_FORTINET_ROAMING_SUCCESS] = "Roaming Success",
+    [VSP_FORTINET_FORTIGUARD_IMAGE_ID] = "FortiGuard Image Id",
+    [VSP_FORTINET_FCLD_FIRMWWARE_INFO_URL] = "Fcld Firmware Info Url",
+    [VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL] = "Fcld Firmware Download Url",
+    [VSP_FORTINET_FCLD_FIRMWARE_RESULT] = "Fcld Firmware Result",
+    [VSP_FORTINET_TIMEZONE_INFO] = "Timezone Info",
 };
 
 -- /* ************************************************************************* */
@@ -859,7 +863,36 @@ pf.walled_garden = ProtoField.new("Walled Garden", "ftnt.capwap.message.element.
 pf.mac = ProtoField.new("Mac", "ftnt.capwap.message.element.mac", ftypes.ETHER)
 pf.rssi = ProtoField.new("RSSI", "ftnt.capwap.message.element.rssi", ftypes.UINT8)
 pf.chan = ProtoField.new("Channel", "ftnt.capwap.message.element.channel", ftypes.UINT8)
+pf.size = ProtoField.new("Size", "ftnt.capwap.message.element.size", ftypes.UINT32)
+pf.hash = ProtoField.new("Hash", "ftnt.capwap.message.element.hash", ftypes.STRING)
+pf.opcode = ProtoField.new("OpCode", "ftnt.capwap.message.element.opcode", ftypes.UINT8)
+pf.data = ProtoField.new("Data", "ftnt.capwap.message.element.data", ftypes.BYTES)
+pf.unused = ProtoField.new("Unused", "ftnt.capwap.message.element.unused", ftypes.UINT8)
+pf.fgs_img_id = ProtoField.new("FgsImgId", "ftnt.capwap.message.element.fgsimgid", ftypes.STRING)
+pf.url = ProtoField.new("url", "ftnt.capwap.message.element.url", ftypes.STRING)
+pf.av_engine_version = ProtoField.new("AV Engine Version", "ftnt.capwap.message.element.av.engine.version", ftypes.STRING)
+pf.av_db_version = ProtoField.new("AV DB Version", "ftnt.capwap.message.element.av.db.version", ftypes.STRING)
+pf.ips_engine_version = ProtoField.new("IPS Engine Version", "ftnt.capwap.message.element.ips.engine.version", ftypes.STRING)
+pf.ips_db_version = ProtoField.new("IPS DB Version", "ftnt.capwap.message.element.ips.db.version", ftypes.STRING)
+pf.botnet_db_version = ProtoField.new("Botnet DB Version", "ftnt.capwap.message.element.botnet.db.version", ftypes.STRING)
 
+local CW_UTM_AV_ENGINE_VER = 1
+local CW_UTM_AV_DB_VER = 2
+local CW_UTM_IPS_ENGINE_VER = 3
+local CW_UTM_IPS_DB_VER = 4
+local CW_UTM_BOTNET_DB_VER = 5
+
+local utypes = {
+    [CW_UTM_AV_ENGINE_VER] = "AV Engine Version",
+    [CW_UTM_AV_DB_VER] = "AV DB Version",
+    [CW_UTM_IPS_ENGINE_VER] = "IPS Engine Version",
+    [CW_UTM_IPS_DB_VER] = "IPS DB Version",
+    [CW_UTM_BOTNET_DB_VER] = "Botnet DB Version",
+}
+
+pf.utm_version_type = ProtoField.new("Utm Version Type", "ftnt.capwap.message.element.utm.version.type", ftypes.UINT16, utypes)
+pf.utm_verson_time = ProtoField.new("Utm Version Time", "ftnt.capwap.message.element.utm.version.time", ftypes.ABSOLUTE_TIME)
+pf.utm_verson_len = ProtoField.new("Utm Version Length", "ftnt.capwap.message.element.utm.version.len", ftypes.UINT16)
 
 capwap.fields = pf
 
@@ -1126,36 +1159,115 @@ function walledGardenDecoder(tlv, tvbrange)
     -- todo: walled garden
 end
 
-function walledGardenDecoder(tlv, tvbrange)
-
-end
-
 function utmInfoDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.size, tvb:range(0, 4))
+    tlv:add(pf.hash, tvb:range(4))
 end
 
 function utmDataDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.length, tvb:range(0, 2))
+    tlv:add(pf.opcode, tvb:range(2, 1))
+    tlv:add(pf.data, tvb:range(3))
 end
 
 function utmJsonInfoDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.size, tvb:range(0, 4))
+    tlv:add(pf.hash, tvb:range(4))
 end
 
 function utmJsonDataDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.length, tvb:range(0, 2))
+    tlv:add(pf.opcode, tvb:range(2, 1))
+    tlv:add(pf.data, tvb:range(3))
 end
 
 function utmVersionDecoder(tlv, tvbrange)
+    -- tlv:add_expert_info(PI_MALFORMED, PI_ERROR, "Unknown Utm Version Decoder")
+    local tvb = tvbrange:tvb()
+    local is_new = tvb:range(2, 1):uint()
+    local length = tvbrange:len()
+    local pos = 0
 
+    repeat
+        local type = tvb:range(pos, 2):uint()
+        tlv:add(pf.utm_version_type, tvb:range(pos, 2))
+        pos = pos + 2
+
+        local len = 0
+        
+        if is_new then
+            local time = tvb:range(pos, 4):uint64()
+            tlv:add(pf.utm_verson_time, tvb:range(pos, 4))
+            pos = pos + 4
+            len = tvb:range(pos, 2):uint()
+            tlv:add(pf.utm_verson_len, tvb:range(pos, 2))
+            pos = pos + 2
+        else
+            len = tvb:range(pos, 2):uint()
+            tlv:add(pf.utm_verson_len, tvb:range(pos, 2))
+            pos = pos + 2
+        end
+
+        if is_new then
+            length = length - 8
+        else
+            length = length - 4
+        end
+
+        -- tlv:add_expert_info(PI_MALFORMED, PI_ERROR, "len: "..len.." pos: "..pos)
+        -- type_process[type](tlv, tvb, pos, len)
+
+        if CW_UTM_AV_ENGINE_VER == type then
+            tlv:add(pf.av_engine_version, tvb:range(pos, len))
+            pos = pos + len
+        end
+
+        if CW_UTM_AV_DB_VER == type then
+            tlv:add(pf.av_db_version, tvb:range(pos, len))
+            pos = pos + len
+        end
+
+        if CW_UTM_IPS_ENGINE_VER == type then
+            tlv:add(pf.ips_engine_version, tvb:range(pos, len))
+            pos = pos + len
+        end
+
+        if CW_UTM_IPS_DB_VER == type then
+            tlv:add(pf.ips_db_version, tvb:range(pos, len))
+            pos = pos + len
+        end
+
+        if CW_UTM_BOTNET_DB_VER == type then
+            tlv:add(pf.botnet_db_version, tvb:range(pos, len))
+            pos = pos + len
+        end
+
+        length = length - len
+
+        -- tlv:add_expert_info(PI_MALFORMED, PI_ERROR, "length: "..length)
+    until length <= 8
 end
 
 function uploadLogNowDecoder (tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.unused, tvb:range(0, 1))
 end
 
 function userGroupDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    local user_len = tvb:range(3, 1):uint()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.usergroup_type, tvb:range(2, 1))
+    tlv:add(pf.user_len, tvb:range(3, 1))
+    tlv:add(pf.user, tvb:range(4, user_len))
+    tlv:add(pf.usergroup_type, tvb:range(4 + user_len, 1))
+    tlv:add(pf.group_len, tvb:range(5 + user_len, 1))
+    tlv:add(pf.group, tvb:range(6 + user_len))
 end
 
 function roamingSuccessDecoder(tlv, tvbrange)
@@ -1163,23 +1275,36 @@ function roamingSuccessDecoder(tlv, tvbrange)
 end
 
 function fortiguardImageIdDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.length, tvb:range(0, 1))
+    tlv:add(pf.fgs_img_id, tvb:range(1))
 end
 
 function fcldFirmwwareInfoUrlDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.length, tvb:range(0, 1))
+    tlv:add(pf.url, tvb:range(1))
 end
 
 function fcldFirmwwareDownloadUrlDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.length, tvb:range(0, 1))
+    tlv:add(pf.url, tvb:range(1))
 end
 
 function fcldFirmwareResultDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.result_code, tvb:range(0, 1))
 end
 
 function timezoneInfoDecoder(tlv, tvbrange)
-
+    local tvb = tvbrange:tvb()
+    local tzid_len = tvb:range(4, 1):uint()
+    tlv:add(pf.ts, tvb:range(0, 4))
+    tlv:add(pf.tzid_len, tvb:range(4, 1))
+    tlv:add(pf.tzid, tvb:range(5, tzid_len))
+    tlv:add(pf.timezone_len, tvb:range(5 + tzid_len, 1))
+    tlv:add(pf.timezone, tvb:range(6 + tzid_len))
 end
 
 function vapBitmapDecoder(tlv, tvbrange)
@@ -1791,87 +1916,87 @@ function ieee80211UpdateWlanDecoder(tlv, tvbrange)
 end
 
 local messageElementDecoder = {
-    [TYPE_AC_DESCRIPTOR] = acDescriptorDecoder,
-    [TYPE_AC_IPV4_LIST] = AcIpv4ListDecoder,
-    [TYPE_AC_IPV6_LIST] = AcIpv6ListDecoder,
-    [TYPE_AC_NAME] = acNameDecoder,
-    [TYPE_AC_NAME_W_PRIORITY] = AcNameWPriorityDecoder,
-    [TYPE_AC_TIMESTAMP] = acTimestampDecoder,
-    [TYPE_ADD_MAC_ACL_ENTRY] = AddMacAclEklDecoder,
-    [TYPE_ADD_STATION] = AddStationDecoder,
-    [TYPE_RESERVED_9] = Reserved9,
-    [TYPE_CAPWAP_CONTROL_IPV4_ADDRESS] = CapwapControlIpv4AddressDecoder,
-    [TYPE_CAPWAP_CONTROL_IPV6_ADDRESS] = CapwapControlIpv6AddressDecoder,
-    [TYPE_CAPWAP_TIMERS] = capwapTimersDecoder,
-    [TYPE_DATA_TRANSFER_DATA] = DataTransferDataDecoder,
-    [TYPE_DATA_TRANSFER_MODE] = DataTransferModeDecoder,
-    [TYPE_DESCRYPTION_ERROR_REPORT] = DescryptionErrorReportDecoder,
-    [TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = decrptionErrorReportPeriodDecoder,
-    [TYPE_DELETE_MAC_ENTRY] = nil,
-    [TYPE_DELETE_STATION] = nil,
-    [TYPE_RESERVED_19] = nil,
-    [TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder,
-    [TYPE_DUPLICATE_IPV4_ADDRESS] = nil,
-    [TYPE_DUPLICATE_IPV6_ADDRESS] = nil,
-    [TYPE_IDLE_TIMEOUT] = idleTimeoutDecoder,
-    [TYPE_IMAGE_DATA] = nil,
-    [TYPE_IMAGE_IDENTIFIER] = nil,
-    [TYPE_IMAGE_INFORMATION] = nil,
-    [TYPE_INITIATE_DOWNLOAD] = nil,
-    [TYPE_LOCATION_DATA] = localDataDecoder,
-    [TYPE_MAXIMUM_MESSAGE_LENGTH] = nil,
-    [TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = capwapLocalIpv4AddressDecoder,
-    [TYPE_RADIO_ADMINISTRATIVE_STATE] = radioAdministrativeStateDecoder,
-    [TYPE_RADIO_OPERATIONAL_STATE] = radioOperationStateDecoder,
-    [TYPE_RESULT_CODE] = resultCodeDecoder,
-    [TYPE_RETURNED_MESSAGE_ELEMENT] = nil,
-    [TYPE_SESSION_ID] = sessionIdDecoder,
-    [TYPE_STATISTICS_TIMER] = statisticsTimerDecoder,
-    [TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder,
-    [TYPE_WTP_BOARD_DATA] = wtpBoardDataDecoder,
-    [TYPE_WTP_DESCRIPTOR] = wtpDescriptorDecoder,
-    [TYPE_WTP_FALLBACK] = wtpFallbackDecoder,
-    [TYPE_WTP_FRAME_TUNNEL_MODE] = wtpFrameTunnelModeDecoder,
-    [TYPE_RESERVED_42] = nil,
-    [TYPE_RESERVED_43] = nil,
-    [TYPE_WTP_MAC_TYPE] = wtpMacTypeDecoder,
-    [TYPE_WTP_NAME] = wtpNameDecoder,
-    [TYPE_RESERVED_46] = nil,
-    [TYPE_WTP_RADIO_STATISTICS] = nil,
-    [TYPE_WTP_REBOOT_STATISTICS] = wtpRebootStatisticsDecoder,
-    [TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION] = nil,
-    [TYPE_CAPWAP_LOCAL_IPV6_ADDRESS] = nil,
-    [TYPE_CAPWAP_TRANSPORT_PROTOCOL] = nil,
-    [TYPE_MTU_DISCOVERY_PADDING] = nil,
-    [TYPE_ECN_SUPPORT] = ecnSupportDecoder,
+    [elementTypes.TYPE_AC_DESCRIPTOR] = acDescriptorDecoder,
+    [elementTypes.TYPE_AC_IPV4_LIST] = AcIpv4ListDecoder,
+    [elementTypes.TYPE_AC_IPV6_LIST] = AcIpv6ListDecoder,
+    [elementTypes.TYPE_AC_NAME] = acNameDecoder,
+    [elementTypes.TYPE_AC_NAME_W_PRIORITY] = AcNameWPriorityDecoder,
+    [elementTypes.TYPE_AC_TIMESTAMP] = acTimestampDecoder,
+    [elementTypes.TYPE_ADD_MAC_ACL_ENTRY] = AddMacAclEklDecoder,
+    [elementTypes.TYPE_ADD_STATION] = AddStationDecoder,
+    [elementTypes.TYPE_RESERVED_9] = Reserved9,
+    [elementTypes.TYPE_CAPWAP_CONTROL_IPV4_ADDRESS] = CapwapControlIpv4AddressDecoder,
+    [elementTypes.TYPE_CAPWAP_CONTROL_IPV6_ADDRESS] = CapwapControlIpv6AddressDecoder,
+    [elementTypes.TYPE_CAPWAP_TIMERS] = capwapTimersDecoder,
+    [elementTypes.TYPE_DATA_TRANSFER_DATA] = DataTransferDataDecoder,
+    [elementTypes.TYPE_DATA_TRANSFER_MODE] = DataTransferModeDecoder,
+    [elementTypes.TYPE_DESCRYPTION_ERROR_REPORT] = DescryptionErrorReportDecoder,
+    [elementTypes.TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = decrptionErrorReportPeriodDecoder,
+    [elementTypes.TYPE_DELETE_MAC_ENTRY] = nil,
+    [elementTypes.TYPE_DELETE_STATION] = nil,
+    [elementTypes.TYPE_RESERVED_19] = nil,
+    [elementTypes.TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder,
+    [elementTypes.TYPE_DUPLICATE_IPV4_ADDRESS] = nil,
+    [elementTypes.TYPE_DUPLICATE_IPV6_ADDRESS] = nil,
+    [elementTypes.TYPE_IDLE_TIMEOUT] = idleTimeoutDecoder,
+    [elementTypes.TYPE_IMAGE_DATA] = nil,
+    [elementTypes.TYPE_IMAGE_IDENTIFIER] = nil,
+    [elementTypes.TYPE_IMAGE_INFORMATION] = nil,
+    [elementTypes.TYPE_INITIATE_DOWNLOAD] = nil,
+    [elementTypes.TYPE_LOCATION_DATA] = localDataDecoder,
+    [elementTypes.TYPE_MAXIMUM_MESSAGE_LENGTH] = nil,
+    [elementTypes.TYPE_CAPWAP_LOCAL_IPV4_ADDRESS] = capwapLocalIpv4AddressDecoder,
+    [elementTypes.TYPE_RADIO_ADMINISTRATIVE_STATE] = radioAdministrativeStateDecoder,
+    [elementTypes.TYPE_RADIO_OPERATIONAL_STATE] = radioOperationStateDecoder,
+    [elementTypes.TYPE_RESULT_CODE] = resultCodeDecoder,
+    [elementTypes.TYPE_RETURNED_MESSAGE_ELEMENT] = nil,
+    [elementTypes.TYPE_SESSION_ID] = sessionIdDecoder,
+    [elementTypes.TYPE_STATISTICS_TIMER] = statisticsTimerDecoder,
+    [elementTypes.TYPE_VENDOR_SPECIFIC_PAYLOAD] = vendorSpecificPayloadDecoder,
+    [elementTypes.TYPE_WTP_BOARD_DATA] = wtpBoardDataDecoder,
+    [elementTypes.TYPE_WTP_DESCRIPTOR] = wtpDescriptorDecoder,
+    [elementTypes.TYPE_WTP_FALLBACK] = wtpFallbackDecoder,
+    [elementTypes.TYPE_WTP_FRAME_TUNNEL_MODE] = wtpFrameTunnelModeDecoder,
+    [elementTypes.TYPE_RESERVED_42] = nil,
+    [elementTypes.TYPE_RESERVED_43] = nil,
+    [elementTypes.TYPE_WTP_MAC_TYPE] = wtpMacTypeDecoder,
+    [elementTypes.TYPE_WTP_NAME] = wtpNameDecoder,
+    [elementTypes.TYPE_RESERVED_46] = nil,
+    [elementTypes.TYPE_WTP_RADIO_STATISTICS] = nil,
+    [elementTypes.TYPE_WTP_REBOOT_STATISTICS] = wtpRebootStatisticsDecoder,
+    [elementTypes.TYPE_WTP_STATIC_IP_ADDRESS_INFORMATION] = nil,
+    [elementTypes.TYPE_CAPWAP_LOCAL_IPV6_ADDRESS] = nil,
+    [elementTypes.TYPE_CAPWAP_TRANSPORT_PROTOCOL] = nil,
+    [elementTypes.TYPE_MTU_DISCOVERY_PADDING] = nil,
+    [elementTypes.TYPE_ECN_SUPPORT] = ecnSupportDecoder,
 
-    [IEEE80211_ADD_WLAN] = ieee0211AddWlanDecoder,
-    [IEEE80211_ANTENNA] = ieee80211AntennaDecoder,
-    [IEEE80211_ASSIGNED_WTP_BSSID] = ieee80211AssignedWtpBssidDecoder,
-    [IEEE80211_DELETE_WLAN] = ieee80211DeleteWlanDecoder,
-    [IEEE80211_DIRECT_SEQUENCE_CONTROL] = ieee80211DirectSequenceControlDecoder,
-    [IEEE80211_INFORMATION_ELEMENT] = ieee80211InformationElementDecoder,
-    [IEEE80211_MAC_OPERATION] = ieee80211MacOperation,
-    [IEEE80211_MIC_COUNTERMEASURES] = nil,
-    [IEEE80211_MULTI_DOMAIN_CAPABILITY] = ieee80211MultiDomainCapabilityDecoder,
-    [IEEE80211_OFDM_CONTROL] = ieee80211OfdmControlDecoder,
-    [IEEE80211_RATE_SET] = nil,
-    [IEEE80211_RSNA_ERROR_REPORT_FROM_STATION] = nil,
-    [IEEE80211_STATION] = nil,
-    [IEEE80211_STATION_QOS_PROFILE] = nil,
-    [IEEE80211_STATION_SESSION_KEY] = nil,
-    [IEEE80211_STATISTICS] = nil,
-    [IEEE80211_SUPPORTED_RATES] = nil,
-    [IEEE80211_TX_POWER] = ieee80211TxPowerDecoder,
-    [IEEE80211_TX_POWER_LEVEL] = ieee80211TxPowerLevelDecoder,
-    [IEEE80211_UPDATE_STATION_QOS] = nil,
-    [IEEE80211_UPDATE_WLAN] = ieee80211UpdateWlanDecoder,
-    [IEEE80211_WTP_QUALITY_OF_SERVICE] = nil,
-    [IEEE80211_WTP_RADIO_CONFIGURATION] = ieee80211WtpRadioConfigurationDecoder,
-    [IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION] = nil,
-    [IEEE80211_WTP_RADIO_INFORMATION] = wtpRadioInformationDecoder,
-    [IEEE80211_SUPPORTED_MAC_PROFILES] = nil,
-    [IEEE80211_MAC_PROFILE] = nil,
+    [elementTypes.IEEE80211_ADD_WLAN] = ieee0211AddWlanDecoder,
+    [elementTypes.IEEE80211_ANTENNA] = ieee80211AntennaDecoder,
+    [elementTypes.IEEE80211_ASSIGNED_WTP_BSSID] = ieee80211AssignedWtpBssidDecoder,
+    [elementTypes.IEEE80211_DELETE_WLAN] = ieee80211DeleteWlanDecoder,
+    [elementTypes.IEEE80211_DIRECT_SEQUENCE_CONTROL] = ieee80211DirectSequenceControlDecoder,
+    [elementTypes.IEEE80211_INFORMATION_ELEMENT] = ieee80211InformationElementDecoder,
+    [elementTypes.IEEE80211_MAC_OPERATION] = ieee80211MacOperation,
+    [elementTypes.IEEE80211_MIC_COUNTERMEASURES] = nil,
+    [elementTypes.IEEE80211_MULTI_DOMAIN_CAPABILITY] = ieee80211MultiDomainCapabilityDecoder,
+    [elementTypes.IEEE80211_OFDM_CONTROL] = ieee80211OfdmControlDecoder,
+    [elementTypes.IEEE80211_RATE_SET] = nil,
+    [elementTypes.IEEE80211_RSNA_ERROR_REPORT_FROM_STATION] = nil,
+    [elementTypes.IEEE80211_STATION] = nil,
+    [elementTypes.IEEE80211_STATION_QOS_PROFILE] = nil,
+    [elementTypes.IEEE80211_STATION_SESSION_KEY] = nil,
+    [elementTypes.IEEE80211_STATISTICS] = nil,
+    [elementTypes.IEEE80211_SUPPORTED_RATES] = nil,
+    [elementTypes.IEEE80211_TX_POWER] = ieee80211TxPowerDecoder,
+    [elementTypes.IEEE80211_TX_POWER_LEVEL] = ieee80211TxPowerLevelDecoder,
+    [elementTypes.IEEE80211_UPDATE_STATION_QOS] = nil,
+    [elementTypes.IEEE80211_UPDATE_WLAN] = ieee80211UpdateWlanDecoder,
+    [elementTypes.IEEE80211_WTP_QUALITY_OF_SERVICE] = nil,
+    [elementTypes.IEEE80211_WTP_RADIO_CONFIGURATION] = ieee80211WtpRadioConfigurationDecoder,
+    [elementTypes.IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION] = nil,
+    [elementTypes.IEEE80211_WTP_RADIO_INFORMATION] = wtpRadioInformationDecoder,
+    [elementTypes.IEEE80211_SUPPORTED_MAC_PROFILES] = nil,
+    [elementTypes.IEEE80211_MAC_PROFILE] = nil,
 }
 
 function capwap.dissector(tvbuf,pktinfo,root)
@@ -1932,7 +2057,7 @@ function capwap.dissector(tvbuf,pktinfo,root)
 
         local tlv = message_element:add(pf.tlv, tvbuf:range(pos, length+4))
 
-        if type ~= TYPE_VENDOR_SPECIFIC_PAYLOAD then
+        if type ~= elementTypes.TYPE_VENDOR_SPECIFIC_PAYLOAD then
             tlv:set_text("Type: (t="..type..",l="..length..") "..tlvTypes[type])
         else
             local ftntElementId = tvbuf:range(pos+8, 2):uint()
