@@ -5,6 +5,7 @@ local original_capwap_dissector = udp_dissector_table:get_dissector(5246)
 
 local element = Field.new("capwap.message_element")
 local element_id = Field.new("capwap.control.fortinet.element_id")
+local unknown = Field.new("capwap.control.fortinet.unknown")
 
 local pf = {}
 
@@ -31,13 +32,13 @@ function capwap.dissector(tvbuf,pktinfo,root)
     original_capwap_dissector:call(tvbuf,pktinfo,root)
 
     local pktlen = tvbuf:reported_length_remaining()
-    -- local tree = root:add(capwap, tvbuf:range(0,pktlen))
+    local tree = root:add(capwap, tvbuf:range(0,pktlen))
 
     local i = 1
     while true do
-        local item = select(i, element())
+        local item = select(i, unknown())
         if item then
-            debug(pktinfo.number.." => "..item.offset.." => "..tvbuf:range(item.offset - 42, 2):uint())
+            debug(i..": "..pktinfo.number.." => "..item.offset.." => "..tvbuf:range(item.offset, 2):uint())
             i = i + 1
         else
             break

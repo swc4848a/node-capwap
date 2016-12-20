@@ -263,6 +263,7 @@ local VSP_FORTINET_REGCODE = 83
 local VSP_FORTINET_COUNTRYCODE = 84
 local VSP_FORTINET_STA_SCAN = 99
 local VSP_FORTINET_STA_CAP_LIST = 101
+local VSP_FORTINET_STA_CAP = 102
 local VSP_FORTINET_FHO = 103
 local VSP_FORTINET_APHO = 104
 local VSP_FORTINET_STA_LOCATE = 106
@@ -282,6 +283,7 @@ local VSP_FORTINET_DISABLE_THRESH = 163
 local VSP_FORTINET_VAP_PSK_PASSWD = 167
 local VSP_FORTINET_IP_FRAG = 170
 local VSP_FORTINET_MAX_DISTANCE = 171
+local VSP_FORTINET_VAP_WEB_AUTH_SERVER = 175
 local VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE = 176
 local VSP_FORTINET_MESH_ETH_BRIDGE_TYPE = 177
 local VSP_FORTINET_WTP_CAP = 192
@@ -295,6 +297,21 @@ local VSP_FORTINET_STA_STATS_INTERVAL = 201
 local VSP_FORTINET_STA_CAP_INTERVAL = 202
 local VSP_FORTINET_TXPWR_DBM = 205
 local VSP_FORTINET_WIDS_ENABLE = 209
+
+local VSP_FORTINET_WALLED_GARDEN = 0x811
+local VSP_FORTINET_UTM_INFO = 0x812
+local VSP_FORTINET_UTM_DATA = 0x813
+local VSP_FORTINET_UTM_JSON_INFO = 0x814
+local VSP_FORTINET_UTM_JSON_DATA = 0x815
+local VSP_FORTINET_UTM_VERSION = 0x816
+local VSP_FORTINET_UPLOAD_LOG_NOW = 0x817
+local VSP_FORTINET_USER_GROUP = 0x818
+local VSP_FORTINET_ROAMING_SUCCESS = 0x819
+local VSP_FORTINET_FORTIGUARD_IMAGE_ID = 0x820
+local VSP_FORTINET_FCLD_FIRMWWARE_INFO_URL = 0x821
+local VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL = 0x822
+local VSP_FORTINET_FCLD_FIRMWARE_RESULT = 0x823
+local VSP_FORTINET_TIMEZONE_INFO = 0x824
 
 local fortinet_element_id_vals = {
     [VSP_FORTINET_AP_SCAN] = "AP Scan",
@@ -320,6 +337,7 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_COUNTRYCODE] = "Country Code",
     [VSP_FORTINET_STA_SCAN] = "STA Scan",
     [VSP_FORTINET_STA_CAP_LIST] = "STA Capability List",
+    [VSP_FORTINET_STA_CAP] = "STA Capability",
     [VSP_FORTINET_FHO] = "FHO",
     [VSP_FORTINET_APHO] = "APHO",
     [VSP_FORTINET_STA_LOCATE] = "STA Locate",
@@ -339,6 +357,7 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_VAP_PSK_PASSWD] = "VAP PSK Password",
     [VSP_FORTINET_IP_FRAG] = "IP Frag",
     [VSP_FORTINET_MAX_DISTANCE] = "Max Distance",
+    [VSP_FORTINET_VAP_WEB_AUTH_SERVER] = "Web Auth Server",
     [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = "Mesh Eth Bridge Enable",
     [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = "Mesh Eth Bridge Type",
     [VSP_FORTINET_WTP_CAP] = "WTP Capabilities",
@@ -351,7 +370,21 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_STA_STATS_INTERVAL] = "STA Statistics Interval",
     [VSP_FORTINET_STA_CAP_INTERVAL] = "STA Capabilities Interval",
     [VSP_FORTINET_TXPWR_DBM] = "TxPower dbm",
-    [VSP_FORTINET_WIDS_ENABLE] = "WIDS Enable"
+    [VSP_FORTINET_WIDS_ENABLE] = "WIDS Enable",
+    [VSP_FORTINET_WALLED_GARDEN] = "Walled Garden",
+    [VSP_FORTINET_UTM_INFO] = "",
+    [VSP_FORTINET_UTM_DATA] = "",
+    [VSP_FORTINET_UTM_JSON_INFO] = "",
+    [VSP_FORTINET_UTM_JSON_DATA] = "",
+    [VSP_FORTINET_UTM_VERSION] = "",
+    [VSP_FORTINET_UPLOAD_LOG_NOW] = "",
+    [VSP_FORTINET_USER_GROUP] = "",
+    [VSP_FORTINET_ROAMING_SUCCESS] = "",
+    [VSP_FORTINET_FORTIGUARD_IMAGE_ID] = "",
+    [VSP_FORTINET_FCLD_FIRMWWARE_INFO_URL] = "",
+    [VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL] = "",
+    [VSP_FORTINET_FCLD_FIRMWARE_RESULT] = "",
+    [VSP_FORTINET_TIMEZONE_INFO] = "",
 };
 
 -- /* ************************************************************************* */
@@ -581,7 +614,7 @@ pf.radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.radio.id",
 pf.reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.reserved", ftypes.UINT8)
 pf.current_channel = ProtoField.new("Current Channel", "ftnt.capwap.message.element.current.channel", ftypes.UINT8)
 pf.length = ProtoField.new("Length", "ftnt.capwap.message.element.length", ftypes.UINT8)
-pf.sta_mac = ProtoField.new("STA MAC", "ftnt.capwap.message.element.sta.mac", ftypes.BYTES)
+pf.sta_mac = ProtoField.new("STA MAC", "ftnt.capwap.message.element.sta.mac", ftypes.ETHER)
 pf.bssid = ProtoField.new("BSSID", "ftnt.capwap.message.element.bssid", ftypes.BYTES)
 pf.mhc = ProtoField.new("MHC", "ftnt.capwap.message.element.mhc", ftypes.UINT8)
 pf.country_code = ProtoField.new("Country Code", "ftnt.capwap.message.element.country.code", ftypes.UINT16)
@@ -806,7 +839,7 @@ pf.vlan_id = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.fortinet.vla
 pf.ip = ProtoField.new("IP", "ftnt.capwap.message.element.fortinet.ip", ftypes.IPv4)
 pf.mask = ProtoField.new("MASK", "ftnt.capwap.message.element.fortinet.mask", ftypes.IPv4)
 
-pf.capability = ProtoField.new("Capability", "ftnt.capwap.message.element.capability", ftypes.UINT16)
+pf.capability = ProtoField.new("Capability", "ftnt.capwap.message.element.capability", ftypes.UINT16, nil, base.HEX)
 pf.key_index = ProtoField.new("Key-Index", "ftnt.capwap.message.element.key.index", ftypes.UINT8)
 pf.key_status = ProtoField.new("Key Status", "ftnt.capwap.message.element.key.status", ftypes.UINT8, ieee80211_wlan_key_status_vals)
 pf.key_length = ProtoField.new("Key Length", "ftnt.capwap.message.element.key.length", ftypes.UINT16)
@@ -817,9 +850,16 @@ pf.auth_type = ProtoField.new("Auth Type", "ftnt.capwap.message.element.auth.typ
 pf.mac_mode = ProtoField.new("MAC Mode", "ftnt.capwap.message.element.mac.mode", ftypes.UINT8, ieee80211_add_wlan_mac_mode_vals)
 pf.tunnel_mode = ProtoField.new("Tunnel Mode", "ftnt.capwap.message.element.tunnel.mode", ftypes.UINT8, ieee80211_add_wlan_tunnel_mode_vals)
 pf.suppress_ssid = ProtoField.new("Suppress SSID", "ftnt.capwap.message.element.suppress.ssid", ftypes.UINT8, yntypes, base.HEX, 0x01)
-pf.key = ProtoField.new("Key", "ftnt.capwap.message.element.key", ftypes.STRING)
+pf.key = ProtoField.new("Key", "ftnt.capwap.message.element.key", ftypes.BYTES)
 pf.flags = ProtoField.new("Flags", "ftnt.capwap.message.element.flags", ftypes.UINT8)
 pf.tag = ProtoField.new("Tag", "ftnt.capwap.message.element.tag", ftypes.BYTES)
+
+pf.auth_server = ProtoField.new("Auth Server", "ftnt.capwap.message.element.auth.server", ftypes.STRING)
+pf.walled_garden = ProtoField.new("Walled Garden", "ftnt.capwap.message.element.walled.garden", ftypes.STRING)
+pf.mac = ProtoField.new("Mac", "ftnt.capwap.message.element.mac", ftypes.ETHER)
+pf.rssi = ProtoField.new("RSSI", "ftnt.capwap.message.element.rssi", ftypes.UINT8)
+pf.chan = ProtoField.new("Channel", "ftnt.capwap.message.element.channel", ftypes.UINT8)
+
 
 capwap.fields = pf
 
@@ -906,6 +946,16 @@ function staCapListDecoder(tlv, tvbrange)
     tlv:add(pf.sta_cap_list, tvb:range(2))
 end
 
+function staCapDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac, tvb:range(2, 6))
+    tlv:add(pf.rssi, tvb:range(8, 1))
+    tlv:add(pf.capability, tvb:range(9, 2))
+    tlv:add(pf.chan, tvb:range(11, 1))
+end
+
 function radioStatsDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.version, tvb:range(0, 1))
@@ -931,6 +981,13 @@ function maxDistanceDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.max_distance, tvb:range(1, 4))
+end
+
+function vapWebAuthServerDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.auth_server, tvb:range(2))
 end
 
 function txPowerDbmDecoder(tlv, tvbrange)
@@ -1061,6 +1118,70 @@ function widsEnableDecoder(tlv, tvbrange)
     tlv:add(pf.wids_enable, tvb:range(1, 4))
 end
 
+function walledGardenDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.walled_garden, tvb:range(2))
+    -- todo: walled garden
+end
+
+function walledGardenDecoder(tlv, tvbrange)
+
+end
+
+function utmInfoDecoder(tlv, tvbrange)
+
+end
+
+function utmDataDecoder(tlv, tvbrange)
+
+end
+
+function utmJsonInfoDecoder(tlv, tvbrange)
+
+end
+
+function utmJsonDataDecoder(tlv, tvbrange)
+
+end
+
+function utmVersionDecoder(tlv, tvbrange)
+
+end
+
+function uploadLogNowDecoder (tlv, tvbrange)
+
+end
+
+function userGroupDecoder(tlv, tvbrange)
+
+end
+
+function roamingSuccessDecoder(tlv, tvbrange)
+
+end
+
+function fortiguardImageIdDecoder(tlv, tvbrange)
+
+end
+
+function fcldFirmwwareInfoUrlDecoder(tlv, tvbrange)
+
+end
+
+function fcldFirmwwareDownloadUrlDecoder(tlv, tvbrange)
+
+end
+
+function fcldFirmwareResultDecoder(tlv, tvbrange)
+
+end
+
+function timezoneInfoDecoder(tlv, tvbrange)
+
+end
+
 function vapBitmapDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1162,6 +1283,7 @@ local ftntElementDecoder = {
     [VSP_FORTINET_COUNTRYCODE] = countryCodeDecoder,
     [VSP_FORTINET_STA_SCAN] = staScanDecoder,
     [VSP_FORTINET_STA_CAP_LIST] = staCapListDecoder,
+    [VSP_FORTINET_STA_CAP] = staCapDecoder,
     [VSP_FORTINET_FHO] = fhoDecoder,
     [VSP_FORTINET_APHO] = aphoDecoder,
     [VSP_FORTINET_STA_LOCATE] = staLocateDecoder,
@@ -1181,6 +1303,7 @@ local ftntElementDecoder = {
     [VSP_FORTINET_VAP_PSK_PASSWD] = vapPskPasswdDecoder,
     [VSP_FORTINET_IP_FRAG] = ipFragDecoder,
     [VSP_FORTINET_MAX_DISTANCE] = maxDistanceDecoder,
+    [VSP_FORTINET_VAP_WEB_AUTH_SERVER] = vapWebAuthServerDecoder,
     [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = meshEthBridgeEnableDecoder,
     [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = meshEthBridgeTypeDecoder,
     [VSP_FORTINET_WTP_CAP] = wtpCapDecoder,
@@ -1194,6 +1317,20 @@ local ftntElementDecoder = {
     [VSP_FORTINET_STA_CAP_INTERVAL] = staCapIntervalDecoder,
     [VSP_FORTINET_TXPWR_DBM] = txPowerDbmDecoder,
     [VSP_FORTINET_WIDS_ENABLE] = widsEnableDecoder,
+    [VSP_FORTINET_WALLED_GARDEN] = walledGardenDecoder,
+    [VSP_FORTINET_UTM_INFO] = utmInfoDecoder,
+    [VSP_FORTINET_UTM_DATA] = utmDataDecoder,
+    [VSP_FORTINET_UTM_JSON_INFO] = utmJsonInfoDecoder,
+    [VSP_FORTINET_UTM_JSON_DATA] = utmJsonDataDecoder,
+    [VSP_FORTINET_UTM_VERSION] = utmVersionDecoder,
+    [VSP_FORTINET_UPLOAD_LOG_NOW] = uploadLogNowDecoder ,
+    [VSP_FORTINET_USER_GROUP] = userGroupDecoder,
+    [VSP_FORTINET_ROAMING_SUCCESS] = roamingSuccessDecoder,
+    [VSP_FORTINET_FORTIGUARD_IMAGE_ID] = fortiguardImageIdDecoder,
+    [VSP_FORTINET_FCLD_FIRMWWARE_INFO_URL] = fcldFirmwwareInfoUrlDecoder,
+    [VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL] = fcldFirmwwareDownloadUrlDecoder,
+    [VSP_FORTINET_FCLD_FIRMWARE_RESULT] = fcldFirmwareResultDecoder,
+    [VSP_FORTINET_TIMEZONE_INFO] = timezoneInfoDecoder,
 }
 
 function boardDataWtpModelNumberDecoder(tlv, tvbrange)
@@ -1616,6 +1753,12 @@ function ieee80211AssignedWtpBssidDecoder(tlv, tvbrange)
     tlv:add(pf.bssid, tvb:range(2, 6))
 end
 
+function ieee80211DeleteWlanDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+end
+
 function ieee80211InformationElementDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1635,6 +1778,16 @@ function radioOperationStateDecoder(tlv, tvbrange)
     tlv:add(pf.radio_operational_id, tvb:range(0, 1))
     tlv:add(pf.radio_operational_state, tvb:range(1, 1))
     tlv:add(pf.radio_operational_cause, tvb:range(2, 1))
+end
+
+function ieee80211UpdateWlanDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.capability, tvb:range(2, 2))
+    tlv:add(pf.key_index, tvb:range(4, 1))
+    tlv:add(pf.key_status, tvb:range(5, 1))
+    tlv:add(pf.key, tvb:range(6))
 end
 
 local messageElementDecoder = {
@@ -1695,7 +1848,7 @@ local messageElementDecoder = {
     [IEEE80211_ADD_WLAN] = ieee0211AddWlanDecoder,
     [IEEE80211_ANTENNA] = ieee80211AntennaDecoder,
     [IEEE80211_ASSIGNED_WTP_BSSID] = ieee80211AssignedWtpBssidDecoder,
-    [IEEE80211_DELETE_WLAN] = nil,
+    [IEEE80211_DELETE_WLAN] = ieee80211DeleteWlanDecoder,
     [IEEE80211_DIRECT_SEQUENCE_CONTROL] = ieee80211DirectSequenceControlDecoder,
     [IEEE80211_INFORMATION_ELEMENT] = ieee80211InformationElementDecoder,
     [IEEE80211_MAC_OPERATION] = ieee80211MacOperation,
@@ -1712,7 +1865,7 @@ local messageElementDecoder = {
     [IEEE80211_TX_POWER] = ieee80211TxPowerDecoder,
     [IEEE80211_TX_POWER_LEVEL] = ieee80211TxPowerLevelDecoder,
     [IEEE80211_UPDATE_STATION_QOS] = nil,
-    [IEEE80211_UPDATE_WLAN] = nil,
+    [IEEE80211_UPDATE_WLAN] = ieee80211UpdateWlanDecoder,
     [IEEE80211_WTP_QUALITY_OF_SERVICE] = nil,
     [IEEE80211_WTP_RADIO_CONFIGURATION] = ieee80211WtpRadioConfigurationDecoder,
     [IEEE80211_WTP_RADIO_FAIL_ALARM_INDICATION] = nil,
