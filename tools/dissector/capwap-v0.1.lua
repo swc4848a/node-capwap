@@ -253,6 +253,7 @@ local VSP_FORTINET_MAC = 33
 local VSP_FORTINET_WTP_ALLOW = 34
 local VSP_FORTINET_WBH_STA = 36
 local VSP_FORTINET_STA_IP_LIST = 38
+local VSP_FORTINET_STA_HOST_INFO_LIST = 39
 local VSP_FORTINET_ADD_STA = 40
 local VSP_FORTINET_HTCAP = 49
 local VSP_FORTINET_MGMT_VAP = 50
@@ -329,6 +330,7 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_WTP_ALLOW] = "WTP Allow",
     [VSP_FORTINET_WBH_STA] = "Mesh WBH STA",
     [VSP_FORTINET_STA_IP_LIST] = "STA IP List",
+    [VSP_FORTINET_STA_HOST_INFO_LIST] = "STA Host Info List",
     [VSP_FORTINET_ADD_STA] = "Add STA",
     [VSP_FORTINET_HTCAP] = "HT Capabilities",
     [VSP_FORTINET_MGMT_VAP] = "Management VAP",
@@ -901,6 +903,7 @@ pf.utm_verson_time = ProtoField.new("Utm Version Time", "ftnt.capwap.message.ele
 pf.utm_verson_len = ProtoField.new("Utm Version Length", "ftnt.capwap.message.element.utm.version.len", ftypes.UINT16)
 
 pf.ip_list = ProtoField.new("IP List", "ftnt.capwap.message.element.ip.list", ftypes.BYTES)
+pf.sta_host_info = ProtoField.new("Sta Host Info", "ftnt.capwap.message.element.sta.host.info", ftypes.BYTES)
 
 capwap.fields = pf
 
@@ -945,6 +948,13 @@ function staIpListDecoder(tlv, tvbrange)
         iplist:add(pf.sta_ip, tvb:range(pos, 4))
         pos = pos + 4
     until pos + 4 >= tvbrange:len()
+end
+
+function staHostInfoListDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version, tvb:range(0, 1))
+    tlv:add(pf.radio_id, tvb:range(1, 1))
+    tlv:add(pf.sta_host_info, tvb:range(2))
 end
 
 function addStaDecoder(tlv, tvbrange)
@@ -1422,6 +1432,7 @@ local ftntElementDecoder = {
     [VSP_FORTINET_WTP_ALLOW] = wtpAllowDecoder,
     [VSP_FORTINET_WBH_STA] = wbhStaDecoder,
     [VSP_FORTINET_STA_IP_LIST] = staIpListDecoder,
+    [VSP_FORTINET_STA_HOST_INFO_LIST] = staHostInfoListDecoder,
     [VSP_FORTINET_ADD_STA] = addStaDecoder,
     [VSP_FORTINET_HTCAP] = htcapDecoder,
     [VSP_FORTINET_MGMT_VAP] = mgmtVapDecoder,
