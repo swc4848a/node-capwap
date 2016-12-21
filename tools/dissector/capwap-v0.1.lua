@@ -286,22 +286,28 @@ local VSP_FORTINET_MCAST_RATE = 149
 local VSP_FORTINET_CFG = 150
 local VSP_FORTINET_SPLIT_TUN_CFG = 151
 local VSP_FORTINET_MGMT_VLAN_TAG = 161
+local VSP_FORTINET_DEL_STA_TS = 162
 local VSP_FORTINET_DISABLE_THRESH = 163
+local VSP_FORTINET_DEL_STA_REASON = 165
 local VSP_FORTINET_VAP_PSK_PASSWD = 167
 local VSP_FORTINET_IP_FRAG = 170
 local VSP_FORTINET_MAX_DISTANCE = 171
+local VSP_FORTINET_DEL_STA_BY = 172
+local VSP_FORTINET_RADIUS_CONFIG = 174
 local VSP_FORTINET_VAP_WEB_AUTH_SERVER = 175
 local VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE = 176
 local VSP_FORTINET_MESH_ETH_BRIDGE_TYPE = 177
 local VSP_FORTINET_WTP_CAP = 192
 local VSP_FORTINET_TXPWR = 193
 local VSP_FORTINET_AC_CAP = 194
+local VSP_FORTINET_STA_STATS = 195
 local VSP_FORTINET_VAP_STATS = 196
 local VSP_FORTINET_WTP_STATS = 197
 local VSP_FORTINET_WTP_UPTIME = 198
 local VSP_FORTINET_RADIO_STATS = 200
 local VSP_FORTINET_STA_STATS_INTERVAL = 201
 local VSP_FORTINET_STA_CAP_INTERVAL = 202
+local VSP_FORTINET_TXPWR_MAX = 204
 local VSP_FORTINET_TXPWR_DBM = 205
 local VSP_FORTINET_WIDS_ENABLE = 209
 
@@ -363,22 +369,28 @@ local fortinet_element_id_vals = {
     [VSP_FORTINET_CFG] = "Configuration",
     [VSP_FORTINET_SPLIT_TUN_CFG] = "Split Tunnel Configuration",
     [VSP_FORTINET_MGMT_VLAN_TAG] = "Management Vlan",
+    [VSP_FORTINET_DEL_STA_TS] = "Delete STA Timestamp",
     [VSP_FORTINET_DISABLE_THRESH] = "Disable Threshold",
+    [VSP_FORTINET_DEL_STA_REASON] = "Delete STA Reason",
     [VSP_FORTINET_VAP_PSK_PASSWD] = "VAP PSK Password",
     [VSP_FORTINET_IP_FRAG] = "IP Frag",
     [VSP_FORTINET_MAX_DISTANCE] = "Max Distance",
+    [VSP_FORTINET_DEL_STA_BY] = "Delete STA By",
+    [VSP_FORTINET_RADIUS_CONFIG] = "Radius Config",
     [VSP_FORTINET_VAP_WEB_AUTH_SERVER] = "Web Auth Server",
     [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = "Mesh Eth Bridge Enable",
     [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = "Mesh Eth Bridge Type",
     [VSP_FORTINET_WTP_CAP] = "WTP Capabilities",
     [VSP_FORTINET_TXPWR] = "Tx Power",
     [VSP_FORTINET_AC_CAP] = "AC Capabilities",
+    [VSP_FORTINET_STA_STATS] = "STA Statistics",
     [VSP_FORTINET_VAP_STATS] = "VAP Statistics",
     [VSP_FORTINET_WTP_STATS] = "WTP Statistics",
     [VSP_FORTINET_WTP_UPTIME] = "WTP Uptime",
     [VSP_FORTINET_RADIO_STATS] = "Radio Statistics",
     [VSP_FORTINET_STA_STATS_INTERVAL] = "STA Statistics Interval",
     [VSP_FORTINET_STA_CAP_INTERVAL] = "STA Capabilities Interval",
+    [VSP_FORTINET_TXPWR_MAX] = "Tx Power Max",
     [VSP_FORTINET_TXPWR_DBM] = "TxPower dbm",
     [VSP_FORTINET_WIDS_ENABLE] = "WIDS Enable",
     [VSP_FORTINET_WALLED_GARDEN] = "Walled Garden",
@@ -624,6 +636,7 @@ pf.radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.radio.id",
 pf.reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.reserved", ftypes.UINT8)
 pf.current_channel = ProtoField.new("Current Channel", "ftnt.capwap.message.element.current.channel", ftypes.UINT8)
 pf.length = ProtoField.new("Length", "ftnt.capwap.message.element.length", ftypes.UINT8)
+pf.length16 = ProtoField.new("Length", "ftnt.capwap.message.element.length16", ftypes.UINT16)
 pf.sta_mac = ProtoField.new("STA MAC", "ftnt.capwap.message.element.sta.mac", ftypes.ETHER)
 pf.bssid = ProtoField.new("BSSID", "ftnt.capwap.message.element.bssid", ftypes.BYTES)
 pf.mhc = ProtoField.new("MHC", "ftnt.capwap.message.element.mhc", ftypes.UINT8)
@@ -863,11 +876,12 @@ pf.tunnel_mode = ProtoField.new("Tunnel Mode", "ftnt.capwap.message.element.tunn
 pf.suppress_ssid = ProtoField.new("Suppress SSID", "ftnt.capwap.message.element.suppress.ssid", ftypes.UINT8, yntypes, base.HEX, 0x01)
 pf.key = ProtoField.new("Key", "ftnt.capwap.message.element.key", ftypes.BYTES)
 pf.flags = ProtoField.new("Flags", "ftnt.capwap.message.element.flags", ftypes.UINT8)
+pf.flags32 = ProtoField.new("Flags", "ftnt.capwap.message.element.flags32", ftypes.UINT32)
 pf.tag = ProtoField.new("Tag", "ftnt.capwap.message.element.tag", ftypes.BYTES)
 
 pf.auth_server = ProtoField.new("Auth Server", "ftnt.capwap.message.element.auth.server", ftypes.STRING)
 pf.walled_garden = ProtoField.new("Walled Garden", "ftnt.capwap.message.element.walled.garden", ftypes.STRING)
-pf.mac = ProtoField.new("Mac", "ftnt.capwap.message.element.mac", ftypes.ETHER)
+pf.mac = ProtoField.new("MAC", "ftnt.capwap.message.element.mac", ftypes.ETHER)
 pf.rssi = ProtoField.new("RSSI", "ftnt.capwap.message.element.rssi", ftypes.UINT8)
 pf.chan = ProtoField.new("Channel", "ftnt.capwap.message.element.channel", ftypes.UINT8)
 pf.size = ProtoField.new("Size", "ftnt.capwap.message.element.size", ftypes.UINT32)
@@ -898,12 +912,37 @@ local utypes = {
     [CW_UTM_BOTNET_DB_VER] = "Botnet DB Version",
 }
 
+local infoTypes = {
+    [12] = "DHO_HOST_NAME",
+    [60] = "DHO_VENDOR_CLASS_IDENTIFIER"
+}
+
 pf.utm_version_type = ProtoField.new("Utm Version Type", "ftnt.capwap.message.element.utm.version.type", ftypes.UINT16, utypes)
 pf.utm_verson_time = ProtoField.new("Utm Version Time", "ftnt.capwap.message.element.utm.version.time", ftypes.ABSOLUTE_TIME)
 pf.utm_verson_len = ProtoField.new("Utm Version Length", "ftnt.capwap.message.element.utm.version.len", ftypes.UINT16)
 
 pf.ip_list = ProtoField.new("IP List", "ftnt.capwap.message.element.ip.list", ftypes.BYTES)
 pf.sta_host_info = ProtoField.new("Sta Host Info", "ftnt.capwap.message.element.sta.host.info", ftypes.BYTES)
+pf.info_age = ProtoField.new("Info Age", "ftnt.capwap.message.element.info.age", ftypes.UINT32)
+pf.info_len = ProtoField.new("Info Length", "ftnt.capwap.message.element.info.length", ftypes.UINT8)
+pf.info = ProtoField.new("Info", "ftnt.capwap.message.element.info", ftypes.STRING)
+pf.info_type = ProtoField.new("Info Type", "ftnt.capwap.message.element.type", ftypes.UINT8, infoTypes)
+
+pf.rx_lastdata = ProtoField.new("Rx Lastdata", "ftnt.capwap.message.element.rx.last.data", ftypes.UINT32)
+pf.tx_lastdata = ProtoField.new("Tx Lastdata", "ftnt.capwap.message.element.tx.last.data", ftypes.UINT32)
+pf.rx_bytes = ProtoField.new("Rx Bytes", "ftnt.capwap.message.element.rx.bytes", ftypes.UINT64)
+pf.tx_bytes = ProtoField.new("Tx Bytes", "ftnt.capwap.message.element.tx.bytes", ftypes.UINT64)
+pf.rate = ProtoField.new("Rate", "ftnt.capwap.message.element.rate", ftypes.UINT32)
+pf.snr = ProtoField.new("SNR", "ftnt.capwap.message.element.snr", ftypes.UINT8)
+
+pf.mac_length = ProtoField.new("Mac Length", "ftnt.capwap.message.element.mac.length", ftypes.UINT8)
+pf.mac_address = ProtoField.new("Mac Address", "ftnt.capwap.message.element.mac.address", ftypes.ETHER)
+pf.del_ts = ProtoField.new("Delete Timestamp", "ftnt.capwap.message.element.delete.timestamp", ftypes.RELATIVE_TIME)
+pf.del_by = ProtoField.new("Delete By", "ftnt.capwap.message.element.delete.by", ftypes.UINT32)
+pf.del_reason = ProtoField.new("Delete Reason", "ftnt.capwap.message.element.delete.reason", ftypes.UINT32)
+pf.conf = ProtoField.new("Configuration", "ftnt.capwap.message.element.conf", ftypes.BYTES)
+pf.tx_power = ProtoField.new("Tx Power", "ftnt.capwap.message.element.tx.power", ftypes.UINT16)
+pf.power_max = ProtoField.new("Power Max", "ftnt.capwap.message.element.power.max", ftypes.UINT16)
 
 capwap.fields = pf
 
@@ -911,10 +950,25 @@ function mgmtVlanTagDecoder(tlv, tvbrange)
     tlv:add(pf.vsp_ftnt_vlanid, tvbrange)
 end
 
+function deleteStaTsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_length, tvb:range(2, 1))
+    local len = tvb:range(2, 1):uint()
+    tlv:add(pf.mac_address, tvb:range(3, len))
+    tlv:add(pf.del_ts, tvb:range(3 + len, 4))
+end
+
 function wtpCapDecoder(tlv, tvbrange)
     tlv:add(pf.vsp_ftnt_wtpcap, tvbrange)
 end
 
+function txPowerDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.tx_power, tvb:range(1, 2))
+end
 
 function wtpAllowDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
@@ -952,9 +1006,27 @@ end
 
 function staHostInfoListDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
-    tlv:add(pf.version, tvb:range(0, 1))
-    tlv:add(pf.radio_id, tvb:range(1, 1))
-    tlv:add(pf.sta_host_info, tvb:range(2))
+    tlv:add(pf.version_16, tvb:range(0, 2))
+    tlv:add(pf.radio_id, tvb:range(2, 1))
+    local list = tlv:add(pf.sta_host_info, tvb:range(3))
+    local pos = 3
+    repeat
+        list:add(pf.radio_id, tvb:range(pos, 1))
+        pos = pos + 1
+        list:add(pf.wlan_id, tvb:range(pos, 1))
+        pos = pos + 1
+        list:add(pf.sta_mac, tvb:range(pos, 6))
+        pos = pos + 6
+        list:add(pf.info_type, tvb:range(pos, 1))
+        pos = pos + 1
+        list:add(pf.info_age, tvb:range(pos, 4))
+        pos = pos + 4
+        list:add(pf.info_len, tvb:range(pos, 1))
+        local info_len = tvb:range(pos, 1):uint()
+        pos = pos + 1
+        list:add(pf.info, tvb:range(pos, info_len))
+        pos = pos + info_len
+    until pos >= tvbrange:len()
 end
 
 function addStaDecoder(tlv, tvbrange)
@@ -985,6 +1057,12 @@ function staCapIntervalDecoder(tlv, tvbrange)
     tlv:add(pf.sta_cap_interval, tvbrange)
 end
 
+function txPowerMaxDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.power_max, tvb:range(1, 2))
+end
+
 function meshEthBridgeEnableDecoder(tlv, tvbrange)
     tlv:add(pf.mesh_eth_bridge_enable, tvbrange)
 end
@@ -1001,6 +1079,36 @@ function vapStatsDecoder(tlv, tvbrange)
     tlv:add(pf.version, tvb:range(0, 1))
     tlv:add(pf.radio_id, tvb:range(1, 1))
     tlv:add(pf.vap_stats, tvb:range(2))
+end
+
+function staStatsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version_16, tvb:range(0, 2))
+    tlv:add(pf.radio_id, tvb:range(2, 1))
+    local list = tlv:add(pf.sta_host_info, tvb:range(3))
+    local pos = 3
+    repeat
+        list:add(pf.sta_mac, tvb:range(pos, 6))
+        pos = pos + 6
+        list:add(pf.radio_id, tvb:range(pos, 1))
+        pos = pos + 1
+        list:add(pf.wlan_id, tvb:range(pos, 1))
+        pos = pos + 1
+        list:add(pf.flags32, tvb:range(pos, 4))
+        pos = pos + 4
+        list:add(pf.rx_lastdata, tvb:range(pos, 4))
+        pos = pos + 4
+        list:add(pf.tx_lastdata, tvb:range(pos, 4))
+        pos = pos + 4
+        list:add(pf.rx_bytes, tvb:range(pos, 8))
+        pos = pos + 8
+        list:add(pf.tx_bytes, tvb:range(pos, 8))
+        pos = pos + 8
+        list:add(pf.rate, tvb:range(pos, 4))
+        pos = pos + 4
+        list:add(pf.snr, tvb:range(pos, 1))
+        pos = pos + 1
+    until pos >= tvbrange:len()
 end
 
 function apListDecoder(tlv, tvbrange)
@@ -1054,6 +1162,25 @@ function maxDistanceDecoder(tlv, tvbrange)
     tlv:add(pf.max_distance, tvb:range(1, 4))
 end
 
+function deleteStaDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_length, tvb:range(2, 1))
+    local len = tvb:range(2, 1):uint()
+    tlv:add(pf.mac_address, tvb:range(3, len))
+    tlv:add(pf.del_by, tvb:range(3 + len, 4))
+end
+
+function radiusConfigDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.length16, tvb:range(2, 2))
+    local len = tvb:range(2, 2):uint()
+    tlv:add(pf.conf, tvb:range(4, len))
+end
+
 function vapWebAuthServerDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1084,6 +1211,16 @@ function disableThreshDecoder(tlv, tvbrange)
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.wlan_id, tvb:range(1, 1))
     tlv:add(pf.disable_thresh, tvb:range(2, 2))
+end
+
+function deleteStaReasonDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_length, tvb:range(2, 1))
+    local len = tvb:range(2, 1):uint()
+    tlv:add(pf.mac_address, tvb:range(3, len))
+    tlv:add(pf.del_reason, tvb:range(3 + len, 4))
 end
 
 function vapFlagsDecoder(tlv, tvbrange)
@@ -1127,6 +1264,14 @@ function passiveDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.passive, tvb:range(1, 1))
+end
+
+function macDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.length, tvb:range(2, 1))
+    tlv:add(pf.mac, tvb:range(3))
 end
 
 function fhoDecoder(tlv, tvbrange)
@@ -1428,7 +1573,7 @@ local ftntElementDecoder = {
     [VSP_FORTINET_AP_SCAN_IDLE] = apScanIdleDecoder,
     [VSP_FORTINET_PASSIVE] = passiveDecoder,
     [VSP_FORTINET_DAEMON_RST] = nil,
-    [VSP_FORTINET_MAC] = nil,
+    [VSP_FORTINET_MAC] = macDecoder,
     [VSP_FORTINET_WTP_ALLOW] = wtpAllowDecoder,
     [VSP_FORTINET_WBH_STA] = wbhStaDecoder,
     [VSP_FORTINET_STA_IP_LIST] = staIpListDecoder,
@@ -1465,22 +1610,28 @@ local ftntElementDecoder = {
     [VSP_FORTINET_CFG] = cfgDecoder,
     [VSP_FORTINET_SPLIT_TUN_CFG] = splitTunCfgDecoder,
     [VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder,
+    [VSP_FORTINET_DEL_STA_TS] = deleteStaTsDecoder,
     [VSP_FORTINET_DISABLE_THRESH] = disableThreshDecoder,
+    [VSP_FORTINET_DEL_STA_REASON] = deleteStaReasonDecoder,
     [VSP_FORTINET_VAP_PSK_PASSWD] = vapPskPasswdDecoder,
     [VSP_FORTINET_IP_FRAG] = ipFragDecoder,
     [VSP_FORTINET_MAX_DISTANCE] = maxDistanceDecoder,
+    [VSP_FORTINET_DEL_STA_BY] = deleteStaDecoder,
+    [VSP_FORTINET_RADIUS_CONFIG] = radiusConfigDecoder,
     [VSP_FORTINET_VAP_WEB_AUTH_SERVER] = vapWebAuthServerDecoder,
     [VSP_FORTINET_MESH_ETH_BRIDGE_ENABLE] = meshEthBridgeEnableDecoder,
     [VSP_FORTINET_MESH_ETH_BRIDGE_TYPE] = meshEthBridgeTypeDecoder,
     [VSP_FORTINET_WTP_CAP] = wtpCapDecoder,
-    [VSP_FORTINET_TXPWR] = nil,
+    [VSP_FORTINET_TXPWR] = txPowerDecoder,
     [VSP_FORTINET_AC_CAP] = acCapDecoder,
+    [VSP_FORTINET_STA_STATS] = staStatsDecoder,
     [VSP_FORTINET_VAP_STATS] = vapStatsDecoder,
     [VSP_FORTINET_WTP_STATS] = wtpStatsDecoder,
     [VSP_FORTINET_WTP_UPTIME] = wtpUptimeDecoder,
     [VSP_FORTINET_RADIO_STATS] = radioStatsDecoder,
     [VSP_FORTINET_STA_STATS_INTERVAL] = staStatsIntervalDecoder,
     [VSP_FORTINET_STA_CAP_INTERVAL] = staCapIntervalDecoder,
+    [VSP_FORTINET_TXPWR_MAX] = txPowerMaxDecoder,
     [VSP_FORTINET_TXPWR_DBM] = txPowerDbmDecoder,
     [VSP_FORTINET_WIDS_ENABLE] = widsEnableDecoder,
     [VSP_FORTINET_WALLED_GARDEN] = walledGardenDecoder,
@@ -1848,6 +1999,13 @@ function decrptionErrorReportPeriodDecoder(tlv, tvbrange)
     tlv:add(pf.decryption_error_report_report_interval, tvb:range(1, 2))
 end
 
+function deleteStationDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.mac_length, tvb:range(1, 1))
+    tlv:add(pf.mac_address, tvb:range(2))
+end
+
 function idleTimeoutDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.idle_timeout, tvb:range(0, 4))
@@ -1974,7 +2132,7 @@ local messageElementDecoder = {
     [elementTypes.TYPE_DESCRYPTION_ERROR_REPORT] = DescryptionErrorReportDecoder,
     [elementTypes.TYPE_DECRYPTION_ERROR_REPORT_PERIOD] = decrptionErrorReportPeriodDecoder,
     [elementTypes.TYPE_DELETE_MAC_ENTRY] = nil,
-    [elementTypes.TYPE_DELETE_STATION] = nil,
+    [elementTypes.TYPE_DELETE_STATION] = deleteStationDecoder,
     [elementTypes.TYPE_RESERVED_19] = nil,
     [elementTypes.TYPE_DISCOVERY_TYPE] = discoveryTypeDecoder,
     [elementTypes.TYPE_DUPLICATE_IPV4_ADDRESS] = nil,
