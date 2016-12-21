@@ -6,6 +6,7 @@ import LogTable from './logtable.react'
 import LogGraph from './loggraph.react'
 import LogDiagram from './logdiagram.react'
 import LogConfig from './logconfig.react'
+import LogAnalysis from './loganalysis.react'
 import Dummy from './dummy.react'
 
 var MainSidebar = require('./mainsidebar.react');
@@ -19,6 +20,7 @@ var MainRouter = React.createClass({
                     <Route path="/LogGraph" component={LogGraph} />
                     <Route path="/LogDiagram" component={LogDiagram} />
                     <Route path="/LogConfig" component={LogConfig} />
+                    <Route path="/LogAnalysis" component={LogAnalysis} />
                     <Route path="/*" component={Dummy} />
                 </Route>
             </Router>

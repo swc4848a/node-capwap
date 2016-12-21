@@ -48,6 +48,7 @@ var graphNodes = [
     { to: 'LogTable', icon: 'table', label: 'Log Table' },
     { to: 'LogGraph', icon: 'area-chart', label: 'Log Graph' },
     { to: 'LogDiagram', icon: 'area-chart', label: 'Log Diagram' },
+    { to: 'LogAnalysis', icon: 'eye', label: 'Log Analysis' },
 ];
 
 var settingsNodes = [
