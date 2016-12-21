@@ -26,12 +26,11 @@ var _apps = {
     graphData: [],
     apServerIp: '',
     apServerLogStatue: false,
-    dataSource: 'logfile'
 };
 
 function updateCollections() {
     if (_apps.startTime.value && _apps.endTime.value) {
-        var url = '/Stores/Raws?dataSource=' + _apps.dataSource + '&start=' + _apps.startTime.value + '&end=' + _apps.endTime.value;
+        var url = '/Stores/Raws?start=' + _apps.startTime.value + '&end=' + _apps.endTime.value;
         fetch(url).then(function(response) {
             response.json().then(function(json) {
                 _apps.collections = json;
@@ -132,10 +131,6 @@ function updateServerConfig(config) {
             _apps.apServerLogStatue = config.status;
         })
     });
-}
-
-function updateDataSource(source) {
-    _apps.dataSource = source;
 }
 
 var AppStore = assign({}, EventEmitter.prototype, {
@@ -242,9 +237,6 @@ AppDispatcher.register(function(action) {
                 ip: action.ip,
                 status: action.status
             });
-            break;
-        case AppConstants.APP_UPDATE_DATA_SOURCE:
-            updateDataSource(action.source);
             break;
         default:
             console.log('Do not support action type [%s]', action.actionType);

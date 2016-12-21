@@ -96,12 +96,6 @@ var AppActions = {
             status: status
         });
     },
-    updateDataSource: function(source) {
-        AppDispatcher.dispatch({
-            actionType: AppConstants.APP_UPDATE_DATA_SOURCE,
-            source: source
-        });
-    }
 };
 
 module.exports = AppActions;

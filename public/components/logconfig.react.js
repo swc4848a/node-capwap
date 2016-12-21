@@ -43,9 +43,6 @@ var Content = React.createClass({
             logEnable: !this.state.logEnable
         });
     },
-    handleDataSourceChange: function(newValue){
-        AppActions.updateDataSource(newValue.value);
-    },
     handleSubmit: function(event) {
         AppActions.updateLogConfig(this.state.ip, this.state.logEnable);
     },
@@ -82,30 +79,6 @@ var Content = React.createClass({
                             </div>
                             <div className="box-footer">
                                 <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-6">
-                        <div className="box box-primary">
-                            <div className="box-header with-border">
-                                <h3 className="box-title">Source Config</h3>
-                            </div>
-                            <div className="box-body">
-                                <div className="form-group">
-                                    <label>Data Source</label>
-                                    <Select 
-                                        name="data-source"
-                                        value="logfile"
-                                        options={[
-                                            { value: 'apserver', label: 'APServer' },
-                                            { value: 'logfile', label: 'LogFile' }
-                                        ]}
-                                        searchable={true}
-                                        onChange={this.handleDataSourceChange}
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>

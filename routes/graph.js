@@ -7,7 +7,7 @@ var mysql = require('mysql');
 router.get('/', function(req, res) {
     if (req.query.messageType && req.query.apnetwork && req.query.ap && req.query.start && req.query.end) {
         var options = {
-            host: '172.16.94.163',
+            host: '172.16.94.164',
             user: 'monitor',
             password: 'pass',
             database: 'monitor'

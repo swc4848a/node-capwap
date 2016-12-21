@@ -6,7 +6,7 @@ var mysql = require('mysql');
 
 router.get('/apnetwork', function(req, res) {
     var options = {
-        host: '172.16.94.163',
+        host: '172.16.94.164',
         user: 'monitor',
         password: 'pass',
         database: 'monitor'
@@ -36,7 +36,7 @@ router.get('/apnetwork', function(req, res) {
 
 router.get('/ap', function(req, res) {
     var options = {
-        host: '172.16.94.163',
+        host: '172.16.94.164',
         user: 'monitor',
         password: 'pass',
         database: 'monitor'
@@ -297,7 +297,7 @@ router.get('/messageType', function(req, res) {
 
 router.get('/stamac', function(req, res) {
     var options = {
-        host: '172.16.94.163',
+        host: '172.16.94.164',
         user: 'monitor',
         password: 'pass',
         database: 'monitor'
