@@ -1118,6 +1118,12 @@ pf.old_state = ProtoField.new("Old State", "ftnt.capwap.message.element.old.stat
 pf.new_state = ProtoField.new("New State", "ftnt.capwap.message.element.new.state", ftypes.UINT32)
 pf.down_up = ProtoField.new("Down up", "ftnt.capwap.message.element.down.up", ftypes.UINT8)
 
+pf.ts = ProtoField.new("Timestamp", "ftnt.capwap.message.element.timestamp", ftypes.UINT32)
+pf.tzid_len = ProtoField.new("Timezone ID Length", "ftnt.capwap.message.element.timezone.id.length", ftypes.UINT8)
+pf.tzid = ProtoField.new("Timezone ID", "ftnt.capwap.message.element.timezone.id", ftypes.STRING)
+pf.timezone_len = ProtoField.new("Timezone Length", "ftnt.capwap.message.element.timezone.length", ftypes.UINT8)
+pf.timezone = ProtoField.new("Timezone", "ftnt.capwap.message.element.timezone", ftypes.STRING)
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
