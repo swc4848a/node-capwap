@@ -1124,6 +1124,9 @@ pf.tzid = ProtoField.new("Timezone ID", "ftnt.capwap.message.element.timezone.id
 pf.timezone_len = ProtoField.new("Timezone Length", "ftnt.capwap.message.element.timezone.length", ftypes.UINT8)
 pf.timezone = ProtoField.new("Timezone", "ftnt.capwap.message.element.timezone", ftypes.STRING)
 
+pf.change = ProtoField.new("Change", "ftnt.capwap.message.element.change", ftypes.UINT8)
+pf.admin_password = ProtoField.new("Admin Password", "ftnt.capwap.message.element.admin.password", ftypes.BYTES)
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -1219,6 +1222,12 @@ end
 
 function regcodeDecoder(tlv, tvbrange)
     tlv:add(pf.regcode, tvbrange)
+end
+
+function adminPasswordDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.change, tvb:range(0, 1))
+    tlv:add(pf.admin_password, tvb:range(1))
 end
 
 function telnetEnableDecoder(tlv, tvbrange)
@@ -1838,7 +1847,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_DHCP_STARVATION] = nil,
     [vsp.VSP_FORTINET_VAP_STATE_LIST] = stateListDecoder,
     [vsp.VSP_FORTINET_TELNET_ENABLE] = telnetEnableDecoder,
-    [vsp.VSP_FORTINET_ADMIN_PASSWD] = nil,
+    [vsp.VSP_FORTINET_ADMIN_PASSWD] = adminPasswordDecoder,
     [vsp.VSP_FORTINET_REGCODE] = regcodeDecoder,
     [vsp.VSP_FORTINET_COUNTRYCODE] = countryCodeDecoder,
     [vsp.VSP_FORTINET_HTTP_ENABLE] = nil,
