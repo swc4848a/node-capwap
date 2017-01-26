@@ -1127,6 +1127,10 @@ pf.timezone = ProtoField.new("Timezone", "ftnt.capwap.message.element.timezone",
 pf.change = ProtoField.new("Change", "ftnt.capwap.message.element.change", ftypes.UINT8)
 pf.admin_password = ProtoField.new("Admin Password", "ftnt.capwap.message.element.admin.password", ftypes.BYTES)
 
+pf.buffer_size = ProtoField.new("Buffer Size", "ftnt.capwap.message.element.buffer.size", ftypes.UINT32)
+pf.channel = ProtoField.new("Channel", "ftnt.capwap.message.element.channel", ftypes.UINT8)
+pf.filter = ProtoField.new("Filter", "ftnt.capwap.message.element.filter", ftypes.UINT32)
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -1484,6 +1488,15 @@ function passiveDecoder(tlv, tvbrange)
     tlv:add(pf.passive, tvb:range(1, 1))
 end
 
+function apScanSnifferDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.buffer_size, tvb:range(1, 4))
+    tlv:add(pf.channel, tvb:range(5, 1))
+    tlv:add(pf.filter, tvb:range(6, 4))
+    tlv:add(pf.mac, tvb:range(10))
+end
+
 function macDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1816,7 +1829,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_AP_LIST] = apListDecoder,
     [vsp.VSP_FORTINET_AP_SCAN_IDLE] = apScanIdleDecoder,
     [vsp.VSP_FORTINET_PASSIVE] = passiveDecoder,
-    [vsp.VSP_FORTINET_AP_SCAN_SNIFFER] = nil,
+    [vsp.VSP_FORTINET_AP_SCAN_SNIFFER] = apScanSnifferDecoder,
     [vsp.VSP_FORTINET_DAEMON_RST] = nil,
     [vsp.VSP_FORTINET_MAC] = macDecoder,
     [vsp.VSP_FORTINET_WTP_ALLOW] = wtpAllowDecoder,
