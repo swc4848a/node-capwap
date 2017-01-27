@@ -56,26 +56,26 @@ var Content = React.createClass({
                                 <h3 className="box-title">Server Config</h3>
                             </div>
                             <div className="box-body">
-                            <div className="form-group">
-                                <label>IP</label>
-                                <input 
-                                    type="text"
-                                    className="form-control" 
-                                    id="ip" 
-                                    placeholder="Enter IP" 
-                                    value={this.state.ip} 
-                                    onChange={this.handleIpChange} 
-                                />
-                            </div>
-                            <div className="checkbox">
-                                <label>
+                                <div className="form-group">
+                                    <label>IP</label>
                                     <input 
-                                        type="checkbox" 
-                                        checked={this.state.logEnable}
-                                        onChange={this.handleLogEnableChange}
-                                    /> Enable Log
-                                </label>
-                            </div>
+                                        type="text"
+                                        className="form-control" 
+                                        id="ip" 
+                                        placeholder="Enter IP" 
+                                        value={this.state.ip} 
+                                        onChange={this.handleIpChange} 
+                                    />
+                                </div>
+                                <div className="checkbox">
+                                    <label>
+                                        <input 
+                                            type="checkbox" 
+                                            checked={this.state.logEnable}
+                                            onChange={this.handleLogEnableChange}
+                                        /> Enable Log
+                                    </label>
+                                </div>
                             </div>
                             <div className="box-footer">
                                 <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>

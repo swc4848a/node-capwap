@@ -1,6 +1,6 @@
 {
   "name": "node-capwap",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "node-capwap ========= ### CAPWAP implementation in JavaScript (Work in progress)",
   "main": "app.js",
   "scripts": {
