@@ -138,6 +138,7 @@ function udpateAnalysisCommands(commands) {
     fetch('/Analysis/commands' + query).then(function(response) {
         response.json().then(function(json) {
             console.log(json);
+            alert(JSON.stringify(json));
         })
     });
 }
