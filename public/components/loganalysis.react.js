@@ -19,22 +19,24 @@ class Header extends React.Component {
     }
 }
 
+// why handleClick = (e) => {} is wrong?
+// https://facebook.github.io/react/docs/handling-events.html
+
 class Content extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { value: '' };
+        this.state = { commands: '' };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange(event) {
-        this.setState({ value: event.target.value });
+        this.setState({ commands: event.target.value });
     }
     handleSubmit(event) {
-        console.log('A name was submitted: ' + this.state.value);
-        event.preventDefault();
+        event.preventDefault(); // reason
+        AppActions.updateCommands(this.state.commands);
     }
-    // why handleClick = (e) => {} is wrong?
-    // https://facebook.github.io/react/docs/handling-events.html
     render() {
         return (
             <section className="content">
@@ -48,8 +50,10 @@ class Content extends React.Component {
                                 <div className="form-group">
                                     <label>Commands:</label>
                                     <textarea 
-                                        className="form-control" rows="3" 
-                                        placeholder="Enter ..." value={this.state.value} 
+                                        className="form-control" 
+                                        rows="3" 
+                                        placeholder="Enter ..." 
+                                        value={this.state.commands} 
                                         onChange={this.handleChange}
                                     >
                                     </textarea>

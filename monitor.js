@@ -16,6 +16,7 @@ var Graph = require('./routes/graph');
 var Diagram = require('./routes/diagram');
 var Options = require('./routes/options');
 var Config = require('./routes/config');
+var Analysis = require('./routes/analysis');
 
 // routes
 app.use('/Stores', Stores);
@@ -23,6 +24,7 @@ app.use('/Graph', Graph);
 app.use('/Diagram', Diagram);
 app.use('/Options', Options);
 app.use('/Config', Config);
+app.use('/Analysis', Analysis);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

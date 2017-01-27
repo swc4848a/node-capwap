@@ -133,6 +133,15 @@ function updateServerConfig(config) {
     });
 }
 
+function udpateAnalysisCommands(commands) {
+    let query = '?commands=' + commands.commands;
+    fetch('/Analysis/commands' + query).then(function(response) {
+        response.json().then(function(json) {
+            console.log(json);
+        })
+    });
+}
+
 var AppStore = assign({}, EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT);
@@ -236,6 +245,11 @@ AppDispatcher.register(function(action) {
             updateServerConfig({
                 ip: action.ip,
                 status: action.status
+            });
+            break;
+        case AppConstants.APP_UPDATE_ANALYSIS_COMMANDS:
+            udpateAnalysisCommands({
+                commands: action.commands
             });
             break;
         default:
