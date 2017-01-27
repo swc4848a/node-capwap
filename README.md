@@ -69,8 +69,8 @@ Thu Aug 29 09:00:00 UTC 2016
 
  * Support multiple client connections
 
-Thu Jan 26 09:00:00 UTC 2017
- *
+Thu Jan 27 09:00:00 UTC 2017
+ * Move from flux.js to MobX.js
 
 # License
 

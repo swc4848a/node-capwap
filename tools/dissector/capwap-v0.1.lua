@@ -321,6 +321,8 @@ vsp.VSP_FORTINET_AP_SUPPRESS_LIST = 128
 vsp.VSP_FORTINET_FORTIPRESENCE_ENABLE = 129
 vsp.VSP_FORTINET_FORTIPRESENCE_PARAMS = 130
 
+vsp.VSP_FORTINET_VAP_NATLEASE = 132
+
 vsp.VSP_FORTINET_VAP_DOWNUP = 144
 vsp.VSP_FORTINET_WDS = 145
 vsp.VSP_FORTINET_VAP_FLAGS = 146
@@ -482,6 +484,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_AP_SUPPRESS_LIST] = "AP Suppress List",
     [vsp.VSP_FORTINET_FORTIPRESENCE_ENABLE] = "FortiPresence Enable",
     [vsp.VSP_FORTINET_FORTIPRESENCE_PARAMS] = "FortiPresence Params",
+    [vsp.VSP_FORTINET_VAP_NATLEASE] = "VAP Natlease",
     [vsp.VSP_FORTINET_VAP_DOWNUP] = "Down Up",
     [vsp.VSP_FORTINET_VAP_FLAGS] = "VAP Flags",
     [vsp.VSP_FORTINET_WDS] = "WDS",
@@ -1131,6 +1134,8 @@ pf.buffer_size = ProtoField.new("Buffer Size", "ftnt.capwap.message.element.buff
 pf.channel = ProtoField.new("Channel", "ftnt.capwap.message.element.channel", ftypes.UINT8)
 pf.filter = ProtoField.new("Filter", "ftnt.capwap.message.element.filter", ftypes.UINT32)
 
+pf.natlease_time = ProtoField.new("Natlease Time", "ftnt.capwap.message.element.nat.lease.time", ftypes.UINT32)
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -1347,6 +1352,13 @@ function countryCodeDecoder(tlv, tvbrange)
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.country_code, tvb:range(1, 2))
     tlv:add(pf.country_code_string, tvb:range(3, 3))
+end
+
+function vapNatleaseDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.natlease_time, tvb:range(2))
 end
 
 function downUpDecoder(tlv, tvbrange)
@@ -1747,6 +1759,14 @@ function splitTunCfgDecoder(tlv, tvbrange)
     tlv:add(pf.cnt, tvb:range(1, 1))
 end
 
+function vapNatIpDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.ip, tvb:range(2, 4))
+    tlv:add(pf.mask, tvb:range(6))
+end
+
 function downupScheduleDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1891,6 +1911,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_AP_SUPPRESS_LIST] = nil,
     [vsp.VSP_FORTINET_FORTIPRESENCE_ENABLE] = nil,
     [vsp.VSP_FORTINET_FORTIPRESENCE_PARAMS] = nil,
+    [vsp.VSP_FORTINET_VAP_NATLEASE] = vapNatleaseDecoder,
     [vsp.VSP_FORTINET_VAP_DOWNUP] = downUpDecoder,
     [vsp.VSP_FORTINET_VAP_FLAGS] = vapFlagsDecoder,
     [vsp.VSP_FORTINET_WDS] = wdsDecoder,
@@ -1901,7 +1922,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_SPLIT_TUN_CFG] = splitTunCfgDecoder,
     [vsp.VSP_FORTINET_WTP_LED_DARK] = nil,
     [vsp.VSP_FORTINET_MAX_RETRANSMIT] = nil,
-    [vsp.VSP_FORTINET_VAP_NATIP] = nil,
+    [vsp.VSP_FORTINET_VAP_NATIP] = vapNatIpDecoder,
     [vsp.VSP_FORTINET_DOWNUP_SCHEDULE] = downupScheduleDecoder,
     [vsp.VSP_FORTINET_FORTIK_MESH_WIRED_LINK] = nil,
     [vsp.VSP_FORTINET_MGMT_VLAN_TAG] = mgmtVlanTagDecoder,
