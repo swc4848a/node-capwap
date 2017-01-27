@@ -1,4 +1,5 @@
 import React from 'react'
+import AppActions from '../actions/AppActions'
 
 class Header extends React.Component {
     render() {
@@ -19,6 +20,21 @@ class Header extends React.Component {
 }
 
 class Content extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: '' };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleChange(event) {
+        this.setState({ value: event.target.value });
+    }
+    handleSubmit(event) {
+        console.log('A name was submitted: ' + this.state.value);
+        event.preventDefault();
+    }
+    // why handleClick = (e) => {} is wrong?
+    // https://facebook.github.io/react/docs/handling-events.html
     render() {
         return (
             <section className="content">
@@ -31,11 +47,16 @@ class Content extends React.Component {
                             <div className="box-body">
                                 <div className="form-group">
                                     <label>Commands:</label>
-                                    <textarea className="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                    <textarea 
+                                        className="form-control" rows="3" 
+                                        placeholder="Enter ..." value={this.state.value} 
+                                        onChange={this.handleChange}
+                                    >
+                                    </textarea>
                                 </div>
                             </div>
                             <div className="box-footer">
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
                             </div>
                         </div>
                     </div>
