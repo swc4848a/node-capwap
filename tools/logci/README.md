@@ -1,7 +1,10 @@
 # logci
-## mysql => message table
+## mysql => message table (old version: parse apserver log file and send json to logserver to update mysql database)
 * select ap_sn, count(ap_sn) from message where msg_type=1 group by ap_sn;
 * select max(ts), min(ts) from message;
+
+## couchdb.js
+* parse apserver log file and use couchdb none sql database
 
 ## shell => jenkins
 ### tree

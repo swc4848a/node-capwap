@@ -25,7 +25,10 @@ class Header extends React.Component {
 class Content extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { commands: '' };
+        this.state = {
+            commands: '',
+            results: ''
+        };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,6 +60,12 @@ class Content extends React.Component {
                                         onChange={this.handleChange}
                                     >
                                     </textarea>
+                                    <label>Results:</label>
+                                    <pre className="prettyprint">
+                                        <code className="javascript">
+                                            {this.state.results}
+                                        </code>
+                                    </pre>
                                 </div>
                             </div>
                             <div className="box-footer">
