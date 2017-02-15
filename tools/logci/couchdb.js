@@ -143,7 +143,7 @@ function parseLine(line) {
 
             messages.push(obj);
             if (messages.length >= 500) {
-                // db.bulkDocs(messages);
+                db.bulkDocs(messages);
                 messages = [];
             }
 

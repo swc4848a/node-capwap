@@ -6,6 +6,12 @@
 ## couchdb.js
 * parse apserver log file and use couchdb none sql database
 
+### readme
+* now setup database on Ubuntu using pouchdb-server (install: $ npm install -g pouchdb-server)
+* start database (/home/zqqiang/Workspaces/database/pouchdb-server): $ pouchdb-server --port 5984 --host 172.16.95.48
+* test database: $ curl 172.16.95.48:5984
+* browse http://172.16.95.48:5984/_utils/ for GUI operation
+
 ## shell => jenkins
 ### tree
 .
