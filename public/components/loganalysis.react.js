@@ -1,5 +1,19 @@
 import React from 'react'
+import { observable, action } from 'mobx'
+import { observer } from 'mobx-react'
 import AppActions from '../actions/AppActions'
+
+var appState = observable({
+    data: ""
+});
+
+appState.query = action(function query() {
+    fetch('/Analysis/data').then(function(response) {
+        response.json().then(function(json) {
+            appState.data = JSON.stringify(json);
+        })
+    });
+});
 
 class Header extends React.Component {
     render() {
@@ -10,8 +24,8 @@ class Header extends React.Component {
                     <small>Analysis</small>
                 </h1>
                 <ol className="breadcrumb">
-                    <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
-                    <li><a href="#">Log Graph</a></li>
+                    <li><a href="javascript:void(0);"><i className="fa fa-dashboard"></i> Home</a></li>
+                    <li><a href="javascript:void(0);">Log Graph</a></li>
                     <li className="active">Log Analysis</li>
                 </ol>
             </section>
@@ -19,26 +33,13 @@ class Header extends React.Component {
     }
 }
 
-// why handleClick = (e) => {} is wrong?
-// https://facebook.github.io/react/docs/handling-events.html
-
+@observer
 class Content extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            commands: '',
-            results: ''
-        };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange(event) {
-        this.setState({ commands: event.target.value });
-    }
-    handleSubmit(event) {
-        event.preventDefault(); // reason
-        AppActions.updateCommands(this.state.commands);
+    onClick() {
+        this.props.appState.query();
     }
     render() {
         return (
@@ -51,25 +52,11 @@ class Content extends React.Component {
                             </div>
                             <div className="box-body">
                                 <div className="form-group">
-                                    <label>Commands:</label>
-                                    <textarea 
-                                        className="form-control" 
-                                        rows="3" 
-                                        placeholder="Enter ..." 
-                                        value={this.state.commands} 
-                                        onChange={this.handleChange}
-                                    >
-                                    </textarea>
-                                    <label>Results:</label>
-                                    <pre className="prettyprint">
-                                        <code className="javascript">
-                                            {this.state.results}
-                                        </code>
-                                    </pre>
+                                    Query: {this.props.appState.data}
                                 </div>
                             </div>
                             <div className="box-footer">
-                                <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+                                <button type="submit" className="btn btn-primary" onClick={this.onClick.bind(this)} >Query</button>
                             </div>
                         </div>
                     </div>
@@ -84,7 +71,7 @@ class LogAnalysis extends React.Component {
         return (
             <div className="content-wrapper">
                 <Header />
-                <Content />
+                <Content appState={appState} />
             </div>
         )
     }

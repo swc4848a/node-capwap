@@ -71,6 +71,7 @@ Thu Aug 29 09:00:00 UTC 2016
 
 Thu Jan 27 09:00:00 UTC 2017
  * Move from flux.js to MobX.js
+ * Move from express.js to koa.js
 
 # License
 
