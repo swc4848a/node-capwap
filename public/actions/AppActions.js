@@ -95,12 +95,6 @@ var AppActions = {
             ip: ip,
             status: status
         });
-    },
-    updateCommands: function(commands) {
-        AppDispatcher.dispatch({
-            actionType: AppConstants.APP_UPDATE_ANALYSIS_COMMANDS,
-            commands: commands
-        })
     }
 };
 

@@ -6,6 +6,7 @@ const exec = require('child_process').exec;
 var S = require('string');
 var PouchDB = require('pouchdb');
 var db = new PouchDB('http://172.16.95.48:5984/logs');
+var moment = require('moment');
 
 router.get('/commands', function(req, res) {
     let cmd = req.query.commands
@@ -31,12 +32,15 @@ router.get('/commands', function(req, res) {
 
 router.get('/data', function(req, res) {
     db.query('my_index/new-view', {
-        // key: 'FAP11C3X12000642',
         reduce: true,
         group: true
     }).then(function(result) {
         console.log(result);
-        res.json(result);
+        let json = [];
+        result.rows.forEach((elem) => {
+            json.push([moment.unix(elem.key), elem.value]);
+        });
+        res.json(json);
     }).catch(function(err) {
         console.error(err);
         res.json(err);

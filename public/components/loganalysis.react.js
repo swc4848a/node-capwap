@@ -3,14 +3,78 @@ import { observable, action } from 'mobx'
 import { observer } from 'mobx-react'
 import AppActions from '../actions/AppActions'
 
+const ReactHighcharts = require('react-highcharts');
+const Highcharts = ReactHighcharts.Highcharts;
+
+// react highchart can't render config series using mobx
+// so just pass const config to highchart and render series later
+
 var appState = observable({
-    data: ""
+
 });
 
-appState.query = action(function query() {
+let config = {
+    chart: {
+        zoomType: 'x'
+    },
+    title: {
+        text: 'USD to EUR exchange rate over time'
+    },
+    subtitle: {
+        text: document.ontouchstart === undefined ?
+            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+    },
+    xAxis: {
+        type: 'datetime'
+    },
+    yAxis: {
+        title: {
+            text: 'Exchange rate'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        area: {
+            fillColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops: [
+                    [0, Highcharts.getOptions().colors[0]],
+                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                ]
+            },
+            marker: {
+                radius: 2
+            },
+            lineWidth: 1,
+            states: {
+                hover: {
+                    lineWidth: 1
+                }
+            },
+            threshold: null
+        }
+    },
+    series: []
+};
+
+appState.query = action(function query(chart) {
     fetch('/Analysis/data').then(function(response) {
         response.json().then(function(json) {
-            appState.data = JSON.stringify(json);
+            // appState.data = JSON.stringify(json);
+
+            chart.addSeries({
+                type: 'area',
+                name: 'USD to EUR',
+                data: json
+            });
+
         })
     });
 });
@@ -39,7 +103,8 @@ class Content extends React.Component {
         super(props);
     }
     onClick() {
-        this.props.appState.query();
+        let chart = this.refs.chart.getChart();
+        this.props.appState.query(chart);
     }
     render() {
         return (
@@ -51,9 +116,7 @@ class Content extends React.Component {
                                 <h3 className="box-title">Analysis Commands</h3>
                             </div>
                             <div className="box-body">
-                                <div className="form-group">
-                                    Query: {this.props.appState.data}
-                                </div>
+                                <ReactHighcharts config={config} ref="chart" ></ReactHighcharts>
                             </div>
                             <div className="box-footer">
                                 <button type="submit" className="btn btn-primary" onClick={this.onClick.bind(this)} >Query</button>
