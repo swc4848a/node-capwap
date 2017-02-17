@@ -799,6 +799,7 @@ pf.tlv_value = ProtoField.new("Value", "ftnt.capwap.message.element.tlv.value", 
 -- message elements protocol common fields
 pf.radio_id = ProtoField.new("Radio ID", "ftnt.capwap.message.element.radio.id", ftypes.UINT8)
 pf.reserved = ProtoField.new("Reserved", "ftnt.capwap.message.element.reserved", ftypes.UINT8)
+pf.reserved_array = ProtoField.new("Reserved", "ftnt.capwap.message.element.reserved.array", ftypes.BYTES)
 pf.current_channel = ProtoField.new("Current Channel", "ftnt.capwap.message.element.current.channel", ftypes.UINT8)
 pf.length = ProtoField.new("Length", "ftnt.capwap.message.element.length", ftypes.UINT8)
 pf.length16 = ProtoField.new("Length", "ftnt.capwap.message.element.length16", ftypes.UINT16)
@@ -955,7 +956,6 @@ pf.radio_operational_state = ProtoField.new("Radio Operational State", "ftnt.cap
 pf.radio_operational_cause = ProtoField.new("Radio Operational Cause", "ftnt.capwap.message.element.radio.operation.cause", ftypes.UINT8, radio_op_cause_vals)
 
 pf.vsp_ftnt_vlanid = ProtoField.new("Vlan ID", "ftnt.capwap.message.element.fortinet.vlan.id", ftypes.UINT16)
-pf.vsp_ftnt_wtpcap = ProtoField.new("WTP CAP", "ftnt.capwap.message.element.fortinet.wtp.cap", ftypes.BYTES)
 pf.serial_number = ProtoField.new("Serial Number", "ftnt.capwap.message.element.fortinet.serial.number", ftypes.STRING)
 pf.allowed = ProtoField.new("Allowed", "ftnt.capwap.message.element.fortinet.allowed", ftypes.UINT8)
 pf.ip_frag_enable = ProtoField.new("IP Frag Enable", "ftnt.capwap.message.element.fortinet.ip.frag.enable", ftypes.UINT8)
@@ -1136,6 +1136,21 @@ pf.filter = ProtoField.new("Filter", "ftnt.capwap.message.element.filter", ftype
 
 pf.natlease_time = ProtoField.new("Natlease Time", "ftnt.capwap.message.element.nat.lease.time", ftypes.UINT32)
 
+pf.localStandalone = ProtoField.new("Local Standalone", "ftnt.capwap.message.element.wtpcap.local.standalone", ftypes.UINT8, nil, base.DEC, 0x01)
+pf.lanPort = ProtoField.new("Lan Port", "ftnt.capwap.message.element.wtpcap.lan.port", ftypes.UINT8, nil, base.DEC, 0x02)
+pf.localSwitch = ProtoField.new("Local Switch", "ftnt.capwap.message.element.wtpcap.local.switch", ftypes.UINT8, nil, base.DEC, 0x04)
+pf.vlan = ProtoField.new("Vlan", "ftnt.capwap.message.element.wtpcap.vlan", ftypes.UINT8, nil, base.DEC, 0x08)
+pf.localBridge = ProtoField.new("Local Bridge", "ftnt.capwap.message.element.wtpcap.local.bridge", ftypes.UINT8, nil, base.DEC, 0x10)
+pf.dfsEnable = ProtoField.new("DFS Enable", "ftnt.capwap.message.element.wtpcap.dfs.enable", ftypes.UINT8, nil, base.DEC, 0x20)
+pf.tsOffset = ProtoField.new("Timestamp Offset", "ftnt.capwap.message.element.wtpcap.ts.offset", ftypes.UINT8, nil, base.DEC, 0x40)
+pf.txPwrPercentage = ProtoField.new("Tx Power Percnetage", "ftnt.capwap.message.element.wtpcap.tx.power.percentage", ftypes.UINT8, nil, base.DEC, 0x80)
+
+pf.mtsEnable = ProtoField.new("Multiple Time Schedule", "ftnt.capwap.message.element.wtpcap.mtl", ftypes.UINT8, nil, base.DEC, 0x08)
+pf.fdsImageRetrieval = ProtoField.new("FDS Image Retrieval", "ftnt.capwap.message.element.wtpcap.fds.image.retrieval", ftypes.UINT8, nil, base.DEC, 0x10)
+pf.wanlan = ProtoField.new("Wan Lan", "ftnt.capwap.message.element.wtpcap.wan.lan", ftypes.UINT8, nil, base.DEC, 0x20)
+pf.ledDark = ProtoField.new("LED Dark", "ftnt.capwap.message.element.wtpcap.led.dark", ftypes.UINT8, nil, base.DEC, 0x40)
+pf.dtlsDataInKernel = ProtoField.new("Dtls Data In Kernel", "ftnt.capwap.message.element.wtpcap.dtls.data.in.kernel", ftypes.UINT8, nil, base.DEC, 0x80)
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -1153,7 +1168,23 @@ function deleteStaTsDecoder(tlv, tvbrange)
 end
 
 function wtpCapDecoder(tlv, tvbrange)
-    tlv:add(pf.vsp_ftnt_wtpcap, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.version, tvb:range(0, 2))
+    tlv:add(pf.radio_id, tvb:range(2, 1))
+    tlv:add(pf.localStandalone, tvb:range(3, 1))
+    tlv:add(pf.lanPort, tvb:range(3, 1))
+    tlv:add(pf.localSwitch, tvb:range(3, 1))
+    tlv:add(pf.vlan, tvb:range(3, 1))
+    tlv:add(pf.localBridge, tvb:range(3, 1))
+    tlv:add(pf.dfsEnable, tvb:range(3, 1))
+    tlv:add(pf.tsOffset, tvb:range(3, 1))
+    tlv:add(pf.txPwrPercentage, tvb:range(3, 1))
+    tlv:add(pf.mtsEnable, tvb:range(4, 1))
+    tlv:add(pf.fdsImageRetrieval, tvb:range(4, 1))
+    tlv:add(pf.wanlan, tvb:range(4, 1))
+    tlv:add(pf.ledDark, tvb:range(4, 1))
+    tlv:add(pf.dtlsDataInKernel, tvb:range(4, 1))
+    tlv:add(pf.reserved_array, tvb:range(5))
 end
 
 function txPowerDecoder(tlv, tvbrange)
