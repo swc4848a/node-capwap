@@ -7,6 +7,7 @@ var S = require('string');
 var PouchDB = require('pouchdb');
 var db = new PouchDB('http://172.16.95.48:5984/logs');
 var moment = require('moment');
+var _ = require('underscore');
 
 router.get('/commands', function(req, res) {
     let cmd = req.query.commands
@@ -32,14 +33,13 @@ router.get('/commands', function(req, res) {
 
 router.get('/data', function(req, res) {
     db.query('my_index/new-view', {
-        reduce: true,
-        group: true
+        key: 'FAP21D3U15000075',
+        include_docs: true
     }).then(function(result) {
-        console.log(result);
-        let json = [];
-        result.rows.forEach((elem) => {
-            json.push([moment.unix(elem.key), elem.value]);
+        let json = _.countBy(result, (item) => {
+            return item.doc.ts;
         });
+        console.log(json);
         res.json(json);
     }).catch(function(err) {
         console.error(err);
