@@ -67,7 +67,6 @@ let config = {
 appState.query = action(function query(chart) {
     fetch('/Analysis/data').then(function(response) {
         response.json().then(function(json) {
-            console.log(json);
             chart.addSeries({
                 type: 'area',
                 name: 'USD to EUR',
