@@ -34,11 +34,11 @@ router.get('/commands', function(req, res) {
 router.get('/data', function(req, res) {
     db.query('my_index/new-view', {
         startkey: [1483307683, 'FP223C3X16001602'],
-        endkey: [1485554066, 'FP223C3X16001602'],
+        endkey: [1496554066, 'FP223C3X16001602'],
         include_docs: true
     }).then(function(result) {
         let json = _.countBy(result.rows, (item) => {
-            return item.value.ts;
+            return Date(item.value.ts);
         });
         res.json(json);
     }).catch(function(err) {

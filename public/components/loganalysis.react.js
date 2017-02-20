@@ -2,6 +2,7 @@ import React from 'react'
 import { observable, action } from 'mobx'
 import { observer } from 'mobx-react'
 import AppActions from '../actions/AppActions'
+import Select from 'react-select';
 
 const ReactHighcharts = require('react-highcharts');
 const Highcharts = ReactHighcharts.Highcharts;
@@ -18,7 +19,7 @@ let config = {
         zoomType: 'x'
     },
     title: {
-        text: 'USD to EUR exchange rate over time'
+        text: 'AP Log Event over time'
     },
     subtitle: {
         text: document.ontouchstart === undefined ?
@@ -69,7 +70,7 @@ appState.query = action(function query(chart) {
         response.json().then(function(json) {
             chart.addSeries({
                 type: 'area',
-                name: 'USD to EUR',
+                name: 'AP Log Events',
                 data: json
             });
 
@@ -95,6 +96,13 @@ class Header extends React.Component {
     }
 }
 
+const timeOptions = [
+    { label: 'Last 24 Hours', value: '24' },
+    { label: 'Last 7 Days', value: '7' },
+    { label: 'Last 31 Days', value: '31' },
+    { label: 'Specify', value: 'specify' },
+];
+
 @observer
 class Content extends React.Component {
     constructor(props) {
@@ -110,8 +118,21 @@ class Content extends React.Component {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="box box-primary">
+                            <div className="box-body">
+                                <div className="row">
+                                    <Select name="Time" 
+                                            value="24" 
+                                            className="col-md-2" 
+                                            options={timeOptions} 
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-12">
+                        <div className="box box-primary">
                             <div className="box-header with-border">
-                                <h3 className="box-title">Analysis Commands</h3>
+                                <h3 className="box-title">Events Over Time</h3>
                             </div>
                             <div className="box-body">
                                 <ReactHighcharts config={config} ref="chart" ></ReactHighcharts>
