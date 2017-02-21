@@ -11,7 +11,7 @@ const Highcharts = ReactHighcharts.Highcharts;
 // so just pass const config to highchart and render series later
 
 var appState = observable({
-
+    time: '24'
 });
 
 let config = {
@@ -121,7 +121,7 @@ class Content extends React.Component {
                             <div className="box-body">
                                 <div className="row">
                                     <Select name="Time" 
-                                            value="24" 
+                                            value={this.props.appState.time} 
                                             className="col-md-2" 
                                             options={timeOptions} 
                                     />
