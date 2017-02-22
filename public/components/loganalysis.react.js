@@ -65,15 +65,17 @@ let config = {
     series: []
 };
 
-appState.query = action(function query(chart) {
-    fetch('/Analysis/data').then(function(response) {
+appState.query = action(function query(chart, time) {
+    let params = time ? '?time=' + time : '';
+    console.log(chart);
+    fetch('/Analysis/data' + params).then(function(response) {
         response.json().then(function(json) {
+            console.log(chart);
             chart.addSeries({
                 type: 'area',
                 name: 'AP Log Events',
                 data: json
             });
-
         })
     });
 });
@@ -112,6 +114,12 @@ class Content extends React.Component {
         let chart = this.refs.chart.getChart();
         this.props.appState.query(chart);
     }
+    onChange(val) {
+        this.props.appState.time = val.value;
+        let chart = this.refs.chart.getChart();
+        console.log(chart);
+        this.props.appState.query(chart, val.value);
+    }
     render() {
         return (
             <section className="content">
@@ -124,6 +132,7 @@ class Content extends React.Component {
                                             value={this.props.appState.time} 
                                             className="col-md-2" 
                                             options={timeOptions} 
+                                            onChange={this.onChange.bind(this)}
                                     />
                                 </div>
                             </div>
@@ -138,7 +147,12 @@ class Content extends React.Component {
                                 <ReactHighcharts config={config} ref="chart" ></ReactHighcharts>
                             </div>
                             <div className="box-footer">
-                                <button type="submit" className="btn btn-primary" onClick={this.onClick.bind(this)} >Query</button>
+                                <button type="submit" 
+                                        className="btn btn-primary" 
+                                        onClick={this.onClick.bind(this)} 
+                                >
+                                    Query
+                                </button>
                             </div>
                         </div>
                     </div>
