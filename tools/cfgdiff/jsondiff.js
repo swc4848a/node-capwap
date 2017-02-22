@@ -23,6 +23,9 @@ rl.on('line', (line) => {
             cli.config[config_str] = {};
             current = cli.config[config_str];
             break;
+        case 'end':
+            // current = last;
+            break;
         case 'edit':
             let edit_str = S(_.rest(lines)).toCSV(' ', null).s;
             if (!current.edit) current.edit = {};
@@ -30,9 +33,8 @@ rl.on('line', (line) => {
             current = current.edit[edit_str];
             break;
         case 'next':
-            // current = current.parent;
+            // current = last;
             break;
-
         default:
             // console.log("not support ", lines[0]);
     }
