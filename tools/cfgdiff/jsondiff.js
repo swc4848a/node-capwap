@@ -14,8 +14,55 @@ let cli = {};
 let current = [cli];
 let top = 0;
 
+let rhs = {
+    config: {
+        'webfilter profile': {
+            edit: {
+                default: {
+                    set: {
+                        comment: 'M Default Web Filtering.',
+                        options: ['activexfilter',
+                            'cookiefilter',
+                            'javafilter',
+                            'block-invalid-url'
+                        ]
+                    },
+                    config: {
+                        override: { set: { 'ovrd-dur': '1d2h3m', profile: 'monitor-all' } },
+                        web: { set: { 'bword-table': '1' } },
+                        'ftgd-wf': {
+                            set: {
+                                options: ['error-allow',
+                                    'http-err-detail',
+                                    'rate-server-ip',
+                                    'redir-block'
+                                ],
+                                ovrd: ['75', 'g05']
+                            },
+                            config: {
+                                filters: {
+                                    edit: {
+                                        '1': { set: { category: '2' } },
+                                        '2': { set: { category: '7' } }
+                                    }
+                                },
+                                quota: {
+                                    edit: {
+                                        '1': { set: { category: 'g02' } },
+                                        '2': { set: { duration: '17s' } }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+
 rl.on('line', (line) => {
-    let lines = S(line).trimLeft().parseCSV(' ', null);
+    let lines = S(line).trimLeft().parseCSV(' ', '"');
     // console.log(lines);
     switch (lines[0]) {
         case 'config':
@@ -47,52 +94,37 @@ rl.on('line', (line) => {
     }
 }).on('close', () => {
     // console.log(util.inspect(cli, { depth: null }));
-    let rhs = {
-        config: {
-            'webfilter profile': {
-                edit: {
-                    '"default"': {
-                        set: {
-                            comment: ['"Default', 'Web', 'Filtering."'],
-                            options: ['activexfilter',
-                                'cookiefilter',
-                                'javafilter',
-                            ]
-                        },
-                        config: {
-                            override: { set: { 'ovrd-dur': '1d2h3m', profile: '"monitor-all"' } },
-                            web: { set: { 'bword-table': '1' } },
-                            'ftgd-wf': {
-                                set: {
-                                    options: ['error-allow',
-                                        'http-err-detail',
-                                        'rate-server-ip',
-                                        'redir-block'
-                                    ],
-                                    ovrd: ['75', 'g05']
-                                },
-                                config: {
-                                    filters: {
-                                        edit: {
-                                            '1': { set: { category: '2' } },
-                                            '2': { set: { category: '7' } }
-                                        }
-                                    },
-                                    quota: {
-                                        edit: {
-                                            '1': { set: { category: 'g02' } },
-                                            '2': { set: { duration: '17s' } }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
 
-    var differences = diff(cli, rhs);
+    let differences = diff(cli, rhs);
+
     console.log(util.inspect(differences, { depth: null }));
+
+    ((diff) => {
+        diff.forEach((elem) => {
+            let cli_start = '';
+            let cli_end = '';
+            elem.path.forEach((item) => {
+                cli_start += ' ';
+                cli_end += ' ';
+                switch (item) {
+                    case 'config':
+                        cli_start += '\r\nconfig';
+                        cli_end += '\r\nend';
+                        break;
+                    case 'edit':
+                        cli_start += '\r\nedit';
+                        cli_end += '\r\nnext';
+                        break;
+                    case 'set':
+                        cli_start += '\r\nset';
+                        break;
+                    default:
+                        cli_start += item;
+                        break;
+                }
+            });
+            let cli_cmd = cli_start + ' ' + elem.rhs + cli_end;
+            console.log(cli_cmd);
+        })
+    })(differences);
 });
