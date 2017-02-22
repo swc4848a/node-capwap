@@ -1,0 +1,23 @@
+config webfilter profile
+    edit "default"
+        set comment "Default Web Filtering."
+        set options activexfilter cookiefilter javafilter block-invalid-url
+        config override
+            set ovrd-dur 1d2h3m
+            set profile "monitor-all"
+        end
+        config web
+            set bword-table 1
+        end
+        config ftgd-wf
+            config filters
+                edit 1
+                    set category 2
+                next
+                edit 2
+                    set category 7
+                next
+            end
+        end
+    next
+end
