@@ -10,12 +10,22 @@ config webfilter profile
             set bword-table 1
         end
         config ftgd-wf
+            set options error-allow http-err-detail rate-server-ip redir-block
+            set ovrd 75 g05
             config filters
                 edit 1
                     set category 2
                 next
                 edit 2
                     set category 7
+                next
+            end
+            config quota
+                edit 1
+                    set category g02
+                next
+                edit 2
+                    set duration 17s
                 next
             end
         end

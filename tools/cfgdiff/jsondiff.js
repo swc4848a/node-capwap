@@ -11,7 +11,8 @@ const rl = readline.createInterface({
 });
 
 let cli = {};
-let current = null;
+let current = [cli];
+let top = 0;
 
 rl.on('line', (line) => {
     let lines = S(line).trimLeft().parseCSV(' ', null);
@@ -19,59 +20,79 @@ rl.on('line', (line) => {
     switch (lines[0]) {
         case 'config':
             let config_str = S(_.rest(lines)).toCSV(' ', null).s;
-            if (!cli.config) cli.config = {};
-            cli.config[config_str] = {};
-            current = cli.config[config_str];
+            if (!current[top].config) current[top].config = {};
+            let config = current[top].config[config_str] = {};
+            current[++top] = config;
             break;
         case 'end':
-            // current = last;
+            top--;
             break;
         case 'edit':
             let edit_str = S(_.rest(lines)).toCSV(' ', null).s;
-            if (!current.edit) current.edit = {};
-            current.edit[edit_str] = {};
-            current = current.edit[edit_str];
+            if (!current[top].edit) current[top].edit = {};
+            let edit = current[top].edit[edit_str] = {};
+            current[++top] = edit;
             break;
         case 'next':
-            // current = last;
+            top--;
+            break;
+        case 'set':
+            let set_key = lines[1];
+            let set_value = lines.length == 3 ? lines[2] : lines.slice(2);
+            if (!current[top].set) current[top].set = {};
+            current[top].set[set_key] = set_value;
             break;
         default:
             // console.log("not support ", lines[0]);
     }
 }).on('close', () => {
-    console.log(util.inspect(cli, { showHidden: true, depth: null }));
-});
-
-// var lhs = {
-//     config: {
-//         'system global': {
-//             set: {
-//                 admintimeout: 480,
-//                 alias: "FGT60D4615007833",
-//                 'fgd-alert-subscription': ['advisory', 'latest-threat'],
-//                 'gui-certificates': 'enable',
-//                 'hostname': "FGT60D4615007833",
-//                 "timezone": '04',
-//             }
-//         }
-//     }
-// };
-
-var rhs = {
-    config: {
-        'system global': {
-            set: {
-                admintimeout: 480,
-                alias: "FGT60D4615007833",
-                'fgd-alert-subscription': ['advisory'],
-                'gui-certificates': 'disable',
-                'hostname': "FGT60D4615007833",
-                "timezone": '04',
+    // console.log(util.inspect(cli, { depth: null }));
+    let rhs = {
+        config: {
+            'webfilter profile': {
+                edit: {
+                    '"default"': {
+                        set: {
+                            comment: ['"Default', 'Web', 'Filtering."'],
+                            options: ['activexfilter',
+                                'cookiefilter',
+                                'javafilter',
+                            ]
+                        },
+                        config: {
+                            override: { set: { 'ovrd-dur': '1d2h3m', profile: '"monitor-all"' } },
+                            web: { set: { 'bword-table': '1' } },
+                            'ftgd-wf': {
+                                set: {
+                                    options: ['error-allow',
+                                        'http-err-detail',
+                                        'rate-server-ip',
+                                        'redir-block'
+                                    ],
+                                    ovrd: ['75', 'g05']
+                                },
+                                config: {
+                                    filters: {
+                                        edit: {
+                                            '1': { set: { category: '2' } },
+                                            '2': { set: { category: '7' } }
+                                        }
+                                    },
+                                    quota: {
+                                        edit: {
+                                            '1': { set: { category: 'g02' } },
+                                            '2': { set: { duration: '17s' } }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
-};
+    };
 
-// var differences = diff(lhs, rhs);
-
-// console.log(util.inspect(differences, { showHidden: true, depth: null }));
+    var differences = diff(cli, rhs);
+    console.log(util.inspect(differences, { depth: null }));
+});
