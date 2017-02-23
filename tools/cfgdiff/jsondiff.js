@@ -123,7 +123,8 @@ rl.on('line', (line) => {
                         break;
                 }
             });
-            let cli_cmd = cli_start + ' ' + elem.rhs + cli_end;
+            let set_value = S(elem.rhs).contains(' ') ? ('"' + elem.rhs + '"') : elem.rhs;
+            let cli_cmd = cli_start + ' ' + set_value + cli_end;
             console.log(cli_cmd);
         })
     })(differences);
