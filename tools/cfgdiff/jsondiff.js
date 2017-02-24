@@ -1,4 +1,6 @@
 var diff = require('deep-diff').diff;
+var observableDiff = require('deep-diff').observableDiff;
+
 var S = require('string');
 
 const util = require('util');
@@ -21,15 +23,27 @@ let rhs = {
                 default: {
                     set: {
                         comment: 'M Default Web Filtering.',
-                        options: ['activexfilter',
+                        options: [
+                            'activexfilter',
                             'cookiefilter',
                             'javafilter',
-                            'block-invalid-url'
+                            'block-invalid-url',
+                            'M Add One',
+                            'M Add Two'
                         ]
                     },
                     config: {
-                        override: { set: { 'ovrd-dur': '1d2h3m', profile: 'monitor-all' } },
-                        web: { set: { 'bword-table': '1' } },
+                        override: {
+                            set: {
+                                'ovrd-dur': '1d2h3m',
+                                profile: 'monitor-all'
+                            }
+                        },
+                        web: {
+                            set: {
+                                'bword-table': '1'
+                            }
+                        },
                         'ftgd-wf': {
                             set: {
                                 options: ['error-allow',
@@ -42,14 +56,30 @@ let rhs = {
                             config: {
                                 filters: {
                                     edit: {
-                                        '1': { set: { category: '2' } },
-                                        '2': { set: { category: '7' } }
+                                        '1': {
+                                            set: {
+                                                category: '2'
+                                            }
+                                        },
+                                        '2': {
+                                            set: {
+                                                category: '7'
+                                            }
+                                        }
                                     }
                                 },
                                 quota: {
                                     edit: {
-                                        '1': { set: { category: 'g02' } },
-                                        '2': { set: { duration: '17s' } }
+                                        '1': {
+                                            set: {
+                                                category: 'g02'
+                                            }
+                                        },
+                                        '2': {
+                                            set: {
+                                                duration: '17s'
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -59,6 +89,50 @@ let rhs = {
             }
         }
     }
+};
+
+let path = (path) => {
+    let cli_start = '';
+    let cli_end = '';
+    path.forEach((item) => {
+        cli_start += ' ';
+        cli_end += ' ';
+        switch (item) {
+            case 'config':
+                cli_start += '\r\nconfig';
+                cli_end += '\r\nend';
+                break;
+            case 'edit':
+                cli_start += '\r\nedit';
+                cli_end += '\r\nnext';
+                break;
+            case 'set':
+                cli_start += '\r\nset';
+                break;
+            default:
+                cli_start += item;
+                break;
+        }
+    });
+    return {
+        start: cli_start,
+        end: cli_end
+    };
+}
+
+let E = (elem) => {
+    let cli_string = path(elem.path);
+    let set_value = S(elem.rhs).contains(' ') ? ('"' + elem.rhs + '"') : elem.rhs;
+    let cli_cmd = cli_string.start + ' ' + set_value + cli_string.end;
+    console.log(cli_cmd);
+};
+
+let A = (elem) => {
+    let cli_string = path(elem.path);
+    // let set_value = S(elem.rhs).contains(' ') ? ('"' + elem.rhs + '"') : elem.rhs;
+    let set_value = 'null';
+    let cli_cmd = cli_string.start + ' ' + set_value + cli_string.end;
+    console.log(cli_cmd);
 };
 
 rl.on('line', (line) => {
@@ -97,35 +171,24 @@ rl.on('line', (line) => {
 
     let differences = diff(cli, rhs);
 
-    console.log(util.inspect(differences, { depth: null }));
+    console.log(util.inspect(differences, {
+        depth: null
+    }));
 
     ((diff) => {
         diff.forEach((elem) => {
-            let cli_start = '';
-            let cli_end = '';
-            elem.path.forEach((item) => {
-                cli_start += ' ';
-                cli_end += ' ';
-                switch (item) {
-                    case 'config':
-                        cli_start += '\r\nconfig';
-                        cli_end += '\r\nend';
-                        break;
-                    case 'edit':
-                        cli_start += '\r\nedit';
-                        cli_end += '\r\nnext';
-                        break;
-                    case 'set':
-                        cli_start += '\r\nset';
-                        break;
-                    default:
-                        cli_start += item;
-                        break;
-                }
-            });
-            let set_value = S(elem.rhs).contains(' ') ? ('"' + elem.rhs + '"') : elem.rhs;
-            let cli_cmd = cli_start + ' ' + set_value + cli_end;
-            console.log(cli_cmd);
+            switch (elem.kind) {
+                case 'E':
+                    E(elem);
+                    break;
+                case 'A':
+                    A(elem);
+                    break;
+                default:
+                    console.log('unkown kind: ', elem.kind);
+                    break;
+            }
         })
     })(differences);
+
 });
