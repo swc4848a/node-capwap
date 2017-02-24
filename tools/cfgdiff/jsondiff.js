@@ -129,8 +129,7 @@ let E = (elem) => {
 
 let A = (elem) => {
     let cli_string = path(elem.path);
-    // let set_value = S(elem.rhs).contains(' ') ? ('"' + elem.rhs + '"') : elem.rhs;
-    let set_value = 'null';
+    let set_value = S(elem.item.rhs).contains(' ') ? ('"' + elem.item.rhs + '"') : elem.item.rhs;
     let cli_cmd = cli_string.start + ' ' + set_value + cli_string.end;
     console.log(cli_cmd);
 };
