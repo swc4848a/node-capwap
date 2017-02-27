@@ -57,7 +57,14 @@ let E = (elem) => {
 
 let A = (elem) => {
     let cli_string = path(elem.path);
-    let set_value = S(elem.item.rhs).contains(' ') ? ('"' + elem.item.rhs + '"') : elem.item.rhs;
+    let set_array = ((path, obj) => {
+        let ref = rhs;
+        _.each(path, (item) => {
+            ref = ref[item];
+        })
+        return ref;
+    })(elem.path, rhs)
+    let set_value = S(set_array).toCSV(' ', null);
     let cli_cmd = cli_string.start + ' ' + set_value + cli_string.end;
     console.log(cli_cmd);
 };

@@ -10,8 +10,8 @@ const rhs = {
                             'cookiefilter',
                             'javafilter',
                             'block-invalid-url',
-                            'M Add One',
-                            'M Add Two'
+                            'add-one',
+                            '"add two"'
                         ]
                     },
                     config: {
