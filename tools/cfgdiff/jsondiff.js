@@ -9,6 +9,7 @@ const util = require('util');
 const readline = require('readline');
 const fs = require('fs');
 const _ = require('underscore');
+const __ = require('lodash');
 
 const rl = readline.createInterface({
     input: fs.createReadStream('webfilter.cli')
@@ -105,7 +106,13 @@ rl.on('line', (line) => {
 
     let differences = diff(cli, rhs);
 
-    console.log(util.inspect(differences, {
+    // console.log(util.inspect(differences, {
+    //     depth: null
+    // }));
+
+    let unionDiff = __.unionBy(differences, 'path');
+
+    console.log(util.inspect(unionDiff, {
         depth: null
     }));
 
@@ -123,6 +130,6 @@ rl.on('line', (line) => {
                     break;
             }
         })
-    })(differences);
+    })(unionDiff);
 
 });
