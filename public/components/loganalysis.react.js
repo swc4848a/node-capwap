@@ -67,18 +67,21 @@ let config = {
 
 appState.query = action(function query(chart, time) {
     let params = time ? '?time=' + time : '';
-    console.log(chart);
     fetch('/Analysis/data' + params).then(function(response) {
         response.json().then(function(json) {
-            console.log(chart);
-            chart.addSeries({
-                type: 'area',
-                name: 'AP Log Events',
-                data: json
-            });
+            if (json.errno) {
+                console.log('ERROR: ', json.errno);
+            } else {
+                chart.addSeries({
+                    type: 'area',
+                    name: 'AP Log Events',
+                    data: json
+                });
+            }
         })
     });
 });
+
 
 class Header extends React.Component {
     render() {
@@ -117,7 +120,6 @@ class Content extends React.Component {
     onChange(val) {
         this.props.appState.time = val.value;
         let chart = this.refs.chart.getChart();
-        console.log(chart);
         this.props.appState.query(chart, val.value);
     }
     render() {
