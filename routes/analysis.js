@@ -38,19 +38,23 @@ router.get('/data', function(req, res) {
 
     switch (req.query.time) {
         case '24':
-            end = start + 24 * 3600;
+            start = end - 24 * 3600;
             break;
         case '7':
-            end = start + 7 * 24 * 3600;
+            start = end - 7 * 24 * 3600;
             break;
         case '31':
-            end = start + 31 * 24 * 3600;
+            start = end - 31 * 24 * 3600;
             break;
         case 'specify':
             console.log('not support!');
+            start = end - 100 * 24 * 3600;
             break;
         default:
             console.log('req.query.time: ', req.query.time);
+            return res.json({
+                error: 'req.query.time [' + req.query.time + '] not in [24, 7, 31]'
+            });
     }
 
     console.log('start: %d, end: %d', start, end);
@@ -63,6 +67,7 @@ router.get('/data', function(req, res) {
         let json = _.countBy(result.rows, (item) => {
             return Date(item.value.ts);
         });
+        console.log(json);
         res.json(json);
     }).catch(function(err) {
         console.error(err);

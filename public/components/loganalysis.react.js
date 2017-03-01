@@ -66,12 +66,15 @@ let config = {
 };
 
 appState.query = action(function query(chart, time) {
+    console.log(chart);
+    console.log(time);
     let params = time ? '?time=' + time : '';
     fetch('/Analysis/data' + params).then(function(response) {
         response.json().then(function(json) {
             if (json.errno) {
                 console.log('ERROR: ', json.errno);
             } else {
+                console.log(json);
                 chart.addSeries({
                     type: 'area',
                     name: 'AP Log Events',
@@ -115,12 +118,14 @@ class Content extends React.Component {
     }
     onClick() {
         let chart = this.refs.chart.getChart();
-        this.props.appState.query(chart);
+        let time = this.props.appState.time;
+        this.props.appState.query(chart, time);
     }
     onChange(val) {
+        // todo: not working
         this.props.appState.time = val.value;
-        let chart = this.refs.chart.getChart();
-        this.props.appState.query(chart, val.value);
+        // let chart = this.refs.chart.getChart();
+        // this.props.appState.query(chart, val.value);
     }
     render() {
         return (
