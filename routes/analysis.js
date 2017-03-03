@@ -67,8 +67,11 @@ router.get('/data', function(req, res) {
         let json = _.countBy(result.rows, (item) => {
             return Date(item.value.ts);
         });
-        console.log(json);
-        res.json(json);
+        let array = [];
+        _.each(json, (v, k) => {
+            array.push([k, v]);
+        })
+        res.json(array);
     }).catch(function(err) {
         console.error(err);
         res.json(err);

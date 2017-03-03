@@ -66,15 +66,12 @@ let config = {
 };
 
 appState.query = action(function query(chart, time) {
-    console.log(chart);
-    console.log(time);
     let params = time ? '?time=' + time : '';
     fetch('/Analysis/data' + params).then(function(response) {
         response.json().then(function(json) {
             if (json.errno) {
                 console.log('ERROR: ', json.errno);
             } else {
-                console.log(json);
                 chart.addSeries({
                     type: 'area',
                     name: 'AP Log Events',
