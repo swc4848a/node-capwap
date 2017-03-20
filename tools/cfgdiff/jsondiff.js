@@ -1,3 +1,5 @@
+'use strict';
+
 var diff = require('deep-diff').diff;
 var observableDiff = require('deep-diff').observableDiff;
 
@@ -18,7 +20,6 @@ const rl = readline.createInterface({
 let cli = {};
 let current = [cli];
 let top = 0;
-
 
 let path = (path) => {
     let cli_start = '';
