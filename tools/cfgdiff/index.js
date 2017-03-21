@@ -4,7 +4,7 @@ const net = require('net');
 const api = require('./api');
 
 const server = net.createServer((c) => {
-    console.log('client connected');
+    // console.log('client connected');
 
     c.on('data', (data) => {
         let res = api.json(JSON.parse(data.toString()));
@@ -14,7 +14,7 @@ const server = net.createServer((c) => {
     });
 
     c.on('end', () => {
-        console.log('client disconnected');
+        // console.log('client disconnected');
     });
 });
 
