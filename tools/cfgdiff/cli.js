@@ -48,7 +48,39 @@ rl.on('line', (line) => {
             console.log("not support ", lines[0]);
     }
 }).on('close', () => {
-    console.log(util.inspect(cli, {
-        depth: null
-    }));
+    // console.log(util.inspect(cli, {
+    //     depth: null
+    // }));
 });
+
+cli.get = (module) => {
+    let res = {
+        code: 0,
+        message: 'ok',
+        result: []
+    };
+
+    let config = cli.config[module];
+
+    if (_.isUndefined(config)) {
+        return res;
+    }
+
+    let edit = cli.config[module].edit;
+    _.each(edit, (value, key) => {
+        let camelizeObj = {};
+        _.each(value.set, (value, key) => {
+            let camelizeKey = S(key).camelize().s;
+            camelizeObj[camelizeKey] = value;
+        });
+
+        let object = _.extend({
+            name: key
+        }, camelizeObj);
+        res.result.push(object);
+    })
+
+    return res;
+}
+
+module.exports = cli;
