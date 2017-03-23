@@ -7,7 +7,8 @@ const server = net.createServer((c) => {
     // console.log('client connected');
 
     c.on('data', (data) => {
-        let res = api.json(JSON.parse(data.toString()));
+        let req = JSON.parse(data.toString());
+        let res = api.json(req);
         c.write(JSON.stringify(res));
         console.log(res);
         c.pipe(c);

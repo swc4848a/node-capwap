@@ -1,77 +1,59 @@
 'use strict';
 
+const _ = require('underscore');
 var S = require('string');
 let cli = require('./cli');
 
 let api = {
-    version: (json) => {
-        let get = (json) => {
-            return {
-                code: 0,
-                message: "ok",
-                result: "v5.4.1, build 1064"
-            };
-        }
-
-        let check = (json) => {
-            return {
-                code: 0,
-                message: 'ok'
+    version: (json, method) => {
+        let action = {
+            get: (json) => {
+                return {
+                    code: 0,
+                    message: "ok",
+                    result: "v5.4.1, build 1064"
+                };
+            },
+            check: (json) => {
+                return {
+                    code: 0,
+                    message: 'ok'
+                }
             }
-        }
-
-        if (S(json.action).contains("Get")) {
-            return get(json);
-        } else if (S(json.action).contains("Check")) {
-            return check(json);
-        } else {
-            return {
-                code: -1,
-                message: "can't support " + json.action
-            };
-        }
+        };
+        return action[method](json);
     },
-    address: (json) => {
-        let get = (json) => {
-            return cli.get('firewall address');
-        }
-
-        if (S(json.action).contains('Get')) {
-            return get(json);
-        } else {
-            return {
-                code: -1,
-                message: "can't support " + json.action
+    address: (json, method) => {
+        let action = {
+            get: (json) => {
+                return cli.get('firewall address');
             }
-        }
+        };
+        return action[method](json);
     },
-    addrgrp: (json) => {
-        let get = (json) => {
-            return cli.get('firewall addrgrp');
-        }
-
-        if (S(json.action).contains('Get')) {
-            return get(json);
-        } else {
-            return {
-                code: -1,
-                message: "can't support " + json.action
+    addrgrp: (json, method) => {
+        let action = {
+            get: (json) => {
+                return cli.get('firewall addrgrp');
             }
-        }
+        };
+        return action[method](json);
     },
     json: (json) => {
         console.log(json);
 
-        if (S(json.action).contains('version')) {
-            return api.version(json);
-        } else if (S(json.action).contains('address')) {
-            return api.address(json);
-        } else if (S(json.action).contains('addrgrp')) {
-            return api.addrgrp(json);
+        let dash = S(json.action).dasherize().s;
+        let csv = S(dash).parseCSV('-');
+
+        const module = csv[0];
+        const method = csv[1];
+
+        if (api[module]) {
+            return api[module](json, method);
         } else {
             return {
                 code: -1,
-                message: "can't support " + json.action
+                message: "can't support " + module
             };
         }
     }
