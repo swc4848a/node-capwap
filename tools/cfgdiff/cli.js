@@ -7,6 +7,8 @@ const readline = require('readline');
 const fs = require('fs');
 const _ = require('underscore');
 const __ = require('lodash');
+const filter = require('./filter');
+const field = require('./field');
 
 const rl = readline.createInterface({
     input: fs.createReadStream('local')
@@ -70,8 +72,10 @@ cli.get = (module) => {
     _.each(edit, (value, key) => {
         let camelizeObj = {};
         _.each(value.set, (value, key) => {
-            let camelizeKey = S(key).camelize().s;
-            camelizeObj[camelizeKey] = value;
+            if (!_.contains(filter[module], key)) {
+                let camelizeKey = S(key).camelize().s;
+                camelizeObj[camelizeKey] = field.value(module, key, value);
+            }
         });
 
         let object = _.extend({
