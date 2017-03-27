@@ -39,6 +39,14 @@ let api = {
         };
         return action[method](json);
     },
+    interface: (json, method) => {
+        let action = {
+            get: (json) => {
+                return cli.get('system interface');
+            }
+        }
+        return action[method](json);
+    },
     json: (json) => {
         console.log(json);
 

@@ -8,7 +8,16 @@ field['firewall address'] = {
     visibility: 'bin_option',
     type: ['upcase', 'underline'],
     subnet: 'string',
-}
+};
+
+field['system interface'] = {
+    type: ['upcase', 'underline'],
+    role: 'upcase',
+    mode: 'upcase',
+    ip: (value) => {
+        return value[0] + '/' + value[1];
+    }
+};
 
 let process = (value, option) => {
     switch (option) {
@@ -30,7 +39,7 @@ let process = (value, option) => {
     }
 }
 
-field.value = (module, key, value) => {
+field.process = (module, key, value) => {
     let m = field[module];
     if (_.isUndefined(m)) return value;
 
@@ -43,6 +52,8 @@ field.value = (module, key, value) => {
             pvalue = process(pvalue, item);
         })
         return pvalue;
+    } else if (_.isFunction(option)) {
+        return option(value);
     } else {
         return process(value, option);
     }
