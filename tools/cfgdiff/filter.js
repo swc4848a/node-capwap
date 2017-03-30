@@ -20,7 +20,7 @@ filter.attributeSkip = (module, key) => {
 }
 
 filter.objectSkip = (module, key, value) => {
-    return filter[module] && filter[module].object(key, value);
+    return filter[module] && filter[module].object && filter[module].object(key, value);
 }
 
 module.exports = filter;

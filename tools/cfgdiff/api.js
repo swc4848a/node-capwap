@@ -23,29 +23,10 @@ let api = {
         };
         return action[method](json);
     },
-    address: (json, method) => {
-        let action = {
-            get: (json) => {
-                return cli.get('firewall address');
-            }
-        };
-        return action[method](json);
-    },
-    addrgrp: (json, method) => {
-        let action = {
-            get: (json) => {
-                return cli.get('firewall addrgrp');
-            }
-        };
-        return action[method](json);
-    },
-    interface: (json, method) => {
-        let action = {
-            get: (json) => {
-                return cli.get('system interface');
-            }
-        }
-        return action[method](json);
+    modules: {
+        interface: 'system interface',
+        addrgrp: 'firewall addrgrp',
+        address: 'firewall address',
     },
     json: (json) => {
         console.log(json);
@@ -56,8 +37,13 @@ let api = {
         const module = csv[0];
         const method = csv[1];
 
-        if (api[module]) {
-            return api[module](json, method);
+        if (api.modules[module]) {
+            let action = {
+                get: (json) => {
+                    return cli.get(api.modules[module]);
+                }
+            }
+            return action[method](json);
         } else {
             return {
                 code: -1,
