@@ -2,22 +2,25 @@
 
 const _ = require('underscore');
 
-const filter = {
-    key: [],
-    value: []
+const filter = [];
+
+filter['firewall address'] = {
+    key: ['uuid']
 };
 
-filter.key['firewall address'] = ['uuid'];
-filter.key['system interface'] = ['vdom', 'vlanforward', 'snmp-index'];
-
-filter.value['system interface'] = ['tunnel']; //todo: add key
-
-filter.contains = (module, key, value) => {
-    if (filter.key[module] && (_.contains(filter.key[module], key) || _.contains(filter.value[module], value))) {
-        return 1;
-    } else {
-        return 0;
+filter['system interface'] = {
+    key: ['vdom', 'vlanforward', 'snmp-index', 'stp'],
+    object: (key, value) => {
+        return key === 'ssl.root' || value['type'] === 'vap-switch';
     }
+};
+
+filter.attributeSkip = (module, key) => {
+    return filter[module] && _.contains(filter[module].key, key);
+}
+
+filter.objectSkip = (module, key, value) => {
+    return filter[module] && filter[module].object(key, value);
 }
 
 module.exports = filter;

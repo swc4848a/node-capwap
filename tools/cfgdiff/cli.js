@@ -70,9 +70,13 @@ cli.get = (module) => {
 
     let edit = cli.config[module].edit;
     _.each(edit, (value, key) => {
+        if (filter.objectSkip(module, key, value.set)) {
+            return;
+        }
+
         let camelizeObj = {};
         _.each(value.set, (value, key) => {
-            if (!filter.contains(module, key, value)) {
+            if (!filter.attributeSkip(module, key)) {
                 camelizeObj[keyMap.process(module, key)] = field.process(module, key, value);
             }
         });
