@@ -27,6 +27,7 @@ let api = {
         interface: 'system interface',
         addrgrp: 'firewall addrgrp',
         address: 'firewall address',
+        dns: 'system dns',
     },
     json: (json) => {
         console.log(json);
@@ -44,6 +45,8 @@ let api = {
                 }
             }
             return action[method](json);
+        } else if (api[module]) {
+            return api[module](json, method);
         } else {
             return {
                 code: -1,

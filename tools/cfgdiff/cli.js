@@ -68,24 +68,33 @@ cli.get = (module) => {
         return res;
     }
 
-    let edit = cli.config[module].edit;
-    _.each(edit, (value, key) => {
-        if (filter.objectSkip(module, key, value.set)) {
+    let setProcess = (key, set) => {
+        if (filter.objectSkip(module, key, set)) {
             return;
         }
 
         let camelizeObj = {};
-        _.each(value.set, (value, key) => {
+        _.each(set, (value, key) => {
             if (!filter.attributeSkip(module, key)) {
                 camelizeObj[keyMap.process(module, key)] = field.process(module, key, value);
             }
         });
 
-        let object = _.extend({
+        let object = key ? _.extend({
             name: key
-        }, camelizeObj);
+        }, camelizeObj) : camelizeObj;
         res.result.push(object);
-    })
+    }
+
+    let edit = cli.config[module].edit;
+    if (edit) {
+        _.each(edit, (value, key) => {
+            setProcess(key, value.set);
+        })
+    } else {
+        let set = cli.config[module].set;
+        setProcess(undefined, set);
+    }
 
     return res;
 }
