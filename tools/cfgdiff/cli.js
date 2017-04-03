@@ -80,9 +80,13 @@ cli.get = (module) => {
             }
         });
 
-        let object = key ? _.extend({
-            name: key
-        }, camelizeObj) : camelizeObj;
+        let indexObject = {};
+        if (keyMap[module]) {
+            indexObject[keyMap[module].name] = key; // todo: name ? 
+        } else {
+            indexObject[name] = key;
+        }
+        let object = key ? _.extend(indexObject, camelizeObj) : camelizeObj;
         res.result.push(object);
     }
 

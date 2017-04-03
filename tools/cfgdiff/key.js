@@ -6,17 +6,17 @@ var S = require('string');
 let keyMap = {};
 
 keyMap['system interface'] = {
-    ip: () => {
-        return 'ipMask';
-    },
-    allowaccess: () => {
-        return 'allowAccess';
-    }
+    ip: 'ipMask',
+    allowaccess: 'allowAccess',
+}
+
+keyMap['router static'] = {
+    name: 'seqNum'
 }
 
 keyMap.process = (module, key) => {
-    if (keyMap[module] && _.isFunction(keyMap[module][key])) {
-        return keyMap[module][key]();
+    if (keyMap[module] && keyMap[module][key]) {
+        return keyMap[module][key];
     } else {
         return S(key).camelize().s;
     }

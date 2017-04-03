@@ -28,6 +28,7 @@ let api = {
         addrgrp: 'firewall addrgrp',
         address: 'firewall address',
         dns: 'system dns',
+        routing: 'router static',
     },
     json: (json) => {
         console.log(json);
