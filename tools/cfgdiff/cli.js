@@ -81,10 +81,10 @@ cli.get = (module) => {
         });
 
         let indexObject = {};
-        if (keyMap[module]) {
+        if (keyMap[module] && keyMap[module].name) {
             indexObject[keyMap[module].name] = key; // todo: name ? 
         } else {
-            indexObject[name] = key;
+            indexObject['name'] = key;
         }
         let object = key ? _.extend(indexObject, camelizeObj) : camelizeObj;
         res.result.push(object);
