@@ -1,6 +1,6 @@
 'use strict';
 
-const _ = require('underscore');
+const _ = require('lodash');
 var S = require('string');
 let cli = require('./cli');
 
@@ -30,6 +30,39 @@ let api = {
         dns: 'system dns',
         routing: 'router static',
     },
+    advanced: {
+        interface: (json, method, params) => {
+            let switchType = json.params.switchType;
+            let systemInterface = cli.config['system interface']; //todo: missing internal 1->7
+            let res = [];
+            _.forEach(systemInterface.edit, (value, key) => {
+                let type = value.set.type;
+                let mode = value.set.mode;
+                let ip = value.set.ip;
+                if (switchType === 'SWITCH') {
+                    if (type != 'vlan' && type != 'physical' && type != 'hard-switch') {
+                        return;
+                    }
+                } else {
+                    if (type != 'physical') {
+                        return;
+                    }
+                }
+                if (mode && mode != 'static') {
+                    return;
+                }
+                if (ip && ip[0] != '0.0.0.0') {
+                    return;
+                }
+                res.push(key);
+            });
+            return {
+                code: 0,
+                message: 'ok',
+                result: res
+            };
+        }
+    },
     json: (json) => {
         console.log(json);
 
@@ -39,7 +72,14 @@ let api = {
         const module = csv[0];
         const method = csv[1];
 
-        if (api.modules[module]) {
+        let params = undefined;
+        if (csv.length > 2) {
+            params = _.slice(csv, 2);
+        }
+
+        if (params) {
+            return api.advanced[module](json, method, params);
+        } else if (api.modules[module]) {
             let action = {
                 get: (json) => {
                     return cli.get(api.modules[module]);

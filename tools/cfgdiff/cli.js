@@ -90,13 +90,13 @@ cli.get = (module) => {
         res.result.push(object);
     }
 
-    let edit = cli.config[module].edit;
+    let edit = config.edit;
     if (edit) {
         _.each(edit, (value, key) => {
             setProcess(key, value.set);
         })
     } else {
-        let set = cli.config[module].set;
+        let set = config.set;
         setProcess(undefined, set);
     }
 
