@@ -77,7 +77,7 @@ let api = {
             params = _.slice(csv, 2);
         }
 
-        if (params) {
+        if (params && api.advanced[module]) {
             return api.advanced[module](json, method, params);
         } else if (api.modules[module]) {
             let action = {
