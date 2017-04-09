@@ -81,9 +81,18 @@ let api = {
             return api.advanced[module](json, method, params);
         } else if (api.modules[module]) {
             let action = {
-                get: (json) => {
+                get: () => {
                     return cli.get(api.modules[module]);
+                },
+                put: (json) => {
+                    return cli.put(api.modules[module], json.params[module]);
                 }
+            }
+            if (_.isUndefined(action[method])) {
+                return {
+                    code: -1,
+                    message: "can't support method " + method
+                };
             }
             return action[method](json);
         } else if (api[module]) {

@@ -103,4 +103,31 @@ cli.get = (module) => {
     return res;
 }
 
+cli.put = (module, json) => {
+    let msg = 'ok';
+    let config = cli.config[module];
+
+    if (_.isUndefined(config)) {
+        return {
+            code: -1,
+            message: 'not support ' + module + 'put'
+        }
+    }
+
+    let edit = config.edit;
+    if (edit) {
+
+    } else {
+        let set = config.set;
+        _.each(json, (value, key) => {
+            set[key] = value;
+        })
+    }
+
+    return {
+        code: msg === 'ok' ? 0 : -1,
+        message: msg
+    };
+}
+
 module.exports = cli;
