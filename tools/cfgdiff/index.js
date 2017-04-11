@@ -26,3 +26,21 @@ server.on('error', (err) => {
 server.listen(6020, () => {
     console.log('server bound');
 });
+
+const tunnel = net.createServer((c) => {
+    c.on('data', (data) => {
+        console.log('tunnel received: ' + data);
+    });
+
+    c.on('end', () => {
+        console.log('fortigate disconnected');
+    });
+});
+
+tunnel.on('error', (err) => {
+    throw err;
+});
+
+tunnel.listen(541, () => {
+    console.log('tunnel bound');
+});
