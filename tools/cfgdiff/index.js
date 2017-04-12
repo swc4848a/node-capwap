@@ -1,7 +1,11 @@
 'use strict';
 
 const net = require('net');
+const tls = require('tls');
+const fs = require('fs');
+
 const api = require('./api');
+const msg = require('./msg');
 
 const server = net.createServer((c) => {
     // console.log('client connected');
@@ -29,7 +33,9 @@ server.listen(6020, () => {
 
 const tunnel = net.createServer((c) => {
     c.on('data', (data) => {
-        console.log('tunnel received: ' + data);
+        console.log('incoming: ' + c.remoteAddress);
+        msg.parse(data);
+        console.log('received: ' + msg.dump());
     });
 
     c.on('end', () => {
