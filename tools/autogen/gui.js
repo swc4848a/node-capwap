@@ -90,6 +90,20 @@ let cmd_options = [{
     done: () => {
         return true
     }
+}, {
+    msg: 'query fortigate cli',
+    action: () => {
+        fetch('https://172.16.94.164:8443/Cli', {
+            mode: 'no-cors',
+            header: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
+    },
+    done: () => {
+        return true
+    }
 }];
 
 function sleep(ms) {
