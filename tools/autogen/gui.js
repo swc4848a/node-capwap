@@ -6,44 +6,107 @@
 
 // window.location.href = url + '?' + params
 
+let is_valid = (selector) => {
+    return $(selector)[0] !== undefined
+}
+
 let cmd_options = [{
     msg: 'click fortigate sn',
     action: () => {
-        $($("div.img_link")[4]).click()
+        $("div.img_link:contains('FGT60D4615007833')").click()
     },
-    timeout: 1,
+    done: () => {
+        return is_valid("div.cat_link:contains('Management')")
+    }
 }, {
     msg: 'click tab management',
     action: () => {
-        $($("div.cat_link")[0]).click()
+        $("div.cat_link:contains('Management')").click()
     },
-    timeout: 1,
+    done: () => {
+        return is_valid("div.gwt-HTML:contains('Admin Settings')")
+    }
 }, {
     msg: 'click admin settings',
     action: () => {
-        $($("div.gwt-HTML")[35]).click()
+        $("div.gwt-HTML:contains('Admin Settings')").click()
     },
-    timeout: 3,
+    done: () => {
+        return is_valid("div.gwt-HTML:contains('HTTP Port')")
+    }
 }, {
     msg: 'set http port to 100',
     action: () => {
         $($("input.gwt-TextBox")[0]).val(100)
     },
-    timeout: 1,
+    done: () => {
+        return is_valid("span:contains('Save')")
+    }
 }, {
     msg: 'click save button',
     action: () => {
-        $($("span")[2]).click()
+        $("span:contains('Save')").click()
     },
-    timeout: 1
+    done: () => {
+        return is_valid("button[title='Deploy']")
+    }
+}, {
+    msg: 'click deploy button',
+    action: () => {
+        $("button[title='Deploy']").click()
+    },
+    done: () => {
+        return is_valid("span:contains('YES')")
+    }
+}, {
+    msg: 'click yes to confirm',
+    action: () => {
+        $("span:contains('YES')").click()
+    },
+    done: () => {
+        return is_valid("button:contains('OK')")
+    }
+}, {
+    msg: 'click ok if success',
+    action: () => {
+        $("button:contains('OK')").click()
+    },
+    done: () => {
+        return is_valid("span:contains('Close')")
+    }
+}, {
+    msg: 'click close button',
+    action: () => {
+        $("span:contains('Close')").click()
+    },
+    done: () => {
+        return false
+    }
 }];
 
-let total_timeout = 0;
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-cmd_options.forEach((item) => {
-    total_timeout += item.timeout
-    setTimeout(() => {
-        console.log(item.msg)
-        item.action()
-    }, (total_timeout) * 1000);
-})
+const timeout = 15;
+
+async function start() {
+    for (let i = 0; i < cmd_options.length; ++i) {
+        let item = cmd_options[i];
+        console.log(item.msg);
+        item.action();
+
+        let cnt = 0;
+        while (item.done !== undefined && !item.done() && cnt < timeout) {
+            ++cnt
+            console.log('......')
+            await sleep(1000);
+        }
+        if (cnt == timeout) {
+            console.log('%d times check failed -> exit', timeout);
+            break;
+        }
+    }
+}
+
+start();
