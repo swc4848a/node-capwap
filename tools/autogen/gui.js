@@ -80,7 +80,15 @@ let cmd_options = [{
         $("span:contains('Close')").click()
     },
     done: () => {
-        return false
+        return is_valid("div.logo:contains('FortiCloud')")
+    }
+}, {
+    msg: 'click home logo',
+    action: () => {
+        $("div.logo:contains('FortiCloud')").click()
+    },
+    done: () => {
+        return true
     }
 }];
 
