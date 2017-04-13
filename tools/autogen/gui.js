@@ -93,12 +93,11 @@ let cmd_options = [{
 }, {
     msg: 'query fortigate cli',
     action: () => {
-        fetch('https://172.16.94.164:8443/Cli', {
+        fetch('https://172.16.94.164:8443/Cli/AdminSettings?HTTPPort=100', {
             mode: 'no-cors',
             header: {
-                'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
-            },
+            }
         })
     },
     done: () => {
