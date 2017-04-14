@@ -6,11 +6,6 @@ let exec = require('ssh-exec');
 let S = require('string');
 let _ = require('lodash');
 
-let map = {
-    'HTTPPort': 'admin-port',
-    'HTTPSPort': 'admin-sport',
-}
-
 let parse = (stdout, query) => {
     let cli = S(stdout).between('config system global', 'end').s;
     let set = S(cli).trim().s;
@@ -22,13 +17,8 @@ let parse = (stdout, query) => {
         result[line[1]] = (line.length === 3) ? line[2] : _.slice(line, 2);
     })
     console.log(result);
-
-    let mapQuery = _.mapKeys(query, function(value, key) {
-        return map[key];
-    });
-
-    console.log(mapQuery);
-    _.each(mapQuery, (v, k) => {
+    console.log(query);
+    _.each(query, (v, k) => {
         if (result[k]) {
             if (result[k] === v) {
                 console.log('success')

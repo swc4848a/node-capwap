@@ -27,8 +27,8 @@ let setup_seq = [
 ]
 
 let adminsettings_seq = [
-    ["HTTPPort", "input.gwt-TextBox:eq(0)", 100],
-    ["HTTPSPort", "input.gwt-TextBox:eq(1)", 200],
+    ["admin-port", "input.gwt-TextBox:eq(0)", 100],
+    ["admin-sport", "input.gwt-TextBox:eq(1)", 200],
 ]
 
 let teardown_seq = [
