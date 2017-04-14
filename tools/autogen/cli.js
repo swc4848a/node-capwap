@@ -8,6 +8,7 @@ let _ = require('lodash');
 
 let map = {
     'HTTPPort': 'admin-port',
+    'HTTPSPort': 'admin-sport',
 }
 
 let parse = (stdout, query) => {
