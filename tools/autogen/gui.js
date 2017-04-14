@@ -28,7 +28,7 @@ let setup_seq = [
 
 let adminsettings_seq = [
     ["admin-port", "input.gwt-TextBox:eq(0)", 100],
-    ["admin-https-redirect", "span.gwt-CheckBox>label", true],
+    ["admin-https-redirect", "span.gwt-CheckBox>label", "enable", true],
     ["admin-sport", "input.gwt-TextBox:eq(1)", 200],
 ]
 
@@ -90,7 +90,8 @@ async function seqrun(cmdseq, head, action) {
                 $(cmdseq[i]).click();
                 break;
             case 'set':
-                dom_oper(cmdseq[i][1], cmdseq[i][2]);
+                let value = cmdseq[i][3] ? cmdseq[i][3] : cmdseq[i][2];
+                dom_oper(cmdseq[i][1], value);
                 break;
             default:
                 console.log('not support %s', action);
