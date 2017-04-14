@@ -7,103 +7,37 @@
 // window.location.href = url + '?' + params
 
 let is_valid = (selector) => {
-    return $(selector)[0] !== undefined
+    switch (typeof selector) {
+        case 'string':
+            return selector ? ($(selector)[0] !== undefined) : true;
+        case 'object':
+            return $(selector[1])[0] !== undefined;
+        case 'undefined':
+            return true;
+        default:
+            console.log('not support %s', typeof selector);
+            return false;
+    }
 }
 
-let cmd_options = [{
-    msg: 'click fortigate sn',
-    action: () => {
-        $("div.img_link:contains('FGT60D4615007833')").click()
-    },
-    done: () => {
-        return is_valid("div.cat_link:contains('Management')")
-    }
-}, {
-    msg: 'click tab management',
-    action: () => {
-        $("div.cat_link:contains('Management')").click()
-    },
-    done: () => {
-        return is_valid("div.gwt-HTML:contains('Admin Settings')")
-    }
-}, {
-    msg: 'click admin settings',
-    action: () => {
-        $("div.gwt-HTML:contains('Admin Settings')").click()
-    },
-    done: () => {
-        return is_valid("div.gwt-HTML:contains('HTTP Port')")
-    }
-}, {
-    msg: 'set http port to 100',
-    action: () => {
-        $($("input.gwt-TextBox")[0]).val(100)
-    },
-    done: () => {
-        return is_valid("span:contains('Save')")
-    }
-}, {
-    msg: 'click save button',
-    action: () => {
-        $("span:contains('Save')").click()
-    },
-    done: () => {
-        return is_valid("button[title='Deploy']")
-    }
-}, {
-    msg: 'click deploy button',
-    action: () => {
-        $("button[title='Deploy']").click()
-    },
-    done: () => {
-        return is_valid("span:contains('YES')")
-    }
-}, {
-    msg: 'click yes to confirm',
-    action: () => {
-        $("span:contains('YES')").click()
-    },
-    done: () => {
-        return is_valid("button:contains('OK')")
-    }
-}, {
-    msg: 'click ok if success',
-    action: () => {
-        $("button:contains('OK')").click()
-    },
-    done: () => {
-        return is_valid("span:contains('Close')")
-    }
-}, {
-    msg: 'click close button',
-    action: () => {
-        $("span:contains('Close')").click()
-    },
-    done: () => {
-        return is_valid("div.logo:contains('FortiCloud')")
-    }
-}, {
-    msg: 'click home logo',
-    action: () => {
-        $("div.logo:contains('FortiCloud')").click()
-    },
-    done: () => {
-        return true
-    }
-}, {
-    msg: 'query fortigate cli',
-    action: () => {
-        fetch('https://172.16.94.164:8443/Cli/AdminSettings?HTTPPort=100', {
-            mode: 'no-cors',
-            header: {
-                'Access-Control-Allow-Origin': '*',
-            }
-        })
-    },
-    done: () => {
-        return true
-    }
-}];
+let setup_seq = [
+    "div.img_link:contains('FGT60D4615007833')",
+    "div.cat_link:contains('Management')",
+    "div.gwt-HTML:contains('Admin Settings')",
+]
+
+let adminsettings_seq = [
+    ["HTTPPort", "input.gwt-TextBox:eq(0)", 100],
+]
+
+let teardown_seq = [
+    "span:contains('Save')",
+    "button[title='Deploy']",
+    "span:contains('YES')",
+    "button:contains('OK')",
+    "span:contains('Close')",
+    "div.logo:contains('FortiCloud')"
+];
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -111,23 +45,67 @@ function sleep(ms) {
 
 const timeout = 15;
 
-async function start() {
-    for (let i = 0; i < cmd_options.length; ++i) {
-        let item = cmd_options[i];
-        console.log(item.msg);
-        item.action();
-
-        let cnt = 0;
-        while (item.done !== undefined && !item.done() && cnt < timeout) {
-            ++cnt
+async function seqrun(cmdseq, head, action) {
+    console.log('%s starting ......', head);
+    for (let i = 0; i < cmdseq.length; ++i) {
+        let retry = 0;
+        while (!is_valid(cmdseq[i]) && retry < timeout) {
+            ++retry
             console.log('......')
             await sleep(1000);
         }
-        if (cnt == timeout) {
+        if (retry == timeout) {
             console.log('%d times check failed -> exit', timeout);
             break;
         }
+
+        console.log('%s: %s', action, cmdseq[i]);
+
+        switch (action) {
+            case 'click':
+                $(cmdseq[i]).click();
+                break;
+            case 'set':
+                $(cmdseq[i][1]).val(cmdseq[i][2]);
+                break;
+            default:
+                console.log('not support %s', action);
+        }
     }
+    console.log('%s done ......', head);
 }
 
-start();
+async function setup() {
+    await seqrun(setup_seq, 'setup', 'click')
+}
+
+async function test() {
+    await seqrun(adminsettings_seq, 'admin settings', 'set')
+}
+
+async function teardown() {
+    await seqrun(teardown_seq, 'teardown', 'click')
+}
+
+function check() {
+    let query = '';
+    adminsettings_seq.forEach((item) => {
+        query += (item[0] + '=' + item[2] + '&');
+    });
+    console.log(query);
+    fetch('https://172.16.94.164:8443/Cli/AdminSettings?' + query, {
+        mode: 'no-cors',
+        header: {
+            'Access-Control-Allow-Origin': '*',
+        }
+    })
+}
+
+async function run() {
+    await setup();
+    await test();
+    await teardown();
+    check();
+}
+
+run();
