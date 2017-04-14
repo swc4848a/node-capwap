@@ -28,6 +28,7 @@ let setup_seq = [
 
 let adminsettings_seq = [
     ["admin-port", "input.gwt-TextBox:eq(0)", 100],
+    ["admin-https-redirect", "span.gwt-CheckBox>label", true],
     ["admin-sport", "input.gwt-TextBox:eq(1)", 200],
 ]
 
@@ -42,6 +43,19 @@ let teardown_seq = [
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function dom_oper(selector, value) {
+    switch (typeof value) {
+        case 'number':
+            $(selector).val(value);
+            break;
+        case 'boolean':
+            $(selector).click();
+            break;
+        default:
+            console.log('not support %s, do nothing', typeof value);
+    }
 }
 
 const timeout = 15;
@@ -60,14 +74,23 @@ async function seqrun(cmdseq, head, action) {
             break;
         }
 
-        console.log('%s: %s', action, cmdseq[i]);
+        switch (typeof cmdseq[i]) {
+            case 'string':
+                console.log('%s: %s', action, cmdseq[i]);
+                break;
+            case 'object':
+                console.log('%s: %s', action, cmdseq[i][0]);
+                break;
+            default:
+                console.log('not support type %s', typeof cmdseq[i]);
+        }
 
         switch (action) {
             case 'click':
                 $(cmdseq[i]).click();
                 break;
             case 'set':
-                $(cmdseq[i][1]).val(cmdseq[i][2]);
+                dom_oper(cmdseq[i][1], cmdseq[i][2]);
                 break;
             default:
                 console.log('not support %s', action);
