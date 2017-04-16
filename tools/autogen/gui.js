@@ -37,11 +37,19 @@ let testSeq = {
         ["admin-telnet-port", "input.gwt-TextBox:eq(2)", 300],
         ["admin-ssh-port", "input.gwt-TextBox:eq(3)", 400],
         ["admintimeout", "input.gwt-TextBox:eq(4)", 480],
+    ],
+    'Routing': [
+        [undefined, "button[title='Create New']", undefined]
     ]
 }
 
 let getTestSeq = (module) => {
-    return testSeq[module];
+    if (testSeq[module]) {
+        return testSeq[module];
+    } else {
+        console.log('not support %s now', module);
+        return [];
+    }
 }
 
 let teardown_seq = [
@@ -63,6 +71,7 @@ function dom_oper(selector, value) {
             $(selector).val(value);
             break;
         case 'boolean':
+        case 'undefined':
             $(selector).click();
             break;
         default:
@@ -127,7 +136,9 @@ async function teardown() {
 function check(module) {
     let query = '';
     getTestSeq(module).forEach((item) => {
-        query += (item[0] + '=' + item[2] + '&');
+        if (item[0]) {
+            query += (item[0] + '=' + item[2] + '&');
+        }
     });
     console.log(query);
     fetch('https://172.16.94.164:8443/Cli/AdminSettings?' + query, {
@@ -146,7 +157,8 @@ async function testcase(module) {
 }
 
 async function run() {
-    await testcase("Admin Settings");
+    // await testcase("Admin Settings");
+    await testcase("Routing");
 }
 
 run();
