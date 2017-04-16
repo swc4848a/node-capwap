@@ -20,17 +20,29 @@ let is_valid = (selector) => {
     }
 }
 
-let setup_seq = [
-    "div.img_link:contains('FGT60D4615007833')",
-    "div.cat_link:contains('Management')",
-    "div.gwt-HTML:contains('Admin Settings')",
-]
+let getSetupSeq = (module) => {
+    return [
+        "div.img_link:contains('FGT60D4615007833')",
+        "div.cat_link:contains('Management')",
+        "div.gwt-HTML:contains('" + module + "')",
+    ]
+}
 
-let adminsettings_seq = [
-    ["admin-port", "input.gwt-TextBox:eq(0)", 100],
-    ["admin-https-redirect", "span.gwt-CheckBox>label", "enable", true],
-    ["admin-sport", "input.gwt-TextBox:eq(1)", 200],
-]
+// [cli-attr, dom-selector, cli-value, {dom-value}]
+let testSeq = {
+    'Admin Settings': [
+        ["admin-port", "input.gwt-TextBox:eq(0)", 100],
+        ["admin-https-redirect", "span.gwt-CheckBox>label", "enable", true],
+        ["admin-sport", "input.gwt-TextBox:eq(1)", 200],
+        ["admin-telnet-port", "input.gwt-TextBox:eq(2)", 300],
+        ["admin-ssh-port", "input.gwt-TextBox:eq(3)", 400],
+        ["admintimeout", "input.gwt-TextBox:eq(4)", 480],
+    ]
+}
+
+let getTestSeq = (module) => {
+    return testSeq[module];
+}
 
 let teardown_seq = [
     "span:contains('Save')",
@@ -100,21 +112,21 @@ async function seqrun(cmdseq, head, action) {
     console.log('%s done ......', head);
 }
 
-async function setup() {
-    await seqrun(setup_seq, 'setup', 'click')
+async function setup(module) {
+    await seqrun(getSetupSeq(module), 'setup', 'click')
 }
 
-async function test() {
-    await seqrun(adminsettings_seq, 'admin settings', 'set')
+async function test(module) {
+    await seqrun(getTestSeq(module), module, 'set')
 }
 
 async function teardown() {
     await seqrun(teardown_seq, 'teardown', 'click')
 }
 
-function check() {
+function check(module) {
     let query = '';
-    adminsettings_seq.forEach((item) => {
+    getTestSeq(module).forEach((item) => {
         query += (item[0] + '=' + item[2] + '&');
     });
     console.log(query);
@@ -126,11 +138,15 @@ function check() {
     })
 }
 
-async function run() {
-    await setup();
-    await test();
+async function testcase(module) {
+    await setup(module);
+    await test(module);
     await teardown();
-    check();
+    await check(module);
+}
+
+async function run() {
+    await testcase("Admin Settings");
 }
 
 run();
