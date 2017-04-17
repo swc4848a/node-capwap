@@ -31,15 +31,17 @@ let getSetupSeq = (module) => {
 // [cli-attr, dom-selector, cli-value, {dom-value}]
 let testSeq = {
     'Admin Settings': [
-        ["admin-port", "input.gwt-TextBox:eq(0)", 100],
+        ["admin-port", "input.gwt-TextBox:eq(0)", 80],
         ["admin-https-redirect", "span.gwt-CheckBox>label", "enable", true],
-        ["admin-sport", "input.gwt-TextBox:eq(1)", 200],
-        ["admin-telnet-port", "input.gwt-TextBox:eq(2)", 300],
-        ["admin-ssh-port", "input.gwt-TextBox:eq(3)", 400],
+        ["admin-sport", "input.gwt-TextBox:eq(1)", 443],
+        ["admin-telnet-port", "input.gwt-TextBox:eq(2)", 23],
+        ["admin-ssh-port", "input.gwt-TextBox:eq(3)", 22],
         ["admintimeout", "input.gwt-TextBox:eq(4)", 480],
     ],
     'Routing': [
-        [undefined, "button[title='Create New']", undefined]
+        [undefined, "button[title='Create New']", undefined],
+        ["dst.ip", "input.gwt-TextBox:eq(0)", "1.1.1.1"],
+        ["dst.mask", "input.gwt-TextBox:eq(1)", "255.255.255.0"],
     ]
 }
 
@@ -67,6 +69,7 @@ function sleep(ms) {
 
 function dom_oper(selector, value) {
     switch (typeof value) {
+        case 'string':
         case 'number':
             $(selector).val(value);
             break;
@@ -141,7 +144,7 @@ function check(module) {
         }
     });
     console.log(query);
-    fetch('https://172.16.94.164:8443/Cli/AdminSettings?' + query, {
+    fetch('https://172.16.94.164:8443/Cli/' + module + '?' + query, {
         mode: 'no-cors',
         header: {
             'Access-Control-Allow-Origin': '*',
@@ -157,7 +160,7 @@ async function testcase(module) {
 }
 
 async function run() {
-    // await testcase("Admin Settings");
+    await testcase("Admin Settings");
     await testcase("Routing");
 }
 
