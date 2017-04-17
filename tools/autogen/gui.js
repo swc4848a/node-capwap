@@ -160,7 +160,7 @@ async function testcase(module) {
 }
 
 async function run() {
-    await testcase("Admin Settings");
+    // await testcase("Admin Settings");
     await testcase("Routing");
 }
 
