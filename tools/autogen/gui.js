@@ -45,6 +45,9 @@ let testSeq = {
         ["gateway", "input.gwt-TextBox:eq(2)", "192.168.1.1"],
         ["distance", "input.gwt-TextBox:eq(3)", 11],
         ["comment", "textarea.gwt-TextArea", "test comments"],
+    ],
+    'FortiGuard': [
+        ["", "", "enable", true],
     ]
 }
 
@@ -164,7 +167,8 @@ async function testcase(module) {
 
 async function run() {
     // await testcase("Admin Settings");
-    await testcase("Routing");
+    // await testcase("Routing");
+    await testcase("FortiGuard");
 }
 
 run();

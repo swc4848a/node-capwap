@@ -40,6 +40,7 @@
     "mysql": "felixge/node-mysql",
     "object-assign": "^4.0.1",
     "packet": "0.0.6",
+    "phantom": "^4.0.2",
     "pouchdb": "^6.1.1",
     "progress": "^1.1.8",
     "react": "^15.3.1",
