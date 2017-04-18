@@ -40,8 +40,11 @@ let testSeq = {
     ],
     'Routing': [
         [undefined, "button[title='Create New']", undefined],
-        ["dst.ip", "input.gwt-TextBox:eq(0)", "1.1.1.1"],
+        ["dst.ip", "input.gwt-TextBox:eq(0)", "192.168.18.0"],
         ["dst.mask", "input.gwt-TextBox:eq(1)", "255.255.255.0"],
+        ["gateway", "input.gwt-TextBox:eq(2)", "192.168.1.1"],
+        ["distance", "input.gwt-TextBox:eq(3)", 11],
+        ["comment", "textarea.gwt-TextArea", "test comments"],
     ]
 }
 
