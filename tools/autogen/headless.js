@@ -1,17 +1,15 @@
-var phantom = require("phantom");
-var _ph, _page, _outObj;
+const phantom = require('phantom');
 
-phantom.create().then(ph => {
-    _ph = ph;
-    return _ph.createPage();
-}).then(page => {
-    _page = page;
-    return _page.open('https://stackoverflow.com/');
-}).then(status => {
-    console.log(status);
-    return _page.property('content')
-}).then(content => {
-    console.log(content);
-    _page.close();
-    _ph.exit();
-}).catch(e => console.log(e));
+(async function() {
+    const instance = await phantom.create();
+    const page = await instance.createPage();
+
+    await page.property('viewportSize', {width: 1024, height: 600});
+    const status = await page.open('https://beta.forticloud.com/com.fortinet.gwt.Main/login.jsp');
+    console.log(`Page opened with status [${status}].`);
+
+    await page.render('forticloud.png');
+    console.log(`File created at [./forticloud.png]`);
+
+    await instance.exit();
+}());
