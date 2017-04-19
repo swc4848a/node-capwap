@@ -1,4 +1,4 @@
 node_modules/
-autogen/build
+autogen/img/*.png
 npm-debug.log
 node-capwap.sublime-workspace

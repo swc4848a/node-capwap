@@ -79,8 +79,8 @@ let seq = [
 
     await sleep(1000);
 
-    await page.render('forticloud.png');
-    console.log('save as ./forticloud.png');
+    await page.render('./img/forticloud.png');
+    console.log('save as ./img/forticloud.png');
 
     await sleep(2000);
 
