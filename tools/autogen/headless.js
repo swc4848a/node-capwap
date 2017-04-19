@@ -10,6 +10,29 @@ let seq = [
     ["input[name='password']", "SuperCRM801"],
     ["input[type='submit']"],
     ["div.img_link:contains('FGT60D4615007833')"],
+    ["div.cat_link:contains('Management')"],
+
+    ["div.gwt-HTML:contains('Admin Settings')"],
+    ["input.gwt-TextBox:eq(0)", 80],
+    ["span.gwt-CheckBox>label"],
+    ["input.gwt-TextBox:eq(1)", 443],
+    ["input.gwt-TextBox:eq(2)", 23],
+    ["input.gwt-TextBox:eq(3)", 22],
+    ["input.gwt-TextBox:eq(4)", 480],
+
+    ["span:contains('Save')"],
+    ["button[title='Deploy']"],
+    ["span:contains('YES')"],
+    ["button:contains('OK')"],
+    ["span:contains('Close')"],
+
+    ["div.gwt-HTML:contains('Routing')"],
+    ["button[title='Create New']"],
+    ["input.gwt-TextBox:eq(0)", "192.168.18.0"],
+    ["input.gwt-TextBox:eq(1)", "255.255.255.0"],
+    ["input.gwt-TextBox:eq(2)", "192.168.1.1"],
+    ["input.gwt-TextBox:eq(3)", 11],
+    ["textarea.gwt-TextArea", "test comments"],
 ];
 
 (async function() {
@@ -35,12 +58,13 @@ let seq = [
             return result;
         }
         let retry = 0;
-        while (!await ready() && retry < 5) {
-            console.log('waiting...');
+        let max_try = 20;
+        while (!await ready() && retry < max_try) {
+            console.log('waiting %s s...', retry + 1);
             await sleep(1000);
             ++retry;
         }
-        if (retry === 5) {
+        if (retry === max_try) {
             console.log('retry timeout, return failed');
             break;
         }
@@ -53,7 +77,7 @@ let seq = [
         }, selector, value);
     }
 
-    await sleep(5000);
+    await sleep(1000);
 
     await page.render('forticloud.png');
     console.log('save as ./forticloud.png');
