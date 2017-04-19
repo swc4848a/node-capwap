@@ -2,15 +2,24 @@
 
 let cases = {};
 
+// [cloud-selector, {value}, gate-selector, {skip}
+cases['login (must be first step)'] = [
+    ["input#email", "zqqiang@fortinet.com", "input#username", "admin"],
+    ["input[name='password']", "SuperCRM801", "input#secretkey"],
+    ["input[type='submit']", undefined, "button#login_button"],
+    ["div.img_link:contains('FGT60D4615007833')", undefined, "skip"],
+    ["div.cat_link:contains('Management')", undefined, "skip"],
+]
+
 cases['admin settings common'] = [
-    ["div.gwt-HTML:contains('Admin Settings')"],
-    ["input.gwt-TextBox:eq(0)", 80],
-    ["span.gwt-CheckBox>label"],
-    ["input.gwt-TextBox:eq(1)", 443],
-    ["input.gwt-TextBox:eq(2)", 23],
-    ["input.gwt-TextBox:eq(3)", 22],
-    ["input.gwt-TextBox:eq(4)", 480],
-    ["span:contains('Save')"],
+    ["div.gwt-HTML:contains('Admin Settings')", undefined, "a[ng-href='admin/settings']"],
+    ["input.gwt-TextBox:eq(0)", 80, "input#admin-port"],
+    ["input:checkbox", true, "input#redirect-check"],
+    ["input.gwt-TextBox:eq(1)", 443, "input#admin-sport"],
+    ["input.gwt-TextBox:eq(2)", 23, "input#admin-telnet-port"],
+    ["input.gwt-TextBox:eq(3)", 22, "input#admin-ssh-port"],
+    ["input.gwt-TextBox:eq(4)", 480, "input#admintimeout"],
+    ["span:contains('Save')", undefined, "skip"],
 ];
 
 // todo: bug
@@ -54,10 +63,20 @@ cases['fortigurad edit, enable all checkbox'] = [
     ["span:contains('Save')"],
 ]
 
-delete cases['admin settings common'];
+cases['deploy'] = [
+    ["button[title='Deploy']"],
+    ["span:contains('YES')"],
+    ["button:contains('OK')"],
+    ["span:contains('Close')"],
+]
+
+// delete cases['admin settings common'];
 delete cases['routing new'];
 delete cases['dns edit use fortigurad'];
 delete cases['dns edit specify'];
+delete cases['fortigurad edit, enable all checkbox'];
+// delete cases['deploy'];
 // delete cases[];
+
 
 module.exports = cases;
