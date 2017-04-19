@@ -36,10 +36,10 @@ cases['routing new'] = [
 
 // todo: comment bug
 cases['dns edit use fortigurad'] = [
-    ["div.gwt-HTML:contains('DNS'):eq(0)"],
-    ["input[type='radio']:eq(0)"],
-    ["input.gwt-TextBox:eq(2)", "test string"],
-    ["span:contains('Save')"],
+    ["div.gwt-HTML:contains('DNS'):eq(0)", undefined, "a[ng-href='page/p/system/dns/']"],
+    ["input[type='radio']:eq(0)", undefined, "input#type_fortiguard", true],
+    ["input.gwt-TextBox:eq(2)", "test string", "input#domain"],
+    ["span:contains('Save')", undefined, "skip"],
 ];
 
 // todo: comment bug
@@ -53,14 +53,14 @@ cases['dns edit specify'] = [
 ]
 
 cases['fortigurad edit, enable all checkbox'] = [
-    ["div.gwt-HTML:contains('FortiGuard')"],
-    ["input:checkbox:eq(0)", true],
-    ["input:checkbox:eq(1)", true],
-    ["input:checkbox:eq(2)", true],
-    ["input:checkbox:eq(3)", true],
-    ["input:checkbox:eq(4)", true],
-    ["input:checkbox:eq(5)", true],
-    ["span:contains('Save')"],
+    ["div.gwt-HTML:contains('FortiGuard')", undefined, "a[ng-href='system/fortiguard']"],
+    ["input:checkbox:eq(0)", true, "input#avips-push-chk"],
+    ["input:checkbox:eq(1)", true, "input#avips-schd-chk"],
+    ["input:checkbox:eq(2)", true, "input#avips-submit-chk"],
+    ["input:checkbox:eq(3)", true, "input#avips-db-chk"],
+    ["input:checkbox:eq(4)", true, "input#filter-wfcache-chk"],
+    ["input:checkbox:eq(5)", true, "input#filter-ascache-chk"],
+    ["span:contains('Save')", undefined, "skip"],
 ]
 
 cases['deploy'] = [
@@ -70,11 +70,11 @@ cases['deploy'] = [
     ["span:contains('Close')"],
 ]
 
-// delete cases['admin settings common'];
+delete cases['admin settings common'];
 delete cases['routing new'];
 delete cases['dns edit use fortigurad'];
 delete cases['dns edit specify'];
-delete cases['fortigurad edit, enable all checkbox'];
+// delete cases['fortigurad edit, enable all checkbox'];
 // delete cases['deploy'];
 // delete cases[];
 

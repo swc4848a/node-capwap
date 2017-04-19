@@ -27,11 +27,12 @@ async function ready(page, selector) {
         console.log('skip %s', selector);
         return true;
     };
-    let result = await page.evaluate(function(selector) {
+    return await page.evaluate(function(selector) {
+        if (!$(selector)[0]) {
+            console.log('ready:', selector, $(selector)[0]);
+        }
         return ($(selector)[0] !== undefined);
     }, selector);
-    console.log('selector:%s -> %s', selector, result);
-    return result;
 }
 
 function action(selector, value) {
@@ -58,9 +59,14 @@ function gateAction(selector, value, expect) {
             $(selector).val(value);
             console.log('set', selector, value);
             break;
+        case 'boolean':
+            $(selector).prop("checked", value);
+            console.log('set', selector, value);
+            break;
         default:
             if (!expect) {
                 $(selector).click();
+                console.log('click', selector);
             }
     }
 
@@ -87,13 +93,17 @@ function gateAction(selector, value, expect) {
             }
             break;
         default:
-            console.log('default: ', selector, expect);
+            console.log('default:', selector, expect);
     }
 }
 
 (async function() {
     const instance = await phantom.create(['--ignore-ssl-errors=yes'], { logLevel: 'error' });
     const page = await instance.createPage();
+
+    await page.on('onConsoleMessage', function(msg) {
+        console.log(msg);
+    });
 
     await page.property('viewportSize', {
         width: 1500,
