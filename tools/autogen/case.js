@@ -114,7 +114,7 @@ cases['address new'] = [
     ["input:checkbox:eq(1)", true, "input#allow-routing"],
     ["textarea.gwt-TextArea", "test comments", "textarea#comment"],
     ["span:contains('Save')", undefined, "skip"],
-    ["button:contains('OK')"], // todo: double put, just skip it.
+    ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
 ]
 
 let key = 'group eight';
@@ -126,7 +126,7 @@ cases['address group new'] = [
     ["div.gwt-HTML:contains(' - ')", undefined, "skip"], // todo: gate click bug
     ["div.gwt-HTML:contains('address new'):eq(0)", undefined, "skip"],
     ["div.gwt-DecoratedPopupPanel", { action: "hide" }, "skip"],
-    ["input:checkbox:eq(0)", true, "input#visibility"],
+    ["input:checkbox:eq(0)", true, "input#visibility"], // todo: bug
     ["input:checkbox:eq(1)", true, "input#allow-routing"],
     ["textarea.gwt-TextArea", "comments test", "textarea#comment"],
     ["span:contains('Save')", undefined, "skip"],
