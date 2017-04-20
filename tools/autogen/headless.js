@@ -1,5 +1,7 @@
 const phantom = require('phantom');
 const cases = require('./case.js');
+const util = require('util');
+const S = require('string');
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -47,8 +49,8 @@ function action(selector, value) {
             console.log('set', selector, value);
             break;
         default:
+            console.log('default: click', selector, $(selector)[0]);
             $(selector).click();
-            console.log('default: click', selector);
     }
 }
 
@@ -63,11 +65,19 @@ function gateAction(selector, value, expect) {
             $(selector).prop("checked", value);
             console.log('set', selector, value);
             break;
-        default:
-            if (!expect) {
-                $(selector).click();
-                console.log('click', selector);
+        case 'object':
+            if (value === null) {
+                if (!expect) {
+                    $(selector).click();
+                    console.log('click', selector);
+                }
+            } else if ('dblclick' === value.action) {
+                $(selector).dblclick();
+                console.log('dblclick', selector);
             }
+            break;
+        default:
+            console.log('unsupport object:', selector, value, expect);
     }
 
     switch (typeof expect) {
@@ -95,6 +105,11 @@ function gateAction(selector, value, expect) {
         default:
             console.log('default:', selector, expect);
     }
+}
+
+async function capture(page, step) {
+    await page.render('./img/' + step + '.png');
+    await sleep(2000);
 }
 
 (async function() {
@@ -134,6 +149,7 @@ function gateAction(selector, value, expect) {
             console.log('retry timeout, return failed');
             break;
         }
+        // await capture(page, i);
         await page.evaluate(function(action, selector, value) {
             action(selector, value);
         }, action, selector, value);
