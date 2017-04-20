@@ -31,9 +31,28 @@ async function ready(page, selector) {
     };
     return await page.evaluate(function(selector) {
         if (!$(selector)[0]) {
-            console.log('ready:', selector, $(selector)[0]);
+            console.log('not ready:', selector, $(selector)[0]);
         }
         return ($(selector)[0] !== undefined);
+    }, selector);
+}
+
+async function gateReady(page, selector) {
+    if (selector === 'skip') {
+        console.log('skip %s', selector);
+        return true;
+    };
+    return await page.evaluate(function(selector) {
+        if ($(selector).length) {
+            console.log('gate ready:', selector, $(selector).length);
+            return true;
+        } else if ($('iframe').contents().find(selector).length) {
+            console.log('gate iframe ready:', selector, $(selector).length);
+            return true;
+        } else {
+            console.log('gate not ready:', selector);
+            return false;
+        }
     }, selector);
 }
 
@@ -48,9 +67,22 @@ function action(selector, value) {
             $(selector).prop("checked", value);
             console.log('set', selector, value);
             break;
+        case 'object':
+            if (value) {
+                if ('hide' === value.action) {
+                    $(selector).hide();
+                    console.log('hide:', selector);
+                } else {
+                    console.log('unsupport action', action);
+                }
+            } else {
+                console.log('value', value);
+                $(selector).click();
+                console.log('click:', selector);
+            }
+            break;
         default:
-            console.log('default: click', selector, $(selector)[0]);
-            $(selector).click();
+            console.log('unsupport type', typeof value, selector);
     }
 }
 
@@ -66,44 +98,66 @@ function gateAction(selector, value, expect) {
             console.log('set', selector, value);
             break;
         case 'object':
-            if (value === null) {
-                if (!expect) {
-                    $(selector).click();
-                    console.log('click', selector);
-                }
-            } else if ('dblclick' === value.action) {
-                $(selector).dblclick();
-                console.log('dblclick', selector);
+            if ($(selector).length) {
+                $(selector).click();
+                console.log('click:', selector);
+            } else {
+                $('iframe').contents().find(selector).click();
+                console.log('iframe click:', selector);
             }
             break;
         default:
-            console.log('unsupport object:', selector, value, expect);
+            console.log('unsupport:', selector, typeof value, expect);
     }
 
     switch (typeof expect) {
         case 'string':
-            if (expect === $(selector).val()) {
-                console.log('config success:', selector, $(selector).val(), expect)
+            if ($(selector).length) {
+                if (expect === $(selector).val()) {
+                    console.log('config success:', selector, $(selector).val(), expect)
+                } else {
+                    console.log('config failed:', selector, $(selector).val(), expect)
+                }
             } else {
-                console.log('config failed:', selector, $(selector).val(), expect)
+                if (expect === $('iframe').contents().find(selector).val()) {
+                    console.log('config success:', selector, $('iframe').contents().find(selector).val(), expect)
+                } else {
+                    console.log('config failed:', selector, $('iframe').contents().find(selector).val(), expect)
+                }
             }
             break;
         case 'number':
-            if (expect === parseInt($(selector).val())) {
-                console.log('config success:', selector, $(selector).val(), expect)
+            if ($(selector).length) {
+                if (expect === parseInt($(selector).val())) {
+                    console.log('config success:', selector, $(selector).val(), expect)
+                } else {
+                    console.log('config failed:', selector, $(selector).val(), expect)
+                }
             } else {
-                console.log('config failed:', selector, $(selector).val(), expect)
+                if (expect === parseInt($('iframe').contents().find(selector).val())) {
+                    console.log('config success:', selector, $('iframe').contents().find(selector).val(), expect)
+                } else {
+                    console.log('config failed:', selector, $('iframe').contents().find(selector).val(), expect)
+                }
             }
             break;
         case 'boolean':
-            if (expect === $(selector).prop("checked")) {
-                console.log('config success:', selector, $(selector).val(), expect)
+            if ($(selector).length) {
+                if (expect === $(selector).prop("checked")) {
+                    console.log('config success:', selector, $(selector).prop("checked"), expect)
+                } else {
+                    console.log('config failed:', selector, $(selector).prop("checked"), expect)
+                }
             } else {
-                console.log('config failed:', selector, $(selector).val(), expect)
+                if (expect === $('iframe').contents().find(selector).prop("checked")) {
+                    console.log('config success:', selector, $('iframe').contents().find(selector).prop("checked"), expect)
+                } else {
+                    console.log('config failed:', selector, $('iframe').contents().find(selector).prop("checked"), expect)
+                }
             }
             break;
         default:
-            console.log('default:', selector, expect);
+            console.log('unsupport:', selector, typeof expect, expect);
     }
 }
 
@@ -184,7 +238,7 @@ async function capture(page, step) {
         let retry = 0;
         let max_try = 20;
 
-        while (!await ready(gatePage, selector) && retry < max_try) {
+        while (!await gateReady(gatePage, selector) && retry < max_try) {
             console.log('waiting %s s...', retry + 1);
             await sleep(1000);
             ++retry;
