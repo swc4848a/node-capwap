@@ -166,56 +166,7 @@ async function capture(page, step) {
     await sleep(2000);
 }
 
-(async function() {
-    const instance = await phantom.create(['--ignore-ssl-errors=yes'], { logLevel: 'error' });
-    const page = await instance.createPage();
-
-    await page.on('onConsoleMessage', function(msg) {
-        console.log(msg);
-    });
-
-    await page.property('viewportSize', {
-        width: 1500,
-        height: 900
-    });
-
-    const status = await page.open('https://beta.forticloud.com/com.fortinet.gwt.Main/login.jsp');
-    console.log(`FortiCloud Page opened with status [${status}].`);
-
-    page.onConsoleMessage = function(msg) {
-        system.stderr.writeLine('console: ' + msg);
-    };
-
-    factory();
-
-    for (let i = 0; i < cloudSeq.length; ++i) {
-        let selector = cloudSeq[i][0];
-        let value = cloudSeq[i][1];
-        let retry = 0;
-        let max_try = 20;
-
-        while (!await ready(page, selector) && retry < max_try) {
-            console.log('waiting %s s...', retry + 1);
-            await sleep(1000);
-            ++retry;
-        }
-        if (retry === max_try) {
-            console.log('retry timeout, return failed');
-            break;
-        }
-        // await capture(page, i);
-        await page.evaluate(function(action, selector, value) {
-            action(selector, value);
-        }, action, selector, value);
-    }
-
-    await sleep(1000);
-
-    await page.render('./img/forticloud.png');
-    console.log('save as ./img/forticloud.png');
-
-    await sleep(2000);
-
+async function gateVerify(instance) {
     const gatePage = await instance.createPage();
 
     await gatePage.on('onConsoleMessage', function(msg) {
@@ -261,7 +212,61 @@ async function capture(page, step) {
     console.log('save as ./img/fortigate.png');
 
     await sleep(2000);
+}
 
+async function cloudConfig(instance) {
+    const page = await instance.createPage();
+
+    await page.on('onConsoleMessage', function(msg) {
+        console.log(msg);
+    });
+
+    await page.property('viewportSize', {
+        width: 1500,
+        height: 900
+    });
+
+    const status = await page.open('https://beta.forticloud.com/com.fortinet.gwt.Main/login.jsp');
+    console.log(`FortiCloud Page opened with status [${status}].`);
+
+    page.onConsoleMessage = function(msg) {
+        system.stderr.writeLine('console: ' + msg);
+    };
+
+    for (let i = 0; i < cloudSeq.length; ++i) {
+        let selector = cloudSeq[i][0];
+        let value = cloudSeq[i][1];
+        let retry = 0;
+        let max_try = 20;
+
+        while (!await ready(page, selector) && retry < max_try) {
+            console.log('waiting %s s...', retry + 1);
+            await sleep(1000);
+            ++retry;
+        }
+        if (retry === max_try) {
+            console.log('retry timeout, return failed');
+            break;
+        }
+        // await capture(page, i);
+        await page.evaluate(function(action, selector, value) {
+            action(selector, value);
+        }, action, selector, value);
+    }
+
+    await sleep(1000);
+
+    await page.render('./img/forticloud.png');
+    console.log('save as ./img/forticloud.png');
+
+    await sleep(2000);
+}
+
+(async function() {
+    const instance = await phantom.create(['--ignore-ssl-errors=yes'], { logLevel: 'error' });
+    factory();
+    await cloudConfig(instance);
+    await gateVerify(instance);
     await instance.exit();
     console.log('instance exit...');
 }());
