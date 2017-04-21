@@ -3,6 +3,7 @@
 let cases = require('./it/setup.js');
 cases = require('./it/interfaces.js');
 cases = require('./it/services.js');
+cases = require('./it/schedules.js');
 
 cases['admin settings common'] = [
     ["div.gwt-HTML:contains('Admin Settings')", undefined, "a[ng-href='admin/settings']"],

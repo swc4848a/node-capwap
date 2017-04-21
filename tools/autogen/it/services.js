@@ -40,8 +40,8 @@ cases['category new'] = [
     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
 ]
 
-
 delete cases['service new'];
 delete cases['service group new'];
+delete cases['category new'];
 
 module.exports = cases;
