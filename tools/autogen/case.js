@@ -140,16 +140,6 @@ delete cases['advanced time settings'];
 delete cases['address new'];
 delete cases['address group new'];
 
-delete cases['interface new'];
-delete cases['interface new dhcp mode'];
-delete cases['interface new loopback'];
-delete cases['interface new hardswitch'];
-delete cases['interface new softswitch'];
-delete cases['interface new wan'];
-delete cases['interface new dmz'];
-delete cases['interface new undefined'];
-delete cases['service new']
-
 
 // delete cases['deploy'];
 // delete cases[];

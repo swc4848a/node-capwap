@@ -113,4 +113,13 @@ cases['interface new undefined'] = [
     ["span:contains('Save')", undefined, "skip"],
 ]
 
+delete cases['interface new'];
+delete cases['interface new dhcp mode'];
+delete cases['interface new loopback'];
+delete cases['interface new hardswitch'];
+delete cases['interface new softswitch'];
+delete cases['interface new wan'];
+delete cases['interface new dmz'];
+delete cases['interface new undefined'];
+
 module.exports = cases;
