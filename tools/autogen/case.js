@@ -133,16 +133,19 @@ cases['address group new'] = [
     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
 ]
 
-// key = 'service one';
-// cases['service new'] = [
-//     ["div.gwt-HTML:contains('Services')", undefined, "a[ng-href='page/p/firewall/object/service/']"],
-//     ["button[title='Create New']", undefined, "tr[mkey='" + key + "']"],
-//     ["div.filter_text:contains('Service'):eq(0)", undefined, "button:contains('Edit'):eq(0)"],
-//     ["input.gwt-TextBox:eq(0)", key, "input#name"],
-
-//     ["span:contains('Save')", undefined, "skip"],
-//     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
-// ]
+key = 'service one';
+cases['service new'] = [
+    ["div.gwt-HTML:contains('Services')", undefined, "a[ng-href='page/p/firewall/object/service/']"],
+    ["button[title='Create New']", undefined, "tr[mkey='" + key + "']"],
+    ["div.filter_text:contains('Service'):eq(0)", undefined, "button:contains('Edit'):eq(0)"],
+    ["input.gwt-TextBox:eq(0)", key, "input#name"],
+    ["input.gwt-TextBox:eq(1)", "3.3.3.3", "input#addr"],
+    ["input.gwt-TextBox:eq(2)", "111", "input.dlow"],
+    ["input.gwt-TextBox:eq(3)", "222", "input.dhigh"],
+    ["textarea.gwt-TextArea", "test comments", "textarea#comment"],
+    ["span:contains('Save')", undefined, "skip"],
+    ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
+]
 
 cases['interface new'] = [
     ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
@@ -164,7 +167,9 @@ cases['interface new dhcp mode'] = [
     ["input.gwt-TextBox:eq(0)", "interface dhcp", "skip"],
     ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
     ["select.gwt-ListBox:eq(2)", 2, "skip"], // vlan: 2
-    ["input:radio:eq(1)", true, "skip"], // address mode: dhcp
+    ["input[value='DHCP']", true, "skip"], // address mode: dhcp
+    ["input[value='DHCP']", true, "skip"], // second click trigger below three params render
+    ["td>input:eq(2)", 100, "skip"], // todo: Distance: 100 (not working)
     ["input:checkbox:eq(1)", true, "skip"], // device dection enable
     ["input:radio[value='MONITOR']", true, "skip"], // monitor
     ["input:radio[value='DOWN']", true, "skip"], // diable
@@ -282,6 +287,7 @@ delete cases['interface new softswitch'];
 delete cases['interface new wan'];
 delete cases['interface new dmz'];
 delete cases['interface new undefined'];
+// delete cases['service new']
 
 // delete cases['deploy'];
 // delete cases[];

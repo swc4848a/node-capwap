@@ -114,13 +114,17 @@ function gateAction(selector, value, expect) {
         case 'string':
             if ($(selector).length) {
                 if (expect === $(selector).val()) {
-                    console.log('config success:', selector, $(selector).val(), expect)
+                    console.log('----------------------------------------------------------');
+                    console.log('* config success:', selector, $(selector).val(), expect);
+                    console.log('----------------------------------------------------------');
                 } else {
                     console.log('config failed:', selector, $(selector).val(), expect)
                 }
             } else {
                 if (expect === $('iframe').contents().find(selector).val()) {
-                    console.log('config success:', selector, $('iframe').contents().find(selector).val(), expect)
+                    console.log('----------------------------------------------------------');
+                    console.log('* config success:', selector, $('iframe').contents().find(selector).val(), expect);
+                    console.log('----------------------------------------------------------');
                 } else {
                     console.log('config failed:', selector, $('iframe').contents().find(selector).val(), expect)
                 }
@@ -129,13 +133,17 @@ function gateAction(selector, value, expect) {
         case 'number':
             if ($(selector).length) {
                 if (expect === parseInt($(selector).val())) {
-                    console.log('config success:', selector, $(selector).val(), expect)
+                    console.log('----------------------------------------------------------');
+                    console.log('* config success:', selector, $(selector).val(), expect);
+                    console.log('----------------------------------------------------------');
                 } else {
                     console.log('config failed:', selector, $(selector).val(), expect)
                 }
             } else {
                 if (expect === parseInt($('iframe').contents().find(selector).val())) {
-                    console.log('config success:', selector, $('iframe').contents().find(selector).val(), expect)
+                    console.log('----------------------------------------------------------');
+                    console.log('* config success:', selector, $('iframe').contents().find(selector).val(), expect);
+                    console.log('----------------------------------------------------------');
                 } else {
                     console.log('config failed:', selector, $('iframe').contents().find(selector).val(), expect)
                 }
@@ -144,13 +152,17 @@ function gateAction(selector, value, expect) {
         case 'boolean':
             if ($(selector).length) {
                 if (expect === $(selector).prop("checked")) {
-                    console.log('config success:', selector, $(selector).prop("checked"), expect)
+                    console.log('----------------------------------------------------------');
+                    console.log('* config success:', selector, $(selector).prop("checked"), expect);
+                    console.log('----------------------------------------------------------');
                 } else {
                     console.log('config failed:', selector, $(selector).prop("checked"), expect)
                 }
             } else {
                 if (expect === $('iframe').contents().find(selector).prop("checked")) {
-                    console.log('config success:', selector, $('iframe').contents().find(selector).prop("checked"), expect)
+                    console.log('----------------------------------------------------------');
+                    console.log('* config success:', selector, $('iframe').contents().find(selector).prop("checked"), expect);
+                    console.log('----------------------------------------------------------');
                 } else {
                     console.log('config failed:', selector, $('iframe').contents().find(selector).prop("checked"), expect)
                 }
