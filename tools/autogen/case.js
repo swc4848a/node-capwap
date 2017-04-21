@@ -1,15 +1,8 @@
 'use strict';
 
-let cases = {};
-
-// [cloud-selector, {value}, gate-selector, {skip}
-cases['login (must be first step)'] = [
-    ["input#email", "zqqiang@fortinet.com", "input#username", "admin"],
-    ["input[name='password']", "SuperCRM801", "input#secretkey"],
-    ["input[type='submit']", undefined, "button#login_button"],
-    ["div.img_link:contains('FGT60D4615007833')", undefined, "skip"],
-    ["div.cat_link:contains('Management')", undefined, "skip"],
-]
+let cases = require('./it/setup.js');
+cases = require('./it/interfaces.js');
+cases = require('./it/services.js');
 
 cases['admin settings common'] = [
     ["div.gwt-HTML:contains('Admin Settings')", undefined, "a[ng-href='admin/settings']"],
@@ -133,139 +126,7 @@ cases['address group new'] = [
     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
 ]
 
-key = 'service one';
-cases['service new'] = [
-    ["div.gwt-HTML:contains('Services')", undefined, "a[ng-href='page/p/firewall/object/service/']"],
-    ["button[title='Create New']", undefined, "tr[mkey='" + key + "']"],
-    ["div.filter_text:contains('Service'):eq(0)", undefined, "button:contains('Edit'):eq(0)"],
-    ["input.gwt-TextBox:eq(0)", key, "input#name"],
-    ["input.gwt-TextBox:eq(1)", "3.3.3.3", "input#addr"],
-    ["input.gwt-TextBox:eq(2)", "111", "input.dlow"],
-    ["input.gwt-TextBox:eq(3)", "222", "input.dhigh"],
-    ["textarea.gwt-TextArea", "test comments", "textarea#comment"],
-    ["span:contains('Save')", undefined, "skip"],
-    ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
-]
-
-cases['interface new'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface one", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["input:radio:eq(0)", true, "skip"], // address mode: manual
-    ["input.gwt-TextBox:eq(2)", "1.1.1.1/24", "skip"],
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='BLOCK']", true, "skip"], // block
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-cases['interface new dhcp mode'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface dhcp", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 2, "skip"], // vlan: 2
-    ["input[value='DHCP']", true, "skip"], // address mode: dhcp
-    ["input[value='DHCP']", true, "skip"], // second click trigger below three params render
-    ["td>input:eq(2)", 100, "skip"], // todo: Distance: 100 (not working)
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-cases['interface new loopback'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface loop", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(0)", "LOOPBACK", "skip"],
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-cases['interface new hardswitch'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface hard", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(0)", "HARD_SWITCH", "skip"],
-    ["input:radio:eq(1)", true, "skip"], // address mode: dhcp
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-// todo: Attribute 'interface' MUST be set.
-cases['interface new softswitch'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface soft", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(0)", "SWITCH", "skip"], // type: soft switch
-    ["input:radio:eq(1)", true, "skip"], // address mode: dhcp
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-cases['interface new wan'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface wan", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 5, "skip"], // vlan: 5
-    ["select.gwt-ListBox:eq(3)", "WAN", "skip"], // role: wan
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-cases['interface new dmz'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface dmz", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 3, "skip"], // vlan: 3
-    ["select.gwt-ListBox:eq(3)", "DMZ", "skip"], // role: dmz
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-cases['interface new undefined'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface no", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 4, "skip"], // vlan: 4
-    ["select.gwt-ListBox:eq(3)", "UNDEFINED", "skip"], // role: undefined
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-cases['deploy'] = [
-    ["button[title='Deploy']"],
-    ["span:contains('YES')"],
-    ["button:contains('OK')"],
-    ["span:contains('Close')"],
-]
+cases = require('./it/deploy.js');
 
 delete cases['admin settings common'];
 delete cases['routing new'];
@@ -287,7 +148,8 @@ delete cases['interface new softswitch'];
 delete cases['interface new wan'];
 delete cases['interface new dmz'];
 delete cases['interface new undefined'];
-// delete cases['service new']
+delete cases['service new']
+
 
 // delete cases['deploy'];
 // delete cases[];
