@@ -199,7 +199,7 @@ async function gateVerify(instance) {
 
     await gatePage.property('viewportSize', {
         width: 1500,
-        height: 900
+        height: 1000
     });
     const gateStatus = await gatePage.open('https://172.16.95.49/login');
     console.log(`FortiGate Page opened with status [${gateStatus}].`);

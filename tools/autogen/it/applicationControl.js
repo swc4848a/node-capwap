@@ -20,5 +20,6 @@ cases['web filter edit'] = [
     ["span:contains('Save')", undefined, "skip"],
 ];
 
+delete cases['web filter edit'];
 
 module.exports = cases;
