@@ -14,6 +14,7 @@ cases = require('./it/advanced.js');
 cases = require('./it/addresses.js');
 cases = require('./it/webFilter.js');
 cases = require('./it/dnsFilter.js');
+cases = require('./it/applicationControl.js');
 
 
 cases = require('./it/deploy.js');

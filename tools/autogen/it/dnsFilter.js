@@ -38,11 +38,12 @@ cases['dns filter edit redirect'] = [
     ["input:checkbox:eq(4)", true, "skip"], // Log all Domains
 
     ["label:contains('Redirect')", undefined, "skip"],
-    ["input:eq(57)", "2.3.3.3", "skip"],
+    ["input:eq(57)", "2.3.3.3", "skip"], // Redirect Portal IP
 
     ["span:contains('Save')", undefined, "skip"],
 ];
 
 delete cases['dns filter edit block'];
+delete cases['dns filter edit redirect'];
 
 module.exports = cases;
