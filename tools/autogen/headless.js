@@ -290,7 +290,7 @@ async function cloudConfig(instance) {
     const instance = await phantom.create(['--ignore-ssl-errors=yes'], { logLevel: 'error' });
     factory();
     await cloudConfig(instance);
-    await gateVerify(instance);
+    // await gateVerify(instance);
     await instance.exit();
     console.log('instance exit...');
 }());
