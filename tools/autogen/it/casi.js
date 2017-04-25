@@ -9,6 +9,6 @@ cases['cloud access security inspection edit'] = [
     ["span:contains('Save')", undefined, "skip"],
 ];
 
-// delete cases['cloud access security inspection edit'];
+delete cases['cloud access security inspection edit'];
 
 module.exports = cases;

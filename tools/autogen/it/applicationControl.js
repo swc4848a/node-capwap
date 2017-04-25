@@ -1,6 +1,6 @@
 let cases = require('./root.js');
 
-cases['web filter edit'] = [
+cases['application control edit'] = [
     ["div.gwt-HTML:contains('Application Control')", undefined, "skip"],
 
     ["textarea.gwt-TextArea", "test comments", "skip"], // todo: bug
@@ -20,6 +20,6 @@ cases['web filter edit'] = [
     ["span:contains('Save')", undefined, "skip"],
 ];
 
-delete cases['web filter edit'];
+delete cases['application control edit'];
 
 module.exports = cases;
