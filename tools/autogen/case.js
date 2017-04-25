@@ -16,6 +16,7 @@ cases = require('./it/webFilter.js');
 cases = require('./it/dnsFilter.js');
 cases = require('./it/applicationControl.js');
 cases = require('./it/casi.js');
+cases = require('./it/proxyOptions.js');
 
 
 cases = require('./it/deploy.js');
