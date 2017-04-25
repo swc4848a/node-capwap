@@ -23,7 +23,7 @@ cases['web filter edit'] = [
     ["input:checkbox:eq(6)", true, "skip"], // Enforce Safe Search on Google, Yahoo!, Bing, Yandex
     ["input.gwt-TextBox", "youtube id", "skip"],
     ["input:checkbox:eq(7)", true, "skip"], // Log all search keywords
-    
+
     ["input:checkbox:eq(8)", true, "skip"], // Block invalid URLs
     ["input:checkbox:eq(10)", true, "skip"], // Block malicious URLs discovered by FortiSandbox
 
@@ -33,7 +33,7 @@ cases['web filter edit'] = [
     ["input:checkbox:eq(15)", true, "skip"], // Rate images by URL
 
     ["input:checkbox:eq(17)", true, "skip"], // Provide details for blocked HTTP 4xx and 5xx errors
-    
+
     ["input:checkbox:eq(18)", true, "skip"], // Remove Java Applets
     ["input:checkbox:eq(19)", true, "skip"], // Remove ActiveX
     ["input:checkbox:eq(20)", true, "skip"], // Remove Cookies
@@ -41,6 +41,49 @@ cases['web filter edit'] = [
     ["span:contains('Save')", undefined, "skip"],
 ];
 
+cases['webfilter profile url filter'] = [
+    ["div.gwt-HTML:contains('Web Filter')", undefined, "a[page/p/utm/wf/profile/edit/default/']"],
+
+    ["label:eq(15)", undefined, "skip"], // URL Filter
+    ["div.tool_new:eq(1)", undefined, "skip"], // new URL Filter button
+    ["div.tk-ModalDialog input.gwt-TextBox", "a.com", "skip"], // URL
+    ["div.tk-ModalDialog label:contains('RegEx')", undefined, "skip"],
+    ["div.tk-ModalDialog label:contains('Block')", undefined, "skip"],
+    ["div.tk-ModalDialog input:checkbox", true, "skip"], // Status
+    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
+
+    ["span:contains('Save')", undefined, "skip"],
+]
+
+cases['webfilter profile web content filter'] = [
+    ["div.gwt-HTML:contains('Web Filter')", undefined, "a[page/p/utm/wf/profile/edit/default/']"],
+
+    ["label:eq(17)", undefined, "skip"], // Web Content Filter
+    ["div.tool_new:eq(2)", undefined, "skip"], // new Web Content Filter button
+    ["div.tk-ModalDialog label:contains('RegEx')", undefined, "skip"],
+    ["div.tk-ModalDialog input.gwt-TextBox", "/abc/", "skip"], // Pattern
+    ["div.tk-ModalDialog label:contains('Exempt')", undefined, "skip"],
+    ["div.tk-ModalDialog input:checkbox", true, "skip"], // Status
+    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
+
+    ["span:contains('Save')", undefined, "skip"],
+]
+
+cases['webfilter profile google account'] = [
+    ["div.gwt-HTML:contains('Web Filter')", undefined, "a[page/p/utm/wf/profile/edit/default/']"],
+
+    ["label:contains('Restrict Google account usage to specific domains')", undefined, "skip"], // Restrict Google account usage to specific domains
+
+    ["div.tool_new:eq(3)", undefined, "skip"], // new google restrict button
+    ["div.tk-ModalDialog input.gwt-TextBox", "test.com", "skip"], // Domain
+    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
+
+    ["span:contains('Save')", undefined, "skip"],
+]
+
 delete cases['web filter edit'];
+delete cases['webfilter profile url filter'];
+delete cases['webfilter profile web content filter'];
+delete cases['webfilter profile google account'];
 
 module.exports = cases;
