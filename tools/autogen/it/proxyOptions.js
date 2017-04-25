@@ -14,12 +14,9 @@ let cloud_map = {
     'MAPI': "input:checkbox:eq(8)",
     'DNS': "input:checkbox:eq(9)",
     'Comfort Clients': "input:checkbox:eq(10)",
-
     'Block Oversized File/Email': "input:checkbox:eq(11)",
-
     'Enable Chunked Bypass': "input:checkbox:eq(12)",
     'Add Fortinet Bar': "input:checkbox:eq(13)",
-
     'Allow Fragmented Messages': "input:checkbox:eq(14)",
     'Append Signature (SMTP)': "input:checkbox:eq(15)",
 
@@ -64,6 +61,6 @@ let checked = (btn) => {
     click('Save');
 })()
 
-// delete cases['proxy options edit'];
+delete cases['proxy options edit'];
 
 module.exports = cases;
