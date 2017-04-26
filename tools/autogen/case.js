@@ -18,6 +18,8 @@ cases = require('./it/applicationControl.js');
 cases = require('./it/casi.js');
 cases = require('./it/proxyOptions.js');
 
+require('./it/sslInspection.js');
+
 
 cases = require('./it/deploy.js');
 
