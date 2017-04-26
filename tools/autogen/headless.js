@@ -199,7 +199,7 @@ async function gateVerify(instance) {
 
     await gatePage.property('viewportSize', {
         width: 1500,
-        height: 1000
+        height: 2000
     });
     const gateStatus = await gatePage.open('https://172.16.95.49/login');
     console.log(`FortiGate Page opened with status [${gateStatus}].`);
@@ -247,7 +247,7 @@ async function cloudConfig(instance) {
 
     await page.property('viewportSize', {
         width: 1500,
-        height: 900
+        height: 2000
     });
 
     const status = await page.open('https://beta.forticloud.com/com.fortinet.gwt.Main/login.jsp');
