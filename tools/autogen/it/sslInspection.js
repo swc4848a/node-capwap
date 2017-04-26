@@ -8,9 +8,7 @@ let map = {
     'Save': "span:contains('Save')",
 }
 
-let build = (t) => {
+new Testcase('ssl inspection edit', map, (t) => {
     t.click('SSL Inspection')
     t.click('Save')
-}
-
-new Testcase('ssl inspection edit', map, build)
+})
