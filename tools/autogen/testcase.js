@@ -10,6 +10,16 @@ class Testcase {
     click(btn) {
         cases[this.module].push([this.map[btn], undefined])
     }
+    checked(btn) {
+        if (this.map[btn]) {
+            cases[this.module].push([this.map[btn], true])
+        }
+    }
+    set(btn, val) {
+        if (this.map[btn]) {
+            cases[this.module].push([this.map[btn], val]);
+        }
+    }
 }
 
 module.exports = Testcase;
