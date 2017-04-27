@@ -20,6 +20,11 @@ class Testcase {
             cases[this.module].push([this.map[btn], val]);
         }
     }
+    hide(btn) {
+        if (this.map[btn]) {
+            cases[this.module].push([this.map[btn], { action: 'hide' }]);
+        }
+    }
 }
 
 module.exports = Testcase;

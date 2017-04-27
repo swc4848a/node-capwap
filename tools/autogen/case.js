@@ -20,6 +20,8 @@ cases = require('./it/proxyOptions.js');
 
 require('./it/sslInspection.js');
 require('./it/webRatingOverrides.js');
+require('./it/webProfileOverrides.js');
+require('./it/usersGroups.js');
 
 
 cases = require('./it/deploy.js');
