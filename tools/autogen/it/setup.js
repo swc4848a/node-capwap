@@ -1,7 +1,4 @@
-let cases = require('./root.js');
-
-// [cloud-selector, {value}, gate-selector, {skip}
-cases['login (must be first step)'] = [
+let login = [
     ["input#email", "zqqiang@fortinet.com", "input#username", "admin"],
     ["input[name='password']", "SuperCRM801", "input#secretkey"],
     ["input[type='submit']", undefined, "button#login_button"],
@@ -9,4 +6,4 @@ cases['login (must be first step)'] = [
     ["div.cat_link:contains('Management')", undefined, "skip"],
 ]
 
-module.exports = cases;
+module.exports = login;

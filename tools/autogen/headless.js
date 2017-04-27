@@ -2,6 +2,8 @@ const phantom = require('phantom');
 const cases = require('./case.js');
 const util = require('util');
 const S = require('string');
+const deploy = require('./it/deploy.js');
+const login = require('./it/setup.js');
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -11,16 +13,20 @@ let cloudSeq = [];
 let gateSeq = [];
 
 function factory() {
+    login.forEach((item) => {
+        cloudSeq.push(item);
+    })
     for (let key in cases) {
         console.log('load "%s" test cases', key);
         cases[key].forEach((item) => {
             cloudSeq.push(item);
         })
-        if (key !== 'deploy') {
-            cases[key].forEach((item) => {
-                gateSeq.push(item);
-            })
-        }
+        deploy.forEach((item) => {
+            cloudSeq.push(item);
+        })
+        cases[key].forEach((item) => {
+            gateSeq.push(item);
+        })
     }
 }
 
@@ -257,7 +263,7 @@ async function cloudConfig(instance) {
         system.stderr.writeLine('console: ' + msg);
     };
 
-    for (let i = 0; i < cloudSeq.length; ++i) {
+    for (let i = 0, j = 0; i < cloudSeq.length; ++i) {
         let selector = cloudSeq[i][0];
         let value = cloudSeq[i][1];
         let retry = 0;
@@ -272,7 +278,9 @@ async function cloudConfig(instance) {
             console.log('retry timeout, return failed');
             break;
         }
-        // await capture(page, i);
+        if ("span:contains('Close')" === selector) {
+            await capture(page, j++);
+        }
         await page.evaluate(function(action, selector, value) {
             action(selector, value);
         }, action, selector, value);

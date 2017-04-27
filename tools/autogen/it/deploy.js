@@ -1,10 +1,8 @@
-let cases = require('./root.js');
-
-cases['deploy'] = [
+let deploy = [
     ["button[title='Deploy']"],
     ["span:contains('YES')"],
     ["button:contains('OK')"],
     ["span:contains('Close')"],
 ]
 
-module.exports = cases;
+module.exports = deploy;

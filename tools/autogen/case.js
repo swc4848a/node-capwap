@@ -1,7 +1,6 @@
 'use strict';
 
-let cases = require('./it/setup.js');
-
+let cases = require('./it/root.js');
 
 cases = require('./it/interfaces.js');
 cases = require('./it/services.js');
@@ -26,11 +25,5 @@ require('./it/customDevicesGroups.js');
 require('./it/ldapServers.js');
 require('./it/radiusServers.js');
 require('./it/authenticationSettings.js');
-
-
-cases = require('./it/deploy.js');
-
-// delete cases['deploy'];
-// delete cases[];
 
 module.exports = cases;
