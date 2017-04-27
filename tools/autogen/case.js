@@ -25,6 +25,7 @@ require('./it/usersGroups.js');
 require('./it/customDevicesGroups.js');
 require('./it/ldapServers.js');
 require('./it/radiusServers.js');
+require('./it/authenticationSettings.js');
 
 
 cases = require('./it/deploy.js');

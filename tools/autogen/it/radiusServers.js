@@ -33,4 +33,4 @@ new Testcase('radius server new', map, (t) => {
     t.click('OK')
 })
 
-// delete cases['radius server new'];
+delete cases['radius server new'];
