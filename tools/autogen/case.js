@@ -24,6 +24,7 @@ require('./it/webProfileOverrides.js');
 require('./it/usersGroups.js');
 require('./it/customDevicesGroups.js');
 require('./it/ldapServers.js');
+require('./it/radiusServers.js');
 
 
 cases = require('./it/deploy.js');
