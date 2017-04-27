@@ -131,4 +131,4 @@ delete cases['ssl inspection edit'];
 delete cases['ssl inspection edit protecting ssl server'];
 delete cases['ssl inspection edit full inspection'];
 delete cases['ssl inspection edit port mapping'];
-// delete cases['ssl inspection edit exempt'];
+delete cases['ssl inspection edit exempt'];

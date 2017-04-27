@@ -19,6 +19,7 @@ cases = require('./it/casi.js');
 cases = require('./it/proxyOptions.js');
 
 require('./it/sslInspection.js');
+require('./it/webRatingOverrides.js');
 
 
 cases = require('./it/deploy.js');
