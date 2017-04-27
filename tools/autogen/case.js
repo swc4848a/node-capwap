@@ -22,6 +22,7 @@ require('./it/sslInspection.js');
 require('./it/webRatingOverrides.js');
 require('./it/webProfileOverrides.js');
 require('./it/usersGroups.js');
+require('./it/customDevicesGroups.js');
 
 
 cases = require('./it/deploy.js');
