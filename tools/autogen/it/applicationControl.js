@@ -20,6 +20,4 @@ cases['application control edit'] = [
     ["span:contains('Save')", undefined, "skip"],
 ];
 
-delete cases['application control edit'];
-
 module.exports = cases;

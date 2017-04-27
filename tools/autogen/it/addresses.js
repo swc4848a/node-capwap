@@ -30,7 +30,4 @@ cases['address group new'] = [
     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
 ]
 
-delete cases['address new'];
-delete cases['address group new'];
-
 module.exports = cases;

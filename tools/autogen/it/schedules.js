@@ -16,6 +16,4 @@ cases['one time schedule new'] = [
     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
 ]
 
-delete cases['one time schedule new'];
-
 module.exports = cases;

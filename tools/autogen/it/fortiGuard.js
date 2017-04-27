@@ -12,6 +12,4 @@ cases['fortigurad edit, enable all checkbox'] = [
     ["span:contains('Save')", undefined, "skip"],
 ]
 
-delete cases['fortigurad edit, enable all checkbox'];
-
 module.exports = cases;

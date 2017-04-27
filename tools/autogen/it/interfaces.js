@@ -43,6 +43,7 @@ cases['interface new loopback'] = [
     ["span:contains('Save')", undefined, "skip"],
 ]
 
+// todo: Physical Interface Members need validataion
 cases['interface new hardswitch'] = [
     ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
     ["button[title='Create New']", undefined, "skip"],
@@ -112,14 +113,5 @@ cases['interface new undefined'] = [
     ["textarea.gwt-TextArea", "test comments", "skip"],
     ["span:contains('Save')", undefined, "skip"],
 ]
-
-delete cases['interface new'];
-delete cases['interface new dhcp mode'];
-delete cases['interface new loopback'];
-delete cases['interface new hardswitch']; // Physical Interface Members need validataion
-delete cases['interface new softswitch'];
-delete cases['interface new wan'];
-delete cases['interface new dmz'];
-delete cases['interface new undefined'];
 
 module.exports = cases;

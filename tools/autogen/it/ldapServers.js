@@ -1,4 +1,3 @@
-let cases = require('./root.js');
 let Testcase = require('../testcase.js');
 
 let map = {
@@ -30,5 +29,3 @@ new Testcase('ldap server new', map, (t) => {
     t.click('Save')
     t.click('OK')
 })
-
-delete cases['ldap server new'];

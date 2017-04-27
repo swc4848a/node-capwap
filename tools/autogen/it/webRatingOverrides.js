@@ -1,4 +1,3 @@
-let cases = require('./root.js');
 let Testcase = require('../testcase.js');
 
 let map = {
@@ -20,5 +19,3 @@ new Testcase('web rating overrides new', map, (t) => {
     t.click('Save')
     t.click('OK')
 })
-
-delete cases['web rating overrides new'];

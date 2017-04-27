@@ -1,4 +1,3 @@
-let cases = require('./root.js');
 let Testcase = require('../testcase.js');
 
 let map = {
@@ -56,6 +55,3 @@ new Testcase('user group new', map, (t) => {
     t.click('Save')
     t.click('OK')
 })
-
-delete cases['user new'];
-delete cases['user group new'];

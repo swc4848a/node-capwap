@@ -40,9 +40,4 @@ cases['advanced time settings'] = [
     ["div.gwt-HTML:contains('Advanced')", undefined, ""],
 ]
 
-delete cases['advanced email service edit security mode none'];
-delete cases['advanced email service edit security mode smtps'];
-delete cases['advanced email service edit security mode starttls'];
-delete cases['advanced time settings'];
-
 module.exports = cases;

@@ -43,7 +43,4 @@ cases['dns filter edit redirect'] = [
     ["span:contains('Save')", undefined, "skip"],
 ];
 
-delete cases['dns filter edit block'];
-delete cases['dns filter edit redirect'];
-
 module.exports = cases;

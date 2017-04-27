@@ -26,4 +26,10 @@ require('./it/ldapServers.js');
 require('./it/radiusServers.js');
 require('./it/authenticationSettings.js');
 
+// filter some can't support testcases
+delete cases['interface new hardswitch'];
+delete cases['interface new softswitch'];
+delete cases['category new'];
+delete cases['web profile overrides new user'];
+
 module.exports = cases;

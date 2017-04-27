@@ -117,7 +117,4 @@ let set = (btn, val) => {
     click('Save');
 })();
 
-delete cases['proxy options edit'];
-delete cases['proxy options port mapping any'];
-
 module.exports = cases;

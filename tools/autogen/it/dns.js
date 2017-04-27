@@ -18,7 +18,4 @@ cases['dns edit specify'] = [
     ["span:contains('Save')"],
 ]
 
-delete cases['dns edit use fortigurad'];
-delete cases['dns edit specify'];
-
 module.exports = cases;

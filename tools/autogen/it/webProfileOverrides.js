@@ -28,4 +28,3 @@ new Testcase('web profile overrides new user', map, (t) => {
 })
 
 // todo: due to click trigger two json new operation, so temporary can't working if deploy, duplicate id
-delete cases['web profile overrides new user'];

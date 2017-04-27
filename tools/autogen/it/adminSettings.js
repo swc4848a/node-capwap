@@ -11,6 +11,4 @@ cases['admin settings common'] = [
     ["span:contains('Save')", undefined, "skip"],
 ];
 
-delete cases['admin settings common'];
-
 module.exports = cases;

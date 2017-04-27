@@ -81,9 +81,4 @@ cases['webfilter profile google account'] = [
     ["span:contains('Save')", undefined, "skip"],
 ]
 
-delete cases['web filter edit'];
-delete cases['webfilter profile url filter'];
-delete cases['webfilter profile web content filter'];
-delete cases['webfilter profile google account'];
-
 module.exports = cases;

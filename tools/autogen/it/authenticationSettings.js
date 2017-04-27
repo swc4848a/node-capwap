@@ -1,4 +1,3 @@
-let cases = require('./root.js');
 let Testcase = require('../testcase.js');
 
 let map = {
@@ -18,5 +17,3 @@ new Testcase('authentication setttings edit', map, (t) => {
 
     t.click('Save')
 })
-
-delete cases['authentication setttings edit'];

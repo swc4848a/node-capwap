@@ -12,6 +12,4 @@ cases['routing new'] = [
     ["span:contains('Save')"],
 ]
 
-delete cases['routing new'];
-
 module.exports = cases;
