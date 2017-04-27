@@ -23,6 +23,7 @@ require('./it/webRatingOverrides.js');
 require('./it/webProfileOverrides.js');
 require('./it/usersGroups.js');
 require('./it/customDevicesGroups.js');
+require('./it/ldapServers.js');
 
 
 cases = require('./it/deploy.js');
