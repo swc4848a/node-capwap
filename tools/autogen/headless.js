@@ -17,7 +17,7 @@ function factory() {
         cloudSeq.push(item);
     })
     for (let key in cases) {
-        if (process.argv[2] && process.argv[2] !== key) {
+        if (process.argv[2] && !S(key).contains(process.argv[2])) {
             continue;
         }
         console.log('load "%s" test cases', key);
