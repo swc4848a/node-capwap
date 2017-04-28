@@ -18,10 +18,14 @@ let map = {
     'Interface Status Disable': "input:radio[value='DOWN']",
     'Comments': "textarea.gwt-TextArea",
     'Save': "span:contains('Save')",
+
+    'Delete for interface one': "tr.disabled:contains('interface one') div[title='Delete']",
+    'Delete for interface dhcp': "tr.disabled:contains('interface dhcp') div[title='Delete']",
+    'Delete for interface loopback': "tr.disabled:contains('interface loop') div[title='Delete']",
+    'YES': "span:contains('YES')",
 }
 
-// todo: forti-switch bug
-new Testcase('interface new', map, (t) => {
+new Testcase('interface new manual', map, (t) => {
     t.click('Interfaces')
     t.click('Create New')
     t.set('Interface Name', "interface one")
@@ -33,6 +37,12 @@ new Testcase('interface new', map, (t) => {
     t.checked('Interface Status Disable')
     t.set('Comments', "test comments")
     t.click('Save')
+})
+
+new Testcase('interface delete manual', map, (t) => {
+    t.click('Interfaces')
+    t.click('Delete for interface one')
+    t.click('YES')
 })
 
 new Testcase('interface new dhcp mode', map, (t) => {
@@ -51,6 +61,12 @@ new Testcase('interface new dhcp mode', map, (t) => {
     t.click('Save')
 })
 
+new Testcase('interface delete dhcp', map, (t) => {
+    t.click('Interfaces')
+    t.click('Delete for interface dhcp')
+    t.click('YES')
+})
+
 new Testcase('interface new loopback', map, (t) => {
     t.click('Interfaces')
     t.click('Create New')
@@ -62,6 +78,12 @@ new Testcase('interface new loopback', map, (t) => {
     t.checked('Interface Status Disable')
     t.set('Comments', "test comments")
     t.click('Save')
+})
+
+new Testcase('interface delete loopback', map, (t) => {
+    t.click('Interfaces')
+    t.click('Delete for interface loopback')
+    t.click('YES')
 })
 
 // todo: Physical Interface Members need validataion
