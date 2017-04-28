@@ -2,7 +2,8 @@
 
 let cases = require('./it/root.js');
 
-cases = require('./it/interfaces.js');
+require('./it/interfaces.js');
+
 cases = require('./it/services.js');
 cases = require('./it/schedules.js');
 cases = require('./it/adminSettings.js');

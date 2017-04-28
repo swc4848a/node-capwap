@@ -1,117 +1,136 @@
-let cases = require('./root.js');
+let Testcase = require('../testcase.js');
 
-cases['interface new'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface one", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["input:radio:eq(0)", true, "skip"], // address mode: manual
-    ["input.gwt-TextBox:eq(2)", "1.1.1.1/24", "skip"],
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='BLOCK']", true, "skip"], // block
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
+let map = {
+    'Interfaces': "div.gwt-HTML:contains('Interfaces')",
+    'Create New': "button[title='Create New']",
+    'Interface Name': "input.gwt-TextBox:eq(0)",
+    'Alias': "input.gwt-TextBox:eq(1)",
+    'Type': "select.gwt-ListBox:eq(0)",
+    'VLAN ID': "select.gwt-ListBox:eq(2)",
+    'Role': "select.gwt-ListBox:eq(3)",
+    'Address Mode Manual': "input[value='STATIC']",
+    'Address Mode DHCP': "input[value='DHCP']",
+    'Distance': "td>input:eq(2)",
+    'IP/Netmask': "input.gwt-TextBox:eq(2)",
+    'Device Detection': "input:checkbox:eq(1)",
+    'Miscellaneous Block': "input:radio[value='BLOCK']",
+    'Miscellaneous Monitor': "input:radio[value='MONITOR']",
+    'Interface Status Disable': "input:radio[value='DOWN']",
+    'Comments': "textarea.gwt-TextArea",
+    'Save': "span:contains('Save')",
+}
 
-cases['interface new dhcp mode'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface dhcp", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 2, "skip"], // vlan: 2
-    ["input[value='DHCP']", true, "skip"], // address mode: dhcp
-    ["input[value='DHCP']", true, "skip"], // second click trigger below three params render
-    ["td>input:eq(2)", 100, "skip"], // todo: Distance: 100 (not working)
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
+// todo: forti-switch bug
+new Testcase('interface new', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface one")
+    t.set('Alias', "alias one")
+    t.checked('Address Mode Manual')
+    t.set('IP/Netmask', "1.1.1.1/24")
+    t.checked('Device Detection')
+    t.checked('Miscellaneous Block')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
 
-cases['interface new loopback'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface loop", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(0)", "LOOPBACK", "skip"],
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
+new Testcase('interface new dhcp mode', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface dhcp")
+    t.set('Alias', "alias one")
+    t.set('VLAN ID', 2)
+    t.checked('Address Mode DHCP')
+    t.checked('Address Mode DHCP') // second click trigger below three params render
+    t.set('Distance', 100) // todo: Distance: 100 (not working)
+    t.checked('Device Detection')
+    t.checked('Miscellaneous Monitor')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
+
+new Testcase('interface new loopback', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface loop")
+    t.set('Alias', "alias loop")
+    t.set('Type', "LOOPBACK")
+    t.checked('Device Detection')
+    t.checked('Miscellaneous Monitor')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
 
 // todo: Physical Interface Members need validataion
-cases['interface new hardswitch'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface hard", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(0)", "HARD_SWITCH", "skip"],
-    ["input:radio:eq(1)", true, "skip"], // address mode: dhcp
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
+new Testcase('interface new hardswitch', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface hard")
+    t.set('Alias', "alias hard")
+    t.set('Type', "HARD_SWITCH")
+    t.checked('Address Mode DHCP')
+    t.checked('Device Detection')
+    t.checked('Miscellaneous Monitor')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
 
 // todo: Attribute 'interface' MUST be set.
-cases['interface new softswitch'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface soft", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(0)", "SWITCH", "skip"], // type: soft switch
-    ["input:radio:eq(1)", true, "skip"], // address mode: dhcp
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
+new Testcase('interface new softswitch', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface soft")
+    t.set('Alias', "alias soft")
+    t.set('Type', "SWITCH")
+    t.checked('Address Mode DHCP')
+    t.checked('Device Detection')
+    t.checked('Miscellaneous Monitor')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
 
-cases['interface new wan'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface wan", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 5, "skip"], // vlan: 5
-    ["select.gwt-ListBox:eq(3)", "WAN", "skip"], // role: wan
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
+new Testcase('interface new wan', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface wan")
+    t.set('Alias', "alias wan")
+    t.set('VLAN ID', 5)
+    t.set('Role', "WAN")
+    t.checked('Miscellaneous Monitor')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
 
-cases['interface new dmz'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface dmz", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 3, "skip"], // vlan: 3
-    ["select.gwt-ListBox:eq(3)", "DMZ", "skip"], // role: dmz
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
+new Testcase('interface new dmz', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface dmz")
+    t.set('Alias', "alias dmz")
+    t.set('VLAN ID', 3)
+    t.set('Role', "DMZ")
+    t.checked('Device Detection')
+    t.checked('Miscellaneous Monitor')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
 
-cases['interface new undefined'] = [
-    ["div.gwt-HTML:contains('Interfaces')", undefined, "skip"],
-    ["button[title='Create New']", undefined, "skip"],
-    ["input.gwt-TextBox:eq(0)", "interface no", "skip"],
-    ["input.gwt-TextBox:eq(1)", "alias one", "skip"],
-    ["select.gwt-ListBox:eq(2)", 4, "skip"], // vlan: 4
-    ["select.gwt-ListBox:eq(3)", "UNDEFINED", "skip"], // role: undefined
-    ["input:checkbox:eq(1)", true, "skip"], // device dection enable
-    ["input:radio[value='MONITOR']", true, "skip"], // monitor
-    ["input:radio[value='DOWN']", true, "skip"], // diable
-    ["textarea.gwt-TextArea", "test comments", "skip"],
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-module.exports = cases;
+new Testcase('interface new undefined', map, (t) => {
+    t.click('Interfaces')
+    t.click('Create New')
+    t.set('Interface Name', "interface undefined")
+    t.set('Alias', "alias undefined")
+    t.set('VLAN ID', 4)
+    t.set('Role', "UNDEFINED")
+    t.checked('Device Detection')
+    t.checked('Miscellaneous Monitor')
+    t.checked('Interface Status Disable')
+    t.set('Comments', "test comments")
+    t.click('Save')
+})
