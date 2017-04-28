@@ -22,6 +22,9 @@ let map = {
     'Delete for interface one': "tr.disabled:contains('interface one') div[title='Delete']",
     'Delete for interface dhcp': "tr.disabled:contains('interface dhcp') div[title='Delete']",
     'Delete for interface loopback': "tr.disabled:contains('interface loop') div[title='Delete']",
+    'Delete for interface wan': "tr.disabled:contains('interface wan') div[title='Delete']",
+    'Delete for interface dmz': "tr.disabled:contains('interface dmz') div[title='Delete']",
+    'Delete for interface undefined': "tr.disabled:contains('interface N/A') div[title='Delete']",
     'YES': "span:contains('YES')",
 }
 
@@ -86,35 +89,35 @@ new Testcase('interface delete loopback', map, (t) => {
     t.click('YES')
 })
 
-// todo: Physical Interface Members need validataion
-new Testcase('interface new hardswitch', map, (t) => {
-    t.click('Interfaces')
-    t.click('Create New')
-    t.set('Interface Name', "interface hard")
-    t.set('Alias', "alias hard")
-    t.set('Type', "HARD_SWITCH")
-    t.checked('Address Mode DHCP')
-    t.checked('Device Detection')
-    t.checked('Miscellaneous Monitor')
-    t.checked('Interface Status Disable')
-    t.set('Comments', "test comments")
-    t.click('Save')
-})
+// // todo: Physical Interface Members need validataion
+// new Testcase('interface new hardswitch', map, (t) => {
+//     t.click('Interfaces')
+//     t.click('Create New')
+//     t.set('Interface Name', "interface hard")
+//     t.set('Alias', "alias hard")
+//     t.set('Type', "HARD_SWITCH")
+//     t.checked('Address Mode DHCP')
+//     t.checked('Device Detection')
+//     t.checked('Miscellaneous Monitor')
+//     t.checked('Interface Status Disable')
+//     t.set('Comments', "test comments")
+//     t.click('Save')
+// })
 
-// todo: Attribute 'interface' MUST be set.
-new Testcase('interface new softswitch', map, (t) => {
-    t.click('Interfaces')
-    t.click('Create New')
-    t.set('Interface Name', "interface soft")
-    t.set('Alias', "alias soft")
-    t.set('Type', "SWITCH")
-    t.checked('Address Mode DHCP')
-    t.checked('Device Detection')
-    t.checked('Miscellaneous Monitor')
-    t.checked('Interface Status Disable')
-    t.set('Comments', "test comments")
-    t.click('Save')
-})
+// // todo: Attribute 'interface' MUST be set.
+// new Testcase('interface new softswitch', map, (t) => {
+//     t.click('Interfaces')
+//     t.click('Create New')
+//     t.set('Interface Name', "interface soft")
+//     t.set('Alias', "alias soft")
+//     t.set('Type', "SWITCH")
+//     t.checked('Address Mode DHCP')
+//     t.checked('Device Detection')
+//     t.checked('Miscellaneous Monitor')
+//     t.checked('Interface Status Disable')
+//     t.set('Comments', "test comments")
+//     t.click('Save')
+// })
 
 new Testcase('interface new wan', map, (t) => {
     t.click('Interfaces')
@@ -127,6 +130,12 @@ new Testcase('interface new wan', map, (t) => {
     t.checked('Interface Status Disable')
     t.set('Comments', "test comments")
     t.click('Save')
+})
+
+new Testcase('interface delete wan', map, (t) => {
+    t.click('Interfaces')
+    t.click('Delete for interface wan')
+    t.click('YES')
 })
 
 new Testcase('interface new dmz', map, (t) => {
@@ -143,10 +152,16 @@ new Testcase('interface new dmz', map, (t) => {
     t.click('Save')
 })
 
+new Testcase('interface delete dmz', map, (t) => {
+    t.click('Interfaces')
+    t.click('Delete for interface dmz')
+    t.click('YES')
+})
+
 new Testcase('interface new undefined', map, (t) => {
     t.click('Interfaces')
     t.click('Create New')
-    t.set('Interface Name', "interface undefined")
+    t.set('Interface Name', "interface N/A")
     t.set('Alias', "alias undefined")
     t.set('VLAN ID', 4)
     t.set('Role', "UNDEFINED")
@@ -155,4 +170,11 @@ new Testcase('interface new undefined', map, (t) => {
     t.checked('Interface Status Disable')
     t.set('Comments', "test comments")
     t.click('Save')
+})
+
+new Testcase('interface delete undefined', map, (t) => {
+    t.click('Interfaces')
+    t.click('Delete for interface undefined')
+    t.click('YES')
+    t.click('YES') //todo: GUI bug, need click yes twice to delete undefined interface
 })

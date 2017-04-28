@@ -7,10 +7,10 @@ require('./it/dns.js');
 require('./it/routing.js');
 require('./it/adminSettings.js');
 require('./it/fortiGuard.js');
+require('./it/advanced.js');
 
 cases = require('./it/services.js');
 cases = require('./it/schedules.js');
-cases = require('./it/advanced.js');
 cases = require('./it/addresses.js');
 cases = require('./it/webFilter.js');
 cases = require('./it/dnsFilter.js');
