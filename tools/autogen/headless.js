@@ -17,6 +17,9 @@ function factory() {
         cloudSeq.push(item);
     })
     for (let key in cases) {
+        if (process.argv[2] && process.argv[2] !== key) {
+            continue;
+        }
         console.log('load "%s" test cases', key);
         cases[key].forEach((item) => {
             cloudSeq.push(item);
