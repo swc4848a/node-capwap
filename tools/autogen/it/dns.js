@@ -1,6 +1,6 @@
 let Testcase = require('../testcase.js');
 
-let map = {
+let cloudMap = {
     'DNS': "div.gwt-HTML:contains('DNS'):eq(0)",
     'Use FortiGuard Servers': "input[type='radio']:eq(0)~label",
     'Specify': "input[type='radio']:eq(1)~label",
@@ -10,7 +10,16 @@ let map = {
     'Save': "span:contains('Save')",
 }
 
-new Testcase('dns edit specify', map, (t) => {
+let gateMap = {
+    'DNS': "a[ng-href='page/p/system/dns/']",
+    'Use FortiGuard Servers': "input#type_fortiguard",
+    'Specify': "input#type_specify",
+    'Primary DNS Server': "input#primary",
+    'Secondary DNS Server': "input#secondary",
+    'Local Domain Name': "input#domain",
+}
+
+new Testcase('dns edit specify', cloudMap, (t) => {
     t.click('DNS')
     t.click('Specify')
     t.set('Primary DNS Server', "1.1.1.1")
@@ -19,7 +28,7 @@ new Testcase('dns edit specify', map, (t) => {
     t.click('Save')
 })
 
-new Testcase('dns edit use fortigurad', map, (t) => {
+new Testcase('dns edit use fortigurad', cloudMap, (t) => {
     t.click('DNS')
     t.click('Use FortiGuard Servers')
     t.set('Local Domain Name', "test domain")

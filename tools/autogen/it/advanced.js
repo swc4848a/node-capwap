@@ -11,6 +11,14 @@ let map = {
     'Security Mode SMTPS': "input:radio:eq(1)",
     'Security Mode STARTTLS': "input:radio:eq(2)",
     'Port': "input[type='text']:eq(40)",
+
+    'Time Zone': "select",
+    'Synchronize with NTP Server': "input:checkbox:eq(1)",
+    'Use FortiGuard Server': "input:radio:eq(3)~label",
+    'Specify': "input:radio:eq(4)~label",
+    'Sync Interval': "input:eq(50)",
+    'Server': "input:eq(51)",
+
     'Save': "span:contains('Save')",
 }
 
@@ -83,3 +91,26 @@ new Testcase('advanced email service edit security mode starttls', map, (t) => {
 //     ["input[type='text']:eq(40)", 100, "input#smtp_port"],
 //     ["span:contains('Save')", undefined, "skip"],
 // ]
+
+new Testcase('advanced time setting use fortiguard', map, (t) => {
+    t.click('Advanced')
+
+    t.set('Time Zone', "04")
+    t.checked('Synchronize with NTP Server')
+    t.click('Use FortiGuard Server')
+    t.set('Sync Interval', 100)
+
+    t.click('Save')
+})
+
+new Testcase('advanced time setting specify', map, (t) => {
+    t.click('Advanced')
+
+    t.set('Time Zone', "04")
+    t.checked('Synchronize with NTP Server')
+    t.click('Specify')
+    t.set('Sync Interval', 200)
+    t.set('Server', "g.com")
+
+    t.click('Save')
+})

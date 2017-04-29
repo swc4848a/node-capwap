@@ -9,29 +9,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let cloudSeq = [];
 let gateSeq = [];
-
-function factory() {
-    login.forEach((item) => {
-        cloudSeq.push(item);
-    })
-    for (let key in cases) {
-        if (process.argv[2] && !S(key).contains(process.argv[2])) {
-            continue;
-        }
-        console.log('load "%s" test cases', key);
-        cases[key].forEach((item) => {
-            cloudSeq.push(item);
-        })
-        deploy.forEach((item) => {
-            cloudSeq.push(item);
-        })
-        cases[key].forEach((item) => {
-            gateSeq.push(item);
-        })
-    }
-}
 
 async function ready(page, selector) {
     if (selector === 'skip') {
@@ -247,7 +225,56 @@ async function gateVerify(instance) {
     await sleep(2000);
 }
 
-async function cloudConfig(instance) {
+async function runSeq(page, action, key, seq) {
+    for (let i = 0, j = 0; i < seq.length; ++i) {
+        let selector = seq[i][0];
+        let value = seq[i][1];
+        let retry = 0;
+        let max_try = 20;
+
+        while (!await ready(page, selector) && retry < max_try) {
+            console.log('waiting %s s...', retry + 1);
+            await sleep(1000);
+            ++retry;
+        }
+        if (retry === max_try) {
+            console.log('retry timeout, return failed');
+            break;
+        }
+        if ("span:contains('Close')" === selector) {
+            await capture(page, key);
+        }
+        await page.evaluate(function(action, selector, value) {
+            action(selector, value);
+        }, action, selector, value);
+    }
+}
+
+function skip(key) {
+    return process.argv[2] && !S(key).contains(process.argv[2]);
+}
+
+function buildCloudLoginSeq() {
+    let loginSeq = [];
+    login.forEach((item) => {
+        loginSeq.push(item);
+    })
+    return loginSeq;
+}
+
+function buildCloudTestSeq(key) {
+    let cloudSeq = [];
+    console.log('load "%s" test cases', key);
+    cases[key].forEach((item) => {
+        cloudSeq.push(item);
+    })
+    deploy.forEach((item) => {
+        cloudSeq.push(item);
+    })
+    return cloudSeq;
+}
+
+async function setupCloudPage(instance) {
     const page = await instance.createPage();
 
     await page.on('onConsoleMessage', function(msg) {
@@ -266,42 +293,27 @@ async function cloudConfig(instance) {
         system.stderr.writeLine('console: ' + msg);
     };
 
-    for (let i = 0, j = 0; i < cloudSeq.length; ++i) {
-        let selector = cloudSeq[i][0];
-        let value = cloudSeq[i][1];
-        let retry = 0;
-        let max_try = 20;
+    return page;
+}
 
-        while (!await ready(page, selector) && retry < max_try) {
-            console.log('waiting %s s...', retry + 1);
-            await sleep(1000);
-            ++retry;
+async function start(instance) {
+    const page = await setupCloudPage(instance);
+
+    await runSeq(page, action, 'login', buildCloudLoginSeq());
+
+    for (let key in cases) {
+        if (skip(key)) {
+            continue;
         }
-        if (retry === max_try) {
-            console.log('retry timeout, return failed');
-            break;
-        }
-        if ("span:contains('Close')" === selector) {
-            await capture(page, j++);
-        }
-        await page.evaluate(function(action, selector, value) {
-            action(selector, value);
-        }, action, selector, value);
+        await runSeq(page, action, S(key).slugify().s, buildCloudTestSeq(key));
     }
-
-    await sleep(1000);
-
-    await page.render('./img/forticloud.png');
-    console.log('save as ./img/forticloud.png');
 
     await sleep(2000);
 }
 
 (async function() {
     const instance = await phantom.create(['--ignore-ssl-errors=yes'], { logLevel: 'error' });
-    factory();
-    await cloudConfig(instance);
-    // await gateVerify(instance);
+    await start(instance);
     await instance.exit();
     console.log('instance exit...');
 }());

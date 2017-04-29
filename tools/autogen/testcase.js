@@ -15,6 +15,11 @@ class Testcase {
             cases[this.module].push([this.map[btn], true])
         }
     }
+    unchecked(btn) {
+        if (this.map[btn]) {
+            cases[this.module].push([this.map[btn], false])
+        }
+    }
     set(btn, val) {
         if (this.map[btn]) {
             cases[this.module].push([this.map[btn], val]);
