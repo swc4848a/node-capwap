@@ -1,5 +1,6 @@
 const phantom = require('phantom');
 const cases = require('./case.js');
+const gatecases = require('./it/gatecases.js');
 const util = require('util');
 const S = require('string');
 const deploy = require('./it/deploy.js');
@@ -73,7 +74,106 @@ function action(selector, value) {
     }
 }
 
-function gateAction(selector, value, expect) {
+// function gateAction(selector, value, expect) {
+//     switch (typeof value) {
+//         case 'string':
+//         case 'number':
+//             $(selector).val(value);
+//             console.log('set', selector, value);
+//             break;
+//         case 'boolean':
+//             $(selector).prop("checked", value);
+//             console.log('set', selector, value);
+//             break;
+//         case 'object':
+//             if ($(selector).length) {
+//                 $(selector).click();
+//                 console.log('click:', selector);
+//             } else {
+//                 $('iframe').contents().find(selector).click();
+//                 console.log('iframe click:', selector);
+//             }
+//             break;
+//         default:
+//             console.log('unsupport:', selector, typeof value, expect);
+//     }
+
+//     switch (typeof expect) {
+//         case 'string':
+//             if ($(selector).length) {
+//                 if (expect === $(selector).val()) {
+//                     console.log('----------------------------------------------------------');
+//                     console.log('* config success:', selector, $(selector).val(), expect);
+//                     console.log('----------------------------------------------------------');
+//                 } else {
+//                     console.log('**********************************************************')
+//                     console.log('* config failed:', selector, $(selector).val(), expect)
+//                     console.log('**********************************************************');
+//                 }
+//             } else {
+//                 if (expect === $('iframe').contents().find(selector).val()) {
+//                     console.log('----------------------------------------------------------');
+//                     console.log('* config success:', selector, $('iframe').contents().find(selector).val(), expect);
+//                     console.log('----------------------------------------------------------');
+//                 } else {
+//                     console.log('**********************************************************')
+//                     console.log('* config failed:', selector, $('iframe').contents().find(selector).val(), expect)
+//                     console.log('**********************************************************');
+//                 }
+//             }
+//             break;
+//         case 'number':
+//             if ($(selector).length) {
+//                 if (expect === parseInt($(selector).val())) {
+//                     console.log('----------------------------------------------------------');
+//                     console.log('* config success:', selector, $(selector).val(), expect);
+//                     console.log('----------------------------------------------------------');
+//                 } else {
+//                     console.log('**********************************************************')
+//                     console.log('* config failed:', selector, $(selector).val(), expect)
+//                     console.log('**********************************************************');
+//                 }
+//             } else {
+//                 if (expect === parseInt($('iframe').contents().find(selector).val())) {
+//                     console.log('----------------------------------------------------------');
+//                     console.log('* config success:', selector, $('iframe').contents().find(selector).val(), expect);
+//                     console.log('----------------------------------------------------------');
+//                 } else {
+//                     console.log('**********************************************************')
+//                     console.log('* config failed:', selector, $('iframe').contents().find(selector).val(), expect)
+//                     console.log('**********************************************************');
+//                 }
+//             }
+//             break;
+//         case 'boolean':
+//             if ($(selector).length) {
+//                 if (expect === $(selector).prop("checked")) {
+//                     console.log('----------------------------------------------------------');
+//                     console.log('* config success:', selector, $(selector).prop("checked"), expect);
+//                     console.log('----------------------------------------------------------');
+//                 } else {
+//                     console.log('**********************************************************')
+//                     console.log('* config failed:', selector, $(selector).prop("checked"), expect)
+//                     console.log('**********************************************************');
+//                 }
+//             } else {
+//                 if (expect === $('iframe').contents().find(selector).prop("checked")) {
+//                     console.log('----------------------------------------------------------');
+//                     console.log('* config success:', selector, $('iframe').contents().find(selector).prop("checked"), expect);
+//                     console.log('----------------------------------------------------------');
+//                 } else {
+//                     console.log('**********************************************************')
+//                     console.log('* config failed:', selector, $('iframe').contents().find(selector).prop("checked"), expect)
+//                     console.log('**********************************************************');
+//                 }
+//             }
+//             break;
+//         default:
+//             console.log('unsupport:', selector, typeof expect, expect);
+//     }
+// }
+
+function gateAction(selector, value) {
     switch (typeof value) {
         case 'string':
         case 'number':
@@ -95,80 +195,6 @@ function gateAction(selector, value, expect) {
             break;
         default:
             console.log('unsupport:', selector, typeof value, expect);
-    }
-
-    switch (typeof expect) {
-        case 'string':
-            if ($(selector).length) {
-                if (expect === $(selector).val()) {
-                    console.log('----------------------------------------------------------');
-                    console.log('* config success:', selector, $(selector).val(), expect);
-                    console.log('----------------------------------------------------------');
-                } else {
-                    console.log('**********************************************************')
-                    console.log('* config failed:', selector, $(selector).val(), expect)
-                    console.log('**********************************************************');
-                }
-            } else {
-                if (expect === $('iframe').contents().find(selector).val()) {
-                    console.log('----------------------------------------------------------');
-                    console.log('* config success:', selector, $('iframe').contents().find(selector).val(), expect);
-                    console.log('----------------------------------------------------------');
-                } else {
-                    console.log('**********************************************************')
-                    console.log('* config failed:', selector, $('iframe').contents().find(selector).val(), expect)
-                    console.log('**********************************************************');
-                }
-            }
-            break;
-        case 'number':
-            if ($(selector).length) {
-                if (expect === parseInt($(selector).val())) {
-                    console.log('----------------------------------------------------------');
-                    console.log('* config success:', selector, $(selector).val(), expect);
-                    console.log('----------------------------------------------------------');
-                } else {
-                    console.log('**********************************************************')
-                    console.log('* config failed:', selector, $(selector).val(), expect)
-                    console.log('**********************************************************');
-                }
-            } else {
-                if (expect === parseInt($('iframe').contents().find(selector).val())) {
-                    console.log('----------------------------------------------------------');
-                    console.log('* config success:', selector, $('iframe').contents().find(selector).val(), expect);
-                    console.log('----------------------------------------------------------');
-                } else {
-                    console.log('**********************************************************')
-                    console.log('* config failed:', selector, $('iframe').contents().find(selector).val(), expect)
-                    console.log('**********************************************************');
-                }
-            }
-            break;
-        case 'boolean':
-            if ($(selector).length) {
-                if (expect === $(selector).prop("checked")) {
-                    console.log('----------------------------------------------------------');
-                    console.log('* config success:', selector, $(selector).prop("checked"), expect);
-                    console.log('----------------------------------------------------------');
-                } else {
-                    console.log('**********************************************************')
-                    console.log('* config failed:', selector, $(selector).prop("checked"), expect)
-                    console.log('**********************************************************');
-                }
-            } else {
-                if (expect === $('iframe').contents().find(selector).prop("checked")) {
-                    console.log('----------------------------------------------------------');
-                    console.log('* config success:', selector, $('iframe').contents().find(selector).prop("checked"), expect);
-                    console.log('----------------------------------------------------------');
-                } else {
-                    console.log('**********************************************************')
-                    console.log('* config failed:', selector, $('iframe').contents().find(selector).prop("checked"), expect)
-                    console.log('**********************************************************');
-                }
-            }
-            break;
-        default:
-            console.log('unsupport:', selector, typeof expect, expect);
     }
 }
 
@@ -225,7 +251,8 @@ async function gateVerify(instance) {
     await sleep(2000);
 }
 
-async function runSeq(page, action, key, seq) {
+async function runSeq(page, action, ready, key, seq) {
+    console.log(seq);
     for (let i = 0, j = 0; i < seq.length; ++i) {
         let selector = seq[i][0];
         let value = seq[i][1];
@@ -255,11 +282,11 @@ function skip(key) {
 }
 
 function buildCloudLoginSeq() {
-    let loginSeq = [];
-    login.forEach((item) => {
-        loginSeq.push(item);
-    })
-    return loginSeq;
+    return login.cloud;
+}
+
+function buildGateLoginSeq() {
+    return login.gate;
 }
 
 function buildCloudTestSeq(key) {
@@ -274,7 +301,7 @@ function buildCloudTestSeq(key) {
     return cloudSeq;
 }
 
-async function setupCloudPage(instance) {
+async function setupPage(instance, url, jquery) {
     const page = await instance.createPage();
 
     await page.on('onConsoleMessage', function(msg) {
@@ -286,26 +313,41 @@ async function setupCloudPage(instance) {
         height: 2000
     });
 
-    const status = await page.open('https://beta.forticloud.com/com.fortinet.gwt.Main/login.jsp');
-    console.log(`FortiCloud Page opened with status [${status}].`);
+    const status = await page.open(url);
+    console.log(`${url} Page opened with status [${status}].`);
 
     page.onConsoleMessage = function(msg) {
         system.stderr.writeLine('console: ' + msg);
     };
 
+    if (jquery) {
+        await page.includeJs('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js');
+    }
+
     return page;
 }
 
-async function start(instance) {
-    const page = await setupCloudPage(instance);
+async function setupCloudPage(instance) {
+    return await setupPage(instance, 'https://beta.forticloud.com/com.fortinet.gwt.Main/login.jsp', false);
+}
 
-    await runSeq(page, action, 'login', buildCloudLoginSeq());
+async function setupGatePage(instance) {
+    return await setupPage(instance, 'https://172.16.95.49/login', true);
+}
+
+async function start(instance) {
+    const cloud_page = await setupCloudPage(instance);
+    const gate_page = await setupGatePage(instance);
+
+    await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+    await runSeq(gate_page, gateAction, gateReady, 'login', buildGateLoginSeq());
 
     for (let key in cases) {
         if (skip(key)) {
             continue;
         }
-        await runSeq(page, action, S(key).slugify().s, buildCloudTestSeq(key));
+        await runSeq(cloud_page, action, ready, S(key).slugify().s, buildCloudTestSeq(key));
+        // await runSeq(gate_page, action, S(key).slugify().s, buildCloudTestSeq(key));
     }
 
     await sleep(2000);

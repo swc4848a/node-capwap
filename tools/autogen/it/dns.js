@@ -19,26 +19,40 @@ let gateMap = {
     'Local Domain Name': "input#domain",
 }
 
-new Testcase('dns edit specify', cloudMap, (t) => {
-    t.click('DNS')
-    t.click('Specify')
-    t.set('Primary DNS Server', "1.1.1.1")
-    t.set('Secondary DNS Server', "2.2.2.2")
-    t.set('Local Domain Name', "test domain")
-    t.click('Save')
+new Testcase({
+    name: 'dns edit specify',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('DNS')
+        c.click('Specify')
+        c.set('Primary DNS Server', "1.1.1.1")
+        c.set('Secondary DNS Server', "2.2.2.2")
+        c.set('Local Domain Name', "test domain")
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('DNS')
+        g.isChecked('Specify')
+        g.isSet('Primary DNS Server', "1.1.1.1")
+        g.isSet('Secondary DNS Server', "2.2.2.2")
+        g.isSet('Local Domain Name', "test domain")
+    }
 })
 
-new Testcase('dns edit use fortigurad', cloudMap, (t) => {
-    t.click('DNS')
-    t.click('Use FortiGuard Servers')
-    t.set('Local Domain Name', "test domain")
-    t.click('Save')
+new Testcase({
+    name: 'dns edit use fortigurad',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: function(c) {
+        c.click('DNS')
+        c.click('Use FortiGuard Servers')
+        c.set('Local Domain Name', "test domain")
+        c.click('Save')
+    },
+    verify: function(g) {
+        g.click('DNS')
+        g.isChecked('Use FortiGuard Servers')
+        g.isSet('Local Domain Name', "test domain")
+    }
 })
-
-// // todo: gate gui bug
-// cases['dns edit use fortigurad'] = [
-//     ["div.gwt-HTML:contains('DNS'):eq(0)", undefined, "a[ng-href='page/p/system/dns/']"],
-//     ["input[type='radio']:eq(0)", undefined, "input#type_fortiguard", true],
-//     ["input.gwt-TextBox:eq(2)", "test string", "input#domain"],
-//     ["span:contains('Save')", undefined, "skip"],
-// ];

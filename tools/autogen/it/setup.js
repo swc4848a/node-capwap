@@ -1,9 +1,15 @@
-let login = [
-    ["input#email", "zqqiang@fortinet.com", "input#username", "admin"],
-    ["input[name='password']", "SuperCRM801", "input#secretkey"],
-    ["input[type='submit']", undefined, "button#login_button"],
-    ["div.img_link:contains('FGT60D4615007833')", undefined, "skip"],
-    ["div.cat_link:contains('Management')", undefined, "skip"],
-]
+let login = {
+    cloud: [
+        ["input#email", "zqqiang@fortinet.com"],
+        ["input[name='password']", "SuperCRM801"],
+        ["input[type='submit']", undefined],
+        ["div.img_link:contains('FGT60D4615007833')", undefined],
+        ["div.cat_link:contains('Management')", undefined],
+    ],
+    gate: [
+        ["input#username", "admin"],
+        ["button#login_button", undefined],
+    ]
+}
 
 module.exports = login;
