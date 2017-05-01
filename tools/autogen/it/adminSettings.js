@@ -1,6 +1,6 @@
 let Testcase = require('../testcase.js');
 
-let map = {
+let cloudMap = {
     'Admin Settings': "div.gwt-HTML:contains('Admin Settings')",
     'HTTP Port': "input.gwt-TextBox:eq(0)",
     'Redirect to HTTPS': "input:checkbox",
@@ -11,24 +11,37 @@ let map = {
     'Save': "span:contains('Save')",
 }
 
-new Testcase('admin settings edit', map, (t) => {
-    t.click('Admin Settings')
-    t.set('HTTP Port', 80)
-    t.checked('Redirect to HTTPS')
-    t.set('HTTPS Port', 443)
-    t.set('Telnet Port', 23)
-    t.set('SSH Port', 22)
-    t.set('Idle Timeout', 480)
-    t.click('Save')
-})
+let gateMap = {
+    'Admin Settings': "a[ng-href='admin/settings']",
+    'HTTP Port': "input#admin-port",
+    'Redirect to HTTPS': "input#redirect-check",
+    'HTTPS Port': "input#admin-sport",
+    'Telnet Port': "input#admin-telnet-port",
+    'SSH Port': "input#admin-ssh-port",
+    'Idle Timeout': "input#admintimeout",
+}
 
-// cases['admin settings common'] = [
-//     ["div.gwt-HTML:contains('Admin Settings')", undefined, "a[ng-href='admin/settings']"],
-//     ["input.gwt-TextBox:eq(0)", 80, "input#admin-port"],
-//     ["input:checkbox", true, "input#redirect-check"],
-//     ["input.gwt-TextBox:eq(1)", 443, "input#admin-sport"],
-//     ["input.gwt-TextBox:eq(2)", 23, "input#admin-telnet-port"],
-//     ["input.gwt-TextBox:eq(3)", 22, "input#admin-ssh-port"],
-//     ["input.gwt-TextBox:eq(4)", 480, "input#admintimeout"],
-//     ["span:contains('Save')", undefined, "skip"],
-// ];
+new Testcase({
+    name: 'admin settings edit',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Admin Settings')
+        c.set('HTTP Port', 80)
+        c.checked('Redirect to HTTPS')
+        c.set('HTTPS Port', 443)
+        c.set('Telnet Port', 23)
+        c.set('SSH Port', 22)
+        c.set('Idle Timeout', 480)
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Admin Settings')
+        g.isSet('HTTP Port', 80)
+        g.isChecked('Redirect to HTTPS')
+        g.isSet('HTTPS Port', 443)
+        g.isSet('Telnet Port', 23)
+        g.isSet('SSH Port', 22)
+        g.isSet('Idle Timeout', 480)
+    }
+})
