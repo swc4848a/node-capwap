@@ -54,6 +54,11 @@ class GateGUI {
             gatecases[this.name].push([this.map[btn], true])
         }
     }
+    isUnchecked(btn) {
+        if (this.map[btn]) {
+            gatecases[this.name].push([this.map[btn], false])
+        }
+    }
     isSet(btn, val) {
         if (this.map[btn]) {
             gatecases[this.name].push([this.map[btn], val]);
