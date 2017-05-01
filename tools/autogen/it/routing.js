@@ -1,6 +1,6 @@
 let Testcase = require('../testcase.js');
 
-let map = {
+let cloudMap = {
     'Routing': "div.gwt-HTML:contains('Routing')",
     'Create New': "button[title='Create New']",
     'Destination IP': "input.gwt-TextBox:eq(0)",
@@ -16,36 +16,89 @@ let map = {
     'YES': "span:contains('YES')",
 }
 
-new Testcase('routing new', map, (t) => {
-    t.click('Routing')
+let gateMap = {
+    'Routing': "a[href='page/p/router/simple/']",
+    '192.168.18.0 routing': "tr>td>span:contains('192.168.18.0')",
+    'Destination IPMask': "input#dst",
+    'Gateway': "input#gateway",
+    'Administrative Distance': "input#distance",
+    'Device Interface': "div.selected-entry>span>div>span",
+    'Comments': "textarea#comment",
 
-    t.click('Create New')
-    t.set('Destination IP', "192.168.18.0")
-    t.set('Destination Netmask', "255.255.255.0")
-    t.set('Gateway', "192.168.1.1")
-    t.set('Administrative Distance', 11)
-    t.set('Device Interface', "internal")
-    t.set('Comments', "test comments")
+    'Edit': "button span:contains('Edit'):eq(0)",
+}
 
-    t.click('Save')
+new Testcase({
+    name: 'routing new',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Routing')
+
+        c.click('Create New')
+        c.set('Destination IP', "192.168.18.0")
+        c.set('Destination Netmask', "255.255.255.0")
+        c.set('Gateway', "192.168.1.1")
+        c.set('Administrative Distance', 11)
+        c.set('Device Interface', "internal")
+        c.set('Comments', "test comments")
+
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Routing')
+        g.click('192.168.18.0 routing')
+        g.click('Edit')
+        g.isSet('Destination IP', "192.168.18.0")
+        g.isSet('Destination Netmask', "255.255.255.0")
+        g.isSet('Gateway', "192.168.1.1")
+        g.isSet('Administrative Distance', 11)
+        g.isSet('Device Interface', "internal")
+        g.isSet('Comments', "test comments")
+    }
 })
 
-new Testcase('routing edit', map, (t) => {
-    t.click('Routing')
-    t.click('Edit Second Item')
+new Testcase({
+    name: 'routing edit',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Routing')
+        c.click('Edit Second Item')
 
-    t.set('Destination IP', "192.168.18.0")
-    t.set('Destination Netmask', "255.255.255.0")
-    t.set('Gateway', "192.168.1.1")
-    t.set('Administrative Distance', 12)
-    t.set('Device Interface', "wan2")
-    t.set('Comments', "test comments")
+        c.set('Destination IP', "192.168.18.0")
+        c.set('Destination Netmask', "255.255.255.0")
+        c.set('Gateway', "192.168.1.1")
+        c.set('Administrative Distance', 12)
+        c.set('Device Interface', "wan2")
+        c.set('Comments', "test comments")
 
-    t.click('Save')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Routing')
+        g.click('192.168.18.0 routing')
+        g.click('Edit')
+        g.isSet('Destination IP', "192.168.18.0")
+        g.isSet('Destination Netmask', "255.255.255.0")
+        g.isSet('Gateway', "192.168.1.1")
+        g.isSet('Administrative Distance', 12)
+        g.isSet('Device Interface', "wan2")
+        g.isSet('Comments', "test comments")
+    }
 })
 
-new Testcase('routing delete', map, (t) => {
-    t.click('Routing')
-    t.click('Delete Second Item')
-    t.click('YES')
+new Testcase({
+    name: 'routing delete',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Routing')
+        c.click('Delete Second Item')
+        c.click('YES')
+    },
+    verify: (g) => {
+        g.click('Routing')
+        g.isDelete('192.168.18.0 routing')
+    }
 })
