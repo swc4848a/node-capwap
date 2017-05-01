@@ -1,6 +1,6 @@
 let Testcase = require('../testcase.js');
 
-let map = {
+let cloudMap = {
     'Advanced': "div.gwt-HTML:contains('Advanced')",
     'SMTP Server': "input.gwt-TextBox:eq(0)",
     'Default Reply To': "input.gwt-TextBox:eq(1)",
@@ -22,95 +22,157 @@ let map = {
     'Save': "span:contains('Save')",
 }
 
-new Testcase('advanced email service edit security mode none', map, (t) => {
-    t.click('Advanced')
-    t.set('SMTP Server', "192.168.100.100")
-    t.set('Default Reply To', "a@gmail.com")
-    t.checked('Authentication')
-    t.set('Username', "Peter Chen")
-    t.set('Password', "12345678")
-    t.checked('Security Mode None')
-    t.set('Port', 100)
-    t.click('Save')
+let gateMap = {
+    'Advanced': "a[ng-href='system/advanced']",
+    'SMTP Server': "input#smtp_server",
+    'Default Reply To': "input#smtp_rt",
+    'Authentication': "input#check-email-auth",
+    'Username': "input#smtp_user",
+    'Password': "input#smtp_passwd",
+    'Security Mode None': "input#radio-email-none",
+    'Security Mode SMTPS': "input#radio-email-smtps",
+    'Security Mode STARTTLS': "input#radio-email-starttls",
+    'Port': "input#smtp_port",
+
+    'Dashboard': "a[href='page/system/status/status']",
+    'System Time': "a[href='/ng/system/time']",
+    'Time Zone': "select[ng-model='ctrl.systemGlobal.timezone']",
+    'Synchronize with NTP Server': "input:radio#sync-ntp",
+    'Manual Settings': "input:radio#manual",
+    'Use FortiGuard Server': "input:radio#fg-server",
+    'Specify': "input:radio#specify-server",
+    'Sync Interval': "input#sync-interval",
+    'Server': "input[ng-model='ctrl.systemNtp.ntpserver[0].server']",
+}
+
+new Testcase({
+    name: 'advanced email service edit security mode none',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Advanced')
+        c.set('SMTP Server', "192.168.100.100")
+        c.set('Default Reply To', "a@gmail.com")
+        c.checked('Authentication')
+        c.set('Username', "Peter Chen")
+        c.set('Password', "12345678")
+        c.checked('Security Mode None')
+        c.set('Port', 100)
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Advanced')
+        g.isSet('SMTP Server', "192.168.100.100")
+        g.isSet('Default Reply To', "a@gmail.com")
+        g.isChecked('Authentication')
+        g.isSet('Username', "Peter Chen")
+        g.isSet('Password', "12345678")
+        g.isChecked('Security Mode None')
+        g.isSet('Port', 100)
+    }
 })
 
-// cases['advanced email service edit security mode none'] = [
-//     ["div.gwt-HTML:contains('Advanced')", undefined, "a[ng-href='system/advanced']"],
-//     ["input.gwt-TextBox:eq(0)", "192.168.100.100", "input#smtp_server"],
-//     ["input.gwt-TextBox:eq(1)", "a@gmail.com", "input#smtp_rt"],
-//     ["input:checkbox:eq(0)", true, "input#check-email-auth"],
-//     ["input.gwt-TextBox:eq(2)", "Peter Chen", "input#smtp_user"],
-//     ["input.gwt-TextBox:eq(3)", "12345678", "input#smtp_passwd"], // can't analysis passwd from GUI
-//     ["input:radio:eq(0)", true, "input#radio-email-none"], // security mode None
-//     ["input[type='text']:eq(40)", 100, "input#smtp_port"],
-//     ["span:contains('Save')", undefined, "skip"],
-// ]
-
-new Testcase('advanced email service edit security mode smtps', map, (t) => {
-    t.click('Advanced')
-    t.set('SMTP Server', "192.168.100.100")
-    t.set('Default Reply To', "a@gmail.com")
-    t.checked('Authentication')
-    t.set('Username', "Peter Chen")
-    t.set('Password', "12345678")
-    t.checked('Security Mode SMTPS')
-    t.set('Port', 100)
-    t.click('Save')
+new Testcase({
+    name: 'advanced email service edit security mode smtps',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Advanced')
+        c.set('SMTP Server', "192.168.100.100")
+        c.set('Default Reply To', "a@gmail.com")
+        c.checked('Authentication')
+        c.set('Username', "Peter Chen")
+        c.set('Password', "12345678")
+        c.checked('Security Mode SMTPS')
+        c.set('Port', 100)
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Advanced')
+        g.isSet('SMTP Server', "192.168.100.100")
+        g.isSet('Default Reply To', "a@gmail.com")
+        g.isChecked('Authentication')
+        g.isSet('Username', "Peter Chen")
+        g.isSet('Password', "12345678")
+        g.isChecked('Security Mode SMTPS')
+        g.isSet('Port', 100)
+    }
 })
 
-// cases['advanced email service edit security mode smtps'] = [
-//     ["div.gwt-HTML:contains('Advanced')", undefined, "a[ng-href='system/advanced']"],
-//     ["input.gwt-TextBox:eq(0)", "192.168.100.100", "input#smtp_server"],
-//     ["input.gwt-TextBox:eq(1)", "a@gmail.com", "input#smtp_rt"],
-//     ["input:checkbox:eq(0)", true, "input#check-email-auth"],
-//     ["input.gwt-TextBox:eq(2)", "Peter Chen", "input#smtp_user"],
-//     ["input:radio:eq(1)", true, "input#radio-email-smtps"], // security mode SMTPS
-//     ["input[type='text']:eq(40)", 100, "input#smtp_port"],
-//     ["span:contains('Save')", undefined, "skip"],
-// ]
-
-new Testcase('advanced email service edit security mode starttls', map, (t) => {
-    t.click('Advanced')
-    t.set('SMTP Server', "192.168.100.100")
-    t.set('Default Reply To', "a@gmail.com")
-    t.checked('Authentication')
-    t.set('Username', "Peter Chen")
-    t.set('Password', "12345678")
-    t.checked('Security Mode STARTTLS')
-    t.set('Port', 100)
-    t.click('Save')
+new Testcase({
+    name: 'advanced email service edit security mode starttls',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Advanced')
+        c.set('SMTP Server', "192.168.100.100")
+        c.set('Default Reply To', "a@gmail.com")
+        c.checked('Authentication')
+        c.set('Username', "Peter Chen")
+        c.set('Password', "12345678")
+        c.checked('Security Mode STARTTLS')
+        c.set('Port', 100)
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Advanced')
+        g.isSet('SMTP Server', "192.168.100.100")
+        g.isSet('Default Reply To', "a@gmail.com")
+        g.isChecked('Authentication')
+        g.isSet('Username', "Peter Chen")
+        g.isSet('Password', "12345678")
+        g.isChecked('Security Mode STARTTLS')
+        g.isSet('Port', 100)
+    }
 })
 
-// cases['advanced email service edit security mode starttls'] = [
-//     ["div.gwt-HTML:contains('Advanced')", undefined, "a[ng-href='system/advanced']"],
-//     ["input.gwt-TextBox:eq(0)", "192.168.100.100", "input#smtp_server"],
-//     ["input.gwt-TextBox:eq(1)", "a@gmail.com", "input#smtp_rt"],
-//     ["input:checkbox:eq(0)", true, "input#check-email-auth"],
-//     ["input.gwt-TextBox:eq(2)", "Peter Chen", "input#smtp_user"],
-//     ["input:radio:eq(2)", true, "input#radio-email-starttls"], // security mode STARTTLS
-//     ["input[type='text']:eq(40)", 100, "input#smtp_port"],
-//     ["span:contains('Save')", undefined, "skip"],
-// ]
+//todo: 
+new Testcase({
+        name: 'advanced time setting use fortiguard',
+        cloud: cloudMap,
+        gate: gateMap,
+        testcase: (c) => {
+            c.click('Advanced')
 
-new Testcase('advanced time setting use fortiguard', map, (t) => {
-    t.click('Advanced')
+            c.set('Time Zone', "04")
+            c.checked('Synchronize with NTP Server')
+            c.click('Use FortiGuard Server')
+            c.set('Sync Interval', 100)
 
-    t.set('Time Zone', "04")
-    t.checked('Synchronize with NTP Server')
-    t.click('Use FortiGuard Server')
-    t.set('Sync Interval', 100)
+            c.click('Save')
+        },
+        verify: (g) => {
+            g.click('Dashboard')
+            g.click('System Time') // todo: can't navigate to new href
+            g.isSet('Time Zone', "string:04")
+            g.isChecked('Synchronize with NTP Server')
+            g.isChecked('Use FortiGuard Server')
+            g.isSet('Sync Interval', 100)
+        }
+    })
+    //todo: 
+new Testcase({
+    name: 'advanced time setting specify',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Advanced')
 
-    t.click('Save')
-})
+        c.set('Time Zone', "04")
+        c.checked('Synchronize with NTP Server')
+        c.click('Specify')
+        c.set('Sync Interval', 200)
+        c.set('Server', "g.com")
 
-new Testcase('advanced time setting specify', map, (t) => {
-    t.click('Advanced')
-
-    t.set('Time Zone', "04")
-    t.checked('Synchronize with NTP Server')
-    t.click('Specify')
-    t.set('Sync Interval', 200)
-    t.set('Server', "g.com")
-
-    t.click('Save')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Dashboard')
+        g.click('System Time') // todo: can't navigate to new href
+        g.isSet('Time Zone', "string:04")
+        g.isChecked('Synchronize with NTP Server')
+        g.isChecked('Specify')
+        g.isSet('Sync Interval', 200)
+        g.isSet('Server', "g.com")
+    }
 })
