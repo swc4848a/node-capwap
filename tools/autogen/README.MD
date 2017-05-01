@@ -9,4 +9,27 @@ Some moudle key is in parent object while others in child object (utmWebRating).
 {"params":{"utmWebRating":{"url":"a.com","key":"a.com","rating":9}}}
 ~~~~
 
-### 
+### Template
+~~~~
+let Testcase = require('../testcase.js');
+
+let cloudMap = {
+
+}
+
+let gateMap = {
+
+}
+
+new Testcase({
+    name: '',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+
+    },
+    verify: (g) => {
+
+    }
+})
+~~~~
