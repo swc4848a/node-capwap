@@ -9,10 +9,11 @@ let cloudMap = {
     'VLAN ID': "select.gwt-ListBox:eq(2)",
     'Role': "select.gwt-ListBox:eq(3)",
     'Address Mode Manual': "input[value='STATIC']",
-    'Address Mode DHCP': "input[value='DHCP']",
+    'Address Mode DHCP': "input[value='DHCP']~label",
     'Distance': "td>input:eq(2)",
     'IP/Netmask': "input.gwt-TextBox:eq(2)",
     'Device Detection': "input:checkbox:eq(1)",
+    'Device Detection for dhcp mode': "input:checkbox:eq(3)",
     'Miscellaneous Block': "input:radio[value='BLOCK']",
     'Miscellaneous Monitor': "input:radio[value='MONITOR']",
     'Interface Status Disable': "input:radio[value='DOWN']",
@@ -45,6 +46,11 @@ let gateMap = {
     'Comments': "textarea#description",
 
     'interface man': "tr[mkey='interface man']",
+    'interface dhcp': "tr[mkey='interface dhcp']",
+    'interface loop': "tr[mkey='interface loop']",
+    'interface wan': "tr[mkey='interface wan']",
+    'interface dmz': "tr[mkey='interface dmz']",
+    'interface N/A': "tr[mkey='interface N/A']",
     'Edit': "button span:contains('Edit'):eq(0)",
 }
 
@@ -97,19 +103,18 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface new dhcp mode',
+    name: 'interface dhcp new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Create New')
         c.set('Interface Name', "interface dhcp")
-        c.set('Alias', "alias one")
+        c.set('Alias', "alias dhcp")
         c.set('VLAN ID', 2)
-        c.checked('Address Mode DHCP')
-        c.checked('Address Mode DHCP') // second click trigger below three params render
-        c.set('Distance', 100) // todo: Distance: 100 (not working)
-        c.checked('Device Detection')
+        c.click('Address Mode DHCP')
+        c.set('Distance', 100)
+        c.checked('Device Detection for dhcp mode')
         c.checked('Miscellaneous Monitor')
         c.checked('Interface Status Disable')
         c.set('Comments', "test comments")
@@ -118,11 +123,12 @@ new Testcase({
     verify: (g) => {
         g.click('Interfaces')
         g.click('interface dhcp')
+        g.click('Edit')
         g.isSet('Interface Name', "interface dhcp")
-        g.isSet('Alias', "alias one")
+        g.isSet('Alias', "alias dhcp")
         g.isSet('VLAN ID', 2)
         g.isSet('Address Mode DHCP', "dhcp")
-        g.isSet('Distance', 100) // todo: Distance: 100 (not working)
+        g.isSet('Distance', 100)
         g.isChecked('Device Detection')
         g.isChecked('Miscellaneous Monitor')
         g.isChecked('Interface Status Disable')
@@ -131,13 +137,14 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface delete dhcp',
+    name: 'interface dhcp delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Delete for interface dhcp')
         c.click('YES')
+        c.click('YES') // todo: GUI bug, need click twice
     },
     verify: (g) => {
         g.click('Interfaces')
@@ -146,7 +153,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface new loopback',
+    name: 'interface loopback new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -155,7 +162,7 @@ new Testcase({
         c.set('Interface Name', "interface loop")
         c.set('Alias', "alias loop")
         c.set('Type', "LOOPBACK")
-        c.checked('Device Detection')
+            // c.checked('Device Detection') // todo: GUI bug, no device detection
         c.checked('Miscellaneous Monitor')
         c.checked('Interface Status Disable')
         c.set('Comments', "test comments")
@@ -164,10 +171,10 @@ new Testcase({
     verify: (g) => {
         g.click('Interfaces')
         g.click('interface loop')
+        g.click('Edit')
         g.isSet('Interface Name', "interface loop")
         g.isSet('Alias', "alias loop")
-        g.isSet('Type', "LOOPBACK")
-        g.isChecked('Device Detection')
+        g.isSet('Type', "loopback")
         g.isChecked('Miscellaneous Monitor')
         g.isChecked('Interface Status Disable')
         g.isSet('Comments', "test comments")
@@ -175,23 +182,24 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface delete loopback',
+    name: 'interface loopback delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Delete for interface loopback')
         c.click('YES')
+        c.click('YES') // todo: GUI bug, need click twice
     },
     verify: (g) => {
         g.click('Interfaces')
-        g.isDelete('interface loopback')
+        g.isDelete('interface loop')
     }
 })
 
 // todo: Physical Interface Members need validataion
 new Testcase({
-    name: 'interface new hardswitch',
+    name: 'interface hardswitch new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -210,6 +218,7 @@ new Testcase({
     verify: (g) => {
         g.click('Interfaces')
         g.click('interface hard')
+        g.click('Edit')
         g.isSet('Interface Name', "interface hard")
         g.isSet('Alias', "alias hard")
         g.isSet('Type', "HARD_SWITCH")
@@ -223,7 +232,7 @@ new Testcase({
 
 // todo: Attribute 'interface' MUST be set.
 new Testcase({
-    name: 'interface new softswitch',
+    name: 'interface softswitch new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -242,6 +251,7 @@ new Testcase({
     verify: (g) => {
         g.click('Interfaces')
         g.click('interface soft')
+        g.click('Edit')
         g.isSet('Interface Name', "interface soft")
         g.isSet('Alias', "alias soft")
         g.isSet('Type', "SWITCH")
@@ -254,7 +264,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface new wan',
+    name: 'interface wan new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -272,10 +282,11 @@ new Testcase({
     verify: (g) => {
         g.click('Interfaces')
         g.click('interface wan')
+        g.click('Edit')
         g.isSet('Interface Name', "interface wan")
         g.isSet('Alias', "alias wan")
         g.isSet('VLAN ID', 5)
-        g.isSet('Role', "WAN")
+        g.isSet('Role', "wan")
         g.isChecked('Miscellaneous Monitor')
         g.isChecked('Interface Status Disable')
         g.isSet('Comments', "test comments")
@@ -283,12 +294,13 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface delete wan',
+    name: 'interface wan delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Delete for interface wan')
+        c.click('YES')
         c.click('YES')
     },
     verify: (g) => {
@@ -298,7 +310,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface new dmz',
+    name: 'interface dmz new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -317,10 +329,11 @@ new Testcase({
     verify: (g) => {
         g.click('Interfaces')
         g.click('interface dmz')
+        g.click('Edit')
         g.isSet('Interface Name', "interface dmz")
         g.isSet('Alias', "alias dmz")
         g.isSet('VLAN ID', 3)
-        g.isSet('Role', "DMZ")
+        g.isSet('Role', "dmz")
         g.isChecked('Device Detection')
         g.isChecked('Miscellaneous Monitor')
         g.isChecked('Interface Status Disable')
@@ -329,12 +342,13 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface delete dmz',
+    name: 'interface dmz delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Delete for interface dmz')
+        c.click('YES')
         c.click('YES')
     },
     verify: (g) => {
@@ -344,7 +358,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface new undefined',
+    name: 'interface undefined new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -363,10 +377,11 @@ new Testcase({
     verify: (g) => {
         g.click('Interfaces')
         g.click('interface N/A')
+        g.click('Edit')
         g.isSet('Interface Name', "interface N/A")
         g.isSet('Alias', "alias undefined")
         g.isSet('VLAN ID', 4)
-        g.isSet('Role', "UNDEFINED")
+        g.isSet('Role', "undefined")
         g.isChecked('Device Detection')
         g.isChecked('Miscellaneous Monitor')
         g.isChecked('Interface Status Disable')
@@ -375,7 +390,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface delete undefined',
+    name: 'interface undefined delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -386,6 +401,6 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Interfaces')
-        g.isDelete('interface undefined')
+        g.isDelete('interface N/A')
     }
 })
