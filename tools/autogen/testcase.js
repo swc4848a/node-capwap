@@ -59,6 +59,11 @@ class GateGUI {
             gatecases[this.name].push([this.map[btn], val]);
         }
     }
+    isDelete(btn) {
+        if (this.map[btn]) {
+            gatecases[this.name].push([this.map[btn], { action: 'delete' }]);
+        }
+    }
 }
 
 class Testcase {

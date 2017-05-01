@@ -19,7 +19,7 @@ let cloudMap = {
     'Comments': "textarea.gwt-TextArea",
     'Save': "span:contains('Save')",
 
-    'Delete for interface one': "tr.disabled:contains('interface one') div[title='Delete']",
+    'Delete for interface manual': "tr.disabled:contains('interface man') div[title='Delete']",
     'Delete for interface dhcp': "tr.disabled:contains('interface dhcp') div[title='Delete']",
     'Delete for interface loopback': "tr.disabled:contains('interface loop') div[title='Delete']",
     'Delete for interface wan': "tr.disabled:contains('interface wan') div[title='Delete']",
@@ -29,36 +29,34 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Interfaces': "",
-    'Create New': "",
-    'Interface Name': "",
-    'Alias': "",
-    'Type': "",
-    'VLAN ID': "",
-    'Role': "",
-    'Address Mode Manual': "",
-    'Address Mode DHCP': "",
-    'Distance': "",
-    'IP/Netmask': "",
-    'Device Detection': "",
-    'Miscellaneous Block': "",
-    'Miscellaneous Monitor': "",
-    'Interface Status Disable': "",
-    'Comments': "",
-    'Save': "",
+    'Interfaces': "a[href='page/p/system/interface/']",
+    'Interface Name': "input#name",
+    'Type': "input#type",
+    'VLAN ID': "input#vlanid",
+    'Role': "select#role",
+    'Address Mode Manual': "input#addressing_mode_static",
+    'Address Mode DHCP': "input#addressing_mode_dhcp",
+    'Distance': "input#distance",
+    'IP/Netmask': "input#ipmask",
+    'Device Detection': "input:checkbox#enable-device-identification",
+    'Miscellaneous Block': "input:radio#scan-botnet-connections-block",
+    'Miscellaneous Monitor': "input:radio#scan-botnet-connections-monitor",
+    'Interface Status Disable': "input:radio#admin_status_down",
+    'Comments': "textarea#description",
 
-    'interface one': "",
+    'interface man': "tr[mkey='interface man']",
+    'Edit': "button span:contains('Edit'):eq(0)",
 }
 
 new Testcase({
-    name: 'interface new manual',
+    name: 'interface manual new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Create New')
-        c.set('Interface Name', "interface one")
-        c.set('Alias', "alias one")
+        c.set('Interface Name', "interface man")
+        c.set('Alias', "alias manual")
         c.checked('Address Mode Manual')
         c.set('IP/Netmask', "1.1.1.1/24")
         c.checked('Device Detection')
@@ -69,11 +67,12 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Interfaces')
-        g.click('interface one')
-        g.isSet('Interface Name', "interface one")
-        g.isSet('Alias', "alias one")
-        g.isChecked('Address Mode Manual')
-        g.isSet('IP/Netmask', "1.1.1.1/24")
+        g.click('interface man')
+        g.click('Edit')
+        g.isSet('Interface Name', "interface man")
+        g.isSet('Alias', "alias manual")
+        g.isSet('Address Mode Manual', "static")
+        g.isSet('IP/Netmask', "1.1.1.1/255.255.255.0")
         g.isChecked('Device Detection')
         g.isChecked('Miscellaneous Block')
         g.isChecked('Interface Status Disable')
@@ -82,17 +81,18 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface delete manual',
+    name: 'interface manual delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
-        c.click('Delete for interface one')
+        c.click('Delete for interface manual')
         c.click('YES')
+        c.click('YES') // todo: GUI bug, need click twice
     },
     verify: (g) => {
         g.click('Interfaces')
-        g.isDelete('interface one')
+        g.isDelete('interface man')
     }
 })
 
@@ -121,8 +121,7 @@ new Testcase({
         g.isSet('Interface Name', "interface dhcp")
         g.isSet('Alias', "alias one")
         g.isSet('VLAN ID', 2)
-        g.isChecked('Address Mode DHCP')
-        g.isChecked('Address Mode DHCP') // second click trigger below three params render
+        g.isSet('Address Mode DHCP', "dhcp")
         g.isSet('Distance', 100) // todo: Distance: 100 (not working)
         g.isChecked('Device Detection')
         g.isChecked('Miscellaneous Monitor')

@@ -119,16 +119,32 @@ function verify(selector, expect) {
             if (result) {
                 console.log("config success", selector, value, expect);
             } else {
-                console.log("config failed", selector, value, expect);
+                console.log("*config failed", selector, value, expect);
             }
             break;
         case 'object':
-            if ($(selector).length) {
-                $(selector).click();
-                console.log('click:', selector);
+            if (expect) {
+                if ('delete' === expect.action) {
+                    if ($(selector).length) {
+                        console.log('*delete failed', selector);
+                    } else {
+                        if ($('iframe').contents().find(selector).length) {
+                            console.log('*iframe delete failed', selector);
+                        } else {
+                            console.log('delete success', selector);
+                        }
+                    }
+                } else {
+                    console.log('config failed: unsupport action', expect.action);
+                }
             } else {
-                $('iframe').contents().find(selector).click();
-                console.log('iframe click:', selector);
+                if ($(selector).length) {
+                    $(selector).click();
+                    console.log('click:', selector);
+                } else {
+                    $('iframe').contents().find(selector).click();
+                    console.log('iframe click:', selector);
+                }
             }
             break;
         default:
@@ -148,10 +164,12 @@ async function runSeq(page, action, ready, key, seq) {
         let retry = 0;
         let max_try = 20;
 
-        while (!await ready(page, selector) && retry < max_try) {
-            console.log('waiting %s s...', retry + 1);
-            await sleep(1000);
-            ++retry;
+        if (!(value && value.action === 'delete')) {
+            while (!await ready(page, selector) && retry < max_try) {
+                console.log('waiting %s s...', retry + 1);
+                await sleep(1000);
+                ++retry;
+            }
         }
         if (retry === max_try) {
             console.log('retry timeout, return failed');

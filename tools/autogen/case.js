@@ -2,7 +2,7 @@
 
 let cases = require('./it/root.js');
 
-// require('./it/interfaces.js');
+require('./it/interfaces.js');
 require('./it/dns.js');
 // require('./it/routing.js');
 // require('./it/adminSettings.js');
