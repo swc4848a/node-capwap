@@ -1,38 +1,3 @@
-// let cases = require('./root.js');
-
-// // todo: can't dbbclick span:contains('new address') and after click save gui post put twice
-// cases['address new'] = [
-//     ["div.gwt-HTML:contains('Addresses')", undefined, "a[ng-href='page/p/firewall/object/address/']"],
-//     ["button[title='Create New']", undefined, "span:contains('address new')", { action: "dblclick" }],
-//     ["div.filter_text:contains('Address'):eq(0)", undefined, "span:contains('Address'):eq(0)"],
-//     ["input.gwt-TextBox:eq(0)", "address new", "input#name"],
-//     ["input.gwt-TextBox:eq(1)", "192.168.100.100/255.255.255.0", "input#ipmask"],
-//     ["input:checkbox:eq(0)", true, "input#visibility"],
-//     ["input:checkbox:eq(1)", true, "input#allow-routing"],
-//     ["textarea.gwt-TextArea", "test comments", "textarea#comment"],
-//     ["span:contains('Save')", undefined, "skip"],
-//     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
-// ]
-
-// let key = 'group one';
-// cases['address group new'] = [
-//     ["div.gwt-HTML:contains('Addresses')", undefined, "a[ng-href='page/p/firewall/object/address/']"],
-//     ["button[title='Create New']", undefined, "tr[mkey='" + key + "']"],
-//     ["div.filter_text:contains('Address'):eq(1)", undefined, "button:contains('Edit'):eq(0)"],
-//     ["input.gwt-TextBox:eq(0)", key, "input#name"],
-//     ["div.gwt-HTML:contains(' - ')", undefined, "skip"], // todo: gate click bug
-//     ["div.gwt-HTML:contains('address new'):eq(0)", undefined, "skip"],
-//     ["div.gwt-DecoratedPopupPanel", { action: "hide" }, "skip"],
-//     ["input:checkbox:eq(0)", true, "input#visibility"], // todo: bug
-//     ["input:checkbox:eq(1)", true, "input#allow-routing"],
-//     ["textarea.gwt-TextArea", "comments test", "textarea#comment"],
-//     ["span:contains('Save')", undefined, "skip"],
-//     ["button:contains('OK')", undefined, "skip"], // todo: double put, just skip it.
-// ]
-
-// module.exports = cases;
-
-
 let Testcase = require('../testcase.js');
 
 let cloudMap = {
@@ -47,9 +12,14 @@ let cloudMap = {
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
 
+    'Delete for address new': "td.left:contains('address new')~td.right div[title='Delete']",
+    'Delete for group new': "td.left:contains('group new')~td.right div[title='Delete']",
+    'Next Page': "img.gwt-Image:eq(3)",
+    'YES': "span:contains('YES')",
+
     'Create Address Group': "div.filter_text:contains('Address'):eq(1)",
     'Members': "div.gwt-HTML:contains(' - ')",
-    'address new': "div.gwt-HTML:contains('address new'):eq(0)",
+    'all': "div.gwt-HTML:contains('all'):eq(0)",
     'Popup Pannel': "div.gwt-DecoratedPopupPanel",
 }
 
@@ -60,6 +30,10 @@ let gateMap = {
     'Visibility': "input#visibility",
     'Static Route': "input#allow-routing",
     'Comments': "textarea#comment",
+
+    'address new': "tr[mkey='address new']",
+    'group new': "tr[mkey='group new']",
+    'Edit': "button span:contains('Edit'):eq(0)",
 }
 
 new Testcase({
@@ -80,11 +54,28 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Addresses')
+        g.click('address new')
+        g.click('Edit')
         g.isSet('Name', "address new")
-        g.isSet('IP/Netmask', "192.168.100.100/255.255.255.0")
+        g.isSet('IP/Netmask', "192.168.100.0/255.255.255.0")
         g.isChecked('Visibility')
         g.isChecked('Static Route')
         g.isSet('Comments', "test comments")
+    }
+})
+
+new Testcase({
+    name: 'address delete',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Addresses')
+        c.click('Delete for address new')
+        c.click('YES')
+    },
+    verify: (g) => {
+        g.click('Addresses')
+        g.isDelete('address new')
     }
 })
 
@@ -98,7 +89,7 @@ new Testcase({
         c.click('Create Address Group')
         c.set('Name', "group new")
         c.click('Members')
-        c.click('address new')
+        c.click('all')
         c.hide('Popup Pannel')
         c.checked('Visibility')
         c.checked('Static Route')
@@ -108,11 +99,29 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Addresses')
+        g.click('group new')
+        g.click('Edit')
         g.isSet('Name', "group new")
         g.isChecked('Visibility')
-        g.isChecked('Static Route')
+        g.isUnchecked('Static Route') // gate GUI disabled
         g.isSet('Comments', "test comments")
         g.click('Save')
         g.click('OK')
+    }
+})
+
+new Testcase({
+    name: 'address group delete',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Addresses')
+        c.click('Next Page')
+        c.click('Delete for group new')
+        c.click('YES')
+    },
+    verify: (g) => {
+        g.click('Addresses')
+        g.isDelete('group new')
     }
 })
