@@ -10,8 +10,8 @@ require('./it/fortiGuard.js');
 require('./it/advanced.js');
 require('./it/addresses.js');
 require('./it/services.js');
+require('./it/schedules.js');
 
-// cases = require('./it/schedules.js');
 // cases = require('./it/webFilter.js');
 // cases = require('./it/dnsFilter.js');
 // cases = require('./it/applicationControl.js');
