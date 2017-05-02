@@ -168,7 +168,7 @@ async function runSeq(page, action, ready, key, seq) {
         let selector = seq[i][0];
         let value = seq[i][1];
         let retry = 0;
-        let max_try = 20;
+        let max_try = 25;
 
         if (!(value && value.action === 'delete')) {
             while (!await ready(page, selector) && retry < max_try) {

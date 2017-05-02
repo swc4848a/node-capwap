@@ -15,7 +15,13 @@ let cloudMap = {
     'OK': "button:contains('OK')",
     'YES': "span:contains('YES')",
 
-    'Days': "input:checkbox",
+    'Sunday': "input:checkbox:eq(0)",
+    'Monday': "input:checkbox:eq(1)",
+    'Tuesday': "input:checkbox:eq(2)",
+    'Wednesday': "input:checkbox:eq(3)",
+    'Thursday': "input:checkbox:eq(4)",
+    'Friday': "input:checkbox:eq(5)",
+    'Saturday': "input:checkbox:eq(6)",
     'Time': "td>input.textBox",
 
     'Delete Onetime one': "td.left:contains('onetime one')~td.right div[title='Delete']",
@@ -113,8 +119,13 @@ new Testcase({
         c.click('Create New')
         c.click('Create Recurring Schedule')
         c.set('Name', "recurring one")
-        c.checked('Days')
-        c.set('Time', 1)
+        c.checked('Monday')
+        c.checked('Tuesday')
+        c.checked('Wednesday')
+        c.checked('Thursday')
+        c.checked('Friday')
+        c.checked('Saturday')
+        c.set('Time', 10)
         c.click('Save')
         c.click('OK')
     },
@@ -124,7 +135,7 @@ new Testcase({
         g.click('Edit')
         g.isChecked('Type Recurring')
         g.isSet('Name', "recurring one")
-        g.isChecked('Sunday')
+        g.isUnchecked('Sunday')
         g.isChecked('Monday')
         g.isChecked('Tuesday')
         g.isChecked('Wednesday')
@@ -132,10 +143,10 @@ new Testcase({
         g.isChecked('Friday')
         g.isChecked('Saturday')
         g.isUnchecked('All Day')
-        g.isSet('Start Hour', 1)
-        g.isSet('Start Min', 1)
-        g.isSet('Stop Hour', 1)
-        g.isSet('Stop Min', 1)
+        g.isSet('Start Hour', 10)
+        g.isSet('Start Min', 10)
+        g.isSet('Stop Hour', 10)
+        g.isSet('Stop Min', 10)
     }
 })
 
