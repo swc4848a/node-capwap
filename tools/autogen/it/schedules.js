@@ -3,8 +3,8 @@ let Testcase = require('../testcase.js');
 let cloudMap = {
     'Schedules': "div.gwt-HTML:contains('Schedules')",
     'Create New': "button[title='Create New']",
+
     'Create One-Time Schedule': "div.filter_text:contains('One-Time Schedule')",
-    'Create Recurring Schedule': "div.filter_text:contains('Recurring Schedule')",
     'Name': "input.gwt-TextBox:eq(0)",
     'Start Date': "img.html-link:eq(0)",
     'Select': "button:contains('Select')",
@@ -15,6 +15,7 @@ let cloudMap = {
     'OK': "button:contains('OK')",
     'YES': "span:contains('YES')",
 
+    'Create Recurring Schedule': "div.filter_text:contains('Recurring Schedule')",
     'Sunday': "input:checkbox:eq(0)",
     'Monday': "input:checkbox:eq(1)",
     'Tuesday': "input:checkbox:eq(2)",
@@ -24,8 +25,15 @@ let cloudMap = {
     'Saturday': "input:checkbox:eq(6)",
     'Time': "td>input.textBox",
 
+    'Create Schedule Group': "div.filter_text:contains('Schedule Group')",
+    'Members': "div.gwt-HTML:contains(' - ')",
+    'Members Always': "div.gwt-HTML:contains('always')",
+    'Members None': "div.gwt-HTML:contains('none')",
+    'Popup Panel': "div.gwt-DecoratedPopupPanel",
+
     'Delete Onetime one': "td.left:contains('onetime one')~td.right div[title='Delete']",
     'Delete Recurring One': "td.left:contains('recurring one')~td.right div[title='Delete']",
+    'Delete Schedule Group One': "td.left:contains('schedule group one')~td.right div[title='Delete']",
 }
 
 let gateMap = {
@@ -57,6 +65,11 @@ let gateMap = {
     'Start Min': "input#start_min",
     'Stop Hour': "input#stop_hour",
     'Stop Min': "input#stop_min",
+
+    'Schedule Group One': "tr[mkey='schedule group one']",
+    'Members Always': "div.formatted-content>span:contains('always')",
+    'Members None': "div.formatted-content>span:contains('none')",
+
 }
 
 new Testcase({
@@ -162,5 +175,46 @@ new Testcase({
     verify: (g) => {
         g.click('Schedules')
         g.isDelete('Recurring One')
+    }
+})
+
+new Testcase({
+    name: 'schedule group new',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Schedules')
+        c.click('Create New')
+        c.click('Create Schedule Group')
+        c.set('Name', "schedule group one")
+        c.click('Members')
+        c.click('Members Always')
+        c.click('Members None')
+        c.hide('Popup Panel')
+        c.click('Save')
+        c.click('OK')
+    },
+    verify: (g) => {
+        g.click('Schedules')
+        g.click('Schedule Group One')
+        g.click('Edit')
+        g.isSet('Name', "schedule group one")
+        g.has('Members Always')
+        g.has('Members None')
+    }
+})
+
+new Testcase({
+    name: 'schedule group delete',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Schedules')
+        c.click('Delete Schedule Group One')
+        c.click('YES')
+    },
+    verify: (g) => {
+        g.click('Schedules')
+        g.isDelete('Schedule Group One')
     }
 })
