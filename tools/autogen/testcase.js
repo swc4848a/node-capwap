@@ -69,6 +69,11 @@ class GateGUI {
             gatecases[this.name].push([this.map[btn], { action: 'delete' }]);
         }
     }
+    has(btn) {
+        if (this.map[btn]) {
+            gatecases[this.name].push([this.map[btn], { action: 'has' }]);
+        }
+    }
 }
 
 class Testcase {

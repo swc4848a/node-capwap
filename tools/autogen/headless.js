@@ -134,8 +134,14 @@ function verify(selector, expect) {
                             console.log('delete success', selector);
                         }
                     }
+                } else if ('has' === expect.action) {
+                    if ($('iframe').contents().find(selector).length) {
+                        console.log("config success", selector, expect);
+                    } else {
+                        console.log("*config failed", selector, expect);
+                    }
                 } else {
-                    console.log('config failed: unsupport action', expect.action);
+                    console.log('*config failed: unsupport action', expect.action);
                 }
             } else {
                 if ($(selector).length) {
