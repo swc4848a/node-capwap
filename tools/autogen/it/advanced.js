@@ -66,7 +66,7 @@ new Testcase({
         g.isSet('Default Reply To', "a@gmail.com")
         g.isChecked('Authentication')
         g.isSet('Username', "Peter Chen")
-        g.isSet('Password', "12345678")
+        g.isSet('Password', "ENC XXXX")
         g.isChecked('Security Mode None')
         g.isSet('Port', 100)
     }
@@ -93,7 +93,7 @@ new Testcase({
         g.isSet('Default Reply To', "a@gmail.com")
         g.isChecked('Authentication')
         g.isSet('Username', "Peter Chen")
-        g.isSet('Password', "12345678")
+        g.isSet('Password', "ENC XXXX")
         g.isChecked('Security Mode SMTPS')
         g.isSet('Port', 100)
     }
@@ -120,7 +120,7 @@ new Testcase({
         g.isSet('Default Reply To', "a@gmail.com")
         g.isChecked('Authentication')
         g.isSet('Username', "Peter Chen")
-        g.isSet('Password', "12345678")
+        g.isSet('Password', "ENC XXXX")
         g.isChecked('Security Mode STARTTLS')
         g.isSet('Port', 100)
     }
