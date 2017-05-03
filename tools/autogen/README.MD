@@ -11,7 +11,8 @@ Auto test for Config Manager Server
 ## How do I get set up?
 * install [node.js v7.10.0+](https://nodejs.org/en/download/package-manager/)  
 * run single testcase: node headless.js "testcase name"  
-* run group testcases: node headless.js "shared name string" (eg: "interface" will load all testcases contains "interface xxx")  
+* run group testcases: node headless.js "shared name string"  
+  (eg: "interface" will load all testcases contains "interface xxx")  
 * run all testcases: node headless.js  
 
 ## How do I get result?
@@ -74,9 +75,14 @@ new Testcase({
 
 ## Continuous Integration
 1. we use [Jenkins](http://172.16.94.162:8080/job/CfgServerIT) to integrate our framework  
-![Jenkins home](doc/jenkins-home)
-![Jenkins build](doc/jenkins-build)
-![Jenkins output](doc/jenkins-output)
+![Jenkins home](doc/jenkins-home.jpg)
+* Log Parser Trend show the summary of your project (more blue and less red means strong health of our project)  
+![Jenkins build](doc/jenkins-build.jpg)
+* Click Parsed Console Output in left menu to show detailed testcase results  
+![Jenkins output](doc/jenkins-output.jpg)
+* Click Error/Warning/Info to check which case failed  
+
 2. if you commit cfgServer Code or testcases will trigger next build (for now it manually build by root user)  
 
 ## Todo List
+1. more testcases add, such as mantis bugs  
