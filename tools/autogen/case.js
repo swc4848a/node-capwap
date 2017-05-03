@@ -11,6 +11,8 @@ require('./it/advanced.js');
 require('./it/addresses.js');
 require('./it/services.js');
 require('./it/schedules.js');
+require('./it/virtualIPs.js');
+require('./it/ipPools.js');
 
 // cases = require('./it/webFilter.js');
 // cases = require('./it/dnsFilter.js');
@@ -36,6 +38,10 @@ delete cases['interface softswitch new'];
 delete cases['routing new'];
 delete cases['routing edit'];
 delete cases['routing delete'];
+
+// todo: extintf any problem
+delete cases['virtual ip new'];
+delete cases['virtual ip delete'];
 
 // todo: temorary delete this case, category can't delete via GUI
 delete cases['category new'];
