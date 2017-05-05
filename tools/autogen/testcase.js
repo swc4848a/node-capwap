@@ -74,6 +74,9 @@ class GateGUI {
             gatecases[this.name].push([this.map[btn], { action: 'has' }]);
         }
     }
+    sleep(time) {
+        gatecases[this.name].push([undefined, { action: 'sleep', value: time }]);
+    }
 }
 
 class Testcase {

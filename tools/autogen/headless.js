@@ -171,7 +171,11 @@ async function runSeq(page, action, ready, key, seq) {
         let retry = 0;
         let max_try = 25;
 
-        if (!(value && value.action === 'delete')) {
+        if (value && value.action === 'sleep') {
+            await sleep(value.value);
+            continue;
+        }
+        if (!(value && (value.action === 'delete'))) {
             while (!await ready(page, selector) && retry < max_try) {
                 console.log('waiting %s s...', retry + 1);
                 await sleep(1000);
