@@ -78,7 +78,7 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('Advanced')
-        c.set('SMTP Server', "192.168.100.100")
+        // c.set('SMTP Server', "192.168.100.100")
         c.set('Default Reply To', "a@gmail.com")
         c.checked('Authentication')
         c.set('Username', "Peter Chen")
@@ -89,7 +89,7 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Advanced')
-        g.isSet('SMTP Server', "192.168.100.100")
+        // g.isSet('SMTP Server', "192.168.100.100")
         g.isSet('Default Reply To', "a@gmail.com")
         g.isChecked('Authentication')
         g.isSet('Username', "Peter Chen")
@@ -105,7 +105,7 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('Advanced')
-        c.set('SMTP Server', "192.168.100.100")
+        // c.set('SMTP Server', "192.168.100.100")
         c.set('Default Reply To', "a@gmail.com")
         c.checked('Authentication')
         c.set('Username', "Peter Chen")
@@ -116,7 +116,7 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Advanced')
-        g.isSet('SMTP Server', "192.168.100.100")
+        // g.isSet('SMTP Server', "192.168.100.100")
         g.isSet('Default Reply To', "a@gmail.com")
         g.isChecked('Authentication')
         g.isSet('Username', "Peter Chen")
