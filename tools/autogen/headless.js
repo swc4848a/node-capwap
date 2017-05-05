@@ -4,6 +4,7 @@ const gatecases = require('./it/gatecases.js');
 const util = require('util');
 const S = require('string');
 const deploy = require('./it/deploy.js');
+const importConfig = require('./it/import.js');
 const login = require('./it/setup.js');
 
 function sleep(ms) {
@@ -205,6 +206,9 @@ function buildGateLoginSeq() {
 function buildCloudTestSeq(key) {
     let cloudSeq = [];
     console.log('load "%s" test cases', key);
+    importConfig.forEach((item) => {
+        cloudSeq.push(item);
+    })
     cases[key].forEach((item) => {
         cloudSeq.push(item);
     })
