@@ -89,7 +89,7 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Advanced')
-        g.sleep(100)
+        g.sleep(1000)
         g.isSet('SMTP Server', "192.168.100.100")
         g.isSet('Default Reply To', "a@gmail.com")
         g.isChecked('Authentication')
@@ -117,6 +117,7 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Advanced')
+        g.sleep(1000)
         g.isSet('SMTP Server', "192.168.100.100")
         g.isSet('Default Reply To', "a@gmail.com")
         g.isChecked('Authentication')
