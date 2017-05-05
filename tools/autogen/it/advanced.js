@@ -57,7 +57,7 @@ new Testcase({
         c.set('Username', "Peter Chen")
         c.set('Password', "12345678")
         c.checked('Security Mode None')
-        c.set('Port', 100)
+        c.set('Port', 25)
         c.click('Save')
     },
     verify: (g) => {
@@ -68,7 +68,7 @@ new Testcase({
         g.isSet('Username', "Peter Chen")
         g.isSet('Password', "ENC XXXX")
         g.isChecked('Security Mode None')
-        g.isSet('Port', 100)
+        g.isSet('Port', 25) // must be 25 in gate GUI
     }
 })
 
@@ -84,7 +84,7 @@ new Testcase({
         c.set('Username', "Peter Chen")
         c.set('Password', "12345678")
         c.checked('Security Mode SMTPS')
-        c.set('Port', 100)
+        c.set('Port', 465)
         c.click('Save')
     },
     verify: (g) => {
@@ -95,7 +95,7 @@ new Testcase({
         g.isSet('Username', "Peter Chen")
         g.isSet('Password', "ENC XXXX")
         g.isChecked('Security Mode SMTPS')
-        g.isSet('Port', 100)
+        g.isSet('Port', 465) // must be 465 in gate GUI
     }
 })
 
@@ -111,7 +111,7 @@ new Testcase({
         c.set('Username', "Peter Chen")
         c.set('Password', "12345678")
         c.checked('Security Mode STARTTLS')
-        c.set('Port', 100)
+        c.set('Port', 25)
         c.click('Save')
     },
     verify: (g) => {
@@ -122,7 +122,7 @@ new Testcase({
         g.isSet('Username', "Peter Chen")
         g.isSet('Password', "ENC XXXX")
         g.isChecked('Security Mode STARTTLS')
-        g.isSet('Port', 100)
+        g.isSet('Port', 25) // must be 25 in gate GUI
     }
 })
 
@@ -150,7 +150,7 @@ new Testcase({
             g.isSet('Sync Interval', 100)
         }
     })
-    //todo: 
+//todo: 
 new Testcase({
     name: 'advanced time setting specify',
     cloud: cloudMap,
