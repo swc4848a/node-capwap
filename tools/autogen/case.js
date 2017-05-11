@@ -50,4 +50,11 @@ delete cases['web profile overrides new user'];
 delete cases['advanced time setting use fortiguard'];
 delete cases['advanced time setting specify'];
 
+// todo: delete fortiguard
+delete cases['fortigurad edit, enable all checkbox'];
+delete cases['fortigurad edit, enable all checkbox'];
+delete cases['fortigurad edit every'];
+delete cases['fortigurad edit daily'];
+delete cases['fortigurad edit weekly'];
+
 module.exports = cases;
