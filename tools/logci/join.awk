@@ -4,7 +4,7 @@
 } END {
     n = asort(array, dest);
     sql="SELECT ap.sn,ap.fwVersion,a.email FROM ap_ap AS ap JOIN ap_network AS n ON ap.apNetworkOid = n.oid JOIN account AS a ON a.oid = n.accountOid WHERE ap.active=1";
-    cmd="mysql -u forticrm -pflzx3kc -s -N -h 192.168.223.37 portal -e \""sql"\"";
+    cmd="mysql -u forticrm -pxxxxxxx -s -N -h 192.168.223.37 portal -e \""sql"\"";
     while(cmd|getline) {
         version[$1]=$2;
         email[$1]=$3;
