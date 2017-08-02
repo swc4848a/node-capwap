@@ -1,4 +1,4 @@
 node_modules/
-tools/autogen/img/*.png
+tools/phantom/img/*.png
 npm-debug.log
 node-capwap.sublime-workspace
