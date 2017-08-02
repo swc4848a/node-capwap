@@ -161,6 +161,7 @@ function verify(selector, expect) {
 
 async function capture(page, step) {
     await page.render('./img/' + step + '.png');
+    console.log('capture -> ' + step + '.png');
     await sleep(2000);
 }
 
@@ -175,6 +176,12 @@ async function runSeq(page, action, ready, key, seq) {
             await sleep(value.value);
             continue;
         }
+        if (value && value.action === 'redirect') {
+            await page.evaluate(function(url) {
+                window.history.pushState("", "", url);
+            }, value.value);
+            continue;
+        }
         if (!(value && (value.action === 'delete'))) {
             while (!await ready(page, selector) && retry < max_try) {
                 console.log('waiting %s s...', retry + 1);
@@ -184,6 +191,7 @@ async function runSeq(page, action, ready, key, seq) {
         }
         if (retry === max_try) {
             console.log('retry timeout, return failed');
+            await capture(page, key + '_failed');
             break;
         }
         if ("span:contains('Close')" === selector) {
@@ -261,27 +269,27 @@ async function setupGatePage(instance) {
     return await setupPage(instance, 'https://172.16.95.49/login', true);
 }
 
-async function start(instance) {
-    const cloud_page = await setupCloudPage(instance);
-    const gate_page = await setupGatePage(instance);
-
-    await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
-    await runSeq(gate_page, action, gateReady, 'login', buildGateLoginSeq());
-
+async function start() {
     for (let key in cases) {
         if (skip(key)) {
             continue;
         }
+
+        const instance = await phantom.create(['--ignore-ssl-errors=yes'], { logLevel: 'error' });
+        const cloud_page = await setupCloudPage(instance);
+        const gate_page = await setupGatePage(instance);
+
+        await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+        await runSeq(gate_page, action, gateReady, 'login', buildGateLoginSeq());
+
         await runSeq(cloud_page, action, ready, S(key).slugify().s, buildCloudTestSeq(key));
         await runSeq(gate_page, verify, gateReady, S(key).slugify().s, buildGateVerifySeq(key));
-    }
 
-    await sleep(2000);
+        await instance.exit();
+        console.log('instance exit...');
+    }
 }
 
 (async function() {
-    const instance = await phantom.create(['--ignore-ssl-errors=yes'], { logLevel: 'error' });
-    await start(instance);
-    await instance.exit();
-    console.log('instance exit...');
+    await start();
 }());
