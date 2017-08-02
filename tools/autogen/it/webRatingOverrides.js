@@ -1,21 +1,57 @@
 let Testcase = require('../testcase.js');
 
-let map = {
+let cloudMap = {
     'Web Rating Overrides': "div.gwt-HTML:contains('Web Rating Overrides')",
 
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
     'URL': "input.gwt-TextBox",
 
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
+
+    'Delete': "div[title='Delete']",
+    'YES': "button:contains('YES')",
 }
 
-new Testcase('web rating overrides new', map, (t) => {
-    t.click('Web Rating Overrides')
+let gateMap = {
+    'Web Rating Overrides': "a[ng-href='page/p/utm/wf/local_rating/']",
 
-    t.click('Create New')
-    t.set('URL', "a.com")
+    'a.com': "tr[mkey='a.com']"
+}
 
-    t.click('Save')
-    t.click('OK')
+new Testcase({
+    name: 'Web Rating Overrides edit',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Rating Overrides')
+
+        c.click('Create New')
+        c.set('URL', "a.com")
+
+        c.click('Save')
+        c.click('OK')
+    },
+    verify: (g) => {
+        g.click('Web Rating Overrides')
+
+        g.has('a.com')
+    }
+})
+
+new Testcase({
+    name: 'Web Rating Overrides delete',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Rating Overrides')
+
+        c.click('Delete')
+        c.click('YES')
+    },
+    verify: (g) => {
+        g.click('Web Rating Overrides')
+
+        g.isDelete('a.com')
+    }
 })

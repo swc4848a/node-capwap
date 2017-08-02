@@ -2,7 +2,7 @@ let Testcase = require('../testcase.js');
 
 let cloudMap = {
     'Services': "div.gwt-HTML:contains('Services')",
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
     'Create Service': "div.filter_text:contains('Service'):eq(0)",
     'Create Service Group': "div.filter_text:contains('Service'):eq(1)",
     'Create Category': "div.filter_text:contains('Category')",
@@ -37,8 +37,8 @@ let gateMap = {
     'Destination Port Low': "input.dlow",
     'Destination Port High': "input.dhigh",
     'Comments': "textarea#comment",
-    'Members FTP': "div.formatted-content>span:contains('FTP')",
-    'Members HTTP': "div.formatted-content>span:contains('HTTP')",
+    'Members FTP': "div.selected-entry>span:contains('FTP')",
+    'Members HTTP': "div.selected-entry>span:contains('HTTP')",
 
     'Category Settings': "button:contains('Category Settings')",
     'Category Multi Select category one': "select#categories>option[value='category one']",
@@ -61,9 +61,7 @@ new Testcase({
         c.click('OK')
     },
     verify: (g) => {
-        g.click('Services')
-        g.click('Service One')
-        g.click('Edit')
+        g.redirect('/ng/page/p/firewall/object/service/edit/w%20service%20one/')
         g.isSet('Name', "w service one")
         g.isSet('IP/FQDN', "1.1.1.1")
         g.isSet('Destination Port Low', "111")
@@ -106,9 +104,7 @@ new Testcase({
         c.click('OK')
     },
     verify: (g) => {
-        g.click('Services')
-        g.click('Service Group One')
-        g.click('Edit')
+        g.redirect('/ng/page/p/firewall/object/service_group/edit/group%20one/')
         g.isSet('Name', "group one")
         g.has('Members FTP')
         g.has('Members HTTP')

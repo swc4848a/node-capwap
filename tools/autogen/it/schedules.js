@@ -2,7 +2,7 @@ let Testcase = require('../testcase.js');
 
 let cloudMap = {
     'Schedules': "div.gwt-HTML:contains('Schedules')",
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
 
     'Create One-Time Schedule': "div.filter_text:contains('One-Time Schedule')",
     'Name': "input.gwt-TextBox:eq(0)",
@@ -67,8 +67,8 @@ let gateMap = {
     'Stop Min': "input#stop_min",
 
     'Schedule Group One': "tr[mkey='schedule group one']",
-    'Members Always': "div.formatted-content>span:contains('always')",
-    'Members None': "div.formatted-content>span:contains('none')",
+    'Members Always': "div.selected-entry>span:contains('always')",
+    'Members None': "div.selected-entry>span:contains('none')",
 
 }
 
@@ -84,16 +84,14 @@ new Testcase({
         c.click('Start Date')
         c.click('Select')
         c.click('End Date')
-        c.set('Last Day', 23)
+        c.set('Last Day', 22)
         c.click('Select')
         c.set('Pre-expiration Event Log', 5)
         c.click('Save')
         c.click('OK')
     },
     verify: (g) => {
-        g.click('Schedules')
-        g.click('OneTime One')
-        g.click('Edit')
+        g.redirect('/ng/page/p/firewall/object/schedule/edit/onetime%20one/')
         g.isChecked('Type Onetime')
         g.isSet('Name', "onetime one")
             // todo: specify date
@@ -143,9 +141,7 @@ new Testcase({
         c.click('OK')
     },
     verify: (g) => {
-        g.click('Schedules')
-        g.click('Recurring One')
-        g.click('Edit')
+        g.redirect('/ng/page/p/firewall/object/schedule/edit/recurring%20one/')
         g.isChecked('Type Recurring')
         g.isSet('Name', "recurring one")
         g.isUnchecked('Sunday')
@@ -195,9 +191,7 @@ new Testcase({
         c.click('OK')
     },
     verify: (g) => {
-        g.click('Schedules')
-        g.click('Schedule Group One')
-        g.click('Edit')
+        g.redirect('/ng/page/p/firewall/object/schedule/group/edit/schedule%20group%20one/')
         g.isSet('Name', "schedule group one")
         g.has('Members Always')
         g.has('Members None')

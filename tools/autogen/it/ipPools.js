@@ -2,7 +2,7 @@ let Testcase = require('../testcase.js');
 
 let cloudMap = {
     'IP Pools': "div.gwt-HTML:contains('IP Pools')",
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
 
     'Name': "input.gwt-TextBox:eq(0)",
     'Type': "", // todo: can't click
@@ -50,10 +50,7 @@ new Testcase({
         c.click('OK')
     },
     verify: (g) => {
-        g.click('IP Pools')
-        g.click('ippool one')
-        g.click('Edit')
-
+        g.redirect('/ng/page/p/firewall/object/ippool/edit/ippool%20one')
         g.isSet('Name', "ippool one")
         g.isChecked('Type Overload')
         g.isSet('External IP Range Start', "1.1.1.1")

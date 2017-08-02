@@ -1,8 +1,8 @@
 let deploy = [
-    ["button[title='Deploy']"],
-    ["span:contains('YES')"],
+    ["button:contains('Deploy')"],
+    ["button:contains('Apply')"],
     ["button:contains('OK')"],
-    ["span:contains('Close')"],
+    ["span:contains('Close'), button:contains('OK')"],
 ]
 
 module.exports = deploy;

@@ -2,7 +2,7 @@ let Testcase = require('../testcase.js');
 
 let cloudMap = {
     'Routing': "div.gwt-HTML:contains('Routing')",
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
     'Destination IP': "input.gwt-TextBox:eq(0)",
     'Destination Netmask': "input.gwt-TextBox:eq(1)",
     'Gateway': "input.gwt-TextBox:eq(2)",

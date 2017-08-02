@@ -2,7 +2,7 @@ let Testcase = require('../testcase.js');
 
 let cloudMap = {
     'Virtual IPs': "div.gwt-HTML:contains('Virtual IPs')",
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
     'Create Virtual IP': "div.filter_text:contains('Virtual IP'):eq(0)",
     'Create Virtual IP Group': "div.filter_text:contains('Virtual IP Group')",
 

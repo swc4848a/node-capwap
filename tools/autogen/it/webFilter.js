@@ -1,84 +1,202 @@
-let cases = require('./root.js');
+let Testcase = require('../testcase.js');
 
-cases['web filter edit'] = [
-    ["div.gwt-HTML:contains('Web Filter')", undefined, "a[page/p/utm/wf/profile/edit/default/']"],
+let cloudMap = {
+    'Web Filter': "div.gwt-HTML:contains('Web Filter')",
 
-    ["input:checkbox:eq(0)", true, "skip"], // FortiGuard category based filter
-    ["div.apFortiGuardCategoryActionAllow:eq(0)", undefined, "skip"], // click Potentially Liable allow
-    ["div.tool_new:eq(0)", undefined, "skip"], // add quota
-    ["div.tk-ModalDialog div.apFortiGuardCategoryActionYes", undefined, "skip"], // click add quota all select
-    ["div.tk-ModalDialog input:eq(7)", 7, "skip"], // set quota 7
-    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"], // click ok
+    'FortiGuard category based filter': "label:contains('FortiGuard category based filter')",
+    'Allow users to override blocked categories': "label:contains('Allow users to override blocked categories')",
+    'Enforce Safe Search on Google, Yahoo!, Bing, Yandex': "label:contains('Enforce Safe Search on Google, Yahoo!, Bing, Yandex')",
+    'Log all search keywords': "label:contains('Log all search keywords')",
+    'Block invalid URLs': "label:contains('Block invalid URLs')",
+    'URL Filter': "label:contains('URL Filter')",
+    'Block malicious URLs discovered by FortiSandbox': "label:contains('Block malicious URLs discovered by FortiSandbox')",
+    'Web Content Filter': "label:contains('Web Content Filter')",
+    'Allow websites when a rating error occurs': "label:contains('Allow websites when a rating error occurs')",
+    'Rate URLs by domain and IP Address': "label:contains('Rate URLs by domain and IP Address')",
+    'Block HTTP redirects by rating': "label:contains('Block HTTP redirects by rating')",
+    'Rate images by URL': "label:contains('Rate images by URL')",
+    'Restrict Google account usage to specific domains': "label:contains('Restrict Google account usage to specific domains')",
+    'Provide details for blocked HTTP 4xx and 5xx errors': "label:contains('Provide details for blocked HTTP 4xx and 5xx errors')",
+    'HTTP POST Action Allow': "label:contains('Allow'):eq(2)",
+    'HTTP POST Action Block': "label:contains('Block'):eq(3)",
+    'Remove Java Applets': "label:contains('Remove Java Applets')",
+    'Remove ActiveX': "label:contains('Remove ActiveX')",
+    'Remove Cookies': "label:contains('Remove Cookies')",
 
-    ["label:contains('Allow users to override blocked categories')", undefined, "skip"], // Allow users to override blocked categories: enable
-    ["input:checkbox:eq(2)", true, "skip"], // SSO_Guest_Users
-    ["input:checkbox:eq(3)", true, "skip"], // Guest-group
-    ["input:checkbox:eq(4)", true, "skip"], // monitor-all
-    ["input:checkbox:eq(5)", true, "skip"], // sniffer-profile
+    'Checkbox All': "input:checkbox",
+    'Allow All': "div.apFortiGuardCategoryActionAllow:contains('Allow')",
+    'Monitor All': "div.apFortiGuardCategoryActionMonitor:contains('Monitor')",
+    'SSO_Guest_Users': "label:contains('SSO_Guest_Users')",
+    'Guest-group': "label:contains('Guest-group')",
+    'monitor-all': "label:contains('monitor-all')",
+    'sniffer-profile': "label:contains('sniffer-profile')",
 
-    ["table.fgtWebFilterDuration>tbody>tr>td>input:eq(0)", 6, "skip"], // day
-    ["table.fgtWebFilterDuration>tbody>tr>td>input:eq(1)", 6, "skip"], // hour
-    ["table.fgtWebFilterDuration>tbody>tr>td>input:eq(2)", 6, "skip"], // minute
+    'Add Category Usage Quota': "div.tool_new:eq(0)",
+    'Delete Category Usage Quota': "div.tool_delete",
+    'Choose Categories Select': "div.apFortiGuardCategoryActionYes:contains('Select')",
+    'Ok': "button:contains('Ok')",
 
-    ["input:checkbox:eq(6)", true, "skip"], // Enforce Safe Search on Google, Yahoo!, Bing, Yandex
-    ["input.gwt-TextBox", "youtube id", "skip"],
-    ["input:checkbox:eq(7)", true, "skip"], // Log all search keywords
+    'Radio Ask': "label:contains('Ask')",
 
-    ["input:checkbox:eq(8)", true, "skip"], // Block invalid URLs
-    ["input:checkbox:eq(10)", true, "skip"], // Block malicious URLs discovered by FortiSandbox
+    'Save': "span:contains('Save')",
+    'OK': "button:contains('OK')",
+}
 
-    ["input:checkbox:eq(12)", true, "skip"], // Allow websites when a rating error occurs
-    ["input:checkbox:eq(13)", true, "skip"], // Rate URLs by domain and IP Address
-    ["input:checkbox:eq(14)", true, "skip"], // Block HTTP redirects by rating
-    ["input:checkbox:eq(15)", true, "skip"], // Rate images by URL
+let gateMap = {
+    'Web Filter': "a[ng-href='page/p/utm/wf/profile/edit/default/']",
 
-    ["input:checkbox:eq(17)", true, "skip"], // Provide details for blocked HTTP 4xx and 5xx errors
+    'FortiGuard category based filter': "input#ftgd_ftgd_cats",
+    'Allow users to override blocked categories': "input#override_checked",
+    'Enforce Safe Search on Google, Yahoo!, Bing, Yandex': "input#safe_search",
+    'Log all search keywords': "input#web_log-search",
+    'Block invalid URLs': "input#options_block-invalid-url",
+    'URL Filter': "input#web_urlfilter-table",
+    'Block malicious URLs discovered by FortiSandbox': "input#enable_blacklist",
+    'Web Content Filter': "input#wfcontent-table",
+    'Allow websites when a rating error occurs': "input#ftgd-wf_options_error-allow",
+    'Rate URLs by domain and IP Address': "input#ftgd-wf_options_rate-server-ip",
+    'Block HTTP redirects by rating': "",
+    'Rate images by URL': "input#rate-image-urls",
+    'Restrict Google account usage to specific domains': "input#restrict_google_accounts",
+    'Provide details for blocked HTTP 4xx and 5xx errors': "input#ftgd-wf_options_http-err-detail",
+    'HTTP POST Action Allow': "input#post-action-normal",
+    'HTTP POST Action Block': "input#post-action-block",
+    'Remove Java Applets': "input#options_javafilter",
+    'Remove ActiveX': "input#options_activexfilter",
+    'Remove Cookies': "input#options_cookiefilter",
 
-    ["input:checkbox:eq(18)", true, "skip"], // Remove Java Applets
-    ["input:checkbox:eq(19)", true, "skip"], // Remove ActiveX
-    ["input:checkbox:eq(20)", true, "skip"], // Remove Cookies
+    'SSO_Guest_Users': "span.entry-value:contains('SSO_Guest_Users')",
+    'Guest-group': "span.entry-value:contains('Guest-group')",
+    'monitor-all': "span.entry-value:contains('monitor-all')",
+    'sniffer-profile': "span.entry-value:contains('sniffer-profile')",
+    'Category Usage Quota With Discrimination': "td.category:contains('Discrimination')",
 
-    ["span:contains('Save')", undefined, "skip"],
-];
+    'Switch applies to': "input:radio[name='override.ovrd-scope']:checked",
+    'Switch Duration': "input:radio[name='override.ovrd-dur-mode']:checked",
+}
 
-cases['webfilter profile url filter'] = [
-    ["div.gwt-HTML:contains('Web Filter')", undefined, "a[page/p/utm/wf/profile/edit/default/']"],
+new Testcase({
+    name: 'web filter edit',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Filter')
+        c.unchecked('Checkbox All')
+        c.click('FortiGuard category based filter')
+        c.click('Allow All')
+        c.click('Allow users to override blocked categories')
+        c.click('SSO_Guest_Users')
+        c.click('monitor-all')
+        c.click('Enforce Safe Search on Google, Yahoo!, Bing, Yandex')
+        c.click('Log all search keywords')
+        c.click('Block invalid URLs')
+        c.click('Block malicious URLs discovered by FortiSandbox')
+        c.click('Allow websites when a rating error occurs')
+        c.click('Rate URLs by domain and IP Address')
+        c.click('Rate images by URL')
+        c.click('Provide details for blocked HTTP 4xx and 5xx errors')
+        c.click('HTTP POST Action Allow')
+        c.click('Remove Java Applets')
+        c.click('Remove ActiveX')
+        c.click('Remove Cookies')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Web Filter')
+        g.isChecked('FortiGuard category based filter')
+        g.isChecked('Allow users to override blocked categories')
+        g.has('SSO_Guest_Users')
+        g.has('monitor-all')
+        g.isChecked('Enforce Safe Search on Google, Yahoo!, Bing, Yandex')
+        g.isChecked('Log all search keywords')
+        g.isChecked('Block invalid URLs')
+        g.isChecked('Block malicious URLs discovered by FortiSandbox')
+        g.isChecked('Allow websites when a rating error occurs')
+        g.isChecked('Rate URLs by domain and IP Address')
+        g.isChecked('Rate images by URL')
+        g.isChecked('Provide details for blocked HTTP 4xx and 5xx errors')
+        g.isChecked('HTTP POST Action Allow')
+        g.isChecked('Remove Java Applets')
+        g.isChecked('Remove ActiveX')
+        g.isChecked('Remove Cookies')
+    }
+})
 
-    ["label:eq(15)", undefined, "skip"], // URL Filter
-    ["div.tool_new:eq(1)", undefined, "skip"], // new URL Filter button
-    ["div.tk-ModalDialog input.gwt-TextBox", "a.com", "skip"], // URL
-    ["div.tk-ModalDialog label:contains('RegEx')", undefined, "skip"],
-    ["div.tk-ModalDialog label:contains('Block')", undefined, "skip"],
-    ["div.tk-ModalDialog input:checkbox", true, "skip"], // Status
-    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
+new Testcase({
+    name: 'web filter edit category usage quota',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Filter')
+        c.click('Monitor All')
+        c.click('Add Category Usage Quota')
+        c.click('Choose Categories Select')
+        c.click('Ok')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Web Filter')
+        g.has('Category Usage Quota With Discrimination')
+    }
+})
 
-    ["span:contains('Save')", undefined, "skip"],
-]
+new Testcase({
+    name: 'web filter delete category usage quota',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Filter')
+        c.click('Delete Category Usage Quota')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Web Filter')
+        g.isDelete('Category Usage Quota With Discrimination') // todo: some bug
+    }
+})
 
-cases['webfilter profile web content filter'] = [
-    ["div.gwt-HTML:contains('Web Filter')", undefined, "a[page/p/utm/wf/profile/edit/default/']"],
+new Testcase({
+    name: 'web filter edit Allow users to override blocked categories',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Filter')
+        c.click('Radio Ask')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Web Filter')
+        g.isSet('Switch applies to', "ask")
+        g.isSet('Switch Duration', "ask")
+    }
+})
 
-    ["label:eq(17)", undefined, "skip"], // Web Content Filter
-    ["div.tool_new:eq(2)", undefined, "skip"], // new Web Content Filter button
-    ["div.tk-ModalDialog label:contains('RegEx')", undefined, "skip"],
-    ["div.tk-ModalDialog input.gwt-TextBox", "/abc/", "skip"], // Pattern
-    ["div.tk-ModalDialog label:contains('Exempt')", undefined, "skip"],
-    ["div.tk-ModalDialog input:checkbox", true, "skip"], // Status
-    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
+// new Testcase({
+//     name: 'web filter edit url filter',
+//     cloud: cloudMap,
+//     gate: gateMap,
+//     testcase: (c) => {
+//         c.click('Web Filter')
+//         c.click('URL Filter')
 
-    ["span:contains('Save')", undefined, "skip"],
-]
+//         c.click('Save')
+//     },
+//     verify: (g) => {
+//         g.click('Web Filter')
+//     }
+// })
 
-cases['webfilter profile google account'] = [
-    ["div.gwt-HTML:contains('Web Filter')", undefined, "a[page/p/utm/wf/profile/edit/default/']"],
-
-    ["label:contains('Restrict Google account usage to specific domains')", undefined, "skip"], // Restrict Google account usage to specific domains
-
-    ["div.tool_new:eq(3)", undefined, "skip"], // new google restrict button
-    ["div.tk-ModalDialog input.gwt-TextBox", "test.com", "skip"], // Domain
-    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
-
-    ["span:contains('Save')", undefined, "skip"],
-]
-
-module.exports = cases;
+new Testcase({
+    name: 'web filter clean',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Filter')
+        c.unchecked('Checkbox All')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Web Filter')
+        g.isUnchecked('Checkbox All')
+    }
+})

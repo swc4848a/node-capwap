@@ -1,23 +1,72 @@
-let cases = require('./root.js');
+let Testcase = require('../testcase.js');
 
-cases['application control edit'] = [
-    ["div.gwt-HTML:contains('Application Control')", undefined, "skip"],
+let cloudMap = {
+    'Application Control': "div.gwt-HTML:contains('Application Control'):eq(0)",
 
-    ["textarea.gwt-TextArea", "test comments", "skip"], // todo: bug
-    ["div.appActionMonitor", undefined, "skip"], // click all monitor
-    ["div.appActionQuarantine:eq(18)", undefined, "skip"], // web others
+    'Comments': "textarea",
+    'Allow All': "div.appActionAllow:eq(0)",
+    'Add Signature': "div.svg-bg-add",
+    'Signature 126.mail': "table.apOverview input:checkbox:eq(0)",
+    'Ok': "button:contains('Ok')",
+    'Deep Inspection of Cloud Applications': "label:contains('Deep Inspection of Cloud Applications')",
+    'Allow and Log DNS Traffic': "label:contains('Allow and Log DNS Traffic')",
+    'Replacement Messages for HTTP-based Applications': "label:contains('Replacement Messages for HTTP-based Applications')",
 
-    ["div.tk-ModalDialog input", 11, "skip"], // set all 11
-    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
+    'Save': "span:contains('Save')",
 
-    ["div.tool_new", undefined, "skip"], // create new signature
-    ["div.tk-ModalDialog input:checkbox:eq(0)", true, "skip"], // choose first two signature
-    ["div.tk-ModalDialog input:checkbox:eq(1)", true, "skip"],
-    ["div.tk-ModalDialog button:contains('Ok')", undefined, "skip"],
-    
-    ["input:checkbox", true, "skip"], // click all checkbox
+    'Options': "input:checkbox",
+}
 
-    ["span:contains('Save')", undefined, "skip"],
-];
+let gateMap = {
+    'Application Control': "a[ng-href='utm/appctrl/sensor/edit/default']",
 
-module.exports = cases;
+    'Comments': "textarea",
+    'Allow Business': "section.categories f-icon.fa-enabled:eq(0)",
+    'Signature 126.mail': "section.overrides a.sig-name:contains('126.mail')",
+    'Allow and Log DNS Traffic': "input#allow-dns",
+    'Replacement Messages for HTTP-based Applications': "input#app-replacemsg",
+}
+
+new Testcase({
+    name: 'application control edit',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Application Control')
+
+        c.set('Comments', "test comments")
+        c.click('Allow All')
+        // c.click('Add Signature')
+        // c.checked('Signature 126.mail')
+        // c.click('Ok')
+        c.click('Allow and Log DNS Traffic')
+        c.click('Replacement Messages for HTTP-based Applications')
+
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Application Control')
+        // g.isSet('Comments', "test comments")
+        g.has('Allow Business')
+        // g.has('Signature 126.mail')
+        g.isChecked('Allow and Log DNS Traffic')
+        g.isChecked('Replacement Messages for HTTP-based Applications')
+    }
+})
+
+new Testcase({
+    name: 'application control clean',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Application Control')
+        c.unchecked('Options')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Application Control')
+
+        g.isUnchecked('Allow and Log DNS Traffic')
+        g.isUnchecked('Replacement Messages for HTTP-based Applications')
+    }
+})

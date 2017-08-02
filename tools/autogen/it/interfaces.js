@@ -2,7 +2,7 @@ let Testcase = require('../testcase.js');
 
 let cloudMap = {
     'Interfaces': "div.gwt-HTML:contains('Interfaces')",
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
     'Interface Name': "input.gwt-TextBox:eq(0)",
     'Alias': "input.gwt-TextBox:eq(1)",
     'Type': "select.gwt-ListBox:eq(0)",
@@ -12,8 +12,8 @@ let cloudMap = {
     'Address Mode DHCP': "input[value='DHCP']~label",
     'Distance': "td>input:eq(2)",
     'IP/Netmask': "input.gwt-TextBox:eq(2)",
-    'Device Detection': "input:checkbox:eq(1)",
-    'Device Detection for dhcp mode': "input:checkbox:eq(3)",
+    'Device Detection': "input:checkbox:eq(11)",
+    'Device Detection for dhcp mode': "input:checkbox:eq(13)",
     'Miscellaneous Block': "input:radio[value='BLOCK']",
     'Miscellaneous Monitor': "input:radio[value='MONITOR']",
     'Interface Status Disable': "input:radio[value='DOWN']",
@@ -25,7 +25,7 @@ let cloudMap = {
     'Delete for interface loopback': "tr.disabled:contains('interface loop') div[title='Delete']",
     'Delete for interface wan': "tr.disabled:contains('interface wan') div[title='Delete']",
     'Delete for interface dmz': "tr.disabled:contains('interface dmz') div[title='Delete']",
-    'Delete for interface undefined': "tr.disabled:contains('interface N/A') div[title='Delete']",
+    'Delete for interface undef': "tr.disabled:contains('interface undef') div[title='Delete']",
     'YES': "span:contains('YES')",
 }
 
@@ -45,12 +45,12 @@ let gateMap = {
     'Interface Status Disable': "input:radio#admin_status_down",
     'Comments': "textarea#description",
 
-    'interface man': "tr[mkey='interface man']",
+    'interface man': "td:contains('interface man')",
     'interface dhcp': "tr[mkey='interface dhcp']",
     'interface loop': "tr[mkey='interface loop']",
     'interface wan': "tr[mkey='interface wan']",
     'interface dmz': "tr[mkey='interface dmz']",
-    'interface N/A': "tr[mkey='interface N/A']",
+    'interface undef': "tr[mkey='interface undef']",
     'Edit': "button span:contains('Edit'):eq(0)",
 }
 
@@ -72,9 +72,7 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface man')
-        g.click('Edit')
+        g.redirect('/ng/page/p/system/interface/edit/interface%20man')
         g.isSet('Interface Name', "interface man")
         g.isSet('Alias', "alias manual")
         g.isSet('Address Mode Manual', "static")
@@ -121,9 +119,7 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface dhcp')
-        g.click('Edit')
+        g.redirect('/ng/page/p/system/interface/edit/interface%20dhcp')
         g.isSet('Interface Name', "interface dhcp")
         g.isSet('Alias', "alias dhcp")
         g.isSet('VLAN ID', 2)
@@ -169,9 +165,7 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface loop')
-        g.click('Edit')
+        g.redirect('/ng/page/p/system/interface/edit/interface%20loop')
         g.isSet('Interface Name', "interface loop")
         g.isSet('Alias', "alias loop")
         g.isSet('Type', "loopback")
@@ -216,9 +210,7 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface hard')
-        g.click('Edit')
+        g.redirect('/ng/page/p/system/interface/edit/interface%20hard')
         g.isSet('Interface Name', "interface hard")
         g.isSet('Alias', "alias hard")
         g.isSet('Type', "HARD_SWITCH")
@@ -249,9 +241,7 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface soft')
-        g.click('Edit')
+        g.redirect('/ng/page/p/system/interface/edit/interface%20soft')
         g.isSet('Interface Name', "interface soft")
         g.isSet('Alias', "alias soft")
         g.isSet('Type', "SWITCH")
@@ -280,9 +270,7 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface wan')
-        g.click('Edit')
+        g.redirect('/ng/page/p/system/interface/edit/interface%20wan')
         g.isSet('Interface Name', "interface wan")
         g.isSet('Alias', "alias wan")
         g.isSet('VLAN ID', 5)
@@ -327,9 +315,7 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface dmz')
-        g.click('Edit')
+        g.redirect('/ng/page/p/system/interface/edit/interface%20dmz')
         g.isSet('Interface Name', "interface dmz")
         g.isSet('Alias', "alias dmz")
         g.isSet('VLAN ID', 3)
@@ -358,13 +344,13 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface undefined new',
+    name: 'interface undef new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Create New')
-        c.set('Interface Name', "interface N/A")
+        c.set('Interface Name', "interface undef")
         c.set('Alias', "alias undefined")
         c.set('VLAN ID', 4)
         c.set('Role', "UNDEFINED")
@@ -375,10 +361,8 @@ new Testcase({
         c.click('Save')
     },
     verify: (g) => {
-        g.click('Interfaces')
-        g.click('interface N/A')
-        g.click('Edit')
-        g.isSet('Interface Name', "interface N/A")
+        g.redirect('/ng/page/p/system/interface/edit/interface%20undef')
+        g.isSet('Interface Name', "interface undef")
         g.isSet('Alias', "alias undefined")
         g.isSet('VLAN ID', 4)
         g.isSet('Role', "undefined")
@@ -390,17 +374,17 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'interface undefined delete',
+    name: 'interface undef delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Interfaces')
-        c.click('Delete for interface undefined')
+        c.click('Delete for interface undef')
         c.click('YES')
         c.click('YES') //todo: GUI bug, need click yes twice to delete undefined interface
     },
     verify: (g) => {
         g.click('Interfaces')
-        g.isDelete('interface N/A')
+        g.isDelete('interface undef')
     }
 })

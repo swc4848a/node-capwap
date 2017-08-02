@@ -2,7 +2,7 @@ let Testcase = require('../testcase.js');
 
 let cloudMap = {
     'Addresses': "div.gwt-HTML:contains('Addresses')",
-    'Create New': "button[title='Create New']",
+    'Create New': "button:contains('Create New')",
     'Create Address': "div.filter_text:contains('Address'):eq(0)",
     'Name': "input.gwt-TextBox:eq(0)",
     'IP/Netmask': "input.gwt-TextBox:eq(1)",
@@ -24,7 +24,7 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Addresses': "a[ng-href='page/p/firewall/object/address/']",
+    'Addresses': "a[ng-href='firewall/address']",
     'Name': "input#name",
     'IP/Netmask': "input#ipmask",
     'Visibility': "input#visibility",
@@ -53,9 +53,7 @@ new Testcase({
         c.click('OK')
     },
     verify: (g) => {
-        g.click('Addresses')
-        g.click('address new')
-        g.click('Edit')
+        g.redirect('/ng/page/p/firewall/object/address/edit/address%20new/')
         g.isSet('Name', "address new")
         g.isSet('IP/Netmask', "192.168.100.0/255.255.255.0")
         g.isChecked('Visibility')
@@ -98,9 +96,7 @@ new Testcase({
         c.click('OK')
     },
     verify: (g) => {
-        g.click('Addresses')
-        g.click('group new')
-        g.click('Edit')
+        g.redirect('/ng/page/p/firewall/object/address_group/edit/group%20new')
         g.isSet('Name', "group new")
         g.isChecked('Visibility')
         g.isUnchecked('Static Route') // gate GUI disabled

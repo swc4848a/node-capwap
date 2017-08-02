@@ -12,7 +12,7 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Admin Settings': "a[ng-href='admin/settings']",
+    'Admin Settings': "a[ng-href='system/settings']",
     'HTTP Port': "input#admin-port",
     'Redirect to HTTPS': "input#redirect-check",
     'HTTPS Port': "input#admin-sport",

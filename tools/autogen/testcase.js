@@ -77,6 +77,9 @@ class GateGUI {
     sleep(time) {
         gatecases[this.name].push([undefined, { action: 'sleep', value: time }]);
     }
+    redirect(url) {
+        gatecases[this.name].push([undefined, { action: 'redirect', value: url }]);
+    }
 }
 
 class Testcase {
