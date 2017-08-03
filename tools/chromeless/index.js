@@ -7,11 +7,11 @@ async function run() {
         .goto('https://beta.forticloud.com')
         .type('zqqiang@fortinet.com', 'input#email')
         .type('SuperCRM801', 'input[type="password"]')
-        .click('input[value="Login"]')
-        .wait(5000)
+        .click('input[type="submit"]')
+        .wait('#demo')
         .screenshot()
 
-    console.log(screenshot) // prints local file path or S3 url
+    console.log(screenshot)
 
     await chromeless.end()
 }
