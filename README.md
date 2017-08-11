@@ -1,6 +1,6 @@
 #node-capwap
 
-### CAPWAP implementation in JavaScript (Work in progress)
+### CAPWAP implementation in JavaScript
 
 Control And Provisioning of Wireless Access Points (CAPWAP) Protocol implementation for Node.js
 written in JavaScript.
@@ -72,6 +72,11 @@ Thu Aug 29 09:00:00 UTC 2016
 Thu Jan 27 09:00:00 UTC 2017
  * Move from flux.js to MobX.js
  * Move from express.js to koa.js
+
+#### Version 0.0.4
+
+Fri Aug 11 14:51:00 UTC 2017
+ * Auto platform upgrade  
 
 # License
 
