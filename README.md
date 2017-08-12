@@ -63,7 +63,7 @@ Thu Nov 4 09:00:00 UTC 2015
  * Add wtp-hash, account-context, wtp-session to manage protocol interaction  
  * Add config file  
 
-#### Version 0.0.3
+#### Version 0.0.3 (node.js:v7.10.0)
 
 Thu Aug 29 09:00:00 UTC 2016
 
@@ -73,7 +73,7 @@ Thu Jan 27 09:00:00 UTC 2017
  * Move from flux.js to MobX.js
  * Move from express.js to koa.js
 
-#### Version 0.0.4
+#### Version 0.0.4 (node.js:)
 
 Fri Aug 11 14:51:00 UTC 2017
  * Auto platform upgrade  
