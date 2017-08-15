@@ -16,4 +16,5 @@ mysql>set global net_buffer_length=1000000;
 mysql>set global max_allowed_packet=1000000000;  
 mysql -u forticrm -p < qa_release_portal.sql;  
 ````
-4. 
+
+### Auto Generate SQL Upgrade Script
