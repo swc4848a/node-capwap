@@ -3,27 +3,28 @@ import socket
 import json
 import time
 import base64
+import mmap
+import re
 from pprint import pprint
 
-def loadCmd(file):
-    with open(file, 'r') as content_file:
-        content = content_file.read()
-        if "XXXX" in content:
-            content = content.replace("XXXX", sys.argv[4])
-        print '== request ===================================> '
-        print content
-    return content
+def getServerIp():
+    with open("/etc/apserver.conf") as f:
+        for line in f:
+            if 'listen=' in line:
+                ip = line.split('=')
+                print 'apserver ip: ' + ip[1]
+                return ip[1]
 
-def run(method, cmd):
+def run(method, cmd, oid, ip, port):
     jsoncmd = '''{
           "id": 1,
           "url": "/debug/remote/exec/",
-          "apNetworkOid": 72214,
+          "apNetworkOid": ''' + oid + ''',
           "method": "''' + method + '''",
           "params": [
             {
-              "wtpAddr": "190.167.110.183",
-              "wtpPort": "5246",
+              "wtpAddr": "''' + ip + '''",
+              "wtpPort": "''' + port + '''",
               "type": "r&s",
               "cmd": "''' + cmd + '''"
             }
@@ -38,9 +39,8 @@ def run(method, cmd):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(3)
 
-    ip = '192.168.223.72'
-    port = 9688
-    s.connect((ip, port))
+    sip = getServerIp()
+    s.connect((sip, 9688))
     s.send(str(json.dumps(data)))
     s.shutdown(socket.SHUT_WR)
 
@@ -67,17 +67,28 @@ def run(method, cmd):
 
     s.close()
 
-def put(cmd):
-    run('put', cmd)
+def put(cmd, oid, ip, port):
+    run('put', cmd, oid, ip, port)
 
-def get():
-    run('get', '')
+def get(oid, ip, port):
+    run('get', '', oid, ip, port)
+
+def getParams(sn):
+    with open("/var/log/capwap.log") as f:
+        for line in f:
+            if sn in line:
+                lastmatch = line
+        if lastmatch is not None:
+            m = re.findall(r"(\b\d+)[-]([0-9A-Z]+)[-]([0-9.]+):(\b\d+)", lastmatch)
+            print m[0]
+            return m[0]
 
 if __name__ == '__main__' :
-    if len(sys.argv) < 2:
-        print 'Usage: %s <cmd>' % (sys.argv[0])
+    if len(sys.argv) < 3:
+        print 'Usage: %s <cmd> <ap-sn>' % (sys.argv[0])
         sys.exit(0)
 
-    put(sys.argv[1])
+    (oid, sn, ip, port) = getParams(sys.argv[2])
+    put(sys.argv[1], oid, ip, port)
     time.sleep(1)
-    get()
+    get(oid, ip, port)
