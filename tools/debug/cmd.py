@@ -94,5 +94,8 @@ if __name__ == '__main__' :
 
     (oid, sn, ip, port) = getParams(sys.argv[2])
     put(sys.argv[1], oid, ip, port)
-    time.sleep(1)
+    time.sleep(5)
     get(oid, ip, port)
+
+# query log before ap start send discovery req
+# grep -rnw /tmp/var_log_wtpd -e CWWS_DISCOVERY_enter -B 200
