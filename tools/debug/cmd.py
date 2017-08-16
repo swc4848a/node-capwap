@@ -74,6 +74,7 @@ def get(oid, ip, port):
     run('get', '', oid, ip, port)
 
 def getParams(sn):
+    lastmatch = None
     with open("/var/log/capwap.log") as f:
         for line in f:
             if sn in line:
@@ -82,6 +83,9 @@ def getParams(sn):
             m = re.findall(r"(\b\d+)[-]([0-9A-Z]+)[-]([0-9.]+):(\b\d+)", lastmatch)
             print m[0]
             return m[0]
+        else:
+            print 'Can not find AP in apserver!'
+            sys.exit(1)
 
 if __name__ == '__main__' :
     if len(sys.argv) < 3:
