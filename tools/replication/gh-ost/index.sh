@@ -8,6 +8,11 @@ mysql-5.7/bin/mysql --port=24801 --host=127.0.0.1
 mysql-5.7/bin/mysql --port=24802 --host=127.0.0.1
 mysql-5.7/bin/mysql --port=24803 --host=127.0.0.1
 
+# grant previllage
+CREATE USER 'group'@'172.16.95.49' IDENTIFIED BY 'group';
+GRANT ALL ON *.* TO 'group'@'172.16.95.49';
+FLUSH PRIVILEGES;
+
 # sql for master
 SET SQL_LOG_BIN=0;
 CREATE USER rpl_user@'%' IDENTIFIED BY 'rpl_pass';
