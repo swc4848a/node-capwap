@@ -67,3 +67,20 @@ SELECT * FROM performance_schema.replication_group_members;
 --assume-master-host=127.0.0.1:24801 \
 --execute \
 --alter="change column c2 c3 int not null" --approve-renamed-columns
+
+# event batch insert table
+delimiter ;;
+create event gh_ost_test
+  on schedule every 1 second
+  starts current_timestamp
+  ends current_timestamp + interval 60 second
+  on completion not preserve
+  enable
+  do
+begin
+  DECLARE v1 INT DEFAULT 10000;
+  WHILE v1 > 0 DO
+      insert into gh_ost_test values (null, 11, v1);
+      SET v1 = v1 - 1;
+  END WHILE;
+end ;;
