@@ -1,0 +1,4 @@
+package-lock.json
+node_modules
+public/bundle.js
+public/theme/project/css/main.css

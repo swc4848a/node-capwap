@@ -1,0 +1,19 @@
+{
+  "name": "portal",
+  "version": "1.0.0",
+  "description": "aws portal with node.js",
+  "main": "index.js",
+  "scripts": {
+    "watch-js": "watchify public/main.js -d -o public/bundle.js -t [ babelify --presets [ es2015 react ] --plugins [transform-decorators-legacy] ] -v",
+    "watch-css": "lessc public/theme/project/less/main.less public/theme/project/css/main.css",
+    "debug": "supervisor index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "forticloud",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  }
+}
