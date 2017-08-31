@@ -1,11 +1,12 @@
-var React = require('react');
-
-// var MainHeader = require('./mainheader.react');
-// var MainRouter = require('./mainrouter.react');
-// var MainFooter = require('./mainfooter.react');
+import React from 'react'
+import Header from './header.jsx'
 
 function Main() {
-  return <div>Demo</div>;
+    return (
+        <div>
+            <Header />
+        </div>
+    );
 }
 
 module.exports = Main;
