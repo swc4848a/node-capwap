@@ -1,12 +1,16 @@
 import React from 'react'
 import Header from './header.jsx'
+import Sidebar from './sidebar.jsx'
+import Content from './content.jsx'
+import Footer from './footer.jsx'
 
-function Main() {
+export default function Main() {
     return (
         <div>
             <Header />
+            <Sidebar />
+            <Content />
+            <Footer />
         </div>
-    );
+    )
 }
-
-module.exports = Main;

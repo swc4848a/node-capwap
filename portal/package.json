@@ -14,7 +14,14 @@
   "license": "MIT",
   "dependencies": {
     "adminlte": "^2.4.1",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
     "react": "^15.6.1",
+    "react-bootstrap": "^0.31.2",
     "react-dom": "^15.6.1"
+  },
+  "devDependencies": {
+    "less": "^2.7.2",
+    "watchify": "^3.9.0"
   }
 }
