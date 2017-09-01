@@ -4,14 +4,15 @@ import {
     Route,
     Link
 } from 'react-router-dom'
+import AccessPoint from './ap.jsx'
 
-function Dymmy() {
+function NoMatch({ location }) {
     return (
         <section className="content">
             <div className="error-page">
                 <h2 className="headline text-yellow"> 404</h2>
                 <div className="error-content">
-                    <h3><i className="fa fa-warning text-yellow"></i> Oops! Page not found.</h3>
+                    <h3><i className="fa fa-warning text-yellow"></i> Oops! {location.pathname} Page not found.</h3>
                     <p>
                         We could not find the page you were looking for.
                         Meanwhile, you may <a href="../../index.html">return to dashboard</a> or try using the search form.
@@ -34,13 +35,8 @@ function Dymmy() {
 export default function Content() {
     return (
         <div className="content-wrapper" style={{minHeight: '901px'}}>
-            <Route exact path="/" component={Dymmy}/>
-            <Route path="/Monitor" component={Dymmy}/>
-            <Route path="/Accesspoint" component={Dymmy}/>
-            <Route path="/Configure" component={Dymmy}/>
-            <Route path="/Log" component={Dymmy}/>
-            <Route path="/Report" component={Dymmy}/>
-            <Route path="/Deploy" component={Dymmy}/>
+            <Route path="/AccessPoint" component={AccessPoint}/>
+            <Route component={NoMatch}/>
         </div>
     )
 }

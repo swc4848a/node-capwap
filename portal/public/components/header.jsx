@@ -6,7 +6,7 @@ class Notifications extends React.Component {
             <li className="dropdown notifications-menu">
                 <a href="javascript:void(0);" className="dropdown-toggle" data-toggle="dropdown">
                     <i className="fa fa-bell-o"></i>
-                    <span className="label label-warning">10</span>
+                    <span className="label label-warning">1</span>
                 </a>
             </li>
         )

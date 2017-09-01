@@ -22,16 +22,27 @@ class Treeview extends React.Component {
         const menuClass = "treeview" + (this.state.display ? " menu-open" : "")
         const treeviewStyle = { display: this.state.display ? "block" : "none" }
         const listItems = this.props.nodes.map((module, index) =>
-            <li key={index}><a href="javascript:void(0);"><i className="fa fa-circle-o"></i> {module}</a></li>
+            <li key={index}><Link to={"/" + module.to}><i className="fa fa-circle-o"></i> {module.name}</Link></li>
         )
+        let link = null
+        if (this.props.nodes && this.props.nodes.length) {
+            const angle = <span className="pull-right-container"><i className="fa fa-angle-left pull-right"></i></span>
+            link = (
+                <a href="javascript:void(0);" onClick={this.handleClick}>
+                    <i className={"fa fa-" + this.props.icon}></i> <span>{this.props.root}</span>
+                    {angle}
+                </a>
+            )
+        } else {
+            link = (
+                <Link to={this.props.to ? ("/" + this.props.to) : (null)} >
+                    <i className={"fa fa-" + this.props.icon}></i> <span>{this.props.root}</span>
+                </Link>
+            )
+        }
         return (
             <li className={menuClass}>
-                <Link to={"/" + this.props.to} onClick={this.handleClick}>
-                    <i className={"fa fa-" + this.props.icon}></i> <span>{this.props.root}</span>
-                    <span className="pull-right-container">
-                        <i className="fa fa-angle-left pull-right"></i>
-                    </span>
-                </Link>
+                {link}
                 <ul className="treeview-menu" style={treeviewStyle}>
                     {listItems}
                 </ul>
@@ -43,21 +54,21 @@ class Treeview extends React.Component {
 class Menu extends React.Component {
     render() {
         const configureNodes = [
-            "SSIDs",
-            "Platform Profile",
-            "AP Tags",
-            "QoS Profile",
-            "FortiCloud User/Group",
-            "My RADIUS Server",
-            "Network",
-            "Bonjour Relay",
-            "FortiPresence"
+            { name: "SSIDs", to: "SSID" },
+            { name: "Platform Profile", to: "Platform" },
+            { name: "AP Tags", to: "Tags" },
+            { name: "QoS Profile", to: "Qos" },
+            { name: "FortiCloud User/Group", to: "UserGroup" },
+            { name: "My RADIUS Server", to: "Radius" },
+            { name: "Network", to: "Network" },
+            { name: "Bonjour Relay", to: "Bonjour" },
+            { name: "FortiPresence", to: "FortiPresence" }
         ]
         return (
             <ul className="sidebar-menu tree" data-widget="tree">
                 <Treeview icon="desktop" root="Monitor" nodes={[]} to="Monitor" />
-                <Treeview icon="wifi" root="Access Points" nodes={[]} to="Accesspoint" />
-                <Treeview icon="cog" root="Configure" nodes={configureNodes} to="Configure" />
+                <Treeview icon="wifi" root="Access Points" nodes={[]} to="AccessPoint" />
+                <Treeview icon="cog" root="Configure" nodes={configureNodes} />
                 <Treeview icon="line-chart" root="Logs" nodes={[]} to="Log" />
                 <Treeview icon="pie-chart" root="Reports" nodes={[]} to="Report" />
                 <Treeview icon="signal" root="Deploy APs" nodes={[]} to="Deploy" />
