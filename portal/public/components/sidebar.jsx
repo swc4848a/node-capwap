@@ -1,6 +1,11 @@
 import React from 'react'
 import Select from 'react-select'
 import { Dropdown, MenuItem, FormControl } from 'react-bootstrap'
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+} from 'react-router-dom'
 
 class Treeview extends React.Component {
     constructor(props) {
@@ -21,12 +26,12 @@ class Treeview extends React.Component {
         )
         return (
             <li className={menuClass}>
-                <a href="#" onClick={this.handleClick}>
+                <Link to={"/" + this.props.to} onClick={this.handleClick}>
                     <i className={"fa fa-" + this.props.icon}></i> <span>{this.props.root}</span>
                     <span className="pull-right-container">
                         <i className="fa fa-angle-left pull-right"></i>
                     </span>
-                </a>
+                </Link>
                 <ul className="treeview-menu" style={treeviewStyle}>
                     {listItems}
                 </ul>
@@ -50,12 +55,12 @@ class Menu extends React.Component {
         ]
         return (
             <ul className="sidebar-menu tree" data-widget="tree">
-                <Treeview icon="desktop" root="Monitor" nodes={[]} />
-                <Treeview icon="wifi" root="Access Points" nodes={[]} />
-                <Treeview icon="cog" root="Configure" nodes={configureNodes} />
-                <Treeview icon="line-chart" root="Logs" nodes={[]} />
-                <Treeview icon="pie-chart" root="Reports" nodes={[]} />
-                <Treeview icon="signal" root="Deploy APs" nodes={[]} />
+                <Treeview icon="desktop" root="Monitor" nodes={[]} to="Monitor" />
+                <Treeview icon="wifi" root="Access Points" nodes={[]} to="Accesspoint" />
+                <Treeview icon="cog" root="Configure" nodes={configureNodes} to="Configure" />
+                <Treeview icon="line-chart" root="Logs" nodes={[]} to="Log" />
+                <Treeview icon="pie-chart" root="Reports" nodes={[]} to="Report" />
+                <Treeview icon="signal" root="Deploy APs" nodes={[]} to="Deploy" />
             </ul>
         )
     }
