@@ -36,7 +36,6 @@ export default function Content() {
     return (
         <div className="content-wrapper" style={{minHeight: '901px'}}>
             <Route path="/AccessPoint" component={AccessPoint}/>
-            <Route component={NoMatch}/>
         </div>
     )
 }

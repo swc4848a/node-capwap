@@ -4,7 +4,7 @@ import Sidebar from './sidebar.jsx'
 import Content from './content.jsx'
 import Footer from './footer.jsx'
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Route,
     Link
 } from 'react-router-dom'

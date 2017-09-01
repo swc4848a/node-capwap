@@ -11,10 +11,10 @@ var app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(__dirname + '/public/theme/project/img/cloud.png'));
 
-// var Stores = require('./routes/stores');
+var AP = require('./routes/ap');
 
 // routes
-// app.use('/Stores', Stores);
+app.use('/AP', AP);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

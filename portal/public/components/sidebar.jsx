@@ -22,7 +22,7 @@ class Treeview extends React.Component {
         const menuClass = "treeview" + (this.state.display ? " menu-open" : "")
         const treeviewStyle = { display: this.state.display ? "block" : "none" }
         const listItems = this.props.nodes.map((module, index) =>
-            <li key={index}><Link to={"/" + module.to}><i className="fa fa-circle-o"></i> {module.name}</Link></li>
+            <li key={index}><Link to={module.to}><i className="fa fa-circle-o"></i> {module.name}</Link></li>
         )
         let link = null
         if (this.props.nodes && this.props.nodes.length) {
@@ -35,7 +35,7 @@ class Treeview extends React.Component {
             )
         } else {
             link = (
-                <Link to={this.props.to ? ("/" + this.props.to) : (null)} >
+                <Link to={this.props.to ? (this.props.to) : (null)} >
                     <i className={"fa fa-" + this.props.icon}></i> <span>{this.props.root}</span>
                 </Link>
             )
