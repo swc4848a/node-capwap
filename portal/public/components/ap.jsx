@@ -61,8 +61,10 @@ class APForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleSerialNumberChange = this.handleSerialNumberChange.bind(this)
+        this.handleNameChange = this.handleNameChange.bind(this)
         this.state = {
-            data: {}
+            serial: '',
+            name: ''
         }
     }
     componentDidMount() {
@@ -70,20 +72,25 @@ class APForm extends React.Component {
         fetch('/AP' + this.props.location.search).then(function(response) {
             response.json().then(function(json) {
                 self.handleSerialNumberChange(json.result[0].data[0].serial)
+                self.handleNameChange(json.result[0].data[0].name)
             })
         });
     }
     handleSerialNumberChange(serial) {
         this.setState({
-            data: {
-                serial: serial
-            }
+            serial: serial
+        })
+    }
+    handleNameChange(name) {
+        this.setState({
+            name: name
         })
     }
     render() {
-        const serial = this.state.data.serial
+        const serial = this.state.serial
+        const name = this.state.name
         return (
-            <div className="col-md-6">
+            <div className="col-md-12">
                 <div className="box box-primary">
                     <div className="box-header with-border">
                         <h3 className="box-title">Configure Access Point</h3>
@@ -95,7 +102,15 @@ class APForm extends React.Component {
                                 right="col-sm-10" 
                                 type="text" 
                                 value={serial} 
+                                disabled={true}
                                 onInputChange={this.handleSerialNumberChange} 
+                            />
+                            <Input left="col-sm-2" 
+                                label="Name" 
+                                right="col-sm-10" 
+                                type="text" 
+                                value={name} 
+                                onInputChange={this.handleNameChange} 
                             />
                         </div>
                         <div className="box-footer">

@@ -19,6 +19,7 @@ export class Input extends React.Component {
                         placeholder={this.props.placeholder} 
                         value={value}
                         onChange={this.handleChange}
+                        disabled={this.props.disabled}
                     />
                 </div>
             </div>
