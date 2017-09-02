@@ -4,7 +4,7 @@ import {
     Route,
     Link
 } from 'react-router-dom'
-import AccessPoint from './ap.jsx'
+import { AccessPointList, AccessPointForm } from './ap.jsx'
 
 function NoMatch({ location }) {
     return (
@@ -35,7 +35,8 @@ function NoMatch({ location }) {
 export default function Content() {
     return (
         <div className="content-wrapper" style={{minHeight: '901px'}}>
-            <Route path="/AccessPoint" component={AccessPoint}/>
+            <Route path="/AccessPointList" component={AccessPointList} />
+            <Route path="/AccessPointForm" component={AccessPointForm} />
         </div>
     )
 }

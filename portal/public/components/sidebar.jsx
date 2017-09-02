@@ -67,7 +67,7 @@ class Menu extends React.Component {
         return (
             <ul className="sidebar-menu tree" data-widget="tree">
                 <Treeview icon="desktop" root="Monitor" nodes={[]} to="Monitor" />
-                <Treeview icon="wifi" root="Access Points" nodes={[]} to="AccessPoint" />
+                <Treeview icon="wifi" root="Access Points" nodes={[]} to="AccessPointList" />
                 <Treeview icon="cog" root="Configure" nodes={configureNodes} />
                 <Treeview icon="line-chart" root="Logs" nodes={[]} to="Log" />
                 <Treeview icon="pie-chart" root="Reports" nodes={[]} to="Report" />

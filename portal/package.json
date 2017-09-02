@@ -20,10 +20,10 @@
     "lodash": "^4.17.4",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.2",
-    "react-bootstrap-table": "^4.0.2",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.2.2",
     "react-select": "^1.0.0-rc.5",
+    "react-table": "^6.5.3",
     "serve-favicon": "^2.4.3",
     "string": "^3.3.3"
   },
