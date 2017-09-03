@@ -29,16 +29,34 @@ export class Input extends React.Component {
     }
 }
 
-export class Text extends React.Component {
+export class CheckboxGroup extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
     render() {
         return (
-            <div className="form-group">
-                <label className={this.props.left + " control-label"}>{this.props.label}</label>
-                <div className={this.props.right}>
-                    <span>{this.props.value}</span>
+            <div className="row">
+                <div className="col-md-offset-2 col-md-2">
+                    <div className="form-group">
+                        <div className={this.props.className}>
+                            <div className="checkbox">
+                                <label>
+                                    <input type="checkbox" /> {this.props.label}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-2">
+                    <div className="form-group">
+                        <div className={this.props.className}>
+                            <div className="checkbox">
+                                <label>
+                                    <input type="checkbox" /> {this.props.label}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

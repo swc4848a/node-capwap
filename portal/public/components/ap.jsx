@@ -7,8 +7,7 @@ import {
     Link
 } from 'react-router-dom'
 
-import { Form, FormGroup, Col, Checkbox, Button, FormControl } from 'react-bootstrap'
-import { Input, Text } from './editor.jsx'
+import { Input, CheckboxGroup } from './editor.jsx'
 
 const columns = [{
     Header: 'Name',
@@ -112,6 +111,7 @@ class APForm extends React.Component {
                                 right="col-sm-10" 
                                 onChange={this.handleChange} 
                             />
+                            <CheckboxGroup className="col-sm-offset-2 col-sm-10" label="tag-one" />
                         </div>
                         <div className="box-footer">
                             <button type="submit" className="btn btn-default">Cancel</button>
