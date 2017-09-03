@@ -60,8 +60,7 @@ const columns = [{
 class APForm extends React.Component {
     constructor(props) {
         super(props);
-        this.handleSerialNumberChange = this.handleSerialNumberChange.bind(this)
-        this.handleNameChange = this.handleNameChange.bind(this)
+        this.handleChange = this.handleChange.bind(this)
         this.state = {
             serial: '',
             name: ''
@@ -71,19 +70,17 @@ class APForm extends React.Component {
         let self = this
         fetch('/AP' + this.props.location.search).then(function(response) {
             response.json().then(function(json) {
-                self.handleSerialNumberChange(json.result[0].data[0].serial)
-                self.handleNameChange(json.result[0].data[0].name)
+                self.handleChange({ target: { name: 'serial', value: json.result[0].data[0].serial } })
+                self.handleChange({ target: { name: 'name', value: json.result[0].data[0].name } })
             })
         });
     }
-    handleSerialNumberChange(serial) {
+    handleChange(e) {
+        const target = e.target
+        const value = target.type === 'checkbox' ? target.checked : target.value
+        const name = target.name
         this.setState({
-            serial: serial
-        })
-    }
-    handleNameChange(name) {
-        this.setState({
-            name: name
+            [name]: value
         })
     }
     render() {
@@ -97,20 +94,23 @@ class APForm extends React.Component {
                     </div>
                     <div className="form-horizontal">
                         <div className="box-body">
-                            <Input left="col-sm-2" 
+                            <Input 
+                                name="serial"
+                                type="text" 
                                 label="Serial Number" 
-                                right="col-sm-10" 
-                                type="text" 
                                 value={serial} 
-                                disabled={true}
-                                onInputChange={this.handleSerialNumberChange} 
-                            />
-                            <Input left="col-sm-2" 
-                                label="Name" 
+                                left="col-sm-2" 
                                 right="col-sm-10" 
+                                disabled={true}
+                            />
+                            <Input 
+                                name="name"
                                 type="text" 
+                                label="Name" 
                                 value={name} 
-                                onInputChange={this.handleNameChange} 
+                                left="col-sm-2" 
+                                right="col-sm-10" 
+                                onChange={this.handleChange} 
                             />
                         </div>
                         <div className="box-footer">

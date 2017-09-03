@@ -6,7 +6,7 @@ export class Input extends React.Component {
         this.handleChange = this.handleChange.bind(this)
     }
     handleChange(e) {
-        this.props.onInputChange(e.target.value)
+        this.props.onChange(e)
     }
     render() {
         const value = this.props.value
@@ -14,7 +14,9 @@ export class Input extends React.Component {
             <div className="form-group">
                 <label className={this.props.left + " control-label"}>{this.props.label}</label>
                 <div className={this.props.right}>
-                    <input type={this.props.type} 
+                    <input 
+                        name={this.props.name}
+                        type={this.props.type} 
                         className="form-control" 
                         placeholder={this.props.placeholder} 
                         value={value}
