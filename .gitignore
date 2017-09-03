@@ -3,3 +3,4 @@ tools/phantom/img/*.png
 npm-debug.log
 node-capwap.sublime-workspace
 _config.yml
+package-lock.json
