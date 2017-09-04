@@ -85,6 +85,11 @@ class APForm extends React.Component {
     render() {
         const serial = this.state.serial
         const name = this.state.name
+        const tags = [
+            {name: 'tags', label: 'one', value: true},
+            {name: 'tags', label: 'two', value: false},
+            {name: 'tags', label: 'three', value: false}
+        ]
         return (
             <div className="col-md-12">
                 <div className="box box-primary">
@@ -111,7 +116,11 @@ class APForm extends React.Component {
                                 right="col-sm-10" 
                                 onChange={this.handleChange} 
                             />
-                            <CheckboxGroup className="col-sm-offset-2 col-sm-10" label="tag-one" />
+                            <CheckboxGroup 
+                                className="col-sm-offset-2 col-sm-10" 
+                                labels={tags} 
+                                onChange={this.handleChange}
+                            />
                         </div>
                         <div className="box-footer">
                             <button type="submit" className="btn btn-default">Cancel</button>

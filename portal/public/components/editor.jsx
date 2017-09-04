@@ -32,31 +32,28 @@ export class Input extends React.Component {
 export class CheckboxGroup extends React.Component {
     constructor(props) {
         super(props)
+        this.handleChange = this.handleChange.bind(this)
+    }
+    handleChange(e) {
+        this.props.onChange(e)
     }
     render() {
+        const listItems = this.props.labels.map((item, index) => {
+            return (
+                <label className="checkbox-inline" title="" key={index}>
+                    <input 
+                        name={item.name} 
+                        type="checkbox" 
+                        checked={item.value} 
+                        onChange={this.handleChange}
+                    /> {item.label + ' '}
+                </label>
+            )
+        })
         return (
-            <div className="row">
-                <div className="col-md-offset-2 col-md-2">
-                    <div className="form-group">
-                        <div className={this.props.className}>
-                            <div className="checkbox">
-                                <label>
-                                    <input type="checkbox" /> {this.props.label}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-2">
-                    <div className="form-group">
-                        <div className={this.props.className}>
-                            <div className="checkbox">
-                                <label>
-                                    <input type="checkbox" /> {this.props.label}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+            <div className="form-group">
+                <div className={this.props.className}>
+                    {listItems}
                 </div>
             </div>
         )
