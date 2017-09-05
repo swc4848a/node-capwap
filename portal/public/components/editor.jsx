@@ -34,8 +34,8 @@ export class CheckboxGroup extends React.Component {
         super(props)
         this.handleChange = this.handleChange.bind(this)
     }
-    handleChange(e) {
-        this.props.onChange(e)
+    handleChange(e, i) {
+        this.props.onChange(e, i)
     }
     render() {
         const listItems = this.props.labels.map((item, index) => {
@@ -45,7 +45,7 @@ export class CheckboxGroup extends React.Component {
                         name={item.name} 
                         type="checkbox" 
                         checked={item.value} 
-                        onChange={this.handleChange}
+                        onChange={(e) => this.handleChange(e, index)}
                     /> {item.label + ' '}
                 </label>
             )

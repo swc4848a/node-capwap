@@ -14,7 +14,7 @@ const mock = {
 }
 
 router.get('/', function(req, res) {
-    if (process.argv[2] === 'debug') {
+    if (process.argv[2] === 'home') {
         return res.json(mock);
     }
     const client = net.createConnection({ host: '172.16.95.46', port: 9688 }, () => {

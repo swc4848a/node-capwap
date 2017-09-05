@@ -77,6 +77,7 @@ Thu Jan 27 09:00:00 UTC 2017
 
 Fri Aug 11 14:51:00 UTC 2017
  * Auto platform upgrade  
+ * Cloud AP Portal  
 
 # License
 

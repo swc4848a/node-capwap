@@ -62,7 +62,8 @@ class APForm extends React.Component {
         this.handleChange = this.handleChange.bind(this)
         this.state = {
             serial: '',
-            name: ''
+            name: '',
+            tags: []
         }
     }
     componentDidMount() {
@@ -71,25 +72,39 @@ class APForm extends React.Component {
             response.json().then(function(json) {
                 self.handleChange({ target: { name: 'serial', value: json.result[0].data[0].serial } })
                 self.handleChange({ target: { name: 'name', value: json.result[0].data[0].name } })
+                const tags = [{ label: 'one', value: true }, { label: 'two', value: false }, { label: 'three', value: false }]
+                for (let i = 0; i < 3; ++i) {
+                    self.handleChange({ target: { type: 'checkbox', name: tags[i].label, label: tags[i].label, value: tags[i].value } }, i)
+                }
             })
         });
     }
-    handleChange(e) {
+    handleChange(e, index) {
         const target = e.target
         const value = target.type === 'checkbox' ? target.checked : target.value
         const name = target.name
-        this.setState({
-            [name]: value
-        })
+        if (target.type !== 'checkbox') {
+            console.log(target)
+            this.setState({
+                [name]: value
+            })
+        } else {
+            console.log(target, index)
+            const tags = this.state.tags.slice()
+            this.setState((prevState) => {
+                const prevValue = prevState.tags[index] ? prevState.tags[index].value : target.value
+                tags[index] = { name: target.name, label: target.name, value: !prevValue };
+                return {
+                    tags: tags
+                }
+            })
+        }
     }
     render() {
         const serial = this.state.serial
         const name = this.state.name
-        const tags = [
-            {name: 'tags', label: 'one', value: true},
-            {name: 'tags', label: 'two', value: false},
-            {name: 'tags', label: 'three', value: false}
-        ]
+        const tags = this.state.tags
+        console.log(tags)
         return (
             <div className="col-md-12">
                 <div className="box box-primary">
