@@ -84,12 +84,10 @@ class APForm extends React.Component {
         const value = target.type === 'checkbox' ? target.checked : target.value
         const name = target.name
         if (target.type !== 'checkbox') {
-            console.log(target)
             this.setState({
                 [name]: value
             })
         } else {
-            console.log(target, index)
             const tags = this.state.tags.slice()
             this.setState((prevState) => {
                 const prevValue = prevState.tags[index] ? prevState.tags[index].value : target.value
@@ -104,7 +102,6 @@ class APForm extends React.Component {
         const serial = this.state.serial
         const name = this.state.name
         const tags = this.state.tags
-        console.log(tags)
         return (
             <div className="col-md-12">
                 <div className="box box-primary">
