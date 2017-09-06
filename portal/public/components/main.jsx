@@ -11,13 +11,11 @@ import {
 
 export default function Main() {
     return (
-        <Router>
-            <div>
-                <Header />
-                <Sidebar />
-                <Content />
-                <Footer />
-            </div>
-        </Router>
+        <div>
+            <Header />
+            <Sidebar />
+            <Content />
+            <Footer />
+        </div>
     )
 }

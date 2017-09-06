@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    BrowserRouter as Router,
+    Switch,
     Route,
     Link
 } from 'react-router-dom'
@@ -35,8 +35,10 @@ function NoMatch({ location }) {
 export default function Content() {
     return (
         <div className="content-wrapper" style={{minHeight: '901px'}}>
-            <Route path="/AccessPointList" component={AccessPointList} />
-            <Route path="/AccessPointForm" component={AccessPointForm} />
+            <Switch>
+                <Route path="/AccessPointList" component={AccessPointList} />
+                <Route path="/AccessPointForm/:sn" component={AccessPointForm} />
+            </Switch>
         </div>
     )
 }

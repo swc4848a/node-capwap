@@ -2,12 +2,13 @@ import React from 'react'
 import _ from 'lodash'
 import ReactTable from 'react-table'
 import {
-    BrowserRouter as Router,
     Route,
-    Link
+    Link,
+    withRouter
 } from 'react-router-dom'
 
 import { Input, CheckboxGroup } from './editor.jsx'
+import { inject, observer } from 'mobx-react'
 
 const columns = [{
     Header: 'Name',
@@ -44,64 +45,74 @@ const columns = [{
     accessor: 'name',
     Cell: (props) => {
         return (
-            <Link to={
-                {
-                    pathname: `AccessPointForm`, 
-                    search: `?sn=${props.value}`
-                }
-            }>
+            <Link to={`/AccessPointForm/${props.value}`} >
                 <i className="fa fa-pencil"></i>
             </Link>
         )
     }
 }]
 
+@inject('apStore')
+@withRouter
+@observer
 class APForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this)
-        this.state = {
-            serial: '',
-            name: '',
-            tags: []
-        }
+        // this.state = {
+        //     serial: '',
+        //     name: '',
+        //     tags: []
+        // }
     }
     componentDidMount() {
         let self = this
-        fetch('/AP' + this.props.location.search).then(function(response) {
+        const sn = this.props.match.params.sn
+        // fetch('/AP?sn=' + this.props.match.params.sn).then(function(response) {
+        //     response.json().then(function(json) {
+        //         self.handleChange({ target: { name: 'serial', value: json.result[0].data[0].serial } })
+        //         self.handleChange({ target: { name: 'name', value: json.result[0].data[0].name } })
+        //         const tags = [{ label: 'one', value: true }, { label: 'two', value: false }, { label: 'three', value: false }]
+        //         for (let i = 0; i < 3; ++i) {
+        //             self.handleChange({ target: { type: 'checkbox', name: tags[i].label, label: tags[i].label, value: tags[i].value } }, i)
+        //         }
+        //     })
+        // });
+        fetch('/AP').then(function(response) {
             response.json().then(function(json) {
-                self.handleChange({ target: { name: 'serial', value: json.result[0].data[0].serial } })
-                self.handleChange({ target: { name: 'name', value: json.result[0].data[0].name } })
-                const tags = [{ label: 'one', value: true }, { label: 'two', value: false }, { label: 'three', value: false }]
-                for (let i = 0; i < 3; ++i) {
-                    self.handleChange({ target: { type: 'checkbox', name: tags[i].label, label: tags[i].label, value: tags[i].value } }, i)
-                }
+                self.props.apStore.set(json.result[0].data)
             })
-        });
+        })
     }
     handleChange(e, index) {
         const target = e.target
         const value = target.type === 'checkbox' ? target.checked : target.value
         const name = target.name
         if (target.type !== 'checkbox') {
-            this.setState({
-                [name]: value
-            })
+            const sn = this.props.match.params.sn
+            this.props.apStore.update(sn, name, value)
         } else {
-            const tags = this.state.tags.slice()
-            this.setState((prevState) => {
-                const prevValue = prevState.tags[index] ? prevState.tags[index].value : target.value
-                tags[index] = { name: target.name, label: target.name, value: !prevValue };
-                return {
-                    tags: tags
-                }
-            })
+            // const tags = this.state.tags.slice()
+            // this.setState((prevState) => {
+            //     const prevValue = prevState.tags[index] ? prevState.tags[index].value : target.value
+            //     tags[index] = { name: target.name, label: target.name, value: !prevValue };
+            //     return {
+            //         tags: tags
+            //     }
+            // })
         }
     }
     render() {
-        const serial = this.state.serial
-        const name = this.state.name
-        const tags = this.state.tags
+        // const serial = this.state.serial
+        // const name = this.state.name
+        // const tags = this.state.tags
+        const sn = this.props.match.params.sn
+        let ap = this.props.apStore.apList.filter(ap => (sn === ap.serial))[0]
+
+        if (!ap) {
+            return <div>Loading ...</div>
+        }
+
         return (
             <div className="col-md-12">
                 <div className="box box-primary">
@@ -114,7 +125,7 @@ class APForm extends React.Component {
                                 name="serial"
                                 type="text" 
                                 label="Serial Number" 
-                                value={serial} 
+                                value={ap.serial} 
                                 left="col-sm-2" 
                                 right="col-sm-10" 
                                 disabled={true}
@@ -123,14 +134,14 @@ class APForm extends React.Component {
                                 name="name"
                                 type="text" 
                                 label="Name" 
-                                value={name} 
+                                value={ap.name} 
                                 left="col-sm-2" 
                                 right="col-sm-10" 
                                 onChange={this.handleChange} 
                             />
                             <CheckboxGroup 
                                 className="col-sm-offset-2 col-sm-10" 
-                                labels={tags} 
+                                labels={[]} 
                                 onChange={this.handleChange}
                             />
                         </div>
@@ -145,22 +156,26 @@ class APForm extends React.Component {
     }
 }
 
+@inject('apStore')
+@withRouter
+@observer
 class APTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { data: [] };
     }
     componentDidMount() {
         let self = this
         fetch('/AP').then(function(response) {
             response.json().then(function(json) {
-                self.setState({
-                    data: json.result[0].data
-                })
+                self.props.apStore.set(json.result[0].data)
             })
-        });
+        })
     }
     render() {
+        const {
+            apList,
+        } = this.props.apStore
+
         return (
             <div className="col-md-12">
                 <div className="box">
@@ -169,7 +184,7 @@ class APTable extends React.Component {
                     </div>
                     <div className="box-body">
                         <ReactTable
-                            data={this.state.data}
+                            data={apList}
                             columns={columns}
                             defaultPageSize={5}
                         />
@@ -191,11 +206,11 @@ export function AccessPointList() {
     )
 }
 
-export function AccessPointForm({ location }) {
+export function AccessPointForm() {
     return (
         <section className="content">
             <div className="row">
-                <APForm location ={ location } />
+                <APForm />
             </div>
         </section>
     )
