@@ -9,7 +9,7 @@ const mock = {
         data: [{
             name: 'FP320C3X14012026',
             serial: 'FP320C3X14012026',
-            tags: [{ name: 'one', label: 'one', value: true }, { name: 'two', label: 'two', value: false }]
+            tags: [{ name: 'tag-one', label: 'tag-one', value: true }, { name: 'tag-two', label: 'tag-two', value: false }]
         }]
     }]
 }

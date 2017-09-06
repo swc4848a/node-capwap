@@ -7,7 +7,7 @@ import {
     withRouter
 } from 'react-router-dom'
 
-import { Input, CheckboxGroup } from './editor.jsx'
+import { Input, CheckboxGroup, CSelect } from './editor.jsx'
 import { inject, observer } from 'mobx-react'
 
 const columns = [{
@@ -118,6 +118,13 @@ class APForm extends React.Component {
                                 className="col-sm-offset-2 col-sm-10" 
                                 labels={ap.tags} 
                                 onChange={this.handleChange}
+                            />
+                            <CSelect 
+                                left="col-sm-2"
+                                right="col-sm-10"
+                                label="Platform Profile"
+                                name="platformProfile"
+                                value=""
                             />
                         </div>
                         <div className="box-footer">

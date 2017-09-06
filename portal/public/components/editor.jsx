@@ -1,6 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
+import Select from 'react-select'
 
+@observer
 export class Input extends React.Component {
     constructor(props) {
         super(props)
@@ -56,6 +58,24 @@ export class CheckboxGroup extends React.Component {
             <div className="form-group">
                 <div className={this.props.className}>
                     {listItems}
+                </div>
+            </div>
+        )
+    }
+}
+
+@observer
+export class CSelect extends React.Component {
+    render() {
+        return (
+            <div className="form-group">
+                <label className={this.props.left + " control-label"}>{this.props.label}</label>
+                <div className={this.props.right}>
+                    <Select
+                        name={this.props.name}
+                        value={this.props.value}
+                        options={this.props.options}
+                    />
                 </div>
             </div>
         )
