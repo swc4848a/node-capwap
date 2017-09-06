@@ -59,25 +59,10 @@ class APForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this)
-        // this.state = {
-        //     serial: '',
-        //     name: '',
-        //     tags: []
-        // }
     }
     componentDidMount() {
         let self = this
         const sn = this.props.match.params.sn
-        // fetch('/AP?sn=' + this.props.match.params.sn).then(function(response) {
-        //     response.json().then(function(json) {
-        //         self.handleChange({ target: { name: 'serial', value: json.result[0].data[0].serial } })
-        //         self.handleChange({ target: { name: 'name', value: json.result[0].data[0].name } })
-        //         const tags = [{ label: 'one', value: true }, { label: 'two', value: false }, { label: 'three', value: false }]
-        //         for (let i = 0; i < 3; ++i) {
-        //             self.handleChange({ target: { type: 'checkbox', name: tags[i].label, label: tags[i].label, value: tags[i].value } }, i)
-        //         }
-        //     })
-        // });
         fetch('/AP').then(function(response) {
             response.json().then(function(json) {
                 self.props.apStore.set(json.result[0].data)
@@ -88,24 +73,14 @@ class APForm extends React.Component {
         const target = e.target
         const value = target.type === 'checkbox' ? target.checked : target.value
         const name = target.name
+        const sn = this.props.match.params.sn
         if (target.type !== 'checkbox') {
-            const sn = this.props.match.params.sn
             this.props.apStore.update(sn, name, value)
         } else {
-            // const tags = this.state.tags.slice()
-            // this.setState((prevState) => {
-            //     const prevValue = prevState.tags[index] ? prevState.tags[index].value : target.value
-            //     tags[index] = { name: target.name, label: target.name, value: !prevValue };
-            //     return {
-            //         tags: tags
-            //     }
-            // })
+            this.props.apStore.updateTag(sn, name, value)
         }
     }
     render() {
-        // const serial = this.state.serial
-        // const name = this.state.name
-        // const tags = this.state.tags
         const sn = this.props.match.params.sn
         let ap = this.props.apStore.apList.filter(ap => (sn === ap.serial))[0]
 
@@ -141,7 +116,7 @@ class APForm extends React.Component {
                             />
                             <CheckboxGroup 
                                 className="col-sm-offset-2 col-sm-10" 
-                                labels={[]} 
+                                labels={ap.tags} 
                                 onChange={this.handleChange}
                             />
                         </div>

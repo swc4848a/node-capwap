@@ -8,6 +8,11 @@ class ApStore {
     @action update(sn, key, value) {
         this.apList.filter(ap => (sn === ap.serial))[0][key] = value
     }
+    @action updateTag(sn, name, value) {
+        this.apList
+            .filter(ap => (sn === ap.serial))[0].tags
+            .filter(tag => (name === tag.name))[0].value = value
+    }
 }
 
 export default new ApStore()

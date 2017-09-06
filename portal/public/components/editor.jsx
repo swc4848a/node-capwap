@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 
 export class Input extends React.Component {
     constructor(props) {
@@ -29,6 +30,7 @@ export class Input extends React.Component {
     }
 }
 
+@observer
 export class CheckboxGroup extends React.Component {
     constructor(props) {
         super(props)
