@@ -153,7 +153,9 @@ class APForm extends React.Component {
                                 onChange={this.handleChange} 
                             />
                             <CheckboxGroup 
-                                className="col-sm-offset-2 col-sm-10" 
+                                label="AP Tags"
+                                left="col-sm-2" 
+                                right="col-sm-10" 
                                 labels={ap.tags} 
                                 onChange={this.handleChange}
                             />
@@ -175,7 +177,9 @@ class APForm extends React.Component {
                                 radioInfo={radioInfo2}
                             />
                             <CheckboxGroup 
-                                className="col-sm-offset-2 col-sm-10" 
+                                label="Admin Access"
+                                left="col-sm-2" 
+                                right="col-sm-10" 
                                 labels={ap.access} 
                                 onChange={this.handleChange}
                             />

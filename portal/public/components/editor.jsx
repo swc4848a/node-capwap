@@ -56,7 +56,8 @@ export class CheckboxGroup extends React.Component {
         })
         return (
             <div className="form-group">
-                <div className={this.props.className}>
+                <label className={this.props.left + " control-label"}>{this.props.label}</label>
+                <div className={this.props.right}>
                     {listItems}
                 </div>
             </div>
