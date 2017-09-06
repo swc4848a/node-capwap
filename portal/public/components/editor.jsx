@@ -42,18 +42,21 @@ export class CheckboxGroup extends React.Component {
         this.props.onChange(e, i)
     }
     render() {
-        const listItems = this.props.labels.map((item, index) => {
-            return (
-                <label className="checkbox-inline" title="" key={index}>
-                    <input 
-                        name={item.name} 
-                        type="checkbox" 
-                        checked={item.value} 
-                        onChange={(e) => this.handleChange(e, index)}
-                    /> {item.label + ' '}
-                </label>
-            )
-        })
+        let listItems = []
+        if (this.props.labels) {
+            listItems = this.props.labels.map((item, index) => {
+                return (
+                    <label className="checkbox-inline" title="" key={index}>
+                        <input 
+                            name={item.name} 
+                            type="checkbox" 
+                            checked={item.value} 
+                            onChange={(e) => this.handleChange(e, index)}
+                        /> {item.label + ' '}
+                    </label>
+                )
+            })
+        }
         return (
             <div className="form-group">
                 <label className={this.props.left + " control-label"}>{this.props.label}</label>

@@ -54,24 +54,24 @@ class Treeview extends React.Component {
 class Menu extends React.Component {
     render() {
         const configureNodes = [
-            { name: "SSIDs", to: "SSID" },
-            { name: "Platform Profile", to: "Platform" },
-            { name: "AP Tags", to: "Tags" },
-            { name: "QoS Profile", to: "Qos" },
-            { name: "FortiCloud User/Group", to: "UserGroup" },
-            { name: "My RADIUS Server", to: "Radius" },
-            { name: "Network", to: "Network" },
-            { name: "Bonjour Relay", to: "Bonjour" },
-            { name: "FortiPresence", to: "FortiPresence" }
+            { name: "SSIDs", to: "/SSID" },
+            { name: "Platform Profile", to: "/Platform" },
+            { name: "AP Tags", to: "/Tags" },
+            { name: "QoS Profile", to: "/Qos" },
+            { name: "FortiCloud User/Group", to: "/UserGroup" },
+            { name: "My RADIUS Server", to: "/Radius" },
+            { name: "Network", to: "/Network" },
+            { name: "Bonjour Relay", to: "/Bonjour" },
+            { name: "FortiPresence", to: "/FortiPresence" }
         ]
         return (
             <ul className="sidebar-menu tree" data-widget="tree">
-                <Treeview icon="desktop" root="Monitor" nodes={[]} to="Monitor" />
-                <Treeview icon="wifi" root="Access Points" nodes={[]} to="AccessPointList" />
+                <Treeview icon="desktop" root="Monitor" nodes={[]} to="/Monitor" />
+                <Treeview icon="wifi" root="Access Points" nodes={[]} to="/AccessPointList" />
                 <Treeview icon="cog" root="Configure" nodes={configureNodes} />
-                <Treeview icon="line-chart" root="Logs" nodes={[]} to="Log" />
-                <Treeview icon="pie-chart" root="Reports" nodes={[]} to="Report" />
-                <Treeview icon="signal" root="Deploy APs" nodes={[]} to="Deploy" />
+                <Treeview icon="line-chart" root="Logs" nodes={[]} to="/Log" />
+                <Treeview icon="pie-chart" root="Reports" nodes={[]} to="/Report" />
+                <Treeview icon="signal" root="Deploy APs" nodes={[]} to="/Deploy" />
             </ul>
         )
     }

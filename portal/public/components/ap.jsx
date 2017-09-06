@@ -4,11 +4,13 @@ import ReactTable from 'react-table'
 import {
     Route,
     Link,
+    NavLink,
     withRouter
 } from 'react-router-dom'
 
 import { Input, CheckboxGroup, CSelect } from './editor.jsx'
 import { inject, observer } from 'mobx-react'
+import { Modal, Button } from 'react-bootstrap'
 
 const columns = [{
     Header: 'Name',
@@ -81,6 +83,7 @@ class APForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
     componentDidMount() {
         let self = this
@@ -93,6 +96,9 @@ class APForm extends React.Component {
     }
     isAccess(name) {
         return ('telnet' === name) || ('http' === name) || ('https' === name) || ('ssh' === name)
+    }
+    handleClick(e) {
+        this.props.history.push('/AccessPointList')
     }
     handleChange(e, index) {
         const target = e.target
@@ -185,8 +191,15 @@ class APForm extends React.Component {
                             />
                         </div>
                         <div className="box-footer">
-                            <button type="submit" className="btn btn-default">Cancel</button>
-                            <button type="submit" className="btn btn-info pull-right">Apply</button>
+                            <div className="pull-right">
+                                <button type="submit" className="btn btn-info" onClick={this.handleClick}>
+                                    Apply
+                                </button>
+                                {' '}
+                                <button type="submit" className="btn btn-default" onClick={this.handleClick}>
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -200,7 +213,8 @@ class APForm extends React.Component {
 @observer
 class APTable extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
+        this.state = { showModal: false }
     }
     componentDidMount() {
         let self = this
