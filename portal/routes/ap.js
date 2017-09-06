@@ -9,7 +9,13 @@ const mock = {
         data: [{
             name: 'FP320C3X14012026',
             serial: 'FP320C3X14012026',
-            tags: [{ name: 'tag-one', label: 'tag-one', value: true }, { name: 'tag-two', label: 'tag-two', value: false }]
+            tags: [{ name: 'tag-one', label: 'tag-one', value: true }, { name: 'tag-two', label: 'tag-two', value: false }],
+            access: [
+                { name: 'telnet', label: 'Telnet', value: true },
+                { name: 'http', label: 'HTTP', value: true },
+                { name: 'https', label: 'HTTPS', value: true },
+                { name: 'ssh', label: 'SSH', value: true }
+            ]
         }]
     }]
 }

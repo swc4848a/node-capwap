@@ -13,6 +13,11 @@ class ApStore {
             .filter(ap => (sn === ap.serial))[0].tags
             .filter(tag => (name === tag.name))[0].value = value
     }
+    @action updateAccess(sn, name, value) {
+        this.apList
+            .filter(ap => (sn === ap.serial))[0].access
+            .filter(access => (name === access.name))[0].value = value
+    }
 }
 
 export default new ApStore()

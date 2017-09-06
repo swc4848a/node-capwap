@@ -52,6 +52,28 @@ const columns = [{
     }
 }]
 
+class Radio extends React.Component {
+    render() {
+        const listItems = this.props.radioInfo.map((info, index) => {
+            return (<div key={index}><dt>{info.label}</dt><dd>{info.value}</dd></div>)
+        })
+        return (
+            <div className={this.props.className}>
+                <div className="box box-solid">
+                    <div className="box-header with-border">
+                        <h3 className="box-title">{this.props.title}</h3>
+                    </div>
+                    <div className="box-body">
+                        <dl className="dl-horizontal">
+                            {listItems}
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
 @inject('apStore')
 @withRouter
 @observer
@@ -69,6 +91,9 @@ class APForm extends React.Component {
             })
         })
     }
+    isAccess(name) {
+        return ('telnet' === name) || ('http' === name) || ('https' === name) || ('ssh' === name)
+    }
     handleChange(e, index) {
         const target = e.target
         const value = target.type === 'checkbox' ? target.checked : target.value
@@ -77,7 +102,11 @@ class APForm extends React.Component {
         if (target.type !== 'checkbox') {
             this.props.apStore.update(sn, name, value)
         } else {
-            this.props.apStore.updateTag(sn, name, value)
+            if (this.isAccess(name)) {
+                this.props.apStore.updateAccess(sn, name, value)
+            } else {
+                this.props.apStore.updateTag(sn, name, value)
+            }
         }
     }
     render() {
@@ -87,6 +116,15 @@ class APForm extends React.Component {
         if (!ap) {
             return <div>Loading ...</div>
         }
+
+        const radioInfo1 = [
+            { label: 'Band', value: '2.4GHz 802.11n/g/b' },
+            { label: 'Channel', value: '1, 6, 11' },
+            { label: 'TX Power', value: '100%' }
+        ]
+        const radioInfo2 = [
+            { label: 'Mode', value: 'Disabled' }
+        ]
 
         return (
             <div className="col-md-12">
@@ -125,6 +163,21 @@ class APForm extends React.Component {
                                 label="Platform Profile"
                                 name="platformProfile"
                                 value=""
+                            />
+                            <Radio 
+                                className="col-sm-offset-1 col-md-10"
+                                title="Radio 1"
+                                radioInfo={radioInfo1}
+                            />
+                            <Radio 
+                                className="col-sm-offset-1 col-md-10"
+                                title="Radio 2"
+                                radioInfo={radioInfo2}
+                            />
+                            <CheckboxGroup 
+                                className="col-sm-offset-2 col-sm-10" 
+                                labels={ap.access} 
+                                onChange={this.handleChange}
                             />
                         </div>
                         <div className="box-footer">
