@@ -6,10 +6,6 @@ import Select from 'react-select'
 export class Input extends React.Component {
     constructor(props) {
         super(props)
-        this.handleChange = this.handleChange.bind(this)
-    }
-    handleChange(e) {
-        this.props.onChange(e)
     }
     render() {
         const value = this.props.value
@@ -23,7 +19,7 @@ export class Input extends React.Component {
                         className="form-control" 
                         placeholder={this.props.placeholder} 
                         value={value}
-                        onChange={this.handleChange}
+                        onChange={this.props.onChange}
                         disabled={this.props.disabled}
                     />
                 </div>
@@ -79,6 +75,7 @@ export class CSelect extends React.Component {
                         name={this.props.name}
                         value={this.props.value}
                         options={this.props.options}
+                        onChange={this.props.onChange}
                     />
                 </div>
             </div>

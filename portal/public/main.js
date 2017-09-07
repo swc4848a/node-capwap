@@ -6,9 +6,11 @@ import { useStrict } from 'mobx'
 
 import Main from './components/main.jsx'
 import apStore from './stores/apStore'
+import networkStore from './stores/networkStore'
 
 const stores = {
     apStore,
+    networkStore,
 }
 
 useStrict(true)
