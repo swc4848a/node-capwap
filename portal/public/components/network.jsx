@@ -8,10 +8,12 @@ import { Input, CheckboxGroup, CSelect } from './editor.jsx'
 @withRouter
 @observer
 export default class Network extends React.Component {
+    componentWillMount() {
+        this.props.networkStore.loadTimezoneOptions()
+    }
     handleTimezoneChange = e => this.props.networkStore.setTimezone(e.target.value)
     render() {
         const { values, timezoneOptions } = this.props.networkStore
-
         return (
             <section className="content">
                 <div className="row">
@@ -28,7 +30,7 @@ export default class Network extends React.Component {
                                         label="Timezone:"
                                         name="timezone"
                                         value={values.timezone}
-                                        options={[]}
+                                        options={timezoneOptions.peek()}
                                         onChange={this.handleTimezoneChange}
                                     />
                                 </div>

@@ -12,9 +12,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(__dirname + '/public/theme/project/img/cloud.png'));
 
 var AP = require('./routes/ap');
+var Timezone = require('./routes/timezone');
 
 // routes
 app.use('/AP', AP);
+app.use('/Timezone', Timezone);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

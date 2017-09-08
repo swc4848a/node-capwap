@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx'
+import agent from '../agent';
 
 class NetworkStore {
     @observable values = {
@@ -9,6 +10,17 @@ class NetworkStore {
 
     @action setTimezone(timezone) {
         this.values.timezone = timezone
+    }
+
+    $req() {
+        return agent.Options.all()
+    }
+
+    @action loadTimezoneOptions() {
+        return this.$req()
+            .then(action(({ options }) => {
+                options.forEach((option, i) => this.timezoneOptions[i] = option)
+            }))
     }
 }
 
