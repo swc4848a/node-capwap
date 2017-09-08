@@ -10,8 +10,9 @@ import { Input, CheckboxGroup, CSelect } from './editor.jsx'
 export default class Network extends React.Component {
     componentWillMount() {
         this.props.networkStore.loadTimezoneOptions()
+        this.props.networkStore.setTimezone('PST')
     }
-    handleTimezoneChange = e => this.props.networkStore.setTimezone(e.target.value)
+    handleTimezoneChange = timezone => this.props.networkStore.setTimezone(timezone.value)
     render() {
         const { values, timezoneOptions } = this.props.networkStore
         return (
