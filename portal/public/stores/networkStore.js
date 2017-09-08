@@ -3,13 +3,18 @@ import agent from '../agent';
 
 class NetworkStore {
     @observable values = {
-        timezone: ''
+        timezone: '',
+        emailTo: ''
     }
 
     @observable timezoneOptions = []
 
     @action setTimezone(timezone) {
         this.values.timezone = timezone
+    }
+
+    @action setEmailTo(emailTo) {
+        this.values.emailTo = emailTo
     }
 
     $req() {

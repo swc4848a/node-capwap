@@ -8,7 +8,7 @@ import {
     withRouter
 } from 'react-router-dom'
 
-import { Input, CheckboxGroup, CSelect } from './editor.jsx'
+import { Input, CheckboxGroup, XSelect } from './editor.jsx'
 import { inject, observer } from 'mobx-react'
 import { Modal, Button } from 'react-bootstrap'
 
@@ -165,7 +165,7 @@ class APForm extends React.Component {
                                 labels={ap.tags} 
                                 onChange={this.handleChange}
                             />
-                            <CSelect 
+                            <XSelect 
                                 left="col-sm-2"
                                 right="col-sm-10"
                                 label="Platform Profile"

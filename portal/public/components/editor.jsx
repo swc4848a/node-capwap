@@ -65,7 +65,7 @@ export class CheckboxGroup extends React.Component {
 }
 
 @observer
-export class CSelect extends React.Component {
+export class XSelect extends React.Component {
     render() {
         return (
             <div className="form-group">
@@ -78,6 +78,42 @@ export class CSelect extends React.Component {
                         onChange={this.props.onChange}
                     />
                 </div>
+            </div>
+        )
+    }
+}
+
+@observer
+export class YSelect extends React.Component {
+    render() {
+        return (
+            <div className="form-group">
+                <label>{this.props.label}</label>
+                <Select
+                    name={this.props.name}
+                    value={this.props.value}
+                    options={this.props.options}
+                    onChange={this.props.onChange}
+                />
+            </div>
+        )
+    }
+}
+
+@observer
+export class YInput extends React.Component {
+    render() {
+        return (
+            <div className="form-group">
+                <label>{this.props.label}</label>
+                <input 
+                    className="form-control" 
+                    name={this.props.name}
+                    type={this.props.type} 
+                    placeholder={this.props.placeholder} 
+                    value={this.props.value}
+                    onChange={this.props.onChange}
+                />
             </div>
         )
     }
