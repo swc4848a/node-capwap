@@ -13,6 +13,10 @@ export default class Network extends React.Component {
     }
     handleTimezoneChange = timezone => this.props.networkStore.setTimezone(timezone.value)
     handleEmailToChange = e => this.props.networkStore.setEmailTo(e.target.value)
+    handleSubmitForm = (e) => {
+        e.preventDefault()
+        this.props.networkStore.submit()
+    }
     render() {
         const { values, timezoneOptions } = this.props.networkStore
         return (
@@ -20,7 +24,7 @@ export default class Network extends React.Component {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="box box-primary">
-                            <form role="form">
+                            <form role="form" onSubmit={this.handleSubmitForm}>
                                 <div className="box-body">
                                     <h4>AP Network Info</h4>
                                     <div className="form-inline">

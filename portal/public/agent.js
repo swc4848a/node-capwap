@@ -19,7 +19,12 @@ const requests = {
         superagent
         .get(`${API_ROOT}${url}`)
         .end(handleErrors)
-        .then(responseBody)
+        .then(responseBody),
+    post: (url, body) =>
+        superagent
+        .post(`${API_ROOT}${url}`, body)
+        .end(handleErrors)
+        .then(responseBody),
 }
 
 const Options = {
@@ -27,6 +32,12 @@ const Options = {
         requests.get(`/Timezone`)
 }
 
+const Network = {
+    submit: network =>
+        requests.post('/Network', { network })
+}
+
 export default {
-    Options
+    Options,
+    Network,
 }

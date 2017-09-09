@@ -13,10 +13,12 @@ app.use(favicon(__dirname + '/public/theme/project/img/cloud.png'));
 
 var AP = require('./routes/ap');
 var Timezone = require('./routes/timezone');
+var Network = require('./routes/network');
 
 // routes
 app.use('/AP', AP);
 app.use('/Timezone', Timezone);
+app.use('/Network', Network);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -17,14 +17,22 @@ class NetworkStore {
         this.values.emailTo = emailTo
     }
 
-    $req() {
-        return agent.Options.all()
-    }
-
     @action loadTimezoneOptions() {
-        return this.$req()
+        return agent.Options.all()
             .then(action(({ options }) => {
                 options.forEach((option, i) => this.timezoneOptions[i] = option)
+            }))
+    }
+
+    @action submit() {
+        const network = this.values
+        return agent.Network.submit(network)
+            .then(({ result }) => {
+                console.log(result)
+            })
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                throw err;
             }))
     }
 }
