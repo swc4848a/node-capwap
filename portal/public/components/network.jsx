@@ -27,19 +27,17 @@ export default class Network extends React.Component {
                             <form role="form" onSubmit={this.handleSubmitForm}>
                                 <div className="box-body">
                                     <h4>AP Network Info</h4>
-                                    <div className="form-inline">
-                                        <div className="form-group">
-                                            <span>Time Zone:</span>{' '}
-                                        </div>
-                                        <div className="form-group">
-                                            <Select 
-                                                name="timezone" 
-                                                value={values.timezone}
-                                                options={timezoneOptions.peek()}
-                                                onChange={this.handleTimezoneChange}
-                                            />
-                                        </div>
+                                    {/*
+                                    <div className="form-group">
+                                        <h4 className="control-label">Time Zone:</h4>{' '}
+                                        <Select 
+                                            name="timezone" 
+                                            value={values.timezone}
+                                            options={timezoneOptions.peek()}
+                                            onChange={this.handleTimezoneChange}
+                                        />
                                     </div>
+                                    */}
                                     <h4>AP Network Alert</h4>
                                     <div className="form-group">
                                         <span>Send alerts via email to</span>{' '}
