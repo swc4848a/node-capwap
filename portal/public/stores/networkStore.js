@@ -4,7 +4,10 @@ import agent from '../agent';
 class NetworkStore {
     @observable values = {
         timezone: '',
-        emailTo: ''
+        emailTo: '',
+        bgScanInterval: 600,
+        bgScanState: false,
+        psScanState: false,
     }
 
     @observable timezoneOptions = []
@@ -15,6 +18,18 @@ class NetworkStore {
 
     @action setEmailTo(emailTo) {
         this.values.emailTo = emailTo
+    }
+
+    @action setBgScanInterval(interval) {
+        this.values.bgScanInterval = interval
+    }
+
+    @action setBgScanState(state) {
+        this.values.bgScanState = state
+    }
+
+    @action setPsScanState(state) {
+        this.values.psScanState = state
     }
 
     @action loadTimezoneOptions() {
