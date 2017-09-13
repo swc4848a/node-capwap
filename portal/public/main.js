@@ -7,10 +7,12 @@ import { useStrict } from 'mobx'
 import Main from './components/main.jsx'
 import apStore from './stores/apStore'
 import networkStore from './stores/networkStore'
+import ssidsStore from './stores/ssidsStore'
 
 const stores = {
     apStore,
     networkStore,
+    ssidsStore,
 }
 
 useStrict(true)

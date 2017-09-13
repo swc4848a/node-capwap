@@ -54,7 +54,7 @@ class Treeview extends React.Component {
 class Menu extends React.Component {
     render() {
         const configureNodes = [
-            { name: "SSIDs", to: "/SSID" },
+            { name: "SSIDs", to: "/SSIDs" },
             { name: "Platform Profile", to: "/Platform" },
             { name: "AP Tags", to: "/Tags" },
             { name: "QoS Profile", to: "/Qos" },

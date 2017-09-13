@@ -26,7 +26,7 @@ router.get('/', function(req, res) {
     }
     const client = net.createConnection({ host: '172.16.95.46', port: 9688 }, () => {
         console.log('connected to server!');
-        const msg = '{"id":30622,"url":"\/wlan\/wtp\/","method":"get","apNetworkOid":752,"params":[{"oid":4101,"name":"FP320C3X14012026"},{"oid":4105,"name":"PS323C3U15000018"},{"oid":4262,"name":"PS311C3U15000007"},{"oid":4311,"name":"FP423E3X16000330"}]}';
+        const msg = '{"id":30622,"url":"\/wlan\/wtp\/","method":"get","apNetworkOid":793}';
         client.write(msg);
         console.log('sent:', msg);
     });

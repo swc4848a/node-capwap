@@ -5,6 +5,7 @@ import {
     Link
 } from 'react-router-dom'
 import { AccessPointList, AccessPointForm } from './ap.jsx'
+import SSIDList from './ssidlist.jsx'
 import Network from './network.jsx'
 
 function NoMatch({ location }) {
@@ -39,6 +40,7 @@ export default function Content() {
             <Switch>
                 <Route path="/AccessPointList" component={AccessPointList} />
                 <Route path="/AccessPointForm/:sn" component={AccessPointForm} />
+                <Route path="/SSIDs" component={SSIDList} />
                 <Route path="/Network" component={Network} />
             </Switch>
         </div>
