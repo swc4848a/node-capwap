@@ -1,11 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import ReactTable from 'react-table'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 
 const columns = [{
     Header: 'SSID',
-    accessor: 'ssid'
+    accessor: 'name'
 }, {
     Header: 'Authentication',
     accessor: 'authentication'
@@ -43,7 +43,11 @@ const columns = [{
 @withRouter
 @observer
 export default class SSIDList extends React.Component {
+    componentWillMount() {
+        this.props.ssidsStore.loadSSIDs()
+    }
     render() {
+        const { ssids } = this.props.ssidsStore
         return (
             <section className="content">
                 <div className="row">
@@ -54,7 +58,7 @@ export default class SSIDList extends React.Component {
                             </div>
                             <div className="box-body">
                                 <ReactTable
-                                    data={[]}
+                                    data={ssids}
                                     columns={columns}
                                     defaultPageSize={5}
                                 />

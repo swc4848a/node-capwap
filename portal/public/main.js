@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import promiseFinally from 'promise.prototype.finally';
 import { Provider } from 'mobx-react'
 import { HashRouter } from 'react-router-dom'
 import { useStrict } from 'mobx'
@@ -15,6 +16,7 @@ const stores = {
     ssidsStore,
 }
 
+promiseFinally.shim();
 useStrict(true)
 
 ReactDOM.render(

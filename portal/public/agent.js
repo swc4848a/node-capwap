@@ -29,15 +29,21 @@ const requests = {
 
 const Options = {
     all: () =>
-        requests.get(`/Timezone`)
+        requests.get(`/timezone`)
 }
 
 const Network = {
     submit: network =>
-        requests.post('/Network', { network })
+        requests.post('/setwork', { network })
+}
+
+const SSIDs = {
+    all: () =>
+        requests.get(`/ssid`)
 }
 
 export default {
     Options,
     Network,
+    SSIDs,
 }
