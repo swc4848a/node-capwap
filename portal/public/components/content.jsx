@@ -7,6 +7,7 @@ import {
 import { AccessPointList, AccessPointForm } from './ap.jsx'
 import SSIDList from './ssidlist.jsx'
 import Network from './network.jsx'
+import SSID from './ssid.jsx'
 
 function NoMatch({ location }) {
     return (
@@ -41,6 +42,7 @@ export default function Content() {
                 <Route path="/AccessPointList" component={AccessPointList} />
                 <Route path="/AccessPointForm/:sn" component={AccessPointForm} />
                 <Route path="/SSIDs" component={SSIDList} />
+                <Route path="/SSID/:name" component={SSID} />
                 <Route path="/Network" component={Network} />
             </Switch>
         </div>

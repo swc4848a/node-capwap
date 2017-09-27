@@ -39,7 +39,9 @@ const Network = {
 
 const SSIDs = {
     all: () =>
-        requests.get(`/ssid`)
+        requests.get(`/ssid`),
+    get: slug =>
+        requests.get(`/ssid/${slug}`),
 }
 
 export default {

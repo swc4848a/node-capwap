@@ -29,7 +29,7 @@ const columns = [{
     accessor: 'schedule'
 }, {
     Header: '',
-    accessor: 'name',
+    accessor: 'ssid',
     Cell: (props) => {
         return (
             <Link to={`/SSID/${props.value}`} >

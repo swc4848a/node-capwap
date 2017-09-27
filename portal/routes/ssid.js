@@ -53,4 +53,18 @@ router.get('/', function(req, res) {
     connection.end();
 });
 
+router.get('/:id', function(req, res) {
+    if (process.argv[2] === 'home') {
+        return res.json({
+            ssid: {}
+        });
+    }
+
+    return res.json({
+        ssid: {
+            name: 'mock-ssid'
+        }
+    })
+})
+
 module.exports = router;

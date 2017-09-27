@@ -9,6 +9,10 @@ class SSIDsStore {
         return this.ssidsRegistry.values()
     }
 
+    getSSID(slug) {
+        return this.ssidsRegistry.get(slug)
+    }
+
     $req() {
         return agent.SSIDs.all()
     }
@@ -18,7 +22,23 @@ class SSIDsStore {
         return this.$req()
             .then(action(({ ssids }) => {
                 this.ssidsRegistry.clear()
-                ssids.forEach((ssid, index) => this.ssidsRegistry.set(index, ssid))
+                ssids.forEach((ssid) => this.ssidsRegistry.set(ssid.ssid, ssid))
+            }))
+            .finally(action(() => {
+                this.isLoading = false
+            }))
+    }
+
+    @action loadSSID(slug, { acceptCached = false } = {}) {
+        if (acceptCached) {
+            const ssid = this.getSSID(slug)
+            if (ssid) return Promise.resolve(ssid)
+        }
+        this.isLoading = true
+        return agent.SSIDs.get(slug)
+            .then(action(({ ssid }) => {
+                this.ssidsRegistry.set(ssid.ssid, ssid)
+                return ssid
             }))
             .finally(action(() => {
                 this.isLoading = false
