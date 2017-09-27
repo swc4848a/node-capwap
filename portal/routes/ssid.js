@@ -2,43 +2,55 @@
 
 const express = require('express');
 const router = express.Router();
-const net = require('net');
+const mysql = require('mysql');
 
 const mock = {
-    result: [{
-        data: [{}]
-    }]
+    ssids: []
+}
+
+const security = {
+    1: 'WPA2-Enterprise'
+}
+
+const auth = {
+    1: 'FortiCloud User/Group'
+}
+
+const nat = {
+    0: 'Bridge',
 }
 
 router.get('/', function(req, res) {
     if (process.argv[2] === 'home') {
         return res.json(mock);
     }
-    const client = net.createConnection({ host: '172.16.95.46', port: 9688 }, () => {
-        console.log('connected to server!');
-        const msg = '{"id":1,"url":"\/wlan\/vap\/","method":"get","apNetworkOid":793}';
-        client.write(msg);
-        client.end();
-        console.log('sent:', msg);
+
+    const connection = mysql.createConnection({
+        host: '172.16.95.95',
+        user: 'forticrm',
+        password: 'forticrm',
+        database: 'portal'
     });
-    let buf = [];
-    let count = 0;
-    client.on('data', (data) => {
-        count++;
-        buf.push(data);
-        try {
-            let json = JSON.parse(Buffer.concat(buf).toString());
-            res.json({
-                ssids: json.result[0].data
+
+    connection.connect();
+
+    connection.query('SELECT * FROM ap_ssid WHERE apNetworkOid = 793', function(error, results, fields) {
+        if (error) throw error;
+        let ssids = [];
+        results.map((result) => {
+            ssids.push({
+                ssid: result.ssid,
+                authentication: `${security[result.security]} ${auth[result.auth]}`,
+                ipAssignment: `${nat[result.nat]}(VLAN ID:${result.vlanId ? result.vlanId : 0})`,
+                apTags: `${result.apAuto ? '<Available to all APs>' : ''}`,
             });
-            console.log('receive done:', json);
-        } catch (e) {
-            console.log('receiving pkt', count);
-        }
+        })
+        res.json({
+            ssids: ssids
+        });
     });
-    client.on('end', () => {
-        console.log('disconnected from server');
-    });
+
+    connection.end();
 });
 
 module.exports = router;

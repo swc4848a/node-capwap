@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 
 const columns = [{
     Header: 'SSID',
-    accessor: 'name'
+    accessor: 'ssid'
 }, {
     Header: 'Authentication',
     accessor: 'authentication'
