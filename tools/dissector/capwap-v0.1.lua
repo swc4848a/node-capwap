@@ -416,6 +416,9 @@ vsp.VSP_FORTINET_FCLD_FIRMWWARE_INFO_URL = 0x821
 vsp.VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL = 0x822
 vsp.VSP_FORTINET_FCLD_FIRMWARE_RESULT = 0x823
 vsp.VSP_FORTINET_TIMEZONE_INFO = 0x824
+vsp.VSP_FORTINET_MAC_AUTH_CONFIG = 0x825
+vsp.VSP_FORTINET_MAC_AUTH_REQ = 0x826
+vsp.VSP_FORTINET_MAC_AUTH_RSP = 0x827
 
 local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_AP_SCAN] = "AP Scan",
@@ -572,6 +575,9 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL] = "Fcld Firmware Download Url",
     [vsp.VSP_FORTINET_FCLD_FIRMWARE_RESULT] = "Fcld Firmware Result",
     [vsp.VSP_FORTINET_TIMEZONE_INFO] = "Timezone Info",
+    [vsp.VSP_FORTINET_MAC_AUTH_CONFIG] = "Mac Authentiction Configuration",
+    [vsp.VSP_FORTINET_MAC_AUTH_REQ] = "Mac Authentiction Request",
+    [vsp.VSP_FORTINET_MAC_AUTH_RSP] = "Mac Authentiction Response",
 };
 
 -- /* ************************************************************************* */
@@ -1041,6 +1047,7 @@ pf.tunnel_mode = ProtoField.new("Tunnel Mode", "ftnt.capwap.message.element.tunn
 pf.suppress_ssid = ProtoField.new("Suppress SSID", "ftnt.capwap.message.element.suppress.ssid", ftypes.UINT8, yntypes, base.HEX, 0x01)
 pf.key = ProtoField.new("Key", "ftnt.capwap.message.element.key", ftypes.BYTES)
 pf.flags = ProtoField.new("Flags", "ftnt.capwap.message.element.flags", ftypes.UINT8)
+pf.flags16 = ProtoField.new("Flags", "ftnt.capwap.message.element.flags16", ftypes.UINT16)
 pf.flags32 = ProtoField.new("Flags", "ftnt.capwap.message.element.flags32", ftypes.UINT32)
 pf.tag = ProtoField.new("Tag", "ftnt.capwap.message.element.tag", ftypes.BYTES)
 
@@ -1778,6 +1785,13 @@ function timezoneInfoDecoder(tlv, tvbrange)
     tlv:add(pf.timezone, tvb:range(6 + tzid_len))
 end
 
+function macAuthConfigDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.flags16, tvb:range(2, 2))
+end
+
 function vapBitmapDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -2030,6 +2044,9 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_FCLD_FIRMWWARE_DOWNLOAD_URL] = fcldFirmwwareDownloadUrlDecoder,
     [vsp.VSP_FORTINET_FCLD_FIRMWARE_RESULT] = fcldFirmwareResultDecoder,
     [vsp.VSP_FORTINET_TIMEZONE_INFO] = timezoneInfoDecoder,
+    [vsp.VSP_FORTINET_MAC_AUTH_CONFIG] = macAuthConfigDecoder,
+    [vsp.VSP_FORTINET_MAC_AUTH_REQ] = macAuthReqDecoder,
+    [vsp.VSP_FORTINET_MAC_AUTH_RSP] = macAuthRspDecoder,
 }
 
 function boardDataWtpModelNumberDecoder(tlv, tvbrange)
