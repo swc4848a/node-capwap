@@ -1158,6 +1158,8 @@ pf.wanlan = ProtoField.new("Wan Lan", "ftnt.capwap.message.element.wtpcap.wan.la
 pf.ledDark = ProtoField.new("LED Dark", "ftnt.capwap.message.element.wtpcap.led.dark", ftypes.UINT8, nil, base.DEC, 0x40)
 pf.dtlsDataInKernel = ProtoField.new("Dtls Data In Kernel", "ftnt.capwap.message.element.wtpcap.dtls.data.in.kernel", ftypes.UINT8, nil, base.DEC, 0x80)
 
+pf.mac_auth_result = ProtoField.new("Mac Auth Result Code", "ftnt.capwap.message.element.mac.auth.result.code", ftypes.UINT8)
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -1790,6 +1792,23 @@ function macAuthConfigDecoder(tlv, tvbrange)
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.wlan_id, tvb:range(1, 1))
     tlv:add(pf.flags16, tvb:range(2, 2))
+end
+
+function macAuthReqDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_length, tvb:range(2, 1))
+    tlv:add(pf.mac_address, tvb:range(3))
+end
+
+function macAuthRspDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_length, tvb:range(2, 1))
+    tlv:add(pf.mac_address, tvb:range(3, 6))
+    tlv:add(pf.mac_auth_result, tvb:range(9))
 end
 
 function vapBitmapDecoder(tlv, tvbrange)
