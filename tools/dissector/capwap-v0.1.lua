@@ -388,6 +388,8 @@ vsp.VSP_FORTINET_VAP_LDPC_CONFIG = 232
 vsp.VSP_FORTINET_ST_VLAN_ID = 234
 vsp.VSP_FORTINET_STA_RADIUS_INFO = 235
 
+vsp.VSP_FORTINET_WTP_POE_OPER = 0x100
+
 vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP = 0x500
 vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP = 0x501
 vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WL_BR = 0x502
@@ -548,6 +550,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_VAP_LDPC_CONFIG] = "Vap Ldpc Config",
     [vsp.VSP_FORTINET_ST_VLAN_ID] = "St Vlan ID",
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = "Sta Radius Info",
+    [vsp.VSP_FORTINET_WTP_POE_OPER] = "Wtp PoE operating mode",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = "Wids Subtype Rf Threat Rogue Ap",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP] = "Wids Subtype Rf Threat Interfear Ap",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WL_BR] = "Wids Subtype Rf Threat Wl Br",
@@ -772,6 +775,13 @@ local ieee80211_add_wlan_tunnel_mode_vals = {
     [0] = "Local Bridging",
     [1] = "802.3 Tunnel",
     [2] = "802.11 Tunnel",
+};
+
+local wtp_poe_mode_opers = {
+    [0] = "Auto",
+    [1] = "802.3af",
+    [2] = "802.3at",
+    [3] = "Power Adapter",
 };
 
 local CAPWAP_HDR_LEN = 16
@@ -1069,6 +1079,7 @@ pf.ips_engine_version = ProtoField.new("IPS Engine Version", "ftnt.capwap.messag
 pf.ips_db_version = ProtoField.new("IPS DB Version", "ftnt.capwap.message.element.ips.db.version", ftypes.STRING)
 pf.botnet_db_version = ProtoField.new("Botnet DB Version", "ftnt.capwap.message.element.botnet.db.version", ftypes.STRING)
 pf.sta_ip = ProtoField.new("Sta IP list", "ftnt.capwap.message.element.sta.ip.list", ftypes.IPv4)
+pf.poe_oper = ProtoField.new("Wtp Poe Mode Oper", "ftnt.capwap.message.element.wtp.poe.mode.oper", ftypes.UINT8, wtp_poe_mode_opers)
 
 local CW_UTM_AV_ENGINE_VER = 1
 local CW_UTM_AV_DB_VER = 2
@@ -1908,6 +1919,12 @@ function mgmtVapDecoder(tlv, tvbrange)
     tlv:add(pf.vfid, tvb:range(18+sn_length, 4))
 end
 
+function wtpPoeOperDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.poe_oper, tvb:range(0, 1))
+end
+
+
 local ftntElementDecoder = {
     [vsp.VSP_FORTINET_AP_SCAN] = apScanDecoder,
     [vsp.VSP_FORTINET_AP_LIST] = apListDecoder,
@@ -2036,6 +2053,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_VAP_LDPC_CONFIG] = nil,
     [vsp.VSP_FORTINET_ST_VLAN_ID] = nil,
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = nil,
+    [vsp.VSP_FORTINET_WTP_POE_OPER] = wtpPoeOperDecoder,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = nil,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP] = nil,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WL_BR] = nil,
