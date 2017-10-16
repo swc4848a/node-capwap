@@ -389,6 +389,7 @@ vsp.VSP_FORTINET_ST_VLAN_ID = 234
 vsp.VSP_FORTINET_STA_RADIUS_INFO = 235
 
 vsp.VSP_FORTINET_WTP_POE_OPER = 0x100
+vsp.VSP_FORTINET_WTP_LED_BLINK = 0x101
 
 vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP = 0x500
 vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP = 0x501
@@ -551,6 +552,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_ST_VLAN_ID] = "St Vlan ID",
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = "Sta Radius Info",
     [vsp.VSP_FORTINET_WTP_POE_OPER] = "Wtp PoE operating mode",
+    [vsp.VSP_FORTINET_WTP_LED_BLINK] = "Wtp LED Blink",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = "Wids Subtype Rf Threat Rogue Ap",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP] = "Wids Subtype Rf Threat Interfear Ap",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WL_BR] = "Wids Subtype Rf Threat Wl Br",
@@ -1170,6 +1172,9 @@ pf.ledDark = ProtoField.new("LED Dark", "ftnt.capwap.message.element.wtpcap.led.
 pf.dtlsDataInKernel = ProtoField.new("Dtls Data In Kernel", "ftnt.capwap.message.element.wtpcap.dtls.data.in.kernel", ftypes.UINT8, nil, base.DEC, 0x80)
 
 pf.mac_auth_result = ProtoField.new("Mac Auth Result Code", "ftnt.capwap.message.element.mac.auth.result.code", ftypes.UINT8)
+
+pf.led_blink = ProtoField.new("Led Blink", "ftnt.capwap.message.element.wtp.led.blink", ftypes.UINT8)
+pf.led_blink_duration = ProtoField.new("Led Blink Duration", "ftnt.capwap.message.element.wtp.led.blink.duration", ftypes.UINT16)
 
 capwap.fields = pf
 
@@ -1924,6 +1929,12 @@ function wtpPoeOperDecoder(tlv, tvbrange)
     tlv:add(pf.poe_oper, tvb:range(0, 1))
 end
 
+function wtpLedBlinkDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.led_blink, tvb:range(0, 1))
+    tlv:add(pf.led_blink_duration, tvb:range(1))
+end
+
 
 local ftntElementDecoder = {
     [vsp.VSP_FORTINET_AP_SCAN] = apScanDecoder,
@@ -2054,6 +2065,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_ST_VLAN_ID] = nil,
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = nil,
     [vsp.VSP_FORTINET_WTP_POE_OPER] = wtpPoeOperDecoder,
+    [vsp.VSP_FORTINET_WTP_LED_BLINK] = wtpLedBlinkDecoder,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = nil,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP] = nil,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WL_BR] = nil,
