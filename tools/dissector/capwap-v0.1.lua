@@ -1021,6 +1021,7 @@ pf.coext = ProtoField.new("Coext", "ftnt.capwap.message.element.fortinet.coext",
 pf.mcs = ProtoField.new("MCS", "ftnt.capwap.message.element.fortinet.mcs", ftypes.UINT8)
 pf.ht_short_gi = ProtoField.new("HT Short GI", "ftnt.capwap.message.element.fortinet.ht.short.gi", ftypes.UINT8)
 pf.bandwidth = ProtoField.new("Bandwidth", "ftnt.capwap.message.element.fortinet.bandwidth", ftypes.UINT8)
+pf.bandwidth16 = ProtoField.new("Bandwidth", "ftnt.capwap.message.element.fortinet.bandwidth", ftypes.UINT16)
 pf.bg_scan_interval = ProtoField.new("bg scan interval", "ftnt.capwap.message.element.fortinet.bg.scan.interval", ftypes.UINT16)
 pf.bg_scan_idle = ProtoField.new("bg scan idle", "ftnt.capwap.message.element.fortinet.bg.scan.idle", ftypes.UINT24)
 pf.bg_scan_rpt_interval = ProtoField.new("bg scan rpt interval", "ftnt.capwap.message.element.fortinet.bg.scan.rpt.interval", ftypes.UINT16)
@@ -1082,6 +1083,7 @@ pf.ips_db_version = ProtoField.new("IPS DB Version", "ftnt.capwap.message.elemen
 pf.botnet_db_version = ProtoField.new("Botnet DB Version", "ftnt.capwap.message.element.botnet.db.version", ftypes.STRING)
 pf.sta_ip = ProtoField.new("Sta IP list", "ftnt.capwap.message.element.sta.ip.list", ftypes.IPv4)
 pf.poe_oper = ProtoField.new("Wtp Poe Mode Oper", "ftnt.capwap.message.element.wtp.poe.mode.oper", ftypes.UINT8, wtp_poe_mode_opers)
+pf.mimo = ProtoField.new("Mimo", "ftnt.capwap.message.element.wtp.mimo", ftypes.UINT16)
 
 local CW_UTM_AV_ENGINE_VER = 1
 local CW_UTM_AV_DB_VER = 2
@@ -1859,6 +1861,18 @@ function downupScheduleDecoder(tlv, tvbrange)
     tlv:add(pf.emin, tvb:range(7, 1))
 end
 
+function addStaLocDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_length, tvb:range(2, 1))
+    local len = tvb:range(2, 1):uint()
+    tlv:add(pf.mac_address, tvb:range(3, len))
+    tlv:add(pf.version, tvb:range(3 + len, 1))
+    tlv:add(pf.bandwidth16, tvb:range(4 + len, 2))
+    tlv:add(pf.mimo, tvb:range(6 + len))
+end
+
 function htcapDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1955,7 +1969,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_DEL_TUNLAN_HOST] = nil,
     [vsp.VSP_FORTINET_STA_SESSION_KEY] = nil,
     [vsp.VSP_FORTINET_STA_AUTHED] = nil,
-    [vsp.VSP_FORTINET_ADD_STA_LOC] = nil,
+    [vsp.VSP_FORTINET_ADD_STA_LOC] = addStaLocDecoder,
     [vsp.VSP_FORTINET_HTCAP] = htcapDecoder,
     [vsp.VSP_FORTINET_MGMT_VAP] = mgmtVapDecoder,
     [vsp.VSP_FORTINET_MODE] = modeDecoder,

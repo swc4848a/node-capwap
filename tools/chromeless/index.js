@@ -4,11 +4,11 @@ async function run() {
     const chromeless = new Chromeless()
 
     const screenshot = await chromeless
-        .goto('https://beta.forticloud.com')
-        .type('zqqiang@fortinet.com', 'input#email')
-        .type('SuperCRM801', 'input[type="password"]')
-        .click('input[type="submit"]')
-        .wait('#demo')
+        .goto('https://172.16.95.47')
+        .type('admin', 'input#username')
+        .type('pass', 'input#secretkey')
+        .click('button#login_button')
+        .wait('button:contains("Later")')
         .screenshot()
 
     console.log(screenshot)
