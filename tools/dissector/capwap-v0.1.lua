@@ -1183,6 +1183,7 @@ pf.mpsk = ProtoField.new("Multi PSK", "ftnt.capwap.message.element.mpsk", ftypes
 pf.mpsk_tobal = ProtoField.new("Multi Total", "ftnt.capwap.message.element.mpsk.total", ftypes.UINT16)
 pf.mpsk_size = ProtoField.new("Multi PSK Buf Size", "ftnt.capwap.message.element.mpsk.buf.size", ftypes.UINT16)
 pf.mpsk_buf = ProtoField.new("Multi PSK Buf", "ftnt.capwap.message.element.mpsk.buf", ftypes.STRING)
+pf.mpsk_name = ProtoField.new("Name", "ftnt.capwap.message.element.mpsk.name", ftypes.STRING)
 pf.concurrent_clients = ProtoField.new("Concurrent Clients", "ftnt.capwap.message.element.mpsk.current.clients", ftypes.UINT64)
 pf.password = ProtoField.new("Password", "ftnt.capwap.message.element.password", ftypes.STRING)
 
@@ -1430,6 +1431,8 @@ function vapMpskDecoder(tlv, tvbrange)
     local list = tlv:add(pf.mpsk_buf, tvb:range(7))
     local pos = 7
     repeat
+        list:add(pf.mpsk_name, tvb:range(pos, 36))
+        pos = pos + 36
         list:add(pf.concurrent_clients, tvb:range(pos, 4))
         pos = pos + 4
         list:add(pf.password, tvb:range(pos, 132))
