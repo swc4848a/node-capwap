@@ -320,7 +320,7 @@ vsp.VSP_FORTINET_WTP_STA_MAX = 118
 vsp.VSP_FORTINET_AP_SUPPRESS_LIST = 128
 vsp.VSP_FORTINET_FORTIPRESENCE_ENABLE = 129
 vsp.VSP_FORTINET_FORTIPRESENCE_PARAMS = 130
-
+vsp.VSP_FORTINET_VAP_MPSK = 0x83
 vsp.VSP_FORTINET_VAP_NATLEASE = 132
 
 vsp.VSP_FORTINET_VAP_DOWNUP = 144
@@ -490,6 +490,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_AP_SUPPRESS_LIST] = "AP Suppress List",
     [vsp.VSP_FORTINET_FORTIPRESENCE_ENABLE] = "FortiPresence Enable",
     [vsp.VSP_FORTINET_FORTIPRESENCE_PARAMS] = "FortiPresence Params",
+    [vsp.VSP_FORTINET_VAP_MPSK] = "VAP MultiPSK",
     [vsp.VSP_FORTINET_VAP_NATLEASE] = "VAP Natlease",
     [vsp.VSP_FORTINET_VAP_DOWNUP] = "Down Up",
     [vsp.VSP_FORTINET_VAP_FLAGS] = "VAP Flags",
@@ -1178,6 +1179,13 @@ pf.mac_auth_result = ProtoField.new("Mac Auth Result Code", "ftnt.capwap.message
 pf.led_blink = ProtoField.new("Led Blink", "ftnt.capwap.message.element.wtp.led.blink", ftypes.UINT8)
 pf.led_blink_duration = ProtoField.new("Led Blink Duration", "ftnt.capwap.message.element.wtp.led.blink.duration", ftypes.UINT16)
 
+pf.mpsk = ProtoField.new("Multi PSK", "ftnt.capwap.message.element.mpsk", ftypes.UINT8)
+pf.mpsk_tobal = ProtoField.new("Multi Total", "ftnt.capwap.message.element.mpsk.total", ftypes.UINT16)
+pf.mpsk_size = ProtoField.new("Multi PSK Buf Size", "ftnt.capwap.message.element.mpsk.buf.size", ftypes.UINT16)
+pf.mpsk_buf = ProtoField.new("Multi PSK Buf", "ftnt.capwap.message.element.mpsk.buf", ftypes.STRING)
+pf.concurrent_clients = ProtoField.new("Concurrent Clients", "ftnt.capwap.message.element.mpsk.current.clients", ftypes.UINT64)
+pf.password = ProtoField.new("Password", "ftnt.capwap.message.element.password", ftypes.STRING)
+
 capwap.fields = pf
 
 function mgmtVlanTagDecoder(tlv, tvbrange)
@@ -1410,6 +1418,23 @@ function countryCodeDecoder(tlv, tvbrange)
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.country_code, tvb:range(1, 2))
     tlv:add(pf.country_code_string, tvb:range(3, 3))
+end
+
+function vapMpskDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mpsk, tvb:range(2, 1))
+    tlv:add(pf.mpsk_tobal, tvb:range(3, 2))
+    tlv:add(pf.mpsk_size, tvb:range(5, 2))
+    local list = tlv:add(pf.mpsk_buf, tvb:range(7))
+    local pos = 7
+    repeat
+        list:add(pf.concurrent_clients, tvb:range(pos, 4))
+        pos = pos + 4
+        list:add(pf.password, tvb:range(pos, 132))
+        pos = pos + 132
+    until pos >= tvbrange:len()
 end
 
 function vapNatleaseDecoder(tlv, tvbrange)
@@ -2017,6 +2042,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_AP_SUPPRESS_LIST] = nil,
     [vsp.VSP_FORTINET_FORTIPRESENCE_ENABLE] = nil,
     [vsp.VSP_FORTINET_FORTIPRESENCE_PARAMS] = nil,
+    [vsp.VSP_FORTINET_VAP_MPSK] = vapMpskDecoder,
     [vsp.VSP_FORTINET_VAP_NATLEASE] = vapNatleaseDecoder,
     [vsp.VSP_FORTINET_VAP_DOWNUP] = downUpDecoder,
     [vsp.VSP_FORTINET_VAP_FLAGS] = vapFlagsDecoder,
