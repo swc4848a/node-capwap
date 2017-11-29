@@ -12,13 +12,13 @@ let cloudMap = {
     'Address Mode DHCP': "input[value='DHCP']~label",
     'Distance': "td>input:eq(2)",
     'IP/Netmask': "input.gwt-TextBox:eq(2)",
-    'Device Detection': "input:checkbox:eq(11)",
+    'Device Detection': "input:checkbox:eq(12)",
     'Device Detection for dhcp mode': "input:checkbox:eq(13)",
     'Miscellaneous Block': "input:radio[value='BLOCK']",
     'Miscellaneous Monitor': "input:radio[value='MONITOR']",
     'Interface Status Disable': "input:radio[value='DOWN']",
     'Comments': "textarea.gwt-TextArea",
-    'Save': "span:contains('Save')",
+    'Save': "button:contains('Save')",
 
     'Delete for interface manual': "tr.disabled:contains('interface man') div[title='Delete']",
     'Delete for interface dhcp': "tr.disabled:contains('interface dhcp') div[title='Delete']",
@@ -30,7 +30,7 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Interfaces': "a[href='page/p/system/interface/']",
+    'Interfaces': "a[ng-href='page/p/system/interface/']",
     'Interface Name': "input#name",
     'Type': "input#type",
     'VLAN ID': "input#vlanid",
@@ -92,7 +92,6 @@ new Testcase({
         c.click('Interfaces')
         c.click('Delete for interface manual')
         c.click('YES')
-        c.click('YES') // todo: GUI bug, need click twice
     },
     verify: (g) => {
         g.click('Interfaces')
@@ -140,7 +139,6 @@ new Testcase({
         c.click('Interfaces')
         c.click('Delete for interface dhcp')
         c.click('YES')
-        c.click('YES') // todo: GUI bug, need click twice
     },
     verify: (g) => {
         g.click('Interfaces')
@@ -183,7 +181,6 @@ new Testcase({
         c.click('Interfaces')
         c.click('Delete for interface loopback')
         c.click('YES')
-        c.click('YES') // todo: GUI bug, need click twice
     },
     verify: (g) => {
         g.click('Interfaces')
@@ -289,7 +286,6 @@ new Testcase({
         c.click('Interfaces')
         c.click('Delete for interface wan')
         c.click('YES')
-        c.click('YES')
     },
     verify: (g) => {
         g.click('Interfaces')
@@ -334,7 +330,6 @@ new Testcase({
     testcase: (c) => {
         c.click('Interfaces')
         c.click('Delete for interface dmz')
-        c.click('YES')
         c.click('YES')
     },
     verify: (g) => {
@@ -381,7 +376,6 @@ new Testcase({
         c.click('Interfaces')
         c.click('Delete for interface undef')
         c.click('YES')
-        c.click('YES') //todo: GUI bug, need click yes twice to delete undefined interface
     },
     verify: (g) => {
         g.click('Interfaces')

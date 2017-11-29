@@ -55,10 +55,12 @@ function action(selector, value) {
         case 'number':
             $(selector).val(value);
             console.log('set', selector, value);
+            // console.log('$("' + selector + '").val("' + value + '"");');
             break;
         case 'boolean':
             $(selector).prop("checked", value);
             console.log('set', selector, value);
+            // console.log('$("' + selector + '").prop("checked", ' + value + ');');
             break;
         case 'object':
             if (value) {
@@ -70,11 +72,12 @@ function action(selector, value) {
                 }
             } else {
                 if (selector === "img[width='113']") {
-                    window.location.href ='https://beta.forticloud.com/loginmgrlogin';
+                    window.location.href = 'https://beta.forticloud.com/loginmgrlogin';
                     console.log('redirect to beta: https://beta.forticloud.com/loginmgrlogin')
                 } else if ($(selector).length) {
                     $(selector).click();
                     console.log('click:', selector);
+                    // console.log('$("' + selector + '").click();');
                 } else {
                     $('iframe').contents().find(selector).click();
                     console.log('iframe click:', selector);
@@ -221,6 +224,10 @@ async function runSeq(page, action, ready, key, seq) {
         if ("div.popupContent button:contains('OK')" === selector) {
             await sleep(10000);
         }
+
+        // debug: capture each step if you need
+        // await capture(page, `${key}${i}`);
+
         await page.evaluate(function(action, selector, value) {
             action(selector, value);
         }, action, selector, value);
