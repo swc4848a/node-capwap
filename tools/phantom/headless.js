@@ -4,6 +4,7 @@ const gatecases = require('./it/gatecases.js');
 const util = require('util');
 const S = require('string');
 const deploy = require('./it/deploy.js');
+const deployTemplate = require('./it/deployTemplate.js');
 const importConfig = require('./it/import.js');
 const login = require('./it/setup.js');
 const logout = require('./it/logout.js');
@@ -93,7 +94,11 @@ function verify(selector, expect) {
     function selectorValue(selector, type) {
         switch (type) {
             case 'string':
-                return $(selector).val();
+                if ($(selector)[0].localName === "span") {
+                    return $(selector).text();
+                } else {
+                    return $(selector).val();
+                }
             case 'number':
                 return parseInt($(selector).val());
             case 'boolean':
@@ -107,7 +112,11 @@ function verify(selector, expect) {
     function iframeSelectorValue(selector, type) {
         switch (type) {
             case 'string':
-                return $('iframe').contents().find(selector).val();
+                if ($('iframe').contents().find(selector)[0].localName === "span") {
+                    return $('iframe').contents().find(selector).text();
+                } else {
+                    return $('iframe').contents().find(selector).val();
+                }
             case 'number':
                 return parseInt($('iframe').contents().find(selector).val());
             case 'boolean':
@@ -242,6 +251,10 @@ function buildCloudLoginSeq() {
     return login.cloud;
 }
 
+function buildCloudTemplateLoginSeq() {
+    return login.template;
+}
+
 function buildGateLoginSeq() {
     return login.gate;
 }
@@ -253,15 +266,23 @@ function buildGateLogoutSeq() {
 function buildCloudTestSeq(key) {
     let cloudSeq = [];
     console.log('load "%s" test cases', key);
-    importConfig.forEach((item) => {
-        cloudSeq.push(item);
-    })
+    if (!isTemplateCase(key)) {
+        importConfig.forEach((item) => {
+            cloudSeq.push(item);
+        })
+    }
     cases[key].forEach((item) => {
         cloudSeq.push(item);
     })
-    deploy.forEach((item) => {
-        cloudSeq.push(item);
-    })
+    if (isTemplateCase(key)) {
+        deployTemplate.forEach((item) => {
+            cloudSeq.push(item);
+        })
+    } else {
+        deploy.forEach((item) => {
+            cloudSeq.push(item);
+        })
+    }
     return cloudSeq;
 }
 
@@ -304,6 +325,10 @@ async function setupGatePage(instance) {
     return await setupPage(instance, config.fortigateUrl, true);
 }
 
+function isTemplateCase(key) {
+    return key.indexOf('template:') !== -1;
+}
+
 async function start() {
     for (let key in cases) {
         if (skip(key)) {
@@ -314,7 +339,11 @@ async function start() {
         const cloud_page = await setupCloudPage(instance);
         const gate_page = await setupGatePage(instance);
 
-        await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+        if (isTemplateCase(key)) {
+            await runSeq(cloud_page, action, ready, 'login', buildCloudTemplateLoginSeq());
+        } else {
+            await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+        }
         await runSeq(gate_page, action, gateReady, 'login', buildGateLoginSeq());
 
         await runSeq(cloud_page, action, ready, S(key).slugify().s, buildCloudTestSeq(key));

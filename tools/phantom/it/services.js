@@ -6,6 +6,7 @@ let cloudMap = {
     'Create Service': "div.filter_text:contains('Service'):eq(0)",
     'Create Service Group': "div.filter_text:contains('Service'):eq(1)",
     'Create Category': "div.filter_text:contains('Category')",
+    'Categories': "button:contains('Categories')",
 
     'Name': "input.gwt-TextBox:eq(0)",
     'IP/FQDN': "input.gwt-TextBox:eq(1)",
@@ -22,9 +23,11 @@ let cloudMap = {
 
     'Delete Service One': "td.left:contains('w service one')~td.right div[title='Delete']",
     'Delete Service Group One': "td.left:contains('group one')~td.right div[title='Delete']",
-    'Last Page': "img.gwt-Image:eq(4)",
+    'Delete Category One': "div.tk-ModalDialog div[title='Delete']",
+    'Last Page': "img.gwt-Image:eq(3)",
 
     'YES': "span:contains('YES')",
+    'Apply': "div.tk-ModalDialog button:contains('Apply')",
 }
 
 let gateMap = {
@@ -45,7 +48,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'service new',
+    name: 'template: service new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -71,7 +74,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'service delete',
+    name: 'template: service delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -87,7 +90,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'service group new',
+    name: 'template: service group new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -113,7 +116,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'service group delete',
+    name: 'template: service group delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -129,7 +132,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'category new',
+    name: 'template: category new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -145,5 +148,22 @@ new Testcase({
         g.click('Services')
         g.click('Category Settings')
         g.has('Category Multi Select category one')
+    }
+})
+
+new Testcase({
+    name: 'template: category delete',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Services')
+        c.click('Categories')
+        c.click('Delete Category One')
+        c.click('Apply')
+    },
+    verify: (g) => {
+        g.click('Services')
+        g.click('Category Settings')
+        g.isDelete('Category Multi Select category one')
     }
 })

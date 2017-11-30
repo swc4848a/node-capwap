@@ -37,7 +37,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'address new',
+    name: 'template: address new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -63,7 +63,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'address delete',
+    name: 'template: address delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -78,7 +78,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'address group new',
+    name: 'template: address group new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -99,7 +99,7 @@ new Testcase({
         g.redirect('/ng/page/p/firewall/object/address_group/edit/group%20new')
         g.isSet('Name', "group new")
         g.isChecked('Visibility')
-        g.isUnchecked('Static Route') // gate GUI disabled
+        g.isChecked('Static Route')
         g.isSet('Comments', "test comments")
         g.click('Save')
         g.click('OK')
@@ -107,7 +107,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'address group delete',
+    name: 'template: address group delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

@@ -10,6 +10,15 @@ let login = {
         ["div.img_link:contains('" + config.fortigateSN + "')", undefined],
         ["div.cat_link:contains('Management')", undefined],
     ],
+    template: [
+        ["input#email", "zqqiang@fortinet.com"],
+        ["input[name='password']", "SuperCRM801"],
+        ["input[type='submit']", undefined],
+        ["img[width='113']", undefined],
+        ["table.flat_button-blue td:contains('Group Management')", undefined],
+        ["div.filter_text:contains('Manage Templates')", undefined],
+        ["div[title='Edit']", undefined],
+    ],
     gate: [
         ["input#username", "admin"],
         ["button#login_button", undefined],

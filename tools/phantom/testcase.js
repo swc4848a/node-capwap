@@ -88,7 +88,7 @@ class Testcase {
         this.verify = options.verify
         this.cloudgui = new CloudGUI({
             name: options.name,
-            map: options.cloud
+            map: options.cloud,
         })
         this.gategui = new GateGUI({
             name: options.name,

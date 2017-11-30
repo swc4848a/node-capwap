@@ -8,7 +8,7 @@ let cloudMap = {
     'Use Extended IPS Signature Package': "input:checkbox:eq(3)~label",
     'Web Filter Cache': "input:checkbox:eq(4)~label",
     'Anti-Spam Cache': "input:checkbox:eq(5)~label",
-    'Disable All Checkbox': "input:checkbox",
+    'All Checkbox': "input:checkbox",
 
     'Scheduled Updates Type': "select.gwt-ListBox:eq(0)",
     'Scheduled Updates Weekday': "select.gwt-ListBox:eq(1)",
@@ -43,12 +43,7 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('FortiGuard')
-        c.click('Accept Push Updates')
-        c.click('Scheduled Updates')
-        c.click('Improve IPS Quality')
-        c.click('Use Extended IPS Signature Package')
-        c.click('Web Filter Cache')
-        c.click('Anti-Spam Cache')
+        c.checked('All Checkbox')
         c.click('Save')
     },
     verify: (g) => {
@@ -112,7 +107,7 @@ new Testcase({
         c.set('Scheduled Updates Type', "WEEKLY")
         c.set('Scheduled Updates Weekday', "FRIDAY")
         c.set('Scheduled Updates AM/PM Hour', 12)
-        c.set('Scheduled Updates AM/PM', "PM") // todo: GUI bug, 12:00 errror
+        c.set('Scheduled Updates AM/PM', "PM") // todo: GUI bug, 12:00 error
 
         c.click('Save')
     },
@@ -131,7 +126,7 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('FortiGuard')
-        c.unchecked('Disable All Checkbox')
+        c.unchecked('All Checkbox')
         c.click('Save')
     },
     verify: (g) => {
