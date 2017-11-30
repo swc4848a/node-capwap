@@ -14,9 +14,9 @@ require('./it/fortiGuard.js');
 // support template
 require('./it/addresses.js');
 require('./it/services.js');
+require('./it/schedules.js');
 
 // todo:
-require('./it/schedules.js');
 require('./it/virtualIPs.js');
 require('./it/ipPools.js');
 require('./it/antiVirus.js');

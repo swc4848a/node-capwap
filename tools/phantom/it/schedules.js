@@ -10,7 +10,7 @@ let cloudMap = {
     'Select': "button:contains('Select')",
     'End Date': "img.html-link:eq(1)",
     'Last Day': "select.gwt-ListBox:eq(0)",
-    'Pre-expiration Event Log': "input.gwt-TextBox:eq(1)",
+    'Pre-expiration Event Log': "input.gwt-TextBox:eq(3)",
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
     'YES': "span:contains('YES')",
@@ -73,7 +73,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'onetime schedule new',
+    name: 'template: onetime schedule new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -107,7 +107,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'onetime schedule delete',
+    name: 'template: onetime schedule delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -122,7 +122,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'recurring schedule new',
+    name: 'template: recurring schedule new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -160,7 +160,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'recurring schedule delete',
+    name: 'template: recurring schedule delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -175,7 +175,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'schedule group new',
+    name: 'template: schedule group new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -199,7 +199,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'schedule group delete',
+    name: 'template: schedule group delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
