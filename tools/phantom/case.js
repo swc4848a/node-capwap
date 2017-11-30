@@ -14,6 +14,8 @@ require('./it/fortiGuard.js');
 // support template
 require('./it/addresses.js');
 require('./it/services.js');
+
+// todo:
 require('./it/schedules.js');
 require('./it/virtualIPs.js');
 require('./it/ipPools.js');
@@ -39,8 +41,6 @@ require('./it/authenticationSettings.js');
 // need reference interface
 delete cases['interface hardswitch new'];
 delete cases['interface softswitch new'];
-
-// delete cases['service new']
 
 // todo: extintf any problem
 delete cases['virtual ip new'];
