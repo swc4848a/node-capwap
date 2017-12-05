@@ -169,22 +169,23 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'ssl inspection edit',
-        cloud: cloudMap,
-        gate: gateMap,
-        testcase: (c) => {
-            c.click('SSL Inspection')
+    name: 'template: ssl inspection edit',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('SSL Inspection')
 
-            c.set('Comments', "test comemnts")
-            c.click('Multiple Clients Connecting to Multiple Servers')
-            c.click('SSL Certificate Inspection')
-            c.click('Untrusted SSL Certificates Allow')
-            c.click('Allow Invalid SSL Certificates')
-            c.click('Log Invalid Certificates')
+        c.set('Comments', "test comemnts")
+        c.click('Multiple Clients Connecting to Multiple Servers')
+        c.click('SSL Certificate Inspection')
+        c.click('Untrusted SSL Certificates Allow')
+        c.click('Allow Invalid SSL Certificates')
+        c.click('Log Invalid Certificates')
 
-            c.click('Save')
-        },
-        verify: (g) => {
-            g.click('SSL Inspection')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('SSL Inspection')
 
-        }})
+    }
+})

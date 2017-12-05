@@ -11,12 +11,15 @@ let cloudMap = {
     'MAPI': "input:checkbox:eq(4)",
     'FTP': "input:checkbox:eq(5)",
     'Treat Windows Executables in Email Attachments as Viruses': "input:checkbox:eq(6)",
-    'Disable': "input:radio:eq(2)~label",
-    'Suspicious Files Only': "input:radio:eq(3)~label",
-    'Executable Files Only': "input:radio:eq(4)~label",
-    'All Supported Files': "input:radio:eq(5)~label",
+    'None': "input:radio:eq(2)~label",
+    'All Supported Files': "input:radio:eq(3)~label",
+    // 'Suspicious Files Only': "input:radio:eq(3)~label",
+    // 'Executable Files Only': "input:radio:eq(4)~label",
     'Use FortiSandbox Database': "input:checkbox:eq(7)",
     'Include Mobile Malware Protection': "input:checkbox:eq(8)",
+
+    'Checkbox All': "input:checkbox",
+
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
 }
@@ -39,23 +42,15 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'antivirus edit',
+    name: 'template: antivirus edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('AntiVirus')
         c.set('Comments', "test comments")
         c.click('Detect Viruses Block')
-        c.checked('HTTP')
-        c.checked('SMTP')
-        c.checked('POP3')
-        c.checked('IMAP')
-        c.checked('MAPI')
-        c.checked('FTP')
-        // c.checked('Treat Windows Executables in Email Attachments as Viruses')
-        c.click('Disable')
-        c.checked('Use FortiSandbox Database')
-        c.checked('Include Mobile Malware Protection')
+        c.click('All Supported Files')
+        c.checked('Checkbox All')
         c.click('Save')
     },
     verify: (g) => {

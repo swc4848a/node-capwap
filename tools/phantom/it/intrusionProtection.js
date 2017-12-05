@@ -4,7 +4,7 @@ let cloudMap = {
     'Intrusion Protection': "div.gwt-HTML:contains('Intrusion Protection'):eq(0)",
     'Comments': "textarea",
     'IPS Signatures Add': "div.tool_new:eq(0)",
-    '3Com.3CDaemon.FTP.Server.Buffer.Overflow': "div.tk-ModalDialog input:checkbox:eq(2)~label",
+    '3Com.Intelligent.Management.Center.Information.Disclosure': "div.tk-ModalDialog input:checkbox:eq(2)~label",
     'Ok': "div.tk-ModalDialog button:contains('Ok')",
     'IPS Filters Add': "div.tool_new:eq(1)",
     'Signatures Delete': "div.appActionDelete",
@@ -17,11 +17,11 @@ let cloudMap = {
 let gateMap = {
     'Intrusion Protection': "a[ng-href='page/p/utm/ips/sensor/edit/default/']",
     'Comments': "textarea",
-    '3Com.3CDaemon.FTP.Server.Buffer.Overflow':"section#sig_section tr[mkey='3Com.3CDaemon.FTP.Server.Buffer.Overflow']",
+    '3Com.Intelligent.Management.Center.Information.Disclosure':"section#sig_section tr[mkey='3Com.Intelligent.Management.Center.Information.Disclosure']",
 }
 
 new Testcase({
-    name: 'IPS sensor edit',
+    name: 'template: IPS sensor edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -30,7 +30,7 @@ new Testcase({
         c.set('Comments', "test comments")
         
         c.click('IPS Signatures Add')
-        c.click('3Com.3CDaemon.FTP.Server.Buffer.Overflow')
+        c.click('3Com.Intelligent.Management.Center.Information.Disclosure')
         c.click('Ok')
         
         // c.click('IPS Filters Add')
@@ -43,12 +43,12 @@ new Testcase({
         g.click('Intrusion Protection')
 
         g.isSet('Comments', "test comments")
-        g.has('3Com.3CDaemon.FTP.Server.Buffer.Overflow')
+        g.has('3Com.Intelligent.Management.Center.Information.Disclosure')
     }
 })
 
 new Testcase({
-    name: 'IPS sensor clean',
+    name: 'template: IPS sensor clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -63,6 +63,6 @@ new Testcase({
         g.click('Intrusion Protection')
 
         g.isSet('Comments', "")
-        g.isDelete('3Com.3CDaemon.FTP.Server.Buffer.Overflow')
+        g.isDelete('3Com.Intelligent.Management.Center.Information.Disclosure')
     }
 })

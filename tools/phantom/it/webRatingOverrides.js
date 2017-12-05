@@ -20,7 +20,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'Web Rating Overrides edit',
+    name: 'template: Web Rating Overrides edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -40,7 +40,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'Web Rating Overrides delete',
+    name: 'template: Web Rating Overrides delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

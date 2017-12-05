@@ -65,7 +65,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'proxy options edit',
+    name: 'template: proxy options edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -134,7 +134,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'proxy options clean',
+    name: 'template: proxy options clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

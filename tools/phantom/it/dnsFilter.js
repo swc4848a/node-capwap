@@ -17,6 +17,7 @@ let cloudMap = {
 
     'Allow DNS requests when a rating error occurs': "label:contains('Allow DNS requests when a rating error occurs')",
     'Log all Domains': "label:contains('Log all Domains')",
+    'Block': "label:contains('Block'):last()",
     'Redirect': "label:contains('Redirect')",
     'Redirect Portal IP': "input:last()",
 
@@ -44,53 +45,54 @@ let gateMap = {
     'Redirect Portal IP': "input#redirect-portal",
 }
 
-// new Testcase({
-//     name: 'DNS Filter Edit',
-//     cloud: cloudMap,
-//     gate: gateMap,
-//     testcase: (c) => {
-//         c.click('DNS Filter')
+new Testcase({
+    name: 'template: DNS Filter Edit',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('DNS Filter')
 
-//         c.click('Block DNS requests to known botnet C&C')
-//         c.click('FortiGuard category based filter')
-//         c.click('Monitor All')
-//         c.click('Domain Filter')
-//         c.click('Add Domain Filter')
-//         c.set('Domain', "a.com")
-//         c.click('Type RegEx')
-//         c.click('Action Allow')
-//         c.click('Status')
-//         c.click('Ok')
-//         c.click('Allow DNS requests when a rating error occurs')
-//         c.click('Log all Domains')
-//         c.click('Redirect')
-//         c.set('Redirect Portal IP', "1.1.1.1")
+        c.click('Block DNS requests to known botnet C&C')
+        c.click('FortiGuard category based filter')
+        c.click('Monitor All')
+        c.click('Domain Filter')
+        c.click('Add Domain Filter')
+        c.set('Domain', "a.com")
+        c.click('Type RegEx')
+        c.click('Action Allow')
+        c.click('Status')
+        c.click('Ok')
+        c.click('Allow DNS requests when a rating error occurs')
+        c.click('Log all Domains')
+        c.click('Redirect')
+        c.set('Redirect Portal IP', "1.1.1.1")
 
-//         c.click('Save')
-//     },
-//     verify: (g) => {
-//         g.click('DNS Filter')
-//         g.isChecked('Block DNS requests to known botnet C&C')
-//         g.isChecked('FortiGuard category based filter')
-//         g.isChecked('Domain Filter')
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('DNS Filter')
+        g.isChecked('Block DNS requests to known botnet C&C')
+        g.isChecked('FortiGuard category based filter')
+        g.isChecked('Domain Filter')
 
-//         g.isChecked('Allow DNS requests when a rating error occurs')
-//         g.isChecked('Log all Domains')
-//         g.isChecked('Redirect')
+        g.isChecked('Allow DNS requests when a rating error occurs')
+        g.isChecked('Log all Domains')
+        g.isChecked('Redirect')
 
-//         g.isSet('Redirect Portal IP Type', "specify")
-//         g.isSet('Redirect Portal IP', "1.1.1.1")
-//     }
-// })
+        g.isSet('Redirect Portal IP Type', "specify")
+        g.isSet('Redirect Portal IP', "1.1.1.1")
+    }
+})
 
 new Testcase({
-    name: 'DNS Filter Clean',
+    name: 'template: DNS Filter Clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('DNS Filter')
 
         c.unchecked('All Checkbox')
+        c.click('Block')
 
         c.click('Save')
     },

@@ -76,7 +76,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'web filter edit',
+    name: 'template: web filter edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -123,7 +123,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'web filter edit category usage quota',
+    name: 'template: web filter edit category usage quota',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -141,7 +141,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'web filter delete category usage quota',
+    name: 'template: web filter delete category usage quota',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -151,12 +151,12 @@ new Testcase({
     },
     verify: (g) => {
         g.click('Web Filter')
-        g.isDelete('Category Usage Quota With Discrimination') // todo: some bug
+        g.isDelete('Category Usage Quota With Discrimination')
     }
 })
 
 new Testcase({
-    name: 'web filter edit Allow users to override blocked categories',
+    name: 'template: web filter edit Allow users to override blocked categories',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -171,23 +171,23 @@ new Testcase({
     }
 })
 
-// new Testcase({
-//     name: 'web filter edit url filter',
-//     cloud: cloudMap,
-//     gate: gateMap,
-//     testcase: (c) => {
-//         c.click('Web Filter')
-//         c.click('URL Filter')
+new Testcase({
+    name: 'template: web filter edit url filter',
+    cloud: cloudMap,
+    gate: gateMap,
+    testcase: (c) => {
+        c.click('Web Filter')
+        c.click('URL Filter')
 
-//         c.click('Save')
-//     },
-//     verify: (g) => {
-//         g.click('Web Filter')
-//     }
-// })
+        c.click('Save')
+    },
+    verify: (g) => {
+        g.click('Web Filter')
+    }
+})
 
 new Testcase({
-    name: 'web filter clean',
+    name: 'template: web filter clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

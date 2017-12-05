@@ -25,7 +25,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'Web Profile Overrides edit',
+    name: 'template: Web Profile Overrides edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -47,7 +47,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'Web Profile Overrides delete',
+    name: 'template: Web Profile Overrides delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

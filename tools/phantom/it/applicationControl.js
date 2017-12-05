@@ -6,7 +6,7 @@ let cloudMap = {
     'Comments': "textarea",
     'Allow All': "div.appActionAllow:eq(0)",
     'Add Signature': "div.svg-bg-add",
-    'Signature 126.mail': "table.apOverview input:checkbox:eq(0)",
+    'Signature 126.mail': "table.apOverview input:checkbox:eq(0) ~label",
     'Ok': "button:contains('Ok')",
     'Deep Inspection of Cloud Applications': "label:contains('Deep Inspection of Cloud Applications')",
     'Allow and Log DNS Traffic': "label:contains('Allow and Log DNS Traffic')",
@@ -14,7 +14,7 @@ let cloudMap = {
 
     'Save': "span:contains('Save')",
 
-    'Options': "input:checkbox",
+    'Checkbox All': "input:checkbox",
 }
 
 let gateMap = {
@@ -22,45 +22,42 @@ let gateMap = {
 
     'Comments': "textarea",
     'Allow Business': "section.categories f-icon.fa-enabled:eq(0)",
-    'Signature 126.mail': "section.overrides a.sig-name:contains('126.mail')",
+    'Signature 126.mail': "section.overrides a.sig-name:contains('126.Mail')",
     'Allow and Log DNS Traffic': "input#allow-dns",
     'Replacement Messages for HTTP-based Applications': "input#app-replacemsg",
 }
 
 new Testcase({
-    name: 'application control edit',
+    name: 'template: application control edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Application Control')
-
         c.set('Comments', "test comments")
         c.click('Allow All')
-        // c.click('Add Signature')
-        // c.checked('Signature 126.mail')
-        // c.click('Ok')
-        c.click('Allow and Log DNS Traffic')
-        c.click('Replacement Messages for HTTP-based Applications')
-
+        c.click('Add Signature')
+        c.click('Signature 126.mail')
+        c.click('Ok')
+        c.checked('Checkbox All')
         c.click('Save')
     },
     verify: (g) => {
         g.click('Application Control')
-        // g.isSet('Comments', "test comments")
+        g.isSet('Comments', "test comments")
         g.has('Allow Business')
-        // g.has('Signature 126.mail')
+        g.has('Signature 126.mail')
         g.isChecked('Allow and Log DNS Traffic')
         g.isChecked('Replacement Messages for HTTP-based Applications')
     }
 })
 
 new Testcase({
-    name: 'application control clean',
+    name: 'template: application control clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Application Control')
-        c.unchecked('Options')
+        c.unchecked('Checkbox All')
         c.click('Save')
     },
     verify: (g) => {
