@@ -32,7 +32,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'radius server new',
+    name: 'template: radius server new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -62,7 +62,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'radius server delete',
+    name: 'template: radius server delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

@@ -23,6 +23,10 @@ require('./it/usersGroups.js');
 require('./it/intrusionProtection.js');
 require('./it/applicationControl.js');
 require('./it/webRatingOverrides.js');
+require('./it/customDevicesGroups.js');
+require('./it/ldapServers.js');
+require('./it/radiusServers.js');
+require('./it/authenticationSettings.js');
 
 // bugs:
 require('./it/dnsFilter.js');
@@ -31,10 +35,6 @@ require('./it/dnsFilter.js');
 require('./it/sslInspection.js');
 
 // todo:
-require('./it/customDevicesGroups.js');
-require('./it/ldapServers.js');
-require('./it/radiusServers.js');
-require('./it/authenticationSettings.js');
 
 // remove from v3.2.1
 // cases = require('./it/casi.js');

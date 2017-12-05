@@ -32,7 +32,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'ldap server new',
+    name: 'template: ldap server new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -61,7 +61,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'ldap server delete',
+    name: 'template: ldap server delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
