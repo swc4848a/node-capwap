@@ -27,14 +27,10 @@ require('./it/customDevicesGroups.js');
 require('./it/ldapServers.js');
 require('./it/radiusServers.js');
 require('./it/authenticationSettings.js');
-
-// bugs:
 require('./it/dnsFilter.js');
 
 // more case:
-require('./it/sslInspection.js');
-
-// todo:
+// require('./it/sslInspection.js');
 
 // remove from v3.2.1
 // cases = require('./it/casi.js');
@@ -42,17 +38,7 @@ require('./it/sslInspection.js');
 // require('./it/webProfileOverrides.js');
 
 // filter some can't support testcases
-// need reference interface
 delete cases['interface hardswitch new'];
 delete cases['interface softswitch new'];
-
-// todo: extintf any problem
-delete cases['virtual ip new'];
-delete cases['virtual ip delete'];
-
-delete cases['web profile overrides new user'];
-
-delete cases['advanced time setting use fortiguard'];
-delete cases['advanced time setting specify'];
 
 module.exports = cases;

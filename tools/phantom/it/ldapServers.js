@@ -53,7 +53,7 @@ new Testcase({
         g.redirect('/ng/user/ldap/edit/server%2520one')
         g.isSet('Name', "server one")
         g.isSet('Server IP/Name', "3.3.3.3")
-        g.isSet('Server Port', 100)
+        g.isSet('Server Port', 636) // if enable secure connection port must be 636
         g.isSet('Common Name Identifier', "ldap id")
         g.isSet('Distinguished Name', "ldap dis")
         g.isChecked('Secure Connection')
