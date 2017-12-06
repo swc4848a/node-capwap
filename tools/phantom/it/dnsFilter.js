@@ -41,7 +41,7 @@ let gateMap = {
     'Allow DNS requests when a rating error occurs': "input#ftgd-dns_options",
     'Log all Domains': "input#log-all-domain",
     'Redirect': "input#block-action",
-    'Redirect Portal IP Type': "input:radio[name='redirect_portal_type']",
+    'Redirect Portal IP Type': "input:radio[name='redirect_portal_type']:checked",
     'Redirect Portal IP': "input#redirect-portal",
 }
 
