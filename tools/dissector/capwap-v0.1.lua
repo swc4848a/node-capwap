@@ -378,6 +378,7 @@ vsp.VSP_FORTINET_WIDS_PARAMS_ASSOC_TIME = 211
 vsp.VSP_FORTINET_WIDS_PARAMS_ASSOC_THRESH = 212
 vsp.VSP_FORTINET_WIDS_PARAMS_AUTH_TIME = 213
 vsp.VSP_FORTINET_WIDS_PARAMS_AUTH_THRESH = 214
+vsp.VSP_FORTINET_WIDS_PARAMS_DEAUTH_THRESH = 215
 
 vsp.VSP_FORTINET_VAP_RATES = 225
 vsp.VSP_FORTINET_BONJOUR_CONFIG = 226
@@ -544,6 +545,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_WIDS_PARAMS_ASSOC_THRESH] = "WIDS Params Assoc Thresh",
     [vsp.VSP_FORTINET_WIDS_PARAMS_AUTH_TIME] = "WIDS Params Auth Time",
     [vsp.VSP_FORTINET_WIDS_PARAMS_AUTH_THRESH] = "WIDS Params Auth Thresh",
+    [vsp.VSP_FORTINET_WIDS_PARAMS_DEAUTH_THRESH] = "WIDS Params DeAuth Thresh",
     [vsp.VSP_FORTINET_VAP_RATES] = "Vap Rates",
     [vsp.VSP_FORTINET_BONJOUR_CONFIG] = "Bonjour Config",
     [vsp.VSP_FORTINET_VAP_OKC_CONFIG] = "Vap OKC Config",
@@ -1038,6 +1040,7 @@ pf.apho = ProtoField.new("APHO", "ftnt.capwap.message.element.fortinet.apho", ft
 pf.locate_enable = ProtoField.new("Locate Enable", "ftnt.capwap.message.element.fortinet.locate.enable", ftypes.UINT8)
 pf.locate_interval = ProtoField.new("Locate Interval", "ftnt.capwap.message.element.fortinet.locate.interval", ftypes.UINT16)
 pf.wids_enable = ProtoField.new("WIDS Enable", "ftnt.capwap.message.element.fortinet.wids.enable", ftypes.UINT32)
+pf.deauth_thresh = ProtoField.new("WIDS DeAuth Thresh", "ftnt.capwap.message.element.fortinet.wids.deauth.thresh", ftypes.UINT16)
 pf.bitmap = ProtoField.new("Bitmap", "ftnt.capwap.message.element.fortinet.bitmap", ftypes.UINT16, nil, base.HEX)
 pf.enable_local_subnet = ProtoField.new("Enable Local Subnet", "ftnt.capwap.message.element.fortinet.enable.local.subnet", ftypes.UINT8)
 pf.cnt = ProtoField.new("CNT", "ftnt.capwap.message.element.fortinet.cnt", ftypes.UINT8)
@@ -1670,6 +1673,12 @@ function widsEnableDecoder(tlv, tvbrange)
     tlv:add(pf.wids_enable, tvb:range(1, 4))
 end
 
+function widsDeAuthThreshDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.deauth_thresh, tvb:range(1, 2))
+end
+
 function dynamicVlanDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -2099,6 +2108,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_WIDS_PARAMS_ASSOC_THRESH] = nil,
     [vsp.VSP_FORTINET_WIDS_PARAMS_AUTH_TIME] = nil,
     [vsp.VSP_FORTINET_WIDS_PARAMS_AUTH_THRESH] = nil,
+    [vsp.VSP_FORTINET_WIDS_PARAMS_DEAUTH_THRESH] = widsDeAuthThreshDecoder,
     [vsp.VSP_FORTINET_VAP_RATES] = nil,
     [vsp.VSP_FORTINET_BONJOUR_CONFIG] = nil,
     [vsp.VSP_FORTINET_VAP_OKC_CONFIG] = nil,
