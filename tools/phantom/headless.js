@@ -73,8 +73,10 @@ function action(selector, value) {
                 }
             } else {
                 if (selector === "img[width='113']") {
-                    window.location.href = 'https://beta.forticloud.com/loginmgrlogin';
-                    console.log('redirect to beta: https://beta.forticloud.com/loginmgrlogin')
+                    // window.location.href = 'https://beta.forticloud.com/loginmgrlogin';
+                    // console.log('redirect to beta: https://beta.forticloud.com/loginmgrlogin')
+                    window.location.href = 'https://alpha.forticloud.com/loginmgrlogin';
+                    console.log('redirect to alpha: https://alpha.forticloud.com/loginmgrlogin')
                 } else if ($(selector).length) {
                     $(selector).click();
                     console.log('click:', selector);
@@ -195,7 +197,7 @@ async function runSeq(page, action, ready, key, seq) {
         let selector = seq[i][0];
         let value = seq[i][1];
         let retry = 0;
-        let max_try = 30;
+        let max_try = 40;
 
         if (value && value.action === 'sleep') {
             await sleep(value.value);
@@ -329,6 +331,11 @@ function isTemplateCase(key) {
     return key.indexOf('template:') !== -1;
 }
 
+function isMultiTenancy() {
+    // todo:
+    return false;
+}
+
 async function start() {
     for (let key in cases) {
         if (skip(key)) {
@@ -339,8 +346,12 @@ async function start() {
         const cloud_page = await setupCloudPage(instance);
         const gate_page = await setupGatePage(instance);
 
-        if (isTemplateCase(key)) {
-            await runSeq(cloud_page, action, ready, 'login', buildCloudTemplateLoginSeq());
+        if (isMultiTenancy()) {
+            if (isTemplateCase(key)) {
+                await runSeq(cloud_page, action, ready, 'login', buildCloudTemplateLoginSeq());
+            } else {
+                await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+            }
         } else {
             await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
         }

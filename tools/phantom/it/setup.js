@@ -1,7 +1,15 @@
 const config = require('../config.js');
 
 let login = {
-    cloud: [
+    cloud : [
+        ["input#email", "zqqiang@fortinet.com"],
+        ["input[name='password']", "SuperCRM801"],
+        ["input[type='submit']", undefined],
+        ["img[width='113']", undefined],
+        ["div.img_link:contains('" + config.fortigateSN + "')", undefined],
+        ["div.cat_link:contains('Management')", undefined],
+    ],
+    cloudMultiTenancy : [
         ["input#email", "zqqiang@fortinet.com"],
         ["input[name='password']", "SuperCRM801"],
         ["input[type='submit']", undefined],
@@ -22,7 +30,7 @@ let login = {
     gate: [
         ["input#username", "admin"],
         ["button#login_button", undefined],
-        ["button:contains('Later')", undefined],
+        // ["button:contains('Later')", undefined],
     ]
 }
 
