@@ -197,7 +197,7 @@ async function runSeq(page, action, ready, key, seq) {
         let selector = seq[i][0];
         let value = seq[i][1];
         let retry = 0;
-        let max_try = 40;
+        let max_try = 30;
 
         if (value && value.action === 'sleep') {
             await sleep(value.value);
@@ -230,14 +230,17 @@ async function runSeq(page, action, ready, key, seq) {
             break;
         }
         if ("span:contains('Close'), button:contains('OK')" === selector) {
-            // await capture(page, key);
+            await capture(page, key);
         }
-        if ("div.popupContent button:contains('OK')" === selector) {
-            await sleep(10000);
+        // if ("div.popupContent button:contains('OK')" === selector) {
+        //     await sleep(10000);
+        // }
+        if ("button:contains('Deploy')" === selector) {
+            await sleep(1000);
         }
 
         // debug: capture each step if you need
-        // await capture(page, `${key}${i}`);
+        await capture(page, `${key}${i}`);
 
         await page.evaluate(function(action, selector, value) {
             action(selector, value);
@@ -347,7 +350,8 @@ async function start() {
         const gate_page = await setupGatePage(instance);
 
         if (isMultiTenancy()) {
-            if (isTemplateCase(key)) {
+            // temporary disable template test
+            if (0 && isTemplateCase(key)) {
                 await runSeq(cloud_page, action, ready, 'login', buildCloudTemplateLoginSeq());
             } else {
                 await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());

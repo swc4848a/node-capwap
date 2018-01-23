@@ -1,7 +1,8 @@
 let importConfig = [
     ["button:contains('Import')"],
     ["div.popupContent button:contains('YES')"],
-    ["div.popupContent button:contains('OK')"],
+    ["", {action: "sleep", value: 10000}]
+    // ["div.popupContent button:contains('OK')"],
 ]
 
 module.exports = importConfig;
