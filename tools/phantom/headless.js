@@ -240,7 +240,7 @@ async function runSeq(page, action, ready, key, seq) {
         }
 
         // debug: capture each step if you need
-        await capture(page, `${key}${i}`);
+        // await capture(page, `${key}${i}`);
 
         await page.evaluate(function(action, selector, value) {
             action(selector, value);
