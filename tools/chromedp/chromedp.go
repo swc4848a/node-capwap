@@ -1,13 +1,13 @@
+// Command click is a chromedp example demonstrating how to use a selector to
+// click on an element.
 package main
 
 import (
 	"context"
-	// "fmt"
-	"io/ioutil"
+	"fmt"
 	"log"
 	"time"
 
-	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
 )
 
@@ -25,10 +25,9 @@ func main() {
 	}
 
 	// run task list
-	var site, res string
-	err = c.Run(ctxt, googleSearch("site:brank.as", "Home", &site, &res))
+	err = start(ctxt, c)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("could not run with logic: %v", err)
 	}
 
 	// shutdown chrome
@@ -42,28 +41,34 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	log.Printf("saved screenshot from search result listing `%s` (%s)", res, site)
 }
 
-func googleSearch(q, text string, site, res *string) chromedp.Tasks {
-	var buf []byte
-	// sel := fmt.Sprintf(`//a[text()[contains(., '%s')]]`, text)
+func start(ctxt context.Context, c *chromedp.CDP) error {
+	if err := c.Run(ctxt, login()); err != nil {
+		return fmt.Errorf("login run error: %v", err)
+	}
+
+	if err := c.Run(ctxt, testcases()); err != nil {
+		return fmt.Errorf("testcases run error: %v", err)
+	}
+
+	c.Run(ctxt, chromedp.Sleep(150*time.Second))
+
+	return nil
+}
+
+func login() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Navigate(`https://www.google.ca`),
-		// chromedp.WaitVisible(`#hplogo`, chromedp.ByID),
-		// chromedp.SendKeys(`#lst-ib`, q+"\n", chromedp.ByID),
-		// chromedp.WaitVisible(`#res`, chromedp.ByID),
-		// chromedp.Text(sel, res),
-		// chromedp.Click(sel),
-		// chromedp.WaitNotVisible(`.preloader-content`, chromedp.ByQuery),
-		// chromedp.WaitVisible(`a[href*="twitter"]`, chromedp.ByQuery),
-		// chromedp.Location(site),
-		// chromedp.ScrollIntoView(`.banner-section.third-section`, chromedp.ByQuery),
-		chromedp.Sleep(2 * time.Second), // wait for animation to finish
-		chromedp.Screenshot(`.banner-section.third-section`, &buf, chromedp.ByQuery),
-		chromedp.ActionFunc(func(context.Context, cdp.Executor) error {
-			return ioutil.WriteFile("screenshot.png", buf, 0644)
-		}),
+		chromedp.Navigate(`https://alpha.forticloud.com`),
+		// chromedp.SetValue(`#email`, `zqqiang@fortinet.com`),
+		// chromedp.SetValue(`input[name="password"]`, `SuperCRM801`),
+		// chromedp.Click(`input[type="submit"]`),
+	}
+}
+
+func testcases() chromedp.Tasks {
+	return chromedp.Tasks{
+		chromedp.WaitVisible(`.svg-icon-90`),
+		chromedp.Click(`.svg-icon-90`),
 	}
 }

@@ -75,10 +75,10 @@ new Testcase({
         g.redirect('/ng/page/p/system/interface/edit/interface%20man')
         g.isSet('Interface Name', "interface man")
         g.isSet('Alias', "alias manual")
-        g.isSet('Address Mode Manual', "static")
+        // g.isSet('Address Mode Manual', "static")
         g.isSet('IP/Netmask', "1.1.1.1/255.255.255.0")
-        g.isChecked('Device Detection')
-        g.isChecked('Miscellaneous Block')
+        // g.isChecked('Device Detection')
+        // g.isChecked('Miscellaneous Block')
         g.isChecked('Interface Status Disable')
         g.isSet('Comments', "test comments")
     }
