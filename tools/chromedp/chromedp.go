@@ -60,15 +60,14 @@ func start(ctxt context.Context, c *chromedp.CDP) error {
 func login() chromedp.Tasks {
 	return chromedp.Tasks{
 		chromedp.Navigate(`https://alpha.forticloud.com`),
-		// chromedp.SetValue(`#email`, `zqqiang@fortinet.com`),
-		// chromedp.SetValue(`input[name="password"]`, `SuperCRM801`),
-		// chromedp.Click(`input[type="submit"]`),
+		chromedp.SetValue(`#email`, `zqqiang@fortinet.com`),
+		chromedp.SetValue(`input[name="password"]`, `SuperCRM801`),
+		chromedp.Click(`input[type="submit"]`),
 	}
 }
 
 func testcases() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.WaitVisible(`.svg-icon-90`),
-		chromedp.Click(`.svg-icon-90`),
+		chromedp.Click(`table .device_box_first .img_link`, chromedp.NodeVisible),
 	}
 }
