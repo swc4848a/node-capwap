@@ -1,6 +1,13 @@
 const config = require('../config.js');
 
 let login = {
+    devAlpha : [
+        ["input:eq(0)", "zqqiang@fortinet.com"],
+        ["input:eq(1)", "SuperCRM801"],
+        ["button", undefined],
+        ["div.img_link:contains('" + config.fortigateSN + "')", undefined],
+        ["div.cat_link:contains('Management')", undefined],
+    ],
     cloud : [
         ["input#email", "zqqiang@fortinet.com"],
         ["input[name='password']", "SuperCRM801"],
@@ -29,8 +36,10 @@ let login = {
     ],
     gate: [
         ["input#username", "admin"],
+        ["input[type='password']", "admin"],
         ["button#login_button", undefined],
-        // ["button:contains('Later')", undefined],
+        ["button:contains('Later')", undefined],
+        ["button:contains('Later')", undefined],
     ]
 }
 

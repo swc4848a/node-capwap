@@ -75,8 +75,8 @@ function action(selector, value) {
                 if (selector === "img[width='113']") {
                     // window.location.href = 'https://beta.forticloud.com/loginmgrlogin';
                     // console.log('redirect to beta: https://beta.forticloud.com/loginmgrlogin')
-                    window.location.href = 'https://alpha.forticloud.com/loginmgrlogin';
-                    console.log('redirect to alpha: https://alpha.forticloud.com/loginmgrlogin')
+                    // window.location.href = 'https://alpha.forticloud.com/loginmgrlogin';
+                    // console.log('redirect to alpha: https://alpha.forticloud.com/loginmgrlogin')
                 } else if ($(selector).length) {
                     $(selector).click();
                     console.log('click:', selector);
@@ -252,6 +252,10 @@ function skip(key) {
     return process.argv[2] && !S(key).contains(process.argv[2]);
 }
 
+function buildDevAlphaCloudLoginSeq() {
+    return login.devAlpha;
+}
+
 function buildCloudLoginSeq() {
     return login.cloud;
 }
@@ -323,7 +327,7 @@ async function setupPage(instance, url, jquery) {
 }
 
 async function setupCloudPage(instance) {
-    return await setupPage(instance, 'https://loginalpha.forticloud.com', true);
+    return await setupPage(instance, 'https://172.16.94.163/com.fortinet.gwt.Main/Main.html', true);
 }
 
 async function setupGatePage(instance) {
@@ -357,7 +361,7 @@ async function start() {
                 await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
             }
         } else {
-            await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+            await runSeq(cloud_page, action, ready, 'login', buildDevAlphaCloudLoginSeq());
         }
         await runSeq(gate_page, action, gateReady, 'login', buildGateLoginSeq());
 
@@ -368,6 +372,15 @@ async function start() {
 
         await instance.exit();
         console.log('instance exit...');
+
+        // exec('rm img/*', (error, stdout, stderr) => {
+        //     if (error) {
+        //         console.error(`exec error: ${error}`);
+        //         return;
+        //     }
+        //     console.log(`stdout: ${stdout}`);
+        //     console.log(`stderr: ${stderr}`);
+        // });
     }
 }
 
