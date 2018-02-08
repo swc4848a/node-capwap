@@ -6,7 +6,7 @@ require('./it/interfaces.js');
 require('./it/dns.js'); // failed
 require('./it/routing.js'); // failed
 require('./it/adminSettings.js');
-require('./it/fortiGuard.js'); //
+require('./it/fortiGuard.js'); // failed
 
 // todo: gwt collpase plus icon can't response jquery click event
 // require('./it/advanced.js');
