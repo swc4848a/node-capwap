@@ -43,8 +43,10 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('FortiGuard')
+        c.sleep(2000)
         c.checked('All Checkbox')
         c.click('Save')
+        c.sleep(2000)
     },
     verify: (g) => {
         g.click('FortiGuard')
@@ -63,10 +65,10 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('FortiGuard')
-
+        c.sleep(2000)
         c.set('Scheduled Updates Type', "EVERY")
         c.set('Scheduled Updates Hour', 20)
-
+        c.sleep(1000)
         c.click('Save')
     },
     verify: (g) => {
@@ -82,7 +84,7 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('FortiGuard')
-
+        c.sleep(2000)
         c.set('Scheduled Updates Type', "DAILY")
         c.set('Scheduled Updates AM/PM Hour', 12)
         c.set('Scheduled Updates AM/PM', "PM")
