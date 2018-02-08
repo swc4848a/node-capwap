@@ -200,7 +200,9 @@ async function runSeq(page, action, ready, key, seq) {
         let max_try = 30;
 
         if (value && value.action === 'sleep') {
+            console.log('sleep start waiting %s s...', value.value);
             await sleep(value.value);
+            console.log('sleep end waiting %s s...', value.value);
             continue;
         }
         if (value && value.action === 'redirect') {
@@ -372,15 +374,6 @@ async function start() {
 
         await instance.exit();
         console.log('instance exit...');
-
-        // exec('rm img/*', (error, stdout, stderr) => {
-        //     if (error) {
-        //         console.error(`exec error: ${error}`);
-        //         return;
-        //     }
-        //     console.log(`stdout: ${stdout}`);
-        //     console.log(`stderr: ${stderr}`);
-        // });
     }
 }
 

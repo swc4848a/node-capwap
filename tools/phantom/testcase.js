@@ -33,6 +33,9 @@ class CloudGUI {
             cloudcases[this.name].push([this.map[btn], { action: 'hide' }]);
         }
     }
+    sleep(time) {
+        cloudcases[this.name].push([undefined, { action: 'sleep', value: time }]);
+    }
 }
 
 class GateGUI {

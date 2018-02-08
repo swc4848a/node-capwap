@@ -34,16 +34,16 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('Routing')
-
         c.click('Create New')
+        c.sleep(2000)
         c.set('Destination IP', "192.168.18.0")
         c.set('Destination Netmask', "255.255.255.0")
         c.set('Gateway', "192.168.1.1")
         c.set('Administrative Distance', 11)
         c.set('Device Interface', "internal")
         c.set('Comments', "test comments")
-
         c.click('Save')
+        c.sleep(2000)
     },
     verify: (g) => {
         g.redirect('/ng/page/p/router/static/edit/2')

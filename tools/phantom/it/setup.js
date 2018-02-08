@@ -39,7 +39,6 @@ let login = {
         ["input[type='password']", "admin"],
         ["button#login_button", undefined],
         ["button:contains('Later')", undefined],
-        ["button:contains('Later')", undefined],
     ]
 }
 

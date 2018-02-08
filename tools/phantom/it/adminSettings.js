@@ -1,13 +1,13 @@
 let Testcase = require('../testcase.js');
 
 let cloudMap = {
-    'Admin Settings': "div.gwt-HTML:contains('Admin Settings')",
-    'HTTP Port': "input.gwt-TextBox:eq(0)",
+    'Admin Settings': "div.gwt-HTML:contains('Settings'):eq(0)",
+    'HTTP Port': "input.gwt-TextBox:eq(1)",
     'Redirect to HTTPS': "input:checkbox",
-    'HTTPS Port': "input.gwt-TextBox:eq(1)",
-    'Telnet Port': "input.gwt-TextBox:eq(2)",
-    'SSH Port': "input.gwt-TextBox:eq(3)",
-    'Idle Timeout': "input.gwt-TextBox:eq(4)",
+    'HTTPS Port': "input.gwt-TextBox:eq(2)",
+    'Telnet Port': "input.gwt-TextBox:eq(3)",
+    'SSH Port': "input.gwt-TextBox:eq(4)",
+    'Idle Timeout': "input.gwt-TextBox:eq(5)",
     'Save': "span:contains('Save')",
 }
 
@@ -27,6 +27,7 @@ new Testcase({
     gate: gateMap,
     testcase: (c) => {
         c.click('Admin Settings')
+        c.sleep(2000)
         c.set('HTTP Port', 80)
         c.checked('Redirect to HTTPS')
         c.set('HTTPS Port', 443)
@@ -34,6 +35,7 @@ new Testcase({
         c.set('SSH Port', 22)
         c.set('Idle Timeout', 480)
         c.click('Save')
+        c.sleep(2000)
     },
     verify: (g) => {
         g.click('Admin Settings')

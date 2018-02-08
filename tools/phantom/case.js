@@ -2,10 +2,10 @@
 
 let cases = require('./it/root.js');
 
-require('./it/interfaces.js'); // failed, interface attr should be oid
-require('./it/dns.js'); // 
+require('./it/interfaces.js');
+require('./it/dns.js'); // failed
 require('./it/routing.js'); // failed
-require('./it/adminSettings.js'); //failed
+require('./it/adminSettings.js');
 require('./it/fortiGuard.js'); //
 
 // todo: gwt collpase plus icon can't response jquery click event

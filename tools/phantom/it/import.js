@@ -1,7 +1,7 @@
 let importConfig = [
     ["button:contains('Import')"],
     ["div.popupContent button:contains('YES')"],
-    ["", {action: "sleep", value: 10000}]
+    [undefined, {action: "sleep", value: 10000}]
     // ["div.popupContent button:contains('OK')"],
 ]
 

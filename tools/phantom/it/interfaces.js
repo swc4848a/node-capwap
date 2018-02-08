@@ -382,3 +382,4 @@ new Testcase({
         g.isDelete('interface undef')
     }
 })
+ 
