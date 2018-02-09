@@ -42,41 +42,28 @@ func main() {
 }
 
 func start(ctxt context.Context, c *chromedp.CDP) error {
-	if err := c.Run(ctxt, login(dev.Login)); err != nil {
-		return fmt.Errorf("login run error: %v", err)
+	for i := 0; i < len(dev.Setup); i++ {
+		if err := c.Run(ctxt, dev.Setup[i]()); err != nil {
+			return fmt.Errorf("login run error: %v", err)
+		}
 	}
 
-	if err := c.Run(ctxt, setup(dev.FgtConfig)); err != nil {
-		return fmt.Errorf("login run error: %v", err)
+	for i := 0; i < len(dev.Interfaces); i++ {
+		if err := c.Run(ctxt, dev.Interfaces[i]()); err != nil {
+			return fmt.Errorf("login run error: %v", err)
+		}
 	}
 
-	if err := c.Run(ctxt, testcases()); err != nil {
-		return fmt.Errorf("testcases run error: %v", err)
+	if err := c.Run(ctxt, demo()); err != nil {
+		return fmt.Errorf("demo run error: %v", err)
 	}
 
-	c.Run(ctxt, chromedp.Sleep(150*time.Second))
+	c.Run(ctxt, chromedp.Sleep(5*time.Second))
 
 	return nil
 }
 
-func login(m map[string]string) chromedp.Tasks {
-	return chromedp.Tasks{
-		chromedp.Navigate(m["url"]),
-		chromedp.SetValue(m["email"], `zqqiang@fortinet.com`),
-		chromedp.SetValue(m["password"], `SuperCRM801`),
-		chromedp.Click(m["login"]),
-	}
-}
-
-func setup(m map[string]string) chromedp.Tasks {
-	return chromedp.Tasks{
-		chromedp.Click(m["FGT_SN"], chromedp.NodeVisible),
-		chromedp.Sleep(1 * time.Second),
-		chromedp.Click(m["Management_Tab"], chromedp.NodeVisible),
-	}
-}
-
-func testcases() chromedp.Tasks {
+func demo() chromedp.Tasks {
 	return chromedp.Tasks{
 		chromedp.Sleep(1 * time.Second),
 	}
