@@ -59,15 +59,19 @@ func start(ctxt context.Context, c *chromedp.CDP) error {
 
 func login() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Navigate(`https://alpha.forticloud.com`),
-		chromedp.SetValue(`#email`, `zqqiang@fortinet.com`),
-		chromedp.SetValue(`input[name="password"]`, `SuperCRM801`),
-		chromedp.Click(`input[type="submit"]`),
+		chromedp.Navigate(`http://172.16.94.163/com.fortinet.gwt.Main/Main.html`),
+		chromedp.SetValue(`input.gwt-TextBox`, `zqqiang@fortinet.com`),
+		chromedp.SetValue(`input.gwt-PasswordTextBox`, `SuperCRM801`),
+		chromedp.Click(`button.loginButton1`),
 	}
 }
 
 func testcases() chromedp.Tasks {
+	FGT := `#ext-gen6 > table.home_panel > tbody > tr:nth-child(2) > td > div > table > tbody > tr > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td > div`
+	Management := `#ext-gen6 > table:nth-child(12) > tbody > tr:nth-child(1) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(3) > div`
 	return chromedp.Tasks{
-		chromedp.Click(`table .device_box_first .img_link`, chromedp.NodeVisible),
+		chromedp.Click(FGT, chromedp.NodeVisible),
+		chromedp.Sleep(1 * time.Second),
+		chromedp.Click(Management, chromedp.NodeVisible),
 	}
 }
