@@ -73,7 +73,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: onetime schedule new',
+    name: 'onetime schedule new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -107,7 +107,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: onetime schedule delete',
+    name: 'onetime schedule delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -122,7 +122,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: recurring schedule new',
+    name: 'recurring schedule new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -160,7 +160,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: recurring schedule delete',
+    name: 'recurring schedule delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -175,7 +175,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: schedule group new',
+    name: 'schedule group new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -199,7 +199,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: schedule group delete',
+    name: 'schedule group delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

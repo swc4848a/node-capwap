@@ -33,7 +33,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: ippool new',
+    name: 'ippool new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -61,7 +61,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: ippool delete',
+    name: 'ippool delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

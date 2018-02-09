@@ -17,15 +17,15 @@ require('./it/services.js');
 require('./it/schedules.js');
 require('./it/virtualIPs.js');
 require('./it/ipPools.js');
-require('./it/antiVirus.js');
-require('./it/webFilter.js');
+require('./it/antiVirus.js'); // failed
+require('./it/webFilter.js'); // failed
 require('./it/usersGroups.js');
-require('./it/intrusionProtection.js');
-require('./it/applicationControl.js');
+require('./it/intrusionProtection.js'); // failed
+require('./it/applicationControl.js'); // failed
 require('./it/webRatingOverrides.js');
 require('./it/customDevicesGroups.js');
-require('./it/ldapServers.js');
-require('./it/radiusServers.js');
+require('./it/ldapServers.js'); // failed
+require('./it/radiusServers.js'); // failed
 require('./it/authenticationSettings.js');
 require('./it/dnsFilter.js');
 

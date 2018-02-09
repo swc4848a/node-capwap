@@ -46,7 +46,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: DNS Filter Edit',
+    name: 'DNS Filter Edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -85,7 +85,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: DNS Filter Clean',
+    name: 'DNS Filter Clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

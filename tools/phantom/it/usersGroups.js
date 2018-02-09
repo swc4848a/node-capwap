@@ -31,7 +31,7 @@ let gateMap = {
     'User Name': "input[ng-model='$ctrl.user.name']",
     'Email Address': "input[type='email']",
     'Country Dial Code Canada': "span.entry-value>span:contains('United States/Canada (+1)')",
-    'Phone Number': "input[ng-model='$ctrl.user.$sms.phoneNumber']",
+    'Phone Number': "input[ng-model='$ctrl.entry.$sms.phoneNumber']",
     'User Account Status': "input:radio[ng-model='$ctrl.user.status']",
 
     'user one': "tr[mkey='user one']",
@@ -45,7 +45,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: user new',
+    name: 'user new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -73,7 +73,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: user group new',
+    name: 'user group new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -104,7 +104,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: user delete',
+    name: 'user delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -118,7 +118,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: user group delete',
+    name: 'user group delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

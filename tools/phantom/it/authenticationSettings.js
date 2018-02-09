@@ -25,7 +25,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: authentication settings edit',
+    name: 'authentication settings edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

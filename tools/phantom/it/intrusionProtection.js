@@ -21,7 +21,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: IPS sensor edit',
+    name: 'IPS sensor edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -48,7 +48,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: IPS sensor clean',
+    name: 'IPS sensor clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

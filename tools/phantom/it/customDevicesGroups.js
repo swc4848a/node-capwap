@@ -38,7 +38,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: device new',
+    name: 'device new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -62,7 +62,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: device delete',
+    name: 'device delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -77,7 +77,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: device group new',
+    name: 'device group new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -104,7 +104,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: device group delete',
+    name: 'device group delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

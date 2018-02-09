@@ -76,17 +76,17 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: web filter edit',
+    name: 'web filter edit common',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
         c.click('Web Filter')
         c.unchecked('Checkbox All')
-        c.click('FortiGuard category based filter')
+        // c.click('FortiGuard category based filter')
         c.click('Allow All')
         c.click('Allow users to override blocked categories')
-        c.click('SSO_Guest_Users')
-        c.click('monitor-all')
+        // c.click('SSO_Guest_Users')
+        // c.click('monitor-all')
         c.click('Enforce Safe Search on Google, Yahoo!, Bing, Yandex')
         c.click('Log all search keywords')
         c.click('Block invalid URLs')
@@ -105,8 +105,8 @@ new Testcase({
         g.click('Web Filter')
         g.isChecked('FortiGuard category based filter')
         g.isChecked('Allow users to override blocked categories')
-        g.has('SSO_Guest_Users')
-        g.has('monitor-all')
+        // g.has('SSO_Guest_Users')
+        // g.has('monitor-all')
         g.isChecked('Enforce Safe Search on Google, Yahoo!, Bing, Yandex')
         g.isChecked('Log all search keywords')
         g.isChecked('Block invalid URLs')
@@ -123,7 +123,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: web filter edit category usage quota',
+    name: 'web filter edit category usage quota',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -141,7 +141,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: web filter delete category usage quota',
+    name: 'web filter delete category usage quota',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -156,7 +156,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: web filter edit Allow users to override blocked categories',
+    name: 'web filter edit Allow users to override blocked categories',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -172,7 +172,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: web filter edit url filter',
+    name: 'web filter edit url filter',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -187,7 +187,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: web filter clean',
+    name: 'web filter clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

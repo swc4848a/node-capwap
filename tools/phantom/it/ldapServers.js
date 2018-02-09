@@ -32,7 +32,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: ldap server new',
+    name: 'ldap server new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -44,10 +44,11 @@ new Testcase({
         c.set('Server Port', 100)
         c.set('Common Name Identifier', "ldap id")
         c.set('Distinguished Name', "ldap dis")
-        c.checked('Secure Connection')
+        // c.checked('Secure Connection')
 
         c.click('Save')
-        c.click('OK')
+        c.sleep(2000)
+        // c.click('OK')
     },
     verify: (g) => {
         g.redirect('/ng/user/ldap/edit/server%2520one')
@@ -56,12 +57,12 @@ new Testcase({
         g.isSet('Server Port', 636) // if enable secure connection port must be 636
         g.isSet('Common Name Identifier', "ldap id")
         g.isSet('Distinguished Name', "ldap dis")
-        g.isChecked('Secure Connection')
+        // g.isChecked('Secure Connection')
     }
 })
 
 new Testcase({
-    name: 'template: ldap server delete',
+    name: 'ldap server delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

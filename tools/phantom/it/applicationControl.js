@@ -28,7 +28,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: application control edit',
+    name: 'application control edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -52,7 +52,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: application control clean',
+    name: 'application control clean',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

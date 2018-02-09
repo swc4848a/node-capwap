@@ -24,7 +24,7 @@ let cloudMap = {
     'Delete Service One': "td.left:contains('w service one')~td.right div[title='Delete']",
     'Delete Service Group One': "td.left:contains('group one')~td.right div[title='Delete']",
     'Delete Category One': "div.tk-ModalDialog div[title='Delete']",
-    'Last Page': "img.gwt-Image:eq(3)",
+    'Last Page': "img.gwt-Image:eq(4)",
 
     'YES': "span:contains('YES')",
     'Apply': "div.tk-ModalDialog button:contains('Apply')",
@@ -43,12 +43,12 @@ let gateMap = {
     'Members FTP': "div.selected-entry>span:contains('FTP')",
     'Members HTTP': "div.selected-entry>span:contains('HTTP')",
 
-    'Category Settings': "button:contains('Category Settings')",
+    'Category Settings': "button:contains('Category Settings'):eq(0)",
     'Category Multi Select category one': "select#categories>option[value='category one']",
 }
 
 new Testcase({
-    name: 'template: service new',
+    name: 'service new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -74,7 +74,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: service delete',
+    name: 'service delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -90,7 +90,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: service group new',
+    name: 'service group new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -116,7 +116,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: service group delete',
+    name: 'service group delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -132,7 +132,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: category new',
+    name: 'category new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -152,7 +152,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: category delete',
+    name: 'category delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

@@ -55,7 +55,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: virtual ip new',
+    name: 'virtual ip new',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
@@ -106,7 +106,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: virtual ip delete',
+    name: 'virtual ip delete',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {

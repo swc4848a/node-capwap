@@ -42,7 +42,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: antivirus edit',
+    name: 'antivirus edit',
     cloud: cloudMap,
     gate: gateMap,
     testcase: (c) => {
