@@ -3,12 +3,12 @@
 package main
 
 import (
+	"./beta"
 	"context"
 	"fmt"
+	"github.com/chromedp/chromedp"
 	"log"
 	"time"
-
-	"github.com/chromedp/chromedp"
 )
 
 func main() {
@@ -44,7 +44,7 @@ func main() {
 }
 
 func start(ctxt context.Context, c *chromedp.CDP) error {
-	if err := c.Run(ctxt, login()); err != nil {
+	if err := c.Run(ctxt, login(beta.Login)); err != nil {
 		return fmt.Errorf("login run error: %v", err)
 	}
 
@@ -57,21 +57,21 @@ func start(ctxt context.Context, c *chromedp.CDP) error {
 	return nil
 }
 
-func login() chromedp.Tasks {
+func login(m map[string]string) chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Navigate(`http://172.16.94.163/com.fortinet.gwt.Main/Main.html`),
-		chromedp.SetValue(`input.gwt-TextBox`, `zqqiang@fortinet.com`),
-		chromedp.SetValue(`input.gwt-PasswordTextBox`, `SuperCRM801`),
-		chromedp.Click(`button.loginButton1`),
+		chromedp.Navigate(m["url"]),
+		chromedp.SetValue(m["email"], `zqqiang@fortinet.com`),
+		chromedp.SetValue(m["password"], ``),
+		chromedp.Click(m["login"]),
 	}
 }
 
 func testcases() chromedp.Tasks {
-	FGT := `#ext-gen6 > table.home_panel > tbody > tr:nth-child(2) > td > div > table > tbody > tr > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td > div`
-	Management := `#ext-gen6 > table:nth-child(12) > tbody > tr:nth-child(1) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(3) > div`
+	m := beta.Config
 	return chromedp.Tasks{
-		chromedp.Click(FGT, chromedp.NodeVisible),
+		chromedp.Click(m["Lower_Level"], chromedp.NodeVisible),
+		chromedp.Click(m["FGT_SN"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
-		chromedp.Click(Management, chromedp.NodeVisible),
+		chromedp.Click(m["Management_Tab"], chromedp.NodeVisible),
 	}
 }
