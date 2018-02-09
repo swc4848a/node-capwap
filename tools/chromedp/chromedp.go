@@ -1,5 +1,3 @@
-// Command click is a chromedp example demonstrating how to use a selector to
-// click on an element.
 package main
 
 import (
@@ -61,17 +59,19 @@ func login(m map[string]string) chromedp.Tasks {
 	return chromedp.Tasks{
 		chromedp.Navigate(m["url"]),
 		chromedp.SetValue(m["email"], `zqqiang@fortinet.com`),
-		chromedp.SetValue(m["password"], ``),
+		chromedp.SetValue(m["password"], `SuperCRM801`),
 		chromedp.Click(m["login"]),
 	}
 }
 
 func testcases() chromedp.Tasks {
-	m := beta.Config
+	m := beta.ApConfig
 	return chromedp.Tasks{
+		chromedp.Click(m["AP_Network"], chromedp.NodeVisible),
 		chromedp.Click(m["Lower_Level"], chromedp.NodeVisible),
-		chromedp.Click(m["FGT_SN"], chromedp.NodeVisible),
-		chromedp.Sleep(1 * time.Second),
-		chromedp.Click(m["Management_Tab"], chromedp.NodeVisible),
+		chromedp.Click(m["DEV3"], chromedp.NodeVisible),
+		chromedp.Click(m["Access_Point"], chromedp.NodeVisible),
+		chromedp.Click(m["AP_SN"], chromedp.NodeVisible),
+		// chromedp.Sleep(1 * time.Second),
 	}
 }
