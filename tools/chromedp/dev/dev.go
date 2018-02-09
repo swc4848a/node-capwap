@@ -7,7 +7,7 @@ var Login = map[string]string{
 	"login":    `button.loginButton1`,
 }
 
-var Config = map[string]string{
+var FgtConfig = map[string]string{
 	"FGT_SN":         `#ext-gen6 > table.home_panel > tbody > tr:nth-child(2) > td > div > table > tbody > tr > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td > div`,
 	"Management_Tab": `#ext-gen6 > table:nth-child(12) > tbody > tr:nth-child(1) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(3) > div`,
 }

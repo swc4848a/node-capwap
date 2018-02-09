@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./beta"
+	"./dev"
 	"context"
 	"fmt"
 	"github.com/chromedp/chromedp"
@@ -42,7 +42,11 @@ func main() {
 }
 
 func start(ctxt context.Context, c *chromedp.CDP) error {
-	if err := c.Run(ctxt, login(beta.Login)); err != nil {
+	if err := c.Run(ctxt, login(dev.Login)); err != nil {
+		return fmt.Errorf("login run error: %v", err)
+	}
+
+	if err := c.Run(ctxt, setup(dev.FgtConfig)); err != nil {
 		return fmt.Errorf("login run error: %v", err)
 	}
 
@@ -64,14 +68,16 @@ func login(m map[string]string) chromedp.Tasks {
 	}
 }
 
-func testcases() chromedp.Tasks {
-	m := beta.ApConfig
+func setup(m map[string]string) chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Click(m["AP_Network"], chromedp.NodeVisible),
-		chromedp.Click(m["Lower_Level"], chromedp.NodeVisible),
-		chromedp.Click(m["DEV3"], chromedp.NodeVisible),
-		chromedp.Click(m["Access_Point"], chromedp.NodeVisible),
-		chromedp.Click(m["AP_SN"], chromedp.NodeVisible),
-		// chromedp.Sleep(1 * time.Second),
+		chromedp.Click(m["FGT_SN"], chromedp.NodeVisible),
+		chromedp.Sleep(1 * time.Second),
+		chromedp.Click(m["Management_Tab"], chromedp.NodeVisible),
+	}
+}
+
+func testcases() chromedp.Tasks {
+	return chromedp.Tasks{
+		chromedp.Sleep(1 * time.Second),
 	}
 }
