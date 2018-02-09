@@ -39,4 +39,7 @@ func setup() chromedp.Tasks {
 	}
 }
 
-var Setup = []cases{login, setup}
+var Setup = []cases{
+	login,
+	setup,
+}

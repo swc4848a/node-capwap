@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var m = map[string]string{
+var c = map[string]string{
 	"Network":        `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(6) > td > div > table > tbody > tr > td:nth-child(2) > div`,
 	"Interfaces":     `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(7) > td > table > tbody > tr > td:nth-child(4) > div > table > tbody > tr > td:nth-child(2) > div`,
 	"Create New":     `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(6) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td:nth-child(3) > button`,
@@ -20,27 +20,45 @@ var m = map[string]string{
 	"Close":          `#ext-gen6 > div.tk-ModalDialog > div > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > button`,
 }
 
+var g = map[string]string{
+	"url":             `http://172.16.95.49`,
+	"username":        `#username`,
+	"password":        `#secretkey`,
+	"Login":           `button#login_button`,
+	"Later":           `#navbar-view-section > div > f-forticare-license-prompt > div > div > div.prompt-body > span > div.button-actions > button:nth-child(2)`,
+	"Hardware Switch": `http://172.16.95.49/ng/page/p/system/interface/edit/hardware%20switch/?redir=%2Fp%2Fsystem%2Finterface%2F`,
+}
+
 func interfaces_setup() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Click(m["Network"], chromedp.NodeVisible),
-		chromedp.Click(m["Interfaces"], chromedp.NodeVisible),
+		chromedp.Click(c["Network"], chromedp.NodeVisible),
+		chromedp.Click(c["Interfaces"], chromedp.NodeVisible),
 	}
 }
 
 func create_new_hardware_switch() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Click(m["Create New"], chromedp.NodeVisible),
+		chromedp.Click(c["Create New"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
-		chromedp.SetValue(m["Interface Name"], `hardware switch test`),
-		chromedp.SetValue(m["Alias"], `alias test`),
-		chromedp.SetValue(m["Type"], `HARD_SWITCH`),
-		chromedp.Click(m["Save"], chromedp.NodeVisible),
+		chromedp.SetValue(c["Interface Name"], `hardware switch test`),
+		chromedp.SetValue(c["Alias"], `alias test`),
+		chromedp.SetValue(c["Type"], `HARD_SWITCH`),
+		chromedp.Click(c["Save"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
-		chromedp.Click(m["Deploy"], chromedp.NodeVisible),
-		chromedp.Click(m["Immediately"], chromedp.NodeVisible),
-		chromedp.Click(m["Apply"], chromedp.NodeVisible),
-		chromedp.Click(m["Deploy OK"], chromedp.NodeVisible),
-		chromedp.Click(m["Close"], chromedp.NodeVisible),
+		chromedp.Click(c["Deploy"], chromedp.NodeVisible),
+		chromedp.Click(c["Immediately"], chromedp.NodeVisible),
+		chromedp.Click(c["Apply"], chromedp.NodeVisible),
+		chromedp.Click(c["Deploy OK"], chromedp.NodeVisible),
+		chromedp.Click(c["Close"], chromedp.NodeVisible),
+
+		chromedp.Navigate(g["url"]),
+		chromedp.Sleep(1 * time.Second),
+		chromedp.SetValue(g["username"], `admin`),
+		chromedp.SetValue(g["password"], `admin`),
+		chromedp.Click(g["Login"]),
+		chromedp.Click(g["Later"]),
+
+		chromedp.Navigate(g["Hardware Switch"]), // can't open due to validation error
 	}
 }
 
