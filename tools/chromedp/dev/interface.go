@@ -18,6 +18,9 @@ var c = map[string]string{
 	"Apply":          `#ext-gen6 > div.tk-ModalDialog > div > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(4) > table > tbody > tr > td:nth-child(1) > button`,
 	"Deploy OK":      `#ext-gen6 > div.gwt-PopupPanel > div > table > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(2) > button`,
 	"Close":          `#ext-gen6 > div.tk-ModalDialog > div > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > button`,
+
+	"Delete Hardware Switch": `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(6) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td.right.last > div > div.html-link.svg-bg.svg-bg-gray.svg-bg-24.svg-bg-delete`,
+	"Yes": `#ext-gen6 > div.gwt-PopupPanel > div > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(1) > button`,
 }
 
 var g = map[string]string{
@@ -62,7 +65,21 @@ func create_new_hardware_switch() chromedp.Tasks {
 	}
 }
 
+func delete_hardware_switch() chromedp.Tasks {
+	return chromedp.Tasks{
+		chromedp.Click(c["Delete Hardware Switch"], chromedp.NodeVisible),
+		chromedp.Click(c["Yes"], chromedp.NodeVisible),
+		chromedp.Sleep(1 * time.Second),
+		chromedp.Click(c["Deploy"], chromedp.NodeVisible),
+		chromedp.Click(c["Immediately"], chromedp.NodeVisible),
+		chromedp.Click(c["Apply"], chromedp.NodeVisible),
+		chromedp.Click(c["Deploy OK"], chromedp.NodeVisible),
+		chromedp.Click(c["Close"], chromedp.NodeVisible),
+	}
+}
+
 var Interfaces = []cases{
 	interfaces_setup,
 	create_new_hardware_switch,
+	delete_hardware_switch,
 }

@@ -42,11 +42,11 @@ func main() {
 }
 
 func start(ctxt context.Context, c *chromedp.CDP) error {
-	// for i := 0; i < len(dev.Setup); i++ {
-	// 	if err := c.Run(ctxt, dev.Setup[i]()); err != nil {
-	// 		return fmt.Errorf("login run error: %v", err)
-	// 	}
-	// }
+	for i := 0; i < len(dev.Setup); i++ {
+		if err := c.Run(ctxt, dev.Setup[i]()); err != nil {
+			return fmt.Errorf("login run error: %v", err)
+		}
+	}
 
 	for i := 0; i < len(dev.Interfaces); i++ {
 		if err := c.Run(ctxt, dev.Interfaces[i]()); err != nil {
