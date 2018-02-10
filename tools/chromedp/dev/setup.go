@@ -13,8 +13,8 @@ var signin = map[string]string{
 }
 
 var fgtConfig = map[string]string{
-	"FGT_SN":         `#ext-gen6 > table.home_panel > tbody > tr:nth-child(2) > td > div > table > tbody > tr > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td > div`,
-	"Management_Tab": `#ext-gen6 > table:nth-child(12) > tbody > tr:nth-child(1) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(3) > div`,
+	"FGT_SN":         `//div[text()='FGT60D4615007833']`,
+	"Management_Tab": `//div[text()='Management']`,
 }
 
 type cases func() chromedp.Tasks
@@ -35,7 +35,7 @@ func setup() chromedp.Tasks {
 		chromedp.Click(m["FGT_SN"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
 		chromedp.Click(m["Management_Tab"], chromedp.NodeVisible),
-		chromedp.Sleep(2 * time.Second),
+		chromedp.Sleep(3 * time.Second),
 	}
 }
 

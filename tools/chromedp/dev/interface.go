@@ -5,9 +5,7 @@ import (
 	"time"
 )
 
-var c = map[string]string{
-	"Network":        `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(6) > td > div > table > tbody > tr > td:nth-child(2) > div`,
-	"Interfaces":     `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(2) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(7) > td > table > tbody > tr > td:nth-child(4) > div > table > tbody > tr > td:nth-child(2) > div`,
+var interfaces = map[string]string{
 	"Create New":     `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(6) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td:nth-child(3) > button`,
 	"Interface Name": `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(6) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > input`,
 	"Alias":          `#toppanel > tbody > tr > td > table > tbody > tr.main_panel > td > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(6) > div > div > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td:nth-child(2) > input`,
@@ -34,25 +32,25 @@ var g = map[string]string{
 
 func interfaces_setup() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Click(c["Network"], chromedp.NodeVisible),
-		chromedp.Click(c["Interfaces"], chromedp.NodeVisible),
+		chromedp.Click(menu["Network"], chromedp.NodeVisible),
+		chromedp.Click(menu["Interfaces"], chromedp.NodeVisible),
 	}
 }
 
 func create_new_hardware_switch() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Click(c["Create New"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Create New"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
-		chromedp.SetValue(c["Interface Name"], `hardware switch test`),
-		chromedp.SetValue(c["Alias"], `alias test`),
-		chromedp.SetValue(c["Type"], `HARD_SWITCH`),
-		chromedp.Click(c["Save"], chromedp.NodeVisible),
+		chromedp.SetValue(interfaces["Interface Name"], `hardware switch test`),
+		chromedp.SetValue(interfaces["Alias"], `alias test`),
+		chromedp.SetValue(interfaces["Type"], `HARD_SWITCH`),
+		chromedp.Click(interfaces["Save"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
-		chromedp.Click(c["Deploy"], chromedp.NodeVisible),
-		chromedp.Click(c["Immediately"], chromedp.NodeVisible),
-		chromedp.Click(c["Apply"], chromedp.NodeVisible),
-		chromedp.Click(c["Deploy OK"], chromedp.NodeVisible),
-		chromedp.Click(c["Close"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Deploy"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Immediately"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Apply"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Deploy OK"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Close"], chromedp.NodeVisible),
 
 		chromedp.Navigate(g["url"]),
 		chromedp.Sleep(1 * time.Second),
@@ -67,14 +65,14 @@ func create_new_hardware_switch() chromedp.Tasks {
 
 func delete_hardware_switch() chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Click(c["Delete Hardware Switch"], chromedp.NodeVisible),
-		chromedp.Click(c["Yes"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Delete Hardware Switch"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Yes"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
-		chromedp.Click(c["Deploy"], chromedp.NodeVisible),
-		chromedp.Click(c["Immediately"], chromedp.NodeVisible),
-		chromedp.Click(c["Apply"], chromedp.NodeVisible),
-		chromedp.Click(c["Deploy OK"], chromedp.NodeVisible),
-		chromedp.Click(c["Close"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Deploy"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Immediately"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Apply"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Deploy OK"], chromedp.NodeVisible),
+		chromedp.Click(interfaces["Close"], chromedp.NodeVisible),
 	}
 }
 

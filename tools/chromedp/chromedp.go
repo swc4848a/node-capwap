@@ -48,23 +48,19 @@ func start(ctxt context.Context, c *chromedp.CDP) error {
 		}
 	}
 
-	for i := 0; i < len(dev.Interfaces); i++ {
-		if err := c.Run(ctxt, dev.Interfaces[i]()); err != nil {
+	// for i := 0; i < len(dev.Interfaces); i++ {
+	//  if err := c.Run(ctxt, dev.Interfaces[i]()); err != nil {
+	//      return fmt.Errorf("login run error: %v", err)
+	//  }
+	// }
+
+	for i := 0; i < len(dev.DnsServers); i++ {
+		if err := c.Run(ctxt, dev.DnsServers[i]()); err != nil {
 			return fmt.Errorf("login run error: %v", err)
 		}
 	}
 
-	if err := c.Run(ctxt, demo()); err != nil {
-		return fmt.Errorf("demo run error: %v", err)
-	}
-
-	c.Run(ctxt, chromedp.Sleep(60*time.Second))
+	c.Run(ctxt, chromedp.Sleep(5*time.Second))
 
 	return nil
-}
-
-func demo() chromedp.Tasks {
-	return chromedp.Tasks{
-		chromedp.Sleep(1 * time.Second),
-	}
 }
