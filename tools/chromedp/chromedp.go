@@ -1,7 +1,8 @@
 package main
 
 import (
-	"./dev"
+	// "./dev"
+	domain "./alpha"
 	"context"
 	"fmt"
 	"github.com/chromedp/chromedp"
@@ -46,8 +47,8 @@ func main() {
 }
 
 func start(ctxt context.Context, c *chromedp.CDP) error {
-	for i := 0; i < len(dev.Setup); i++ {
-		if err := c.Run(ctxt, dev.Setup[i]()); err != nil {
+	for i := 0; i < len(domain.Setup); i++ {
+		if err := c.Run(ctxt, domain.Setup[i]()); err != nil {
 			return fmt.Errorf("login run error: %v", err)
 		}
 	}
@@ -58,11 +59,11 @@ func start(ctxt context.Context, c *chromedp.CDP) error {
 	//  }
 	// }
 
-	for i := 0; i < len(dev.DnsServers); i++ {
-		if err := c.Run(ctxt, dev.DnsServers[i]()); err != nil {
-			return fmt.Errorf("login run error: %v", err)
-		}
-	}
+	// for i := 0; i < len(domain.DnsServers); i++ {
+	// 	if err := c.Run(ctxt, domain.DnsServers[i]()); err != nil {
+	// 		return fmt.Errorf("login run error: %v", err)
+	// 	}
+	// }
 
 	c.Run(ctxt, chromedp.Sleep(5*time.Second))
 
