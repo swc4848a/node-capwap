@@ -1,4 +1,4 @@
-package dev
+package share
 
 import (
 	"github.com/chromedp/chromedp"
