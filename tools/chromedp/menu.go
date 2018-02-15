@@ -1,4 +1,4 @@
-package alpha
+package main
 
 var menu = map[string]string{
 	"Network":     `//div[text()='Network']`,

@@ -1,7 +1,6 @@
 package main
 
 import (
-	domain "./alpha"
 	"context"
 	"github.com/chromedp/chromedp"
 	"github.com/chromedp/chromedp/runner"
@@ -54,14 +53,16 @@ func (s *TestSuite) TearDownSuite() {
 	}
 }
 
+func (s *TestSuite) SetupTest() {
+	log.Print("SetupTest")
+}
+
+func (s *TestSuite) TearDownTest() {
+	log.Print("TearDownTest")
+}
+
 // In order for 'go test' to run this suite, we need to create
 // a normal test function and pass our suite to suite.Run
 func TestChromedpTestSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
-}
-
-func (s *TestSuite) TestDomain() {
-	t := s.T()
-
-	domain.Run(t, s.ctxt, s.c)
 }

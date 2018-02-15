@@ -1,4 +1,4 @@
-package alpha
+package main
 
 import (
 	"github.com/chromedp/chromedp"
@@ -46,5 +46,18 @@ func fortiGateLogin() chromedp.Tasks {
 		chromedp.SetValue(m["password"], `admin`),
 		chromedp.Click(m["Login"], chromedp.NodeVisible),
 		chromedp.Click(m["Later"], chromedp.NodeVisible),
+	}
+}
+
+func saveAndDeploy() chromedp.Tasks {
+	m := button
+	return chromedp.Tasks{
+		chromedp.Click(m["Save"], chromedp.NodeVisible),
+		chromedp.Sleep(1 * time.Second),
+		chromedp.Click(m["Deploy"], chromedp.NodeVisible),
+		chromedp.Click(m["Immediately"], chromedp.NodeVisible),
+		chromedp.Click(m["Apply"], chromedp.NodeVisible),
+		chromedp.Click(m["OK"], chromedp.NodeVisible),
+		chromedp.Click(m["Close"], chromedp.NodeVisible),
 	}
 }
