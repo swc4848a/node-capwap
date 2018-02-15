@@ -1,13 +1,12 @@
 package alpha
 
 import (
-	// "context"
-	// "log"
-	// "github.com/chromedp/cdproto/cdp"
 	"context"
 	"fmt"
 	"github.com/chromedp/chromedp"
-	"log"
+	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var dnsServersButton = map[string]string{
@@ -44,16 +43,16 @@ func dns_servers_create_new_verify(s *string) chromedp.Tasks {
 	}
 }
 
-func Run(ctxt context.Context, c *chromedp.CDP) error {
+func Run(t *testing.T, ctxt context.Context, c *chromedp.CDP) error {
 	var val string
 
-	if err := c.Run(ctxt, cloudLogin()); err != nil {
-		return fmt.Errorf("login run error: %v", err)
-	}
+	// if err := c.Run(ctxt, cloudLogin()); err != nil {
+	// 	return fmt.Errorf("login run error: %v", err)
+	// }
 
-	if err := c.Run(ctxt, dns_servers_create_new()); err != nil {
-		return fmt.Errorf("login run error: %v", err)
-	}
+	// if err := c.Run(ctxt, dns_servers_create_new()); err != nil {
+	// 	return fmt.Errorf("login run error: %v", err)
+	// }
 
 	if err := c.Run(ctxt, fortiGateLogin()); err != nil {
 		return fmt.Errorf("login run error: %v", err)
@@ -63,7 +62,7 @@ func Run(ctxt context.Context, c *chromedp.CDP) error {
 		return fmt.Errorf("login run error: %v", err)
 	}
 
-	log.Printf("=======> interface value %s", val)
+	assert.Equal(t, val, `dma`, "The two words should be the same.")
 
 	return nil
 }
