@@ -5,33 +5,32 @@ import (
 	"time"
 )
 
-var signin = map[string]string{
-	"url":      `https://alpha.forticloud.com`,
-	"email":    `input#email`,
-	"password": `input[name='password']`,
-	"login":    `input[type='submit']`,
-}
-
-var fgtConfig = map[string]string{
+var cloud = map[string]string{
+	"url":            `https://alpha.forticloud.com`,
+	"email":          `input#email`,
+	"password":       `input[name='password']`,
+	"login":          `input[type='submit']`,
 	"FGT_SN":         `//div[text()='FGT60D4615007833']`,
 	"Management_Tab": `//div[text()='Management']`,
 }
 
-type cases func() chromedp.Tasks
+var fortiGate = map[string]string{
+	"url":      `http://172.16.95.49/login`,
+	"username": `input#username`,
+	"password": `input#secretkey`,
+	"Login":    `button#login_button`,
+	"Later":    `//button[text()='Later']`,
+}
 
-func login() chromedp.Tasks {
-	m := signin
+func cloudLogin() chromedp.Tasks {
+	m := cloud
 	return chromedp.Tasks{
 		chromedp.Navigate(m["url"]),
 		chromedp.SetValue(m["email"], `zqqiang@fortinet.com`),
 		chromedp.SetValue(m["password"], `SuperCRM801`),
 		chromedp.Click(m["login"]),
-	}
-}
 
-func setup() chromedp.Tasks {
-	m := fgtConfig
-	return chromedp.Tasks{
+		chromedp.Sleep(1 * time.Second),
 		chromedp.Click(m["FGT_SN"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
 		chromedp.Click(m["Management_Tab"], chromedp.NodeVisible),
@@ -39,7 +38,13 @@ func setup() chromedp.Tasks {
 	}
 }
 
-var Setup = []cases{
-	login,
-	setup,
+func fortiGateLogin() chromedp.Tasks {
+	m := fortiGate
+	return chromedp.Tasks{
+		chromedp.Navigate(m["url"]),
+		chromedp.SetValue(m["username"], `admin`),
+		chromedp.SetValue(m["password"], `admin`),
+		chromedp.Click(m["Login"], chromedp.NodeVisible),
+		chromedp.Click(m["Later"], chromedp.NodeVisible),
+	}
 }

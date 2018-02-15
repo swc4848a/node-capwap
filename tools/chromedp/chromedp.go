@@ -1,12 +1,11 @@
 package main
 
 import (
-	// "./dev"
 	domain "./alpha"
-	share "./share"
 	"context"
-	"fmt"
+	// "fmt"
 	"github.com/chromedp/chromedp"
+	"github.com/chromedp/chromedp/runner"
 	"log"
 	"time"
 )
@@ -21,7 +20,10 @@ func main() {
 	// create chrome instance
 	c, err := chromedp.New(
 		ctxt,
-		chromedp.WithRunnerOptions(),
+		chromedp.WithRunnerOptions(
+			// runner.Flag("headless", true),
+			runner.WindowSize(1920, 1080),
+		),
 		chromedp.WithLog(log.Printf),
 	)
 	if err != nil {
@@ -48,23 +50,19 @@ func main() {
 }
 
 func start(ctxt context.Context, c *chromedp.CDP) error {
-	for i := 0; i < len(domain.Setup); i++ {
-		if err := c.Run(ctxt, domain.Setup[i]()); err != nil {
-			return fmt.Errorf("login run error: %v", err)
-		}
-	}
-
 	// for i := 0; i < len(dev.Interfaces); i++ {
 	//  if err := c.Run(ctxt, dev.Interfaces[i]()); err != nil {
 	//      return fmt.Errorf("login run error: %v", err)
 	//  }
 	// }
 
-	for i := 0; i < len(share.DnsServers); i++ {
-		if err := c.Run(ctxt, share.DnsServers[i]()); err != nil {
-			return fmt.Errorf("login run error: %v", err)
-		}
-	}
+	// for i := 0; i < len(domain.DnsServers); i++ {
+	// 	if err := c.Run(ctxt, domain.DnsServers[i]()); err != nil {
+	// 		return fmt.Errorf("login run error: %v", err)
+	// 	}
+	// }
+
+	domain.Run(ctxt, c)
 
 	c.Run(ctxt, chromedp.Sleep(5*time.Second))
 
