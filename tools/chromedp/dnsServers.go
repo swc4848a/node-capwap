@@ -130,3 +130,22 @@ func (s *TestSuite) TestDnsServersCreateWan1() {
 	assert.Equal(`wan1`, inter, "should be the same.")
 	assert.Equal(`non-recursive`, mode, "should be the same.")
 }
+
+func (s *TestSuite) TestDemo() {
+	var val string
+
+	t := Testcase{
+		s,
+		[]string{val},
+		func() chromedp.Tasks {
+			return chromedp.Tasks{}
+		},
+		func(result []string) chromedp.Tasks {
+			return chromedp.Tasks{}
+		},
+		func(assert *Assertions) {
+			assert.Nil(nil)
+		},
+	}
+	t.build()
+}
