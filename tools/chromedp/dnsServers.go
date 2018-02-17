@@ -136,7 +136,6 @@ func (s *TestSuite) TestDemo() {
 
 	t := Testcase{
 		s,
-		[]string{val},
 		chromedp.Tasks{
 			chromedp.Click(menu["Network"], chromedp.NodeVisible),
 		},

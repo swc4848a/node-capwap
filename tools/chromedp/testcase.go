@@ -6,10 +6,9 @@ import (
 )
 
 type Testcase struct {
-	s      *TestSuite
-	result []string
-	test   chromedp.Tasks
-	query  chromedp.Tasks
+	s     *TestSuite
+	test  chromedp.Tasks
+	query chromedp.Tasks
 }
 
 func (t *Testcase) build() {
