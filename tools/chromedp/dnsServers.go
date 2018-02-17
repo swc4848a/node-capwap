@@ -137,15 +137,18 @@ func (s *TestSuite) TestDemo() {
 	t := Testcase{
 		s,
 		[]string{val},
-		func() chromedp.Tasks {
-			return chromedp.Tasks{}
+		chromedp.Tasks{
+			chromedp.Click(menu["Network"], chromedp.NodeVisible),
 		},
-		func(result []string) chromedp.Tasks {
-			return chromedp.Tasks{}
-		},
-		func(assert *assert.Assertions) {
-			assert.Nil(nil)
+		chromedp.Tasks{
+			chromedp.Navigate(fgtDnsServers["wan1Url"]),
+			chromedp.Text(fgtDnsServers["Interface"], &val),
 		},
 	}
+
 	t.build()
+
+	assert := assert.New(s.T())
+
+	assert.Equal(``, val, "should be the same.")
 }
