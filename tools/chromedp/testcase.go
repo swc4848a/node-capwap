@@ -10,7 +10,7 @@ type Testcase struct {
 	result []string
 	test   func() chromedp.Tasks
 	query  func([]string) chromedp.Tasks
-	verify func(*Assertions)
+	verify func(*assert.Assertions)
 }
 
 func (t *Testcase) build() {

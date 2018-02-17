@@ -143,7 +143,7 @@ func (s *TestSuite) TestDemo() {
 		func(result []string) chromedp.Tasks {
 			return chromedp.Tasks{}
 		},
-		func(assert *Assertions) {
+		func(assert *assert.Assertions) {
 			assert.Nil(nil)
 		},
 	}
