@@ -136,18 +136,18 @@ func (s *TestSuite) TestDemo() {
 
 	t := Testcase{
 		s,
-		chromedp.Tasks{
-			chromedp.Click(menu["Network"], chromedp.NodeVisible),
+		{
+			{menu["Network"], {Click}},
 		},
-		chromedp.Tasks{
-			chromedp.Navigate(fgtDnsServers["wan1Url"]),
-			chromedp.Text(fgtDnsServers["Interface"], &val),
+		{
+			{"https://www.google.ca/", {Navigate}},
+			{"//input[@name='btnK']", {Value, `Google Search`}},
 		},
 	}
 
-	t.build()
+	t.Build()
 
 	assert := assert.New(s.T())
 
-	assert.Equal(``, val, "should be the same.")
+	assert.Equal(`Google Search`, val, "should be the same.")
 }
