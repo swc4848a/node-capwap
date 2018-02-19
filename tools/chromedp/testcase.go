@@ -3,19 +3,23 @@ package main
 import (
 	"github.com/chromedp/chromedp"
 	"github.com/stretchr/testify/assert"
+	"time"
 )
 
 type (
-	Options struct {
+	Option struct {
 		Key     string
-		Type    int
-		Content string
+		Action  int
+		Content *string
 	}
+
+	TestOptions  []Option
+	QueryOptions []Option
 
 	Testcase struct {
 		s     *TestSuite
-		test  []Options
-		query []Options
+		test  TestOptions
+		query QueryOptions
 	}
 )
 
@@ -23,26 +27,39 @@ const (
 	Dummy int = 0
 
 	Click int = 100
+	Sleep int = 101
 
 	Navigate int = 200
-	Value    int = 201
+	Text     int = 201
+	Value    int = 202
 )
 
 func (t *Testcase) Test() chromedp.Tasks {
-	var tasks = chromedp.Tasks
+	tasks := make([]chromedp.Action, len(t.test))
 	for i := 0; i < len(t.test); i++ {
 		tt := t.test[i]
-		ta := tasks[i]
-		switch tt.Type {
+		switch tt.Action {
 		case Click:
-			ta = chromedp.Click(tt.Key, chromedp.NodeVisible)
+			tasks[i] = chromedp.Click(tt.Key, chromedp.NodeVisible)
+		case Sleep:
+			tasks[i] = chromedp.Sleep(1 * time.Second)
 		}
 	}
 	return tasks
 }
 
 func (t *Testcase) Query() chromedp.Tasks {
-
+	tasks := make([]chromedp.Action, len(t.query))
+	for i := 0; i < len(t.query); i++ {
+		tt := t.query[i]
+		switch tt.Action {
+		case Navigate:
+			tasks[i] = chromedp.Navigate(tt.Key)
+		case Value:
+			tasks[i] = chromedp.Value(tt.Key, tt.Content, chromedp.BySearch)
+		}
+	}
+	return tasks
 }
 
 func (t *Testcase) Build() {
@@ -52,7 +69,7 @@ func (t *Testcase) Build() {
 
 	assert.Nil(c.Run(ctxt, cloudLogin()))
 	assert.Nil(c.Run(ctxt, t.Test()))
-	// assert.Nil(c.Run(ctxt, saveAndDeploy()))
-	// assert.Nil(c.Run(ctxt, fortiGateLogin()))
+	assert.Nil(c.Run(ctxt, saveAndDeploy()))
+	assert.Nil(c.Run(ctxt, fortiGateLogin()))
 	assert.Nil(c.Run(ctxt, t.Query()))
 }
