@@ -8,9 +8,10 @@ import (
 
 type (
 	Option struct {
-		Key     string
-		Action  int
-		Content *string
+		Key    string
+		Action int
+		In     string
+		Out    *string
 	}
 
 	TestOptions  []Option
@@ -26,8 +27,9 @@ type (
 const (
 	Dummy int = 0
 
-	Click int = 100
-	Sleep int = 101
+	Click    int = 100
+	SetValue int = 101
+	Sleep    int = 102
 
 	Navigate int = 200
 	Text     int = 201
@@ -41,6 +43,8 @@ func (t *Testcase) Test() chromedp.Tasks {
 		switch tt.Action {
 		case Click:
 			tasks[i] = chromedp.Click(tt.Key, chromedp.NodeVisible)
+		case SetValue:
+			tasks[i] = chromedp.SetValue(tt.Key, tt.In, chromedp.NodeVisible)
 		case Sleep:
 			tasks[i] = chromedp.Sleep(1 * time.Second)
 		}
@@ -56,7 +60,7 @@ func (t *Testcase) Query() chromedp.Tasks {
 		case Navigate:
 			tasks[i] = chromedp.Navigate(tt.Key)
 		case Value:
-			tasks[i] = chromedp.Value(tt.Key, tt.Content, chromedp.BySearch)
+			tasks[i] = chromedp.Value(tt.Key, tt.Out, chromedp.BySearch)
 		}
 	}
 	return tasks

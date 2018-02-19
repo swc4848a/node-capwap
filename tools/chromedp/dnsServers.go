@@ -38,8 +38,8 @@ func (s *TestSuite) TestDnsServersCreate() {
 		},
 		QueryOptions{
 			{Key: fgtDnsServers["dmzUrl"], Action: Navigate},
-			{Key: fgtDnsServers["Interface"], Action: Text, Content: &inter},
-			{Key: fgtDnsServers["Mode"], Action: Value, Content: &mode},
+			{Key: fgtDnsServers["Interface"], Action: Text, Out: &inter},
+			{Key: fgtDnsServers["Mode"], Action: Value, Out: &mode},
 		},
 	}
 
@@ -63,7 +63,7 @@ func (s *TestSuite) TestDnsServersDelete() {
 		},
 		QueryOptions{
 			{Key: fgtDnsServers["dnsServersUrl"], Action: Navigate},
-			{Key: fgtDnsServers["DNS Service on Interface"], Action: Text, Content: &inter},
+			{Key: fgtDnsServers["DNS Service on Interface"], Action: Text, Out: &inter},
 		},
 	}
 
@@ -92,8 +92,8 @@ func (s *TestSuite) TestDnsServersCreateWan1() {
 		},
 		QueryOptions{
 			{Key: fgtDnsServers["wan1Url"], Action: Navigate},
-			{Key: fgtDnsServers["Interface"], Action: Text, Content: &inter},
-			{Key: fgtDnsServers["Mode"], Action: Value, Content: &mode},
+			{Key: fgtDnsServers["Interface"], Action: Text, Out: &inter},
+			{Key: fgtDnsServers["Mode"], Action: Value, Out: &mode},
 		},
 	}
 
