@@ -14,7 +14,7 @@ func (s *TestSuite) TestDemo() {
 		},
 		QueryOptions{
 			{Key: "https://www.google.ca/", Action: Navigate},
-			{Key: "//input[@name='btnK']", Action: Value, Content: &result},
+			{Key: "//input[@name='btnK']", Action: Value, Out: &result},
 		},
 	}
 

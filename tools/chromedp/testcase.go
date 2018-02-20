@@ -73,7 +73,7 @@ func (t *Testcase) Build() {
 
 	assert.Nil(c.Run(ctxt, cloudLogin()))
 	assert.Nil(c.Run(ctxt, t.Test()))
-	assert.Nil(c.Run(ctxt, saveAndDeploy()))
-	assert.Nil(c.Run(ctxt, fortiGateLogin()))
-	assert.Nil(c.Run(ctxt, t.Query()))
+	// assert.Nil(c.Run(ctxt, saveAndDeploy()))
+	// assert.Nil(c.Run(ctxt, fortiGateLogin()))
+	// assert.Nil(c.Run(ctxt, t.Query()))
 }
