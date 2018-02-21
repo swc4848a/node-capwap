@@ -30,7 +30,7 @@ func buildSupp(s string) {
 }
 
 func main() {
-	file, err := os.Open("./out")
+	file, err := os.Open("C:\\Users\\ZhaoqingQiang\\Downloads\\valgrind.log")
 	if err != nil {
 		log.Fatal(err)
 	}
