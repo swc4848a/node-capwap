@@ -47,7 +47,7 @@ func main() {
 	}
 
 	for k, v := range Map {
-		fmt.Println("{\n")
+		fmt.Println("{")
 		fmt.Println(k)
 		fmt.Println("}")
 		fmt.Println("used_suppression: ", v)
