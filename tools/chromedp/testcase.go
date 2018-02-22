@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/chromedp/chromedp"
 	"github.com/stretchr/testify/assert"
+	"log"
+	"strconv"
 	"time"
 )
 
@@ -12,6 +14,7 @@ type (
 		Action int
 		In     string
 		Out    *string
+		Eval   *[]string
 	}
 
 	TestOptions  []Option
@@ -31,9 +34,11 @@ const (
 	SetValue int = 101
 	Sleep    int = 102
 
-	Navigate int = 200
-	Text     int = 201
-	Value    int = 202
+	Navigate    int = 200
+	Text        int = 201
+	Value       int = 202
+	Evaluate    int = 203
+	WaitVisible int = 204
 )
 
 func (t *Testcase) Test() chromedp.Tasks {
@@ -63,8 +68,17 @@ func (t *Testcase) Query() chromedp.Tasks {
 			tasks[i] = chromedp.Value(tt.Key, tt.Out, chromedp.NodeVisible)
 		case Text:
 			tasks[i] = chromedp.Text(tt.Key, tt.Out, chromedp.NodeVisible)
+		case Evaluate:
+			key := `[document.querySelector('iframe[name="embedded-iframe"]').contentWindow.document.querySelector('` + tt.Key + `').value];`
+			tasks[i] = chromedp.Evaluate(key, tt.Eval)
 		case Sleep:
-			tasks[i] = chromedp.Sleep(1 * time.Second)
+			if timeout, err := strconv.Atoi(tt.In); err == nil {
+				tasks[i] = chromedp.Sleep(time.Duration(timeout) * time.Second)
+			} else {
+				log.Println("invalid time.Duration: ", tt.In, err)
+			}
+		case WaitVisible:
+			tasks[i] = chromedp.WaitVisible(tt.Key)
 		}
 	}
 	return tasks

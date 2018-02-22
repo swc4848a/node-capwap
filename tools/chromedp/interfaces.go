@@ -17,14 +17,11 @@ var cloudInterfaces = map[string]string{
 
 var fgtInterfaces = map[string]string{
 	"url":   `http://172.16.95.49/ng/page/p/system/interface/edit/TestHard`,
-	"alias": `//input[@id='alias']`,
-
-	"dns":     `http://172.16.95.49/ng/page/p/system/dns`,
-	"primary": `//input[@id="primary"]`,
+	"Alias": `input#alias`,
 }
 
 func (s *TestSuite) TestCreateNewHardwareSwitchInterface() {
-	var alias string
+	var alias []string
 
 	t := Testcase{
 		s,
@@ -42,8 +39,9 @@ func (s *TestSuite) TestCreateNewHardwareSwitchInterface() {
 			{Key: cloudInterfaces["HTTPS"], Action: Click},
 		},
 		QueryOptions{
-			{Key: fgtInterfaces["dns"], Action: Navigate},
-			{Key: fgtInterfaces["primary"], Action: Value, Out: &alias},
+			{Key: fgtInterfaces["url"], Action: Navigate},
+			{Action: Sleep, In: "6"},
+			{Key: fgtInterfaces["Alias"], Action: Evaluate, Eval: &alias},
 		},
 	}
 
@@ -51,5 +49,5 @@ func (s *TestSuite) TestCreateNewHardwareSwitchInterface() {
 
 	assert := assert.New(s.T())
 
-	assert.Equal(`Alias Test Hardware`, alias, "should be the same.")
+	assert.Equal(`Alias Test Hardware`, alias[0], "should be the same.")
 }
