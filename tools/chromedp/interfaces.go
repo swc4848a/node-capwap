@@ -16,32 +16,40 @@ var cloudInterfaces = map[string]string{
 }
 
 var fgtInterfaces = map[string]string{
-	"": ``,
+	"url":   `http://172.16.95.49/ng/page/p/system/interface/edit/TestHard`,
+	"alias": `//input[@id='alias']`,
+
+	"dns":     `http://172.16.95.49/ng/page/p/system/dns`,
+	"primary": `//input[@id="primary"]`,
 }
 
 func (s *TestSuite) TestCreateNewHardwareSwitchInterface() {
+	var alias string
+
 	t := Testcase{
 		s,
 		TestOptions{
 			{Key: menu["Network"], Action: Click},
 			{Key: menu["Interfaces"], Action: Click},
 			{Key: cloudInterfaces["Create New"], Action: Click},
-			{Key: cloudInterfaces["Interface Name"], Action: SetValue, In: "Test Hardware"},
+			{Action: Sleep},
+			{Key: cloudInterfaces["Interface Name"], Action: SetValue, In: "TestHard"},
 			{Key: cloudInterfaces["Alias"], Action: SetValue, In: "Alias Test Hardware"},
 			{Key: cloudInterfaces["Type"], Action: Click},
 			{Key: cloudInterfaces["Hardware Switch"], Action: Click},
 			{Key: cloudInterfaces["Internal5"], Action: Click},
-			{Key: cloudInterfaces["IP/Netmask"], Action: SetValue, In: "192.168.100.0/24"},
+			{Key: cloudInterfaces["IP/Netmask"], Action: SetValue, In: "192.168.100.12/24"},
 			{Key: cloudInterfaces["HTTPS"], Action: Click},
 		},
-		QueryOptions{},
+		QueryOptions{
+			{Key: fgtInterfaces["dns"], Action: Navigate},
+			{Key: fgtInterfaces["primary"], Action: Value, Out: &alias},
+		},
 	}
 
 	t.Build()
 
 	assert := assert.New(s.T())
 
-	assert.Nil(nil)
-
-	// assert.Equal(`Google Search`, result, "should be the same.")
+	assert.Equal(`Alias Test Hardware`, alias, "should be the same.")
 }

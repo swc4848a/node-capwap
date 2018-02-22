@@ -27,6 +27,9 @@ func (s *TestSuite) SetupSuite() {
 		s.ctxt,
 		chromedp.WithRunnerOptions(
 			// runner.Flag("headless", true),
+			runner.Flag("disable-web-security", true),
+			runner.Flag("allow-running-insecure-content", true),
+			runner.Flag("user-data-dir", "D:\\Workspaces\\Project\\chromedp"),
 			runner.WindowSize(1920, 1080),
 		),
 		chromedp.WithLog(log.Printf),

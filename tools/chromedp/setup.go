@@ -30,8 +30,6 @@ func cloudLogin() chromedp.Tasks {
 		chromedp.SetValue(m["password"], `SuperCRM801`),
 		chromedp.Click(m["login"]),
 
-		chromedp.Click(button["OK"], chromedp.NodeVisible), //todo: temporary
-
 		chromedp.Sleep(1 * time.Second),
 		chromedp.Click(m["FGT_SN"], chromedp.NodeVisible),
 		chromedp.Sleep(1 * time.Second),
@@ -47,7 +45,8 @@ func fortiGateLogin() chromedp.Tasks {
 		chromedp.SetValue(m["username"], `admin`),
 		chromedp.SetValue(m["password"], `admin`),
 		chromedp.Click(m["Login"], chromedp.NodeVisible),
-		chromedp.Click(m["Later"], chromedp.NodeVisible),
+		chromedp.Sleep(1 * time.Second),
+		// chromedp.Click(m["Later"], chromedp.NodeVisible),
 	}
 }
 

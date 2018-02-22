@@ -197,7 +197,7 @@ async function runSeq(page, action, ready, key, seq) {
         let selector = seq[i][0];
         let value = seq[i][1];
         let retry = 0;
-        let max_try = 30;
+        let max_try = 40;
 
         if (value && value.action === 'sleep') {
             console.log('sleep start waiting %s s...', value.value);
@@ -329,7 +329,7 @@ async function setupPage(instance, url, jquery) {
 }
 
 async function setupCloudPage(instance) {
-    return await setupPage(instance, 'https://172.16.94.163/com.fortinet.gwt.Main/Main.html', true);
+    return await setupPage(instance, 'https://alpha.forticloud.com', true);
 }
 
 async function setupGatePage(instance) {
@@ -363,7 +363,7 @@ async function start() {
                 await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
             }
         } else {
-            await runSeq(cloud_page, action, ready, 'login', buildDevAlphaCloudLoginSeq());
+            await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
         }
         await runSeq(gate_page, action, gateReady, 'login', buildGateLoginSeq());
 

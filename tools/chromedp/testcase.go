@@ -60,7 +60,11 @@ func (t *Testcase) Query() chromedp.Tasks {
 		case Navigate:
 			tasks[i] = chromedp.Navigate(tt.Key)
 		case Value:
-			tasks[i] = chromedp.Value(tt.Key, tt.Out, chromedp.BySearch)
+			tasks[i] = chromedp.Value(tt.Key, tt.Out, chromedp.NodeVisible)
+		case Text:
+			tasks[i] = chromedp.Text(tt.Key, tt.Out, chromedp.NodeVisible)
+		case Sleep:
+			tasks[i] = chromedp.Sleep(1 * time.Second)
 		}
 	}
 	return tasks
@@ -71,9 +75,9 @@ func (t *Testcase) Build() {
 	ctxt := t.s.ctxt
 	assert := assert.New(t.s.T())
 
-	assert.Nil(c.Run(ctxt, cloudLogin()))
-	assert.Nil(c.Run(ctxt, t.Test()))
+	// assert.Nil(c.Run(ctxt, cloudLogin()))
+	// assert.Nil(c.Run(ctxt, t.Test()))
 	// assert.Nil(c.Run(ctxt, saveAndDeploy()))
-	// assert.Nil(c.Run(ctxt, fortiGateLogin()))
-	// assert.Nil(c.Run(ctxt, t.Query()))
+	assert.Nil(c.Run(ctxt, fortiGateLogin()))
+	assert.Nil(c.Run(ctxt, t.Query()))
 }
