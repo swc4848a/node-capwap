@@ -9,7 +9,8 @@ Auto test for Config Manager Server
 * auto run all testcase if developer commit code and give them feedback  
 
 ## How do I get set up?
-* install [node.js v7.10.0+](https://nodejs.org/en/download/package-manager/)  
+* install [node.js v8.6.0+](https://nodejs.org/en/download/package-manager/)  
+* change config.js to your own environment url, account, password  
 * run single testcase: node headless.js "testcase name"  
 * run group testcases: node headless.js "shared name string"  
   (eg: "interface" will load all testcases contains "interface xxx")  

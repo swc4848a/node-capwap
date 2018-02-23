@@ -56,12 +56,10 @@ function action(selector, value) {
         case 'number':
             $(selector).val(value);
             console.log('set', selector, value);
-            // console.log('$("' + selector + '").val("' + value + '"");');
             break;
         case 'boolean':
             $(selector).prop("checked", value);
             console.log('set', selector, value);
-            // console.log('$("' + selector + '").prop("checked", ' + value + ');');
             break;
         case 'object':
             if (value) {
@@ -80,7 +78,6 @@ function action(selector, value) {
                 } else if ($(selector).length) {
                     $(selector).click();
                     console.log('click:', selector);
-                    // console.log('$("' + selector + '").click();');
                 } else {
                     $('iframe').contents().find(selector).click();
                     console.log('iframe click:', selector);
@@ -234,9 +231,7 @@ async function runSeq(page, action, ready, key, seq) {
         if ("span:contains('Close'), button:contains('OK')" === selector) {
             await capture(page, key);
         }
-        // if ("div.popupContent button:contains('OK')" === selector) {
-        //     await sleep(10000);
-        // }
+
         if ("button:contains('Deploy')" === selector) {
             await sleep(1000);
         }
@@ -329,7 +324,7 @@ async function setupPage(instance, url, jquery) {
 }
 
 async function setupCloudPage(instance) {
-    return await setupPage(instance, 'https://alpha.forticloud.com', true);
+    return await setupPage(instance, config.cloudUrl, true);
 }
 
 async function setupGatePage(instance) {
@@ -355,16 +350,18 @@ async function start() {
         const cloud_page = await setupCloudPage(instance);
         const gate_page = await setupGatePage(instance);
 
-        if (isMultiTenancy()) {
-            // temporary disable template test
-            if (0 && isTemplateCase(key)) {
-                await runSeq(cloud_page, action, ready, 'login', buildCloudTemplateLoginSeq());
-            } else {
-                await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
-            }
-        } else {
-            await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
-        }
+        // if (isMultiTenancy()) {
+        //     // temporary disable template test
+        //     if (0 && isTemplateCase(key)) {
+        //         await runSeq(cloud_page, action, ready, 'login', buildCloudTemplateLoginSeq());
+        //     } else {
+        //         await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+        //     }
+        // } else {
+        //     await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
+        // }
+
+        await runSeq(cloud_page, action, ready, 'login', buildCloudLoginSeq());
         await runSeq(gate_page, action, gateReady, 'login', buildGateLoginSeq());
 
         await runSeq(cloud_page, action, ready, S(key).slugify().s, buildCloudTestSeq(key));
