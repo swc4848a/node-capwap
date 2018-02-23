@@ -27,6 +27,7 @@ func (s *TestSuite) SetupSuite() {
 		s.ctxt,
 		chromedp.WithRunnerOptions(
 			// runner.Flag("headless", true),
+			runner.Flag("no-sandbox", true),
 			runner.WindowSize(1920, 1080),
 		),
 		chromedp.WithLog(log.Printf),

@@ -40,7 +40,7 @@ func (s *TestSuite) TestCreateNewHardwareSwitchInterface() {
 		},
 		QueryOptions{
 			{Key: fgtInterfaces["url"], Action: Navigate},
-			{Action: Sleep, In: "6"},
+			{Action: Sleep, In: "10"},
 			{Key: fgtInterfaces["Alias"], Action: Evaluate, Eval: &alias},
 		},
 	}
