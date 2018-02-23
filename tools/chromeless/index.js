@@ -4,7 +4,7 @@ const path = require('path')
 async function run() {
     const chromeless = new Chromeless({
         debug: true,
-        implicitWait: true,
+        // implicitWait: true,
         // launchChrome: false
     })
 
