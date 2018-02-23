@@ -70,6 +70,11 @@ new Testcase({
 4. testcase callback define cloud GUI actions exempt the develop action which will do in the framework  
 5. verify callback define gate GUI verify actions  
 
+* include testcase in case.js  
+```
+require('./it/yourTestcase.js');
+```
+
 ## Best Practise
 1. first create a new item, edit it and delete it finally so that no side-effect to next testcase.
 2. complicated testcase need group related action in one testcase, such as create a datasource first and use it in other module, finally remove all  
