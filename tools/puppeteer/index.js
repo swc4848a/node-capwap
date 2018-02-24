@@ -49,8 +49,12 @@ const click = async function(page, selector) {
     await page.$$eval('div.second_menu_button_on_n', div => div[3].click());
     await page.$$eval('div.gwt-HTML', div => div[38].click());
 
+    await page.waitFor(`//button[text()="Create New"]`)
     // jquery
     await page.evaluate(`$('button:eq(5)').click()`);
+
+    await page.waitFor(`//span[text()="Save"]`)
+    await page.evaluate(`$('input.gwt-TextBox:eq(0)').val("interface test")`);
 
     await page.waitFor(1000);
 
