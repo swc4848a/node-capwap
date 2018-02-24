@@ -45,13 +45,12 @@ const click = async function(page, selector) {
 
     await page.waitFor('select');
 
-    const Network = '//div[text()="Network"]';
-    xpath = await page.$x(Network);
-    await xpath[0].click();
+    // documentQueryAll
+    await page.$$eval('div.second_menu_button_on_n', div => div[3].click());
+    await page.$$eval('div.gwt-HTML', div => div[38].click());
 
-    // const Interface = '//div[text()="Interface"]';
-    // xpath = await page.$x(Interface);
-    // await xpath[0].click();
+    // jquery
+    await page.evaluate(`$('button:eq(5)').click()`);
 
     await page.waitFor(1000);
 
