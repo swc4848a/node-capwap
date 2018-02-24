@@ -8,11 +8,11 @@ const click = async function(page, selector) {
 };
 
 (async() => {
-    const width = 1920
-    const height = 1080
+    const width = 1600
+    const height = 900
 
     const browser = await puppeteer.launch({
-        headless: false,
+        // headless: false,
         args: [
             `--window-size=${width},${height}`
         ]
@@ -45,13 +45,15 @@ const click = async function(page, selector) {
 
     await page.waitFor('select');
 
-    // const Network = '//div[text()="Network"]';
-    // xpath = await page.$x(Network);
-    // await xpath[0].click();
+    const Network = '//div[text()="Network"]';
+    xpath = await page.$x(Network);
+    await xpath[0].click();
 
     // const Interface = '//div[text()="Interface"]';
     // xpath = await page.$x(Interface);
     // await xpath[0].click();
+
+    await page.waitFor(1000);
 
     await page.screenshot({ path: path.join(__dirname, 'alpha-main.png') });
 
