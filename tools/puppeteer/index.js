@@ -1,11 +1,14 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 
-const click = async function(page, selector) {
-    await page.waitFor(selector);
-    const xpath = await page.$x(selector);
-    await xpath[0].click();
-};
+let testcase = [
+    [`goto`, `https://alpha.forticloud.com`],
+    [`type`, `input#email`, `zqqiang@fortinet.com`],
+    [`type`, `input[name="password"]`, `SuperCRM801`],
+    [`click`, `input[type="submit"]`],
+    [`click`, `//div[text()="ZQQ-APNETWORK-DEV"]`],
+    [`click`, `//div[text()="Configure"]`],
+];
 
 (async() => {
     const width = 1600
@@ -13,6 +16,7 @@ const click = async function(page, selector) {
 
     const browser = await puppeteer.launch({
         // headless: false,
+        // slowMo: 250,
         args: [
             `--window-size=${width},${height}`
         ]
@@ -26,35 +30,43 @@ const click = async function(page, selector) {
         height: height,
     });
 
-    await page.goto('https://alpha.forticloud.com');
-    await page.waitFor('input#email');
+    for (const item of testcase) {
+        action = item[0]
+        key = item[1]
+        val = item[2]
 
-    await page.type('input#email', 'zqqiang@fortinet.com');
-    await page.type('input[name="password"]', 'SuperCRM801');
-    await page.click('input[type="submit"]');
+        switch (action) {
+            case `goto`:
+                await page.goto(key)
+                break
+            case `type`:
+                await page.waitFor(key)
+                await page.type(key, val)
+                break
+            case `click`:
+                if (key.startsWith(`//`)) {
+                    await page.waitFor(key, { visible: true })
+                        .then((elem) => elem.click())
+                } else {
+                    await page.click(key)
+                }
+                break
+            default:
+                console.log(`unsupport action: ${action}`)
+        }
+    }
 
-    const fgt = '//div[text()="FGT60D4615007833"]';
-    await page.waitFor(fgt);
-    let xpath = await page.$x(fgt);
-    await xpath[0].click();
 
-    const Management = '//div[text()="Management"]';
-    await page.waitFor(Management);
-    xpath = await page.$x(Management);
-    await xpath[0].click();
+    // // documentQueryAll
+    // await page.$$eval('div.second_menu_button_on_n', div => div[3].click());
+    // await page.$$eval('div.gwt-HTML', div => div[38].click());
 
-    await page.waitFor('select');
+    // await page.waitFor(`//button[text()="Create New"]`)
+    // // jquery
+    // await page.evaluate(`$('button:eq(5)').click()`);
 
-    // documentQueryAll
-    await page.$$eval('div.second_menu_button_on_n', div => div[3].click());
-    await page.$$eval('div.gwt-HTML', div => div[38].click());
-
-    await page.waitFor(`//button[text()="Create New"]`)
-    // jquery
-    await page.evaluate(`$('button:eq(5)').click()`);
-
-    await page.waitFor(`//span[text()="Save"]`)
-    await page.evaluate(`$('input.gwt-TextBox:eq(0)').val("interface test")`);
+    // await page.waitFor(`//span[text()="Save"]`)
+    // await page.evaluate(`$('input.gwt-TextBox:eq(0)').val("interface test")`);
 
     await page.waitFor(1000);
 
