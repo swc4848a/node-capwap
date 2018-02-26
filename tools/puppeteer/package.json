@@ -8,5 +8,6 @@
     "debug": "env DEBUG=\"puppeteer:page,puppeteer:mouse\" node index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {}
 }

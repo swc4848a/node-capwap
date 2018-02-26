@@ -1,16 +1,16 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
+const fs = require('fs');
+const cases = require('./src/cases');
 
-let testcase = [
-    [`goto`, `https://alpha.forticloud.com`],
-    [`type`, `input#email`, `zqqiang@fortinet.com`],
-    [`type`, `input[name="password"]`, `SuperCRM801`],
-    [`click`, `input[type="submit"]`],
-    [`wait`, 3000],
-    [`click`, `//div[text()="ZQQ-APNETWORK-DEV"]`],
-    [`click`, `//div[text()="Configure"]`],
-    [`wait`, 3000],
-];
+(async() => {
+    const files = fs.readdirSync('./it');
+
+    for (const file of files) {
+        require(`./it/${file}`);
+        console.log(`  load ${file}`);
+    };
+})();
 
 (async() => {
     const width = 1600
@@ -32,59 +32,42 @@ let testcase = [
         height: height,
     });
 
-    let action
-    let key
-    let val
-    let timeout
-    let url
-
     try {
-        for (const item of testcase) {
-            action = item[0]
-            switch (action) {
-                case `goto`:
-                    url = item[1]
-                    await page.goto(url)
-                    break
-                case `type`:
-                    key = item[1]
-                    val = item[2]
-                    await page.waitFor(key)
-                    await page.type(key, val)
-                    break
-                case `click`:
-                    key = item[1]
-                    if (key.startsWith(`//`)) {
-                        const elem = await page.waitFor(key)
-                        await elem.click()
-                    } else {
-                        await page.click(key)
-                    }
-                    break
-                case `wait`:
-                    timeout = item[1]
-                    await page.waitFor(timeout)
-                    break
-                default:
-                    console.log(`unsupport action: ${action}`)
+        for (const testcase of cases) {
+            for (const item of testcase.seq) {
+                switch (item.action) {
+                    case `goto`:
+                        await page.goto(item.url)
+                        break
+                    case `type`:
+                        await page.waitFor(item.sel)
+                        await page.type(item.sel, item.val)
+                        break
+                    case `click`:
+                        if (item.sel.startsWith(`//`)) {
+                            const elem = await page.waitFor(item.sel)
+                            await elem.click()
+                        } else {
+                            await page.click(item.sel)
+                        }
+                        break
+                    case `wait`:
+                        await page.waitFor(item.timeout)
+                        break
+                    case `isType`:
+                        const frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                        const result = await frame.$eval(`${item.sel}`, el => el.value)
+                        console.log(`  result: ${result} expect: ${item.expect} => ${result === item.expect ? 'success' : 'failed'}`)
+                        break
+                    default:
+                        console.log(`unsupport action: ${action}`)
+                }
             }
         }
     } catch (error) {
         console.log(`catch ${error}`)
     }
 
-
-    // // documentQueryAll
-    // await page.$$eval('div.second_menu_button_on_n', div => div[3].click());
-    // await page.$$eval('div.gwt-HTML', div => div[38].click());
-
-    // await page.waitFor(`//button[text()="Create New"]`)
-    // // jquery
-    // await page.evaluate(`$('button:eq(5)').click()`);
-
-    // await page.waitFor(`//span[text()="Save"]`)
-    // await page.evaluate(`$('input.gwt-TextBox:eq(0)').val("interface test")`);
-
-    await page.screenshot({ path: path.join(__dirname, 'alpha-main.png') });
+    await page.screenshot({ path: path.join(__dirname, '/img/alpha-main.png') });
     await browser.close();
 })();
