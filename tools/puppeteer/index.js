@@ -6,8 +6,10 @@ let testcase = [
     [`type`, `input#email`, `zqqiang@fortinet.com`],
     [`type`, `input[name="password"]`, `SuperCRM801`],
     [`click`, `input[type="submit"]`],
+    [`wait`, 3000],
     [`click`, `//div[text()="ZQQ-APNETWORK-DEV"]`],
     [`click`, `//div[text()="Configure"]`],
+    [`wait`, 3000],
 ];
 
 (async() => {
@@ -30,30 +32,45 @@ let testcase = [
         height: height,
     });
 
-    for (const item of testcase) {
-        action = item[0]
-        key = item[1]
-        val = item[2]
+    let action
+    let key
+    let val
+    let timeout
+    let url
 
-        switch (action) {
-            case `goto`:
-                await page.goto(key)
-                break
-            case `type`:
-                await page.waitFor(key)
-                await page.type(key, val)
-                break
-            case `click`:
-                if (key.startsWith(`//`)) {
-                    await page.waitFor(key, { visible: true })
-                        .then((elem) => elem.click())
-                } else {
-                    await page.click(key)
-                }
-                break
-            default:
-                console.log(`unsupport action: ${action}`)
+    try {
+        for (const item of testcase) {
+            action = item[0]
+            switch (action) {
+                case `goto`:
+                    url = item[1]
+                    await page.goto(url)
+                    break
+                case `type`:
+                    key = item[1]
+                    val = item[2]
+                    await page.waitFor(key)
+                    await page.type(key, val)
+                    break
+                case `click`:
+                    key = item[1]
+                    if (key.startsWith(`//`)) {
+                        const elem = await page.waitFor(key)
+                        await elem.click()
+                    } else {
+                        await page.click(key)
+                    }
+                    break
+                case `wait`:
+                    timeout = item[1]
+                    await page.waitFor(timeout)
+                    break
+                default:
+                    console.log(`unsupport action: ${action}`)
+            }
         }
+    } catch (error) {
+        console.log(`catch ${error}`)
     }
 
 
@@ -68,9 +85,6 @@ let testcase = [
     // await page.waitFor(`//span[text()="Save"]`)
     // await page.evaluate(`$('input.gwt-TextBox:eq(0)').val("interface test")`);
 
-    await page.waitFor(1000);
-
     await page.screenshot({ path: path.join(__dirname, 'alpha-main.png') });
-
     await browser.close();
 })();
