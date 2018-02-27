@@ -31,7 +31,7 @@ if (process.argv.length > 2) {
     });
 
     const page = await browser.newPage();
-    page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+    page.on('console', msg => console.log('  page log:', msg.text()));
 
     page.setViewport({
         width: width,
@@ -42,15 +42,19 @@ if (process.argv.length > 2) {
         for (const testcase of cases) {
             if (filter && !testcase.name.includes(filter))
                 continue;
-            console.log(`run testcase: ${testcase.name}`)
+            console.log(`  run testcase: ${testcase.name}`)
             for (const item of testcase.seq) {
                 switch (item.action) {
                     case `goto`:
                         await page.goto(item.url)
                         break
                     case `type`:
-                        await page.waitFor(item.sel)
-                        await page.type(item.sel, item.val)
+                        if (item.sel.includes(`:`)) {
+                            await page.evaluate(`$("${item.sel}").val("${item.val}")`)
+                        } else {
+                            await page.waitFor(item.sel)
+                            await page.type(item.sel, item.val)
+                        }
                         break
                     case `click`:
                         if (item.sel.startsWith(`//`)) {
@@ -66,7 +70,7 @@ if (process.argv.length > 2) {
                         await page.waitFor(item.timeout)
                         break
                     case `checked`:
-                        await page.$eval(`$('${item.sel}').prop("checked", ${item.val})`)
+                        await page.evaluate(`$("${item.sel}").prop("checked", ${item.val})`)
                         break
                     case `isType`:
                         const frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
@@ -74,12 +78,12 @@ if (process.argv.length > 2) {
                         console.log(`  result: ${result} expect: ${item.expect} => ${result === item.expect ? 'success' : 'failed'}`)
                         break
                     default:
-                        console.log(`unsupport action: ${action}`)
+                        console.error(`  unsupport action: ${action}`)
                 }
             }
         }
     } catch (error) {
-        console.log(`catch: `, error)
+        console.error(`  catch: `, error)
     }
 
     await page.screenshot({ path: path.join(__dirname, '/img/alpha-main.png') });

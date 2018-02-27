@@ -12,6 +12,7 @@ class Testcase {
     }
     setup() {
         this.cloudLogin()
+        this.cloudNavigate()
         this.testcase()
         this.fosLogin()
         this.verify()
@@ -21,6 +22,11 @@ class Testcase {
         this.type(`input#email`, Config.cloudUsername)
         this.type(`input[name="password"]`, Config.cloudPassword)
         this.click(`input[type="submit"]`)
+        this.wait(3000)
+    }
+    cloudNavigate() {
+        this.click(`//div[text()="${Config.fortigateSN}"]`)
+        this.click(`//div[text()="Management"]`)
         this.wait(3000)
     }
     fosLogin() {
