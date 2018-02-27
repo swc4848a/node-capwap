@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "env DEBUG=\"puppeteer:page,puppeteer:mouse\" node index.js"
+    "debug": "env DEBUG=\"puppeteer:page,puppeteer:mouse\" node index.js",
+    "headless": "env DEBUG=\"puppeteer:page,puppeteer:mouse\" node index.js headless"
   },
   "author": "",
   "license": "ISC",

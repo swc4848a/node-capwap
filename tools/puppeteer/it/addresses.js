@@ -24,12 +24,13 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Addresses': "a[ng-href='firewall/address']",
     'Name': "input#name",
     'IP/Netmask': "input#ipmask",
     'Visibility': "input#visibility",
     'Static Route': "input#allow-routing",
     'Comments': "textarea#comment",
+
+    'Addresses': "a[ng-href='firewall/address']",
 
     'address new': "tr[mkey='address new']",
     'group new': "tr[mkey='group new']",
@@ -47,33 +48,34 @@ new Testcase({
         this.checked(cloudMap['Visibility'])
         this.checked(cloudMap['Static Route'])
         this.set(cloudMap['Comments'], "test comments")
-        // this.click(cloudMap['Save'])
-        // this.click(cloudMap['OK'])
+        this.click(cloudMap['Save'])
+        this.click(cloudMap['OK'])
     },
     verify() {
-        // this.redirect(gateMap['/ng/page/p/firewall/object/address/edit/address%20new/'])
-        // this.isSet(gateMap['Name'], "address new")
-        // this.isSet(gateMap['IP/Netmask'], "192.168.100.0/255.255.255.0")
-        // this.isChecked(gateMap['Visibility'])
-        // this.isChecked(gateMap['Static Route'])
-        // this.isSet(gateMap['Comments'], "test comments")
+        this.redirect('/ng/page/p/firewall/object/address/edit/address%20new/')
+        this.isSet(gateMap['Name'], "address new")
+        this.isSet(gateMap['IP/Netmask'], "192.168.100.0/255.255.255.0")
+        this.isChecked(gateMap['Visibility'])
+        this.isChecked(gateMap['Static Route'])
+        this.isSet(gateMap['Comments'], "test comments")
     }
 })
 
-// new Testcase({
-//     name: 'address delete',
-//     cloud: cloudMap,
-//     gate: gateMap,
-//     testcase: (c) => {
-//         c.click('Addresses')
-//         c.click('Delete for address new')
-//         c.click('YES')
-//     },
-//     verify: (g) => {
-//         g.click('Addresses')
-//         g.isDelete('address new')
-//     }
-// })
+new Testcase({
+    name: 'address delete',
+    testcase() {
+        this.click(cloudMap['Addresses'])
+        this.click(cloudMap['Delete for address new'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+        // this.redirect('/ng/firewall/address')
+        this.click(gateMap['Addresses'])
+        this.wait(3000)
+        
+        this.isDelete(gateMap['address new'])
+    }
+})
 
 // new Testcase({
 //     name: 'address group new',

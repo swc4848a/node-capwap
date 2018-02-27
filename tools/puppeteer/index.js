@@ -3,8 +3,10 @@ const path = require('path');
 const fs = require('fs');
 const cases = require('./src/cases');
 
+let headless = false;
 let filter = undefined;
 if (process.argv.length > 2) {
+    headless = (process.argv[2] === `headless`);
     filter = process.argv[process.argv.length - 1];
     console.log(`  filter: ${filter}`);
 };
@@ -22,8 +24,11 @@ if (process.argv.length > 2) {
     const width = 1600
     const height = 900
 
+    let frame = undefined
+    let result = undefined
+
     const browser = await puppeteer.launch({
-        // headless: false,
+        headless: headless,
         // slowMo: 250,
         args: [
             `--window-size=${width},${height}`
@@ -40,8 +45,10 @@ if (process.argv.length > 2) {
 
     try {
         for (const testcase of cases) {
-            if (filter && !testcase.name.includes(filter))
-                continue;
+            if (filter && !testcase.name.includes(filter)) {
+                console.log(`  skip ${testcase.name}`)
+                continue
+            }
             console.log(`  run testcase: ${testcase.name}`)
             for (const item of testcase.seq) {
                 switch (item.action) {
@@ -52,13 +59,13 @@ if (process.argv.length > 2) {
                         if (item.sel.includes(`:`)) {
                             await page.evaluate(`$("${item.sel}").val("${item.val}")`)
                         } else {
-                            await page.waitFor(item.sel)
+                            await page.waitFor(item.sel, { timeout: 10000 })
                             await page.type(item.sel, item.val)
                         }
                         break
                     case `click`:
                         if (item.sel.startsWith(`//`)) {
-                            const elem = await page.waitFor(item.sel)
+                            const elem = await page.waitFor(item.sel, { timeout: 10000 })
                             await elem.click()
                         } else if (item.sel.includes(`:`)) {
                             await page.evaluate(`$("${item.sel}").click()`)
@@ -69,13 +76,26 @@ if (process.argv.length > 2) {
                     case `wait`:
                         await page.waitFor(item.timeout)
                         break
+                    case `waitFor`:
+                        await page.waitFor(item.sel, { timeout: item.timeout })
+                        break
                     case `checked`:
                         await page.evaluate(`$("${item.sel}").prop("checked", ${item.val})`)
                         break
                     case `isType`:
-                        const frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
-                        const result = await frame.$eval(`${item.sel}`, el => el.value)
+                        frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                        result = await frame.$eval(`${item.sel}`, el => el.value)
                         console.log(`  result: ${result} expect: ${item.expect} => ${result === item.expect ? 'success' : 'failed'}`)
+                        break
+                    case `isChecked`:
+                        frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                        result = await frame.$eval(`${item.sel}`, el => el.value)
+                        console.log(`  result: ${result} expect: ${item.expect} => ${result === item.expect ? 'success' : 'failed'}`)
+                        break
+                    case `isDelete`:
+                        frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                        result = await frame.$eval(`${item.sel}`, el => el.value)
+                        console.log(`  result: ${result} expect: ${undefined} => ${result === undefined ? 'success' : 'failed'}`)
                         break
                     default:
                         console.error(`  unsupport action: ${action}`)

@@ -14,6 +14,7 @@ class Testcase {
         this.cloudLogin()
         this.cloudNavigate()
         this.testcase()
+        this.cloudDeploy()
         this.fosLogin()
         this.verify()
     }
@@ -28,6 +29,13 @@ class Testcase {
         this.click(`//div[text()="${Config.fortigateSN}"]`)
         this.click(`//div[text()="Management"]`)
         this.wait(3000)
+    }
+    cloudDeploy() {
+        this.wait(1000)
+        this.click(`//button[text()="Deploy"]`)
+        this.click(`//label[text()="Immediately"]`)
+        this.click(`//button[text()="Apply"]`)
+        this.wait(`//button[text()="OK"]`)
     }
     fosLogin() {
         this.goto(Config.fortigateUrl)
@@ -44,7 +52,7 @@ class Testcase {
         this.seq.push({ action: `goto`, url: url })
     }
     redirect(url) {
-        this.seq.push({ action: `goto`, url: url })
+        this.seq.push({ action: `goto`, url: Config.fortigateUrl + url })
     }
     type(sel, val) {
         this.seq.push({ action: `type`, sel: sel, val: val })
@@ -55,14 +63,24 @@ class Testcase {
     checked(sel) {
         this.seq.push({ action: `checked`, sel: sel, val: true })
     }
-    wait(timeout) {
-        this.seq.push({ action: `wait`, timeout: timeout })
+    wait(selectorOrTimeout) {
+        if (Number.isInteger(selectorOrTimeout)) {
+            this.seq.push({ action: `wait`, timeout: selectorOrTimeout })
+        } else {
+            this.seq.push({ action: `waitFor`, sel: selectorOrTimeout, timeout: 35000 })
+        }
     }
     isType(sel, expect) {
         this.seq.push({ action: `isType`, sel: sel, expect: expect })
     }
     isSet(sel, expect) {
         this.seq.push({ action: `isType`, sel: sel, expect: expect })
+    }
+    isChecked(sel) {
+        this.seq.push({ action: `isChecked`, sel: sel, expect: true })
+    }
+    isDelete(sel) {
+        this.seq.push({ action: `isDelete`, sel: sel })
     }
 }
 
