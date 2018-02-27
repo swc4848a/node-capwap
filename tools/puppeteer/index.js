@@ -56,6 +56,8 @@ if (process.argv.length > 2) {
                         if (item.sel.startsWith(`//`)) {
                             const elem = await page.waitFor(item.sel)
                             await elem.click()
+                        } else if (item.sel.includes(`:`)) {
+                            await page.evaluate(`$("${item.sel}").click()`)
                         } else {
                             await page.click(item.sel)
                         }
