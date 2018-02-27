@@ -37,13 +37,25 @@ class Testcase {
     goto(url) {
         this.seq.push({ action: `goto`, url: url })
     }
+    redirect(url) {
+        this.seq.push({ action: `goto`, url: url })
+    }
     type(sel, val) {
         this.seq.push({ action: `type`, sel: sel, val: val })
+    }
+    set(sel, val) {
+        this.seq.push({ action: `type`, sel: sel, val: val })
+    }
+    checked(sel) {
+        this.seq.push({ action: `checked`, sel: sel, val: true })
     }
     wait(timeout) {
         this.seq.push({ action: `wait`, timeout: timeout })
     }
     isType(sel, expect) {
+        this.seq.push({ action: `isType`, sel: sel, expect: expect })
+    }
+    isSet(sel, expect) {
         this.seq.push({ action: `isType`, sel: sel, expect: expect })
     }
 }

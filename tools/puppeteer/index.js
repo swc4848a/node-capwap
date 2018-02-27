@@ -3,6 +3,12 @@ const path = require('path');
 const fs = require('fs');
 const cases = require('./src/cases');
 
+let filter = undefined;
+if (process.argv.length > 2) {
+    filter = process.argv[process.argv.length - 1];
+    console.log(`  filter: ${filter}`);
+};
+
 (async() => {
     const files = fs.readdirSync('./it');
 
@@ -34,6 +40,9 @@ const cases = require('./src/cases');
 
     try {
         for (const testcase of cases) {
+            if (filter && !testcase.name.includes(filter))
+                continue;
+            console.log(`run testcase: ${testcase.name}`)
             for (const item of testcase.seq) {
                 switch (item.action) {
                     case `goto`:
@@ -54,6 +63,9 @@ const cases = require('./src/cases');
                     case `wait`:
                         await page.waitFor(item.timeout)
                         break
+                    case `checked`:
+                        await page.$eval(`$('${item.sel}').prop("checked", ${item.val})`)
+                        break
                     case `isType`:
                         const frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
                         const result = await frame.$eval(`${item.sel}`, el => el.value)
@@ -65,7 +77,7 @@ const cases = require('./src/cases');
             }
         }
     } catch (error) {
-        console.log(`catch ${error}`)
+        console.log(`catch: `, error)
     }
 
     await page.screenshot({ path: path.join(__dirname, '/img/alpha-main.png') });
