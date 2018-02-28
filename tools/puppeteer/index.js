@@ -93,9 +93,8 @@ if (process.argv.length > 2) {
                         console.log(`  result: ${result} expect: ${item.expect} => ${result === item.expect ? 'success' : 'failed'}`)
                         break
                     case `isDelete`:
-                        frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
-                        result = await frame.$eval(`${item.sel}`, el => el.value)
-                        console.log(`  result: ${result} expect: ${undefined} => ${result === undefined ? 'success' : 'failed'}`)
+                        result = await page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
+                        console.log(`  result: ${result} expect: ${0} => ${result === 0 ? 'success' : 'failed'}`)
                         break
                     default:
                         console.error(`  unsupport action: ${action}`)

@@ -1,7 +1,7 @@
 const Testcase = require('../src/testcase')
 
 new Testcase({
-    name: 'address new',
+    name: 'demo',
     testcase() {
         this.click(`//div[text()="FGT60D4615007833"]`)
         this.click(`//div[text()="Management"]`)

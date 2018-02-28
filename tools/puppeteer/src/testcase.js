@@ -77,10 +77,10 @@ class Testcase {
         this.seq.push({ action: `isType`, sel: sel, expect: expect })
     }
     isChecked(sel) {
-        this.seq.push({ action: `isChecked`, sel: sel, expect: true })
+        this.seq.push({ action: `isChecked`, sel: sel, expect: `enable` })
     }
-    isDelete(sel) {
-        this.seq.push({ action: `isDelete`, sel: sel })
+    isDelete(target) {
+        this.seq.push({ action: `isDelete`, target: target })
     }
 }
 

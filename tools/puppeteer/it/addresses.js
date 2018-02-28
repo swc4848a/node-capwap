@@ -30,11 +30,14 @@ let gateMap = {
     'Static Route': "input#allow-routing",
     'Comments': "textarea#comment",
 
-    'Addresses': "a[ng-href='firewall/address']",
-
-    'address new': "tr[mkey='address new']",
+    'address table': "div.first-cell span",
+    'address new': "//span[text()='address new']",
     'group new': "tr[mkey='group new']",
     'Edit': "button span:contains('Edit'):eq(0)",
+
+    'Policy & Objects': "//span[text()='Policy & Objects']",
+    'Addresses': "a[href='firewall/address']",
+    'Edit': "//span[text()='Edit']",
 }
 
 new Testcase({
@@ -49,10 +52,16 @@ new Testcase({
         this.checked(cloudMap['Static Route'])
         this.set(cloudMap['Comments'], "test comments")
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
-        this.redirect('/ng/page/p/firewall/object/address/edit/address%20new/')
+        this.click(gateMap['Policy & Objects'])
+        this.click(gateMap['Addresses'])
+        this.wait(3000)
+        this.click(gateMap['address new'])
+        this.click(gateMap['Edit'])
+        this.wait(3000)
         this.isSet(gateMap['Name'], "address new")
         this.isSet(gateMap['IP/Netmask'], "192.168.100.0/255.255.255.0")
         this.isChecked(gateMap['Visibility'])
@@ -65,15 +74,15 @@ new Testcase({
     name: 'address delete',
     testcase() {
         this.click(cloudMap['Addresses'])
+        this.wait(1000)
         this.click(cloudMap['Delete for address new'])
         this.click(cloudMap['YES'])
     },
     verify() {
-        // this.redirect('/ng/firewall/address')
+        this.click(gateMap['Policy & Objects'])
         this.click(gateMap['Addresses'])
         this.wait(3000)
-        
-        this.isDelete(gateMap['address new'])
+        this.isDelete('address new')
     }
 })
 
