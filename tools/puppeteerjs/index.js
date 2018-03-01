@@ -87,13 +87,21 @@ if (process.argv.length > 2) {
                         break
                     case `isType`:
                         frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
-                        result = await frame.$eval(`${item.sel}`, el => el.value)
-                        console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)
+                        if (frame) {
+                            result = await frame.$eval(`${item.sel}`, el => el.value)
+                        } else {
+                            result = await page.$eval(`${item.sel}`, el => el.value)
+                        }
+                        console.log(`  result: [${result}] expect: [${item.expect}] => ${result == item.expect ? 'success' : 'failed'}`)
                         break
                     case `isCheck`:
                         frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
-                        result = await frame.$eval(`${item.sel}`, el => el.value)
-                        console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)
+                        if (frame) {
+                            result = await frame.$eval(`${item.sel}`, el => el.value)
+                        } else {
+                            result = await page.$eval(`${item.sel}`, el => el.value)
+                        }
+                        console.log(`  result: [${result}] expect: [${item.expect}] => ${item.expect.includes(result) ? 'success' : 'failed'}`)
                         break
                     case `isDelete`:
                         result = await page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
