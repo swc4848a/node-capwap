@@ -82,7 +82,7 @@ if (process.argv.length > 2) {
                     case `waitFor`:
                         await page.waitFor(item.sel, { timeout: item.timeout })
                         break
-                    case `checked`:
+                    case `check`:
                         await page.evaluate(`$("${item.sel}").prop("checked", ${item.val})`)
                         break
                     case `isType`:
@@ -90,7 +90,7 @@ if (process.argv.length > 2) {
                         result = await frame.$eval(`${item.sel}`, el => el.value)
                         console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)
                         break
-                    case `isChecked`:
+                    case `isCheck`:
                         frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
                         result = await frame.$eval(`${item.sel}`, el => el.value)
                         console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)

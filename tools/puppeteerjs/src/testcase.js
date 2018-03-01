@@ -63,8 +63,11 @@ class Testcase {
     set(sel, val) {
         this.seq.push({ action: `type`, sel: sel, val: val })
     }
-    checked(sel) {
-        this.seq.push({ action: `checked`, sel: sel, val: true })
+    check(sel) {
+        this.seq.push({ action: `check`, sel: sel, val: true })
+    }
+    uncheck(sel) {
+        this.seq.push({ action: `check`, sel: sel, val: false })
     }
     wait(selectorOrTimeout) {
         if (Number.isInteger(selectorOrTimeout)) {
@@ -79,8 +82,8 @@ class Testcase {
     isSet(sel, expect) {
         this.seq.push({ action: `isType`, sel: sel, expect: expect })
     }
-    isChecked(sel) {
-        this.seq.push({ action: `isChecked`, sel: sel, expect: `enable` })
+    isCheck(sel) {
+        this.seq.push({ action: `isCheck`, sel: sel, expect: `enable` })
     }
     isDelete(target) {
         this.seq.push({ action: `isDelete`, target: target })
