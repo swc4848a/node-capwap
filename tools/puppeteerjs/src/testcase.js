@@ -26,9 +26,18 @@ class Testcase {
         this.wait(3000)
     }
     cloudNavigate() {
-        this.click(`//div[text()="${Config.fortigateSN}"]`)
-        this.click(`//div[text()="Management"]`)
-        this.wait(3000)
+        if (Config.isMultiTenancy) {
+            this.wait(3000)
+            this.click(`//label[text()="Including lower level"]`)
+            this.wait(1000)
+            this.click(`//div[text()="${Config.fortigateSN}"]`)
+            this.click(`//div[text()="Management"]`)
+            this.wait(3000)
+        } else {
+            this.click(`//div[text()="${Config.fortigateSN}"]`)
+            this.click(`//div[text()="Management"]`)
+            this.wait(3000)
+        }
     }
     cloudDeploy() {
         this.wait(1000)

@@ -203,6 +203,13 @@ this.isCheck(`input#checkbox`)
 ```javascript
 this.isDelete(`address new`)
 ```
+#### testcase.evaluate(pageFunction)
+- `pageFunction` <[string]> Function to be evaluated in the page context
+
+string can be passed in instead of a function:
+```js
+console.log(await page.evaluate(`$('input#editor').click()`));
+```
 
 ## Best Practise
 1. first create a new item, edit it and delete it finally so that no side-effect to next testcase.
