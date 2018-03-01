@@ -82,7 +82,7 @@ class Testcase {
         if (Number.isInteger(selectorOrTimeout)) {
             this.seq.push({ action: `wait`, timeout: selectorOrTimeout })
         } else {
-            this.seq.push({ action: `waitFor`, sel: selectorOrTimeout, timeout: 35000 })
+            this.seq.push({ action: `waitFor`, sel: selectorOrTimeout, timeout: 40000 })
         }
     }
     isType(sel, expect) {
