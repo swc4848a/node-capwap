@@ -1,5 +1,5 @@
 {
-  "name": "puppeteer",
+  "name": "puppeteerjs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,5 +10,8 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {}
+  "devDependencies": {},
+  "dependencies": {
+    "puppeteer": "^1.1.1"
+  }
 }

@@ -52,6 +52,9 @@ if (process.argv.length > 2) {
             console.log(`  run testcase: ${testcase.name}`)
             for (const item of testcase.seq) {
                 switch (item.action) {
+                    case `evaluate`:
+                        await page.evaluate(`${item.script}`)
+                        break
                     case `goto`:
                         await page.goto(item.url)
                         break
@@ -85,16 +88,16 @@ if (process.argv.length > 2) {
                     case `isType`:
                         frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
                         result = await frame.$eval(`${item.sel}`, el => el.value)
-                        console.log(`  result: ${result} expect: ${item.expect} => ${result === item.expect ? 'success' : 'failed'}`)
+                        console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)
                         break
                     case `isChecked`:
                         frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
                         result = await frame.$eval(`${item.sel}`, el => el.value)
-                        console.log(`  result: ${result} expect: ${item.expect} => ${result === item.expect ? 'success' : 'failed'}`)
+                        console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)
                         break
                     case `isDelete`:
                         result = await page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
-                        console.log(`  result: ${result} expect: ${0} => ${result === 0 ? 'success' : 'failed'}`)
+                        console.log(`  result: [${result}] expect: [${0}] => ${result === 0 ? 'success' : 'failed'}`)
                         break
                     default:
                         console.error(`  unsupport action: ${action}`)
@@ -105,6 +108,6 @@ if (process.argv.length > 2) {
         console.error(`  catch: `, error)
     }
 
-    await page.screenshot({ path: path.join(__dirname, '/img/alpha-main.png') });
+    await page.screenshot({ path: path.join(__dirname, '/img/result.png') });
     await browser.close();
 })();

@@ -45,6 +45,9 @@ class Testcase {
         this.click(`//button[text()="Later"]`)
         this.wait(3000)
     }
+    evaluate(script) {
+        this.seq.push({ action: `evaluate`, script: script })
+    }
     click(sel) {
         this.seq.push({ action: `click`, sel: sel })
     }

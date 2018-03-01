@@ -1,3 +1,41 @@
+# Auto Test Framework
+Auto test for FortiCloud GUI Config Parts  
+
+## What is this repository for?
+* simulate user click the cloud GUI and deploy to device  
+* query the result from device GUI and compare the result  
+* auto run all testcase if developer commit code and give them feedback  
+
+## How do I get set up?
+* install [node.js v8.6.0+](https://nodejs.org/en/download/package-manager/)  
+* npm install  
+* change conf/config.js to your own environment url, account, password  
+* run single testcase in debug mode(start Chromium): npm run debug "testcase name"  
+* run group testcases: npm run debug "shared name string"  
+  (eg: "interface" will load all testcases contains "interface xxx")  
+* run all testcases in headless mode: npm run headless  
+
+## How do I get result?
+* stdout  
+1. retry timeout, return failed: develop failed or develop timeout (eg: cfgServer core dump)  
+2. if result match expect:
+```
+result: [192.168.100.0/255.255.255.0] expect: [192.168.100.0/255.255.255.0] => success
+```
+3. if not match:
+```
+result: [192.168.100.0/255.255.255.0] expect: [192.168.100.0/255.255.255.0] => failed
+```
+
+* img  
+1. after each testcase run, it will capture final GUI image  
+2. if encounter retry timeout, return failed, check the img/result.png for the specific reason  or use debug mode  
+
+## Contribution guidelines
+
+### Develop your testcases
+* create a testcase source file in it folder and name it with menu label name  
+~~~~
 let Testcase = require('../src/testcase.js');
 
 let cloudMap = {
@@ -85,48 +123,20 @@ new Testcase({
         this.isDelete('address new')
     }
 })
+~~~~
+1. cloudMap indicate the forticloud GUI label and the [jquery/xpath/css selector](https://api.jquery.com/category/selectors/)  
+2. gateMap indicate the fortigate GUI label and the [jquery/xpath/css selector](https://api.jquery.com/category/selectors/)  
+3. new Testcase will create a testcase with input and verify actions  
+4. testcase callback define cloud GUI actions exempt the develop action which will do in the framework  
+5. verify callback define gate GUI verify actions  
 
-// new Testcase({
-//     name: 'address group new',
-//     cloud: cloudMap,
-//     gate: gateMap,
-//     testcase: (c) => {
-//         c.click('Addresses')
-//         c.click('Create New')
-//         c.click('Create Address Group')
-//         c.set('Name', "group new")
-//         c.click('Members')
-//         c.click('all')
-//         c.hide('Popup Pannel')
-//         c.checked('Visibility')
-//         // c.checked('Static Route')
-//         c.set('Comments', "test comments")
-//         c.click('Save')
-//         c.click('OK')
-//     },
-//     verify: (g) => {
-//         g.redirect('/ng/page/p/firewall/object/address_group/edit/group%20new')
-//         g.isSet('Name', "group new")
-//         g.isChecked('Visibility')
-//         // g.isChecked('Static Route')
-//         g.isSet('Comments', "test comments")
-//         g.click('Save')
-//         g.click('OK')
-//     }
-// })
+## Best Practise
+1. first create a new item, edit it and delete it finally so that no side-effect to next testcase.
+2. complicated testcase need group related action in one testcase, such as create a datasource first and use it in other module, finally remove all  
 
-// new Testcase({
-//     name: 'address group delete',
-//     cloud: cloudMap,
-//     gate: gateMap,
-//     testcase: (c) => {
-//         c.click('Addresses')
-//         c.click('Next Page')
-//         c.click('Delete for group new')
-//         c.click('YES')
-//     },
-//     verify: (g) => {
-//         g.click('Addresses')
-//         g.isDelete('group new')
-//     }
-// })
+## Continuous Integration (TODO)
+1. we use [Jenkins](http://172.16.94.162:8080/job/CfgServerIT) to integrate our framework  
+2. if you commit cfgServer Code or testcases will trigger next build (for now it manually build by root user)  
+
+## Todo List
+1.  
