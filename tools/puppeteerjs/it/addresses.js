@@ -32,7 +32,7 @@ let gateMap = {
 
     'address table': "div.first-cell span",
     'address new': "//span[text()='address new']",
-    'group new': "tr[mkey='group new']",
+    'group new': "//span[text()='group new']",
     'Edit': "button span:contains('Edit'):eq(0)",
 
     'Policy & Objects': "//span[text()='Policy & Objects']",
@@ -83,5 +83,50 @@ new Testcase({
         this.click(gateMap['Addresses'])
         this.wait(3000)
         this.isDelete('address new')
+    }
+})
+
+new Testcase({
+    name: 'address group new',
+    testcase() {
+        this.click(cloudMap['Addresses'])
+        this.click(cloudMap['Create New'])
+        this.click(cloudMap['Create Address Group'])
+        this.set(cloudMap['Name'], "group new")
+        this.click(cloudMap['Members'])
+        this.click(cloudMap['all'])
+        this.click(`//div[text()="Comments"]`)
+        this.check(cloudMap['Visibility'])
+        this.set(cloudMap['Comments'], "test comments")
+        this.click(cloudMap['Save'])
+        this.wait(1000)
+        this.click(cloudMap['OK'])
+    },
+    verify() {
+        this.click(gateMap['Policy & Objects'])
+        this.click(gateMap['Addresses'])
+        this.wait(3000)
+        this.click(gateMap['group new'])
+        this.click(gateMap['Edit'])
+        this.wait(3000)
+        this.isSet(gateMap['Name'], "group new")
+        this.isCheck(gateMap['Visibility'])
+        this.isSet(gateMap['Comments'], "test comments")
+    }
+})
+
+new Testcase({
+    name: 'address group delete',
+    testcase() {
+        this.click(cloudMap['Addresses'])
+        this.click(cloudMap['Next Page'])
+        this.click(cloudMap['Delete for group new'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+        this.click(gateMap['Policy & Objects'])
+        this.click(gateMap['Addresses'])
+        this.wait(3000)
+        this.isDelete('group new')
     }
 })
