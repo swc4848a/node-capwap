@@ -54,6 +54,9 @@ class Testcase {
         this.click(`//button[text()="Later"]`)
         this.wait(3000)
     }
+    capture(filename) {
+        this.seq.push({ action: `screenshot`, filename: filename })
+    }
     evaluate(script) {
         this.seq.push({ action: `evaluate`, script: script })
     }
@@ -93,6 +96,9 @@ class Testcase {
     }
     isCheck(sel) {
         this.seq.push({ action: `isCheck`, sel: sel, expect: true })
+    }
+    isUncheck(sel) {
+        this.seq.push({ action: `isCheck`, sel: sel, expect: false })
     }
     isDelete(target) {
         this.seq.push({ action: `isDelete`, target: target })

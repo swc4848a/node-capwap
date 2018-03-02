@@ -167,10 +167,8 @@ new Testcase({
     },
     verify() {
         this.click(gateMap['System'])
-        this.wait(1000)
         this.click(gateMap['Settings'])
         this.wait(3000)
-        this.click(gateMap['System Time']) // todo: can't navigate to new href
         this.isSet(gateMap['Time Zone'], "string:04")
         this.isCheck(gateMap['Synchronize with NTP Server'])
         this.isCheck(gateMap['Specify'])

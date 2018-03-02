@@ -52,6 +52,9 @@ if (process.argv.length > 2) {
             console.log(`  run testcase: ${testcase.name}`)
             for (const item of testcase.seq) {
                 switch (item.action) {
+                    case `screenshot`:
+                        await page.screenshot({ path: path.join(__dirname, `/img/${item.filename}`) });
+                        break
                     case `evaluate`:
                         await page.evaluate(`${item.script}`)
                         break

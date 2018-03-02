@@ -210,6 +210,8 @@ string can be passed in instead of a function:
 ```js
 console.log(await page.evaluate(`$('input#editor').click()`));
 ```
+#### testcase.capture(filename)
+- `filename` <[string]> The file name to save the image to. The capture type will be inferred from file extension. If no path is provided, the image won't be saved to the disk.
 
 ## Best Practise
 1. first create a new item, edit it and delete it finally so that no side-effect to next testcase.
@@ -218,6 +220,13 @@ console.log(await page.evaluate(`$('input#editor').click()`));
 ## Continuous Integration (TODO)
 1. we use [Jenkins](http://172.16.94.162:8080/job/CfgServerIT) to integrate our framework  
 2. if you commit cfgServer Code or testcases will trigger next build (for now it manually build by root user)  
+
+## FAQ
+
+#### Q: How to handle FortiGate SSL Error When Goto URL First Time?
+
+Please make sure `Redirect to HTTPS` is diabled in System => Settings.  
+
 
 ## Todo List
 1. enable/disable cloud/fos config step options  
