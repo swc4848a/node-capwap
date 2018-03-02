@@ -220,4 +220,5 @@ console.log(await page.evaluate(`$('input#editor').click()`));
 2. if you commit cfgServer Code or testcases will trigger next build (for now it manually build by root user)  
 
 ## Todo List
-1.  
+1. enable/disable cloud/fos config step options  
+2. testcase pause option  

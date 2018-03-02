@@ -97,11 +97,11 @@ if (process.argv.length > 2) {
                     case `isCheck`:
                         frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
                         if (frame) {
-                            result = await frame.$eval(`${item.sel}`, el => el.value)
+                            result = await frame.evaluate(`$('${item.sel}').prop("checked")`)
                         } else {
-                            result = await page.$eval(`${item.sel}`, el => el.value)
+                            result = await page.evaluate(`$('${item.sel}').prop("checked")`)
                         }
-                        console.log(`  result: [${result}] expect: [${item.expect}] => ${item.expect.includes(result) ? 'success' : 'failed'}`)
+                        console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)
                         break
                     case `isDelete`:
                         result = await page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);

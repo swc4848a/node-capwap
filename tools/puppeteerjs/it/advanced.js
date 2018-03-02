@@ -25,6 +25,7 @@ let cloudMap = {
 
 let gateMap = {
     'System': "//span[text()='System']",
+    'Settings': "a[ng-href='system/settings']",
     'Advanced': "a[ng-href='system/advanced']",
     'SMTP Server': "input#smtp_server",
     'Default Reply To': "input#smtp_rt",
@@ -36,14 +37,12 @@ let gateMap = {
     'Security Mode STARTTLS': "input#radio-email-starttls",
     'Port': "input#smtp_port",
 
-    'Dashboard': "//span[text()='Dashboard']",
-    'Main': "//span[text()='Main']",
     'System Time': "a[href='/ng/system/time']",
-    'Time Zone': "select[ng-model='ctrl.systemGlobal.timezone']",
-    'Synchronize with NTP Server': "input:radio#sync-ntp",
-    'Manual Settings': "input:radio#manual",
-    'Use FortiGuard Server': "input:radio#fg-server",
-    'Specify': "input:radio#specify-server",
+    'Time Zone': "select[ng-model='$ctrl.systemGlobal.timezone']",
+    'Synchronize with NTP Server': "input#sync-ntp",
+    'Manual Settings': "input#manual",
+    'Use FortiGuard Server': "input#fg-server",
+    'Specify': "input#specify-server",
     'Sync Interval': "input#sync-interval",
     'Server': "input[ng-model='ctrl.systemNtp.ntpserver[0].server']",
 }
@@ -71,7 +70,7 @@ new Testcase({
         this.isCheck(gateMap['Authentication'])
         this.isSet(gateMap['Username'], "Peter Chen")
         this.isSet(gateMap['Password'], "ENC XXXX")
-        // this.isCheck(gateMap['Security Mode None'])
+        this.isCheck(gateMap['Security Mode None'])
         this.isSet(gateMap['Port'], 25) // must be 25 in gate GUI
     }
 })
@@ -98,7 +97,7 @@ new Testcase({
         this.isCheck(gateMap['Authentication'])
         this.isSet(gateMap['Username'], "Peter Chen")
         this.isSet(gateMap['Password'], "ENC XXXX")
-        // this.isCheck(gateMap['Security Mode SMTPS'])
+        this.isCheck(gateMap['Security Mode SMTPS'])
         this.isSet(gateMap['Port'], 465) // must be 465 in gate GUI
     }
 })
@@ -125,7 +124,7 @@ new Testcase({
         this.isCheck(gateMap['Authentication'])
         this.isSet(gateMap['Username'], "Peter Chen")
         this.isSet(gateMap['Password'], "ENC XXXX")
-        // this.isCheck(gateMap['Security Mode STARTTLS'])
+        this.isCheck(gateMap['Security Mode STARTTLS'])
         this.isSet(gateMap['Port'], 25) // must be 25 in gate GUI
     }
 })
@@ -143,10 +142,9 @@ new Testcase({
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Dashboard'])
-        this.click(gateMap['Main'])
+        this.click(gateMap['System'])
+        this.click(gateMap['Settings'])
         this.wait(3000)
-        this.click(gateMap['System Time']) // todo: can't navigate to new href
         this.isSet(gateMap['Time Zone'], "string:04")
         this.isCheck(gateMap['Synchronize with NTP Server'])
         this.isCheck(gateMap['Use FortiGuard Server'])
@@ -168,8 +166,9 @@ new Testcase({
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Dashboard'])
-        this.click(gateMap['Main'])
+        this.click(gateMap['System'])
+        this.wait(1000)
+        this.click(gateMap['Settings'])
         this.wait(3000)
         this.click(gateMap['System Time']) // todo: can't navigate to new href
         this.isSet(gateMap['Time Zone'], "string:04")
