@@ -1,7 +1,23 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
+const program = require('commander');
 const cases = require('./src/cases');
+
+function list(val) {
+    return val.split(',');
+}
+
+program
+    .version(`0.2.0`)
+    .option(`-h, --headless`, `run headless mode`)
+    .option(`-s, --skip <items>`, `add the skip steps`, list)
+    .parse(process.argv);
+
+console.log('skip ', program.skip);
+console.log('headless ', program.headless);
+
+return;
 
 let headless = false;
 let filter = undefined;
