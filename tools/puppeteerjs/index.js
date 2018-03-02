@@ -1,31 +1,9 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
-const program = require('commander');
+
 const cases = require('./src/cases');
-
-function list(val) {
-    return val.split(',');
-}
-
-program
-    .version(`0.2.0`)
-    .option(`-h, --headless`, `run headless mode`)
-    .option(`-s, --skip <items>`, `add the skip steps`, list)
-    .parse(process.argv);
-
-console.log('skip ', program.skip);
-console.log('headless ', program.headless);
-
-return;
-
-let headless = false;
-let filter = undefined;
-if (process.argv.length > 2) {
-    headless = (process.argv[2] === `headless`);
-    filter = process.argv[process.argv.length - 1];
-    console.log(`  filter: ${filter}`);
-};
+const program = require('./src/commander');
 
 (async() => {
     const files = fs.readdirSync('./it');
@@ -44,7 +22,7 @@ if (process.argv.length > 2) {
     let result = undefined
 
     const browser = await puppeteer.launch({
-        headless: headless,
+        headless: program.headless,
         // slowMo: 250,
         args: [
             `--window-size=${width},${height}`
@@ -61,7 +39,7 @@ if (process.argv.length > 2) {
 
     try {
         for (const testcase of cases) {
-            if (filter && !testcase.name.includes(filter)) {
+            if (program.case && !program.case.includes(testcase.name)) {
                 console.log(`  skip ${testcase.name}`)
                 continue
             }
