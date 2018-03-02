@@ -47,6 +47,44 @@ node index.js -h
 5. TODO: run testcases match regular expression:  
 ```
 ```
+6. show verbose log:  
+```
+npm run debug -- --help
+npm run debug -- -c "address new"
+npm run debug -- -c "address new","address delete"
+npm run debug -- -s testcase,deploy
+npm run debug -- -s deploy
+npm run debug -- -s verify
+npm run debug -- -h
+```
+   output like:  
+```
+λ npm run debug -- -c "test"
+
+> puppeteerjs@1.0.0 debug D:\Workspaces\Project\github\node-capwap\tools\puppeteerjs
+> cross-env DEBUG="puppeteer:page,puppeteer:mouse" node index.js "-c" "test"
+
+  -h [false]
+  -s undefined
+  -c test
+  -r undefined
+  load addresses.js
+  load adminSettings.js
+  load advanced.js
+  puppeteer:page page.setViewport({"width":"800","height":"600"}) +0ms
+  puppeteer:page page.setViewport({"width":"1600","height":"900"}) +5ms
+  skip address new
+  skip address delete
+  skip address group new
+  skip address group delete
+  skip admin settings edit
+  skip advanced email service edit security mode none
+  skip advanced email service edit security mode smtps
+  skip advanced email service edit security mode starttls
+  skip advanced time setting use fortiguard
+  skip advanced time setting specify
+  puppeteer:page page.screenshot({"path":"\"D:\\\\Workspaces\\\\Project\\\\github\\\\node-capwap\\\\tools\\\\puppeteerjs\\\\img\\\\result.png\""}) +4ms
+```
 
 ## How do I get result?
 * stdout  
