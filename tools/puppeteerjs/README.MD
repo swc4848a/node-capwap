@@ -7,13 +7,46 @@ Auto test for FortiCloud GUI Config Parts
 * auto run all testcase if developer commit code and give them feedback  
 
 ## How do I get set up?
+* svn co https://scm-yvr-mirror.fortinet.com/svn/svnroot/FGSLog/100/trunk/Others/fgtMgrAutoTest  
 * install [node.js v8.6.0+](https://nodejs.org/en/download/package-manager/)  
 * npm install  
 * change conf/config.js to your own environment url, account, password  
-* run single testcase in debug mode(start Chromium): npm run debug "testcase name"  
-* run group testcases: npm run debug "shared name string"  
-  (eg: "interface" will load all testcases contains "interface xxx")  
-* run all testcases in headless mode: npm run headless  
+
+## How to run testcase?
+1. show help menu:  
+```
+λ node index.js --help
+
+  Usage: index [options]
+
+
+  Options:
+
+    -V, --version          output the version number
+    -h, --headless         run headless mode
+    -s, --skip <steps>     add the skip steps [testcase,deploy,verify]
+    -c, --case <cases>     run single/multi testcases ['case one', 'case two']
+    -r, --regexr <regexr>  run testcases match regular expression
+    -h, --help             output usage information
+```
+2. run single/multi testcaes in debug mode:  
+```
+node index.js -c "address new"
+node index.js -c "address new","address delete"
+```
+3. skip some steps in debug mode:  
+```
+node index.js -s testcase,deploy
+node index.js -s deploy
+node index.js -s verify
+```
+4. run in headless mode:  
+```
+node index.js -h
+```
+5. TODO: run testcases match regular expression:  
+```
+```
 
 ## How do I get result?
 * stdout  
@@ -229,5 +262,4 @@ Please make sure `Redirect to HTTPS` is diabled in System => Settings.
 
 
 ## Todo List
-1. enable/disable cloud/fos config step options  
-2. testcase pause option  
+1. testcase pause option  

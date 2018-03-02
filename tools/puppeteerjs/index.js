@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs');
 
 const cases = require('./src/cases');
-const program = require('./src/commander');
+const commander = require('./src/commander');
+commander.show();
 
 (async() => {
     const files = fs.readdirSync('./it');
@@ -22,7 +23,7 @@ const program = require('./src/commander');
     let result = undefined
 
     const browser = await puppeteer.launch({
-        headless: program.headless,
+        headless: commander.headless(),
         // slowMo: 250,
         args: [
             `--window-size=${width},${height}`
@@ -39,7 +40,7 @@ const program = require('./src/commander');
 
     try {
         for (const testcase of cases) {
-            if (program.case && !program.case.includes(testcase.name)) {
+            if (commander.case() && !commander.case().includes(testcase.name)) {
                 console.log(`  skip ${testcase.name}`)
                 continue
             }
