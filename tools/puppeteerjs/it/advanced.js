@@ -16,7 +16,7 @@ let cloudMap = {
     'Time Zone': "select",
     'Synchronize with NTP Server': "input:checkbox:eq(1)",
     'Use FortiGuard Server': "input:radio:eq(3)~label",
-    'Specify': "input:radio:eq(4)~label",
+    'Specify': "input:radio:eq(1)~label",
     'Sync Interval': "input:eq(57)",
     'Server': "input:eq(51)",
 
