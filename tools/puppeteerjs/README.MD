@@ -283,6 +283,12 @@ console.log(await page.evaluate(`$('input#editor').click()`));
 ```
 #### testcase.capture(filename)
 - `filename` <[string]> The file name to save the image to. The capture type will be inferred from file extension. If no path is provided, the image won't be saved to the disk.
+#### testcase.has(target)
+- `target` <[string]> A [target] to search for element.
+
+```javascript
+this.has(`126.Mail`)
+```
 
 ## Best Practise
 1. first create a new item, edit it and delete it finally so that no side-effect to next testcase.

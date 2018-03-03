@@ -105,6 +105,10 @@ commander.show();
                         result = await page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
                         console.log(`  result: [${result}] expect: [${0}] => ${result === 0 ? 'success' : 'failed'}`)
                         break
+                    case `has`:
+                        result = await page.evaluate(`$(':contains("${item.target}")').length`);
+                        console.log(`  result: [${result}] expect: [${1}] => ${result !== 0 ? 'success' : 'failed'}`)
+                        break
                     default:
                         console.error(`  unsupport action: ${action}`)
                 }

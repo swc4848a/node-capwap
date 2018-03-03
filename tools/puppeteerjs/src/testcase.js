@@ -110,6 +110,9 @@ class Testcase {
     isDelete(target) {
         this.seq.push({ action: `isDelete`, target: target })
     }
+    has(target) {
+        this.seq.push({ action: `has`, target: target })
+    }
 }
 
 module.exports = Testcase
