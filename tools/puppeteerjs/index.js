@@ -90,9 +90,6 @@ async function run(page, testcase) {
     const width = 1600
     const height = 900
 
-    let frame = undefined
-    let result = undefined
-
     const browser = await puppeteer.launch({
         headless: commander.headless(),
         // slowMo: 250,
