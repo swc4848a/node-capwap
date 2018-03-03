@@ -21,8 +21,8 @@ class Testcase {
             this.cloudDeploy()
         }
         if (!(commander.skip() && commander.skip().includes(`verify`))) {
-            this.fosLogin()
-            this.verify()
+            // this.fosLogin()
+            // this.verify()
         }
     }
     cloudLogin() {

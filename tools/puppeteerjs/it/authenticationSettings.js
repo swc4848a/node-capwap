@@ -3,7 +3,7 @@ let Testcase = require('../src/testcase.js');
 let cloudMap = {
     'User & Device': "//div[text()='User & Device']",
     'Authentication Settings': "div.gwt-HTML:contains('Authentication Settings')",
-    'Authentication Timeout': "input.gwt-TextBox",
+    'Authentication Timeout': "input.gwt-TextBox:eq(0)",
     'Protocol Support All': "input:checkbox",
     'Save': "span:contains('Save')",
     'All Checkbox': "input:checkbox",
@@ -27,7 +27,7 @@ new Testcase({
     name: 'authentication settings edit',
     testcase() {
         this.click(cloudMap['Authentication Settings'])
-        this.set(cloudMap['Authentication Timeout'], '11')
+        this.set(cloudMap['Authentication Timeout'], 11)
         this.check(cloudMap['Protocol Support All'])
         this.click(cloudMap['Save'])
     },

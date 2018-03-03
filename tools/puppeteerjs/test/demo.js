@@ -1,30 +1,27 @@
 const Page = require('../src/page');
-const cases = require('./src/cases');
+const cases = require('../src/cases');
+const assert = require('assert');
+const fs = require('fs');
 
-(async() => {
-    const files = fs.readdirSync('./it');
-
-    for (const file of files) {
-        require(`./it/${file}`);
-        console.log(`  load ${file}`);
-    };
-})();
-
-
-let page = new Page();
-
+require('../it/addresses');
 
 describe("Demo suite", function() {
-    this.timeout(0)
+    this.timeout(0);
 
-    await page.setup();
+    let page;
 
-    const testcase = cases[0];
-    // for (const testcase of cases) {
-    it(testcase.name, async function() {
-        await page.run(testcase)
+    before(async function() {
+        page = new Page();
+        await page.setup();
     });
-    // }
 
-    await page.close();
+    after(async function() {
+        await page.close();
+    });
+
+    for (const testcase of cases) {
+        it(testcase.name, async function() {
+            // await page.run(testcase);
+        });
+    }
 });

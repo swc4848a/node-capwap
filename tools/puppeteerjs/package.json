@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": ".\\node_modules\\.bin\\mocha.cmd  --reporter spec",
-    "iostest": ".\\node_modules\\.bin\\mocha  --reporter spec",
+    "linuxtest": "cross-env DEBUG=\"puppeteer:page,puppeteer:mouse\" node_modules/.bin/mocha",
     "debug": "cross-env DEBUG=\"puppeteer:page,puppeteer:mouse\" node index.js"
   },
   "author": "",
