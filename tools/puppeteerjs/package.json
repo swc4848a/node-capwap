@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env DEBUG=\"puppeteer:page,puppeteer:mouse\" node_modules\\.bin\\mocha.cmd",
-    "linuxtest": "cross-env DEBUG=\"puppeteer:page,puppeteer:mouse\" node_modules/.bin/mocha",
+    "test": "node_modules\\.bin\\mocha.cmd",
+    "linuxtest": "node_modules/.bin/mocha",
     "debug": "cross-env DEBUG=\"puppeteer:page,puppeteer:mouse\" node index.js"
   },
   "author": "",
@@ -14,6 +14,7 @@
     "cross-env": "^5.1.3"
   },
   "dependencies": {
+    "chai": "^4.1.2",
     "commander": "^2.14.1",
     "mocha": "^5.0.1",
     "puppeteer": "^1.1.1"

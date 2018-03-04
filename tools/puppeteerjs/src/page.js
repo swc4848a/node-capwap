@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
+const assert = require('chai').assert;
 
 class Page {
     constructor() {
@@ -32,6 +33,8 @@ class Page {
     }
     async run(testcase) {
         for (const item of testcase.seq) {
+            let frame = undefined;
+            let result = undefined;
             switch (item.action) {
                 case `screenshot`:
                     await this.page.screenshot({ path: path.join(__dirname, `/img/${item.filename}`) });
@@ -70,30 +73,34 @@ class Page {
                     await this.page.evaluate(`$("${item.sel}").prop("checked", ${item.val})`)
                     break
                 case `isType`:
-                    frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                    frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                     if (frame) {
                         result = await frame.$eval(`${item.sel}`, el => el.value)
                     } else {
                         result = await this.page.$eval(`${item.sel}`, el => el.value)
                     }
                     console.log(`  result: [${result}] expect: [${item.expect}] => ${result == item.expect ? 'success' : 'failed'}`)
+                    assert.equal(result, item.expect, `${item.sel} should be ${item.expect}`)
                     break
                 case `isCheck`:
-                    frame = page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                    frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                     if (frame) {
                         result = await frame.evaluate(`$('${item.sel}').prop("checked")`)
                     } else {
                         result = await this.page.evaluate(`$('${item.sel}').prop("checked")`)
                     }
                     console.log(`  result: [${result}] expect: [${item.expect}] => ${result === item.expect ? 'success' : 'failed'}`)
+                    assert.equal(result, item.expect, `${item.sel} should be ${item.expect}`)
                     break
                 case `isDelete`:
                     result = await this.page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
                     console.log(`  result: [${result}] expect: [${0}] => ${result === 0 ? 'success' : 'failed'}`)
+                    assert.equal(result, 0, `${item.sel} should be ${0}`)
                     break
                 case `has`:
                     result = await this.page.evaluate(`$(':contains("${item.target}")').length`);
                     console.log(`  result: [${result}] expect: [${1}] => ${result !== 0 ? 'success' : 'failed'}`)
+                    assert.equal(result, 1, `${item.sel} should be ${1}`)
                     break
                 default:
                     console.error(`  unsupport action: ${action}`)
