@@ -1,6 +1,6 @@
 const Config = require('../conf/config')
 const Cases = require('../src/cases')
-const commander = require('../src/commander');
+// const commander = require('../src/commander');
 
 class Testcase {
     constructor(options) {
@@ -12,18 +12,18 @@ class Testcase {
         Cases.push(this)
     }
     setup() {
-        if (!(commander.skip() && commander.skip().includes(`testcase`))) {
+        // if (!(commander.skip() && commander.skip().includes(`testcase`))) {
             this.cloudLogin()
             this.cloudNavigate()
             this.testcase()
-        }
-        if (!(commander.skip() && commander.skip().includes(`deploy`))) {
+        // }
+        // if (!(commander.skip() && commander.skip().includes(`deploy`))) {
             this.cloudDeploy()
-        }
-        if (!(commander.skip() && commander.skip().includes(`verify`))) {
+        // }
+        // if (!(commander.skip() && commander.skip().includes(`verify`))) {
             // this.fosLogin()
-            // this.verify()
-        }
+            this.verify()
+        // }
     }
     cloudLogin() {
         this.goto(Config.cloudUrl)

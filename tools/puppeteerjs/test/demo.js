@@ -2,8 +2,16 @@ const Page = require('../src/page');
 const cases = require('../src/cases');
 const assert = require('assert');
 const fs = require('fs');
+const path = require('path');
 
-require('../it/addresses');
+(() => {
+    const files = fs.readdirSync(path.join(__dirname, '../it'));
+
+    for (const file of files) {
+        require(path.join(__dirname, `../it/${file}`));
+        console.log(`  load ${file}`);
+    };
+})();
 
 describe("Demo suite", function() {
     this.timeout(0);
