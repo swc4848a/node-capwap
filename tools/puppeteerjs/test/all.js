@@ -29,7 +29,7 @@ describe("All Testcases", function() {
 
     for (const testcase of cases) {
         it(testcase.name, async function() {
-            await page.run(testcase);
+            // await page.run(testcase);
         });
     }
 });
