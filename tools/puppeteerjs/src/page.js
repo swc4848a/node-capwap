@@ -28,7 +28,7 @@ class Page {
         });
     }
     async close() {
-        await this.page.screenshot({ path: path.join(__dirname, '../img/result.png') });
+        await this.page.screenshot({ path: path.join(__dirname, '../out/result.png') });
         await this.browser.close();
     }
     async run(testcase) {
@@ -37,7 +37,7 @@ class Page {
             let result = undefined;
             switch (item.action) {
                 case `screenshot`:
-                    await this.page.screenshot({ path: path.join(__dirname, `/img/${item.filename}`) });
+                    await this.page.screenshot({ path: path.join(__dirname, `/out/${item.filename}`) });
                     break
                 case `evaluate`:
                     await this.page.evaluate(`${item.script}`)

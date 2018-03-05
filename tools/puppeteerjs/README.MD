@@ -241,6 +241,14 @@ If there's no element matching `selector`, the method throws an error.
 ```javascript
 this.check(`input#checkbox`)
 ```
+#### testcase.uncheck(selector)
+- `selector` <[string]> A [selector] to search for element to check. If there are multiple elements satisfying the selector, the first will be checked.
+
+If there's no element matching `selector`, the method throws an error.
+
+```javascript
+this.uncheck(`input#checkbox`)
+```
 #### testcase.wait(selectorOrTimeout)
 - `selectorOrTimeout` <[string]|[number]> A [selector] or timeout to wait for
 
