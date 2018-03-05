@@ -7,12 +7,12 @@ class Page {
         this.browser = undefined;
         this.page = undefined;
     }
-    async setup() {
+    async setup(options) {
         const width = 1600
         const height = 900
 
         this.browser = await puppeteer.launch({
-            headless: true,
+            headless: options.headless,
             // slowMo: 250,
             args: [
                 `--window-size=${width},${height}`

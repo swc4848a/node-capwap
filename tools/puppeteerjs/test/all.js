@@ -20,7 +20,7 @@ describe("All Testcases", function() {
 
     before(async function() {
         page = new Page();
-        await page.setup();
+        await page.setup({ headless: true });
     });
 
     after(async function() {

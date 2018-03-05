@@ -18,7 +18,7 @@ commander.show();
 
 (async() => {
     let page = new Page();
-    await page.setup();
+    await page.setup({ headless: commander.headless() });
 
     try {
         for (const testcase of cases) {
