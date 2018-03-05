@@ -7,10 +7,20 @@ Auto test for FortiCloud GUI Config Parts
 * auto run all testcase if developer commit code and give them feedback  
 
 ## How do I get set up?
+### Windows
 * svn co https://scm-yvr-mirror.fortinet.com/svn/svnroot/FGSLog/100/trunk/Others/fgtMgrAutoTest  
 * install [node.js v8.6.0+](https://nodejs.org/en/download/package-manager/)  
 * npm install  
 * change conf/config.js to your own environment url, account, password  
+### Redhat 6.9+
+* svn co https://scm-yvr-mirror.fortinet.com/svn/svnroot/FGSLog/100/trunk/Others/fgtMgrAutoTest  
+* install [node.js v8.6.0+](https://nodejs.org/en/download/package-manager/)  
+* npm install --unsafe-perm  
+* change conf/config.js to your own environment url, account, password  
+* install google-chrome for rhel/centos 6.x/7.x [more](https://intoli.com/blog/installing-google-chrome-on-centos/)  
+```
+curl https://intoli.com/install-google-chrome.sh | bash
+```
 
 ## How to run testcase?
 1. show help menu:  

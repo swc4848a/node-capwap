@@ -11,13 +11,23 @@ class Page {
         const width = 1600
         const height = 900
 
-        this.browser = await puppeteer.launch({
+        let launchOptions = {
             headless: options.headless,
-            // slowMo: 250,
             args: [
                 `--window-size=${width},${height}`
             ]
-        });
+        }
+
+        if (process.platform === `win32`) {
+
+        } else if (process.platform === `linux`) {
+            launchOptions.executablePath = `/usr/bin/google-chrome`
+            launchOptions.args.push(`--no-sandbox`)
+        } else {
+            console.error(`unsupport os ${process.platform}`);
+        }
+
+        this.browser = await puppeteer.launch(launchOptions);
 
         this.page = await this.browser.newPage();
         this.page.on('console', msg => console.log('  page log:', msg.text()));
