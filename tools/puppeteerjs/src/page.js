@@ -63,13 +63,15 @@ class Page {
                     await this.page.type(item.sel, item.val)
                     break
                 case `click`:
+                    frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                    const gui = frame ? frame : this.page;
                     if (item.sel.startsWith(`//`)) {
-                        const elem = await this.page.waitFor(item.sel, { timeout: 10000 })
+                        const elem = await gui.waitFor(item.sel, { timeout: 10000 })
                         await elem.click()
                     } else if (item.sel.includes(`:`)) {
-                        await this.page.evaluate(`$("${item.sel}").click()`)
+                        await gui.evaluate(`$("${item.sel}").click()`)
                     } else {
-                        await this.page.click(item.sel)
+                        await gui.click(item.sel)
                     }
                     break
                 case `wait`:
