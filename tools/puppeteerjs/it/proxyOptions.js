@@ -65,7 +65,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: proxy options edit',
+    name: 'proxy options edit',
     testcase() {
         this.click(cloudMap['Proxy Options'])
 
@@ -132,7 +132,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: proxy options clean',
+    name: 'proxy options clean',
     testcase() {
         this.click(cloudMap['Proxy Options'])
 

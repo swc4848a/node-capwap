@@ -41,7 +41,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: ssl inspection edit',
+    name: 'ssl inspection edit',
     testcase() {
         this.click(cloudMap['SSL Inspection'])
 

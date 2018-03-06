@@ -25,7 +25,7 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'template: Web Profile Overrides edit',
+    name: 'Web Profile Overrides edit',
     testcase() {
         this.click(cloudMap['Web Profile Overrides'])
         this.click(cloudMap['Create New'])
@@ -45,7 +45,7 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'template: Web Profile Overrides delete',
+    name: 'Web Profile Overrides delete',
     testcase() {
         this.click(cloudMap['Web Profile Overrides'])
 
