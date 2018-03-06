@@ -108,9 +108,9 @@ result: [192.168.100.0/255.255.255.0] expect: [192.168.100.0/255.255.255.0] => s
 result: [192.168.100.0/255.255.255.0] expect: [192.168.100.0/255.255.255.0] => failed
 ```
 
-* img  
+* out  
 1. after each testcase run, it will capture final GUI image  
-2. if encounter retry timeout, return failed, check the img/result.png for the specific reason  or use debug mode  
+2. if encounter retry timeout, return failed, check the out/result.png for the specific reason  or use debug mode  
 
 ## Contribution guidelines
 
@@ -315,6 +315,53 @@ this.has(`126.Mail`)
 ## Continuous Integration (TODO)
 1. we use [Jenkins](http://172.16.94.162:8080/job/CfgServerIT) to integrate our framework  
 2. if you commit cfgServer Code or testcases will trigger next build (for now it manually build by root user)  
+
+### Mocha.js Env
+1. all testcases run under mocha mode on jenkins.  
+   if you need test one/multi case please follow mocha command line.  
+```
+[root@localhost fgtMgrAutoTest]# npm run linuxtest -- --grep "address"
+
+> puppeteerjs@1.0.0 linuxtest /var/lib/jenkins/workspace/CfgServerIT/fgtMgrAutoTest
+> mocha "--grep" "address"
+
+  load addresses.js
+  load adminSettings.js
+  load advanced.js
+  load antiVirus.js
+  load applicationControl.js
+  load authenticationSettings.js
+  load customDevicesGroups.js
+  load dns.js
+  load dnsFilter.js
+  load fortiGuard.js
+  load interfaces.js
+  load intrusionProtection.js
+  load ipPools.js
+  load ldapServers.js
+  load proxyOptions.js
+  load radiusServers.js
+  load routing.js
+  load schedules.js
+  load services.js
+  load sslInspection.js
+  load usersGroups.js
+  load virtualIPs.js
+  load webFilter.js
+  load webProfileOverrides.js
+  load webRatingOverrides.js
+
+
+  All Testcases
+    ✓ address new
+    ✓ address delete
+    ✓ address group new
+    ✓ address group delete
+
+
+  4 passing (2s)
+
+```
 
 ## FAQ
 
