@@ -80,7 +80,7 @@ class Testcase {
         this.seq.push({ action: `type`, sel: sel, val: val })
     }
     set(sel, val) {
-        this.seq.push({ action: `type`, sel: sel, val: val })
+        this.seq.push({ action: `set`, sel: sel, val: val })
     }
     check(sel) {
         this.seq.push({ action: `check`, sel: sel, val: true })

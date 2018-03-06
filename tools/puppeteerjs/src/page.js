@@ -47,7 +47,7 @@ class Page {
             let result = undefined;
             switch (item.action) {
                 case `screenshot`:
-                    await this.page.screenshot({ path: path.join(__dirname, `/out/${item.filename}`) });
+                    await this.page.screenshot({ path: path.join(__dirname, `../out/${item.filename}`) });
                     break
                 case `evaluate`:
                     await this.page.evaluate(`${item.script}`)
@@ -55,13 +55,12 @@ class Page {
                 case `goto`:
                     await this.page.goto(item.url)
                     break
+                case `set`:
+                    await this.page.evaluate(`$("${item.sel}").val("${item.val}")`)
+                    break
                 case `type`:
-                    if (item.sel.includes(`:`)) {
-                        await this.page.evaluate(`$("${item.sel}").val("${item.val}")`)
-                    } else {
-                        await this.page.waitFor(item.sel, { timeout: 10000 })
-                        await this.page.type(item.sel, item.val)
-                    }
+                    await this.page.waitFor(item.sel, { timeout: 10000 })
+                    await this.page.type(item.sel, item.val)
                     break
                 case `click`:
                     if (item.sel.startsWith(`//`)) {

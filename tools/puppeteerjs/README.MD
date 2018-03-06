@@ -236,12 +236,21 @@ this.goto(`https://alpha.forticloud.com`)
 ```
 #### testcase.set(selector, text)
 - `selector` <[string]> A [selector] of an element to type into. If there are multiple elements satisfying the selector, the first will be used.
+- `text` <[string]> A text to set into a focused element.
+
+Using jquery val() api to set element value.
+
+```js
+this.set('#mytextarea', 'Hello'); // Types instantly
+```
+#### testcase.type(selector, text)
+- `selector` <[string]> A [selector] of an element to type into. If there are multiple elements satisfying the selector, the first will be used.
 - `text` <[string]> A text to type into a focused element.
 
 Sends a `keydown`, `keypress`/`input`, and `keyup` event for each character in the text.
 
 ```js
-this.set('#mytextarea', 'Hello'); // Types instantly
+this.type('#mytextarea', 'Hello'); // Types instantly
 ```
 #### testcase.check(selector)
 - `selector` <[string]> A [selector] to search for element to check. If there are multiple elements satisfying the selector, the first will be checked.
@@ -312,9 +321,11 @@ this.has(`126.Mail`)
 1. first create a new item, edit it and delete it finally so that no side-effect to next testcase.
 2. complicated testcase need group related action in one testcase, such as create a datasource first and use it in other module, finally remove all  
 
-## Continuous Integration (TODO)
+## Continuous Integration
 1. we use [Jenkins](http://172.16.94.162:8080/job/CfgServerIT) to integrate our framework  
-2. if you commit cfgServer Code or testcases will trigger next build (for now it manually build by root user)  
+2. [mochawesome report](http://172.16.94.162:8080/job/CfgServerIT/HTML_Report/)  
+3. TODO: if you commit cfgServer Code or testcases will trigger next build (for now it manually build by root user)  
+
 
 ### Mocha.js Env
 1. all testcases run under mocha mode on jenkins.  
