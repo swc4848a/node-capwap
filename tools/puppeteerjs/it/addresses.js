@@ -51,7 +51,6 @@ new Testcase({
         this.check(cloudMap['Visibility'])
         this.check(cloudMap['Static Route'])
         this.set(cloudMap['Comments'], "test comments")
-        this.capture('debug.png')
         this.click(cloudMap['Save'])
         this.wait(1000)
         this.click(cloudMap['OK'])

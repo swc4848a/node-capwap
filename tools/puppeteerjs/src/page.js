@@ -47,22 +47,28 @@ class Page {
             let result = undefined;
             switch (item.action) {
                 case `screenshot`:
-                    await this.page.screenshot({ path: path.join(__dirname, `../out/${item.filename}`) });
+                    console.log(`  screenshot ./out/${item.filename}`)
+                    await this.page.screenshot({ path: path.join(__dirname, `../out/${item.filename}`) })
                     break
                 case `evaluate`:
+                    console.log(`  evaluate ${item.script}`)
                     await this.page.evaluate(`${item.script}`)
                     break
                 case `goto`:
+                    console.log(`  goto ${item.url}`)
                     await this.page.goto(item.url)
                     break
                 case `set`:
+                    console.log(`  set ${item.sel} '${item.val}'`)
                     await this.page.evaluate(`$("${item.sel}").val("${item.val}")`)
                     break
                 case `type`:
+                    console.log(`  type ${item.sel} '${item.val}'`)
                     await this.page.waitFor(item.sel, { timeout: 10000 })
                     await this.page.type(item.sel, item.val)
                     break
                 case `click`:
+                    console.log(`  click ${item.sel}`)
                     frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                     const gui = frame ? frame : this.page;
                     if (item.sel.startsWith(`//`)) {
@@ -75,12 +81,15 @@ class Page {
                     }
                     break
                 case `wait`:
+                    console.log(`  wait ${item.timeout}`)
                     await this.page.waitFor(item.timeout)
                     break
                 case `waitFor`:
+                    console.log(`  waitFor ${item.sel} timeout ${item.timeout}`)
                     await this.page.waitFor(item.sel, { timeout: item.timeout })
                     break
                 case `check`:
+                    console.log(`  check ${item.sel} '${item.val}'`)
                     await this.page.evaluate(`$("${item.sel}").prop("checked", ${item.val})`)
                     break
                 case `isType`:
