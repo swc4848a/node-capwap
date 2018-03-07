@@ -87,7 +87,7 @@ class Page {
                     }
                     break
                 case `wait`:
-                    console.log(`  wait ${item.timeout}`)
+                    console.log(`  wait ${item.timeout}ms`)
                     await this.page.waitFor(item.timeout)
                     break
                 case `waitFor`:

@@ -20,10 +20,12 @@ class Testcase {
         }
         if (!(commander.skip() && commander.skip().includes(`deploy`))) {
             this.cloudDeploy()
+            this.cloudLogout()
         }
         if (!(commander.skip() && commander.skip().includes(`verify`))) {
             this.fosLogin()
             this.verify()
+            this.fosLogout()
         }
     }
     cloudLogin() {
@@ -32,6 +34,9 @@ class Testcase {
         this.type(`input[name="password"]`, Config.cloudPassword)
         this.click(`input[type="submit"]`)
         this.wait(3000)
+    }
+    cloudLogout() {
+        this.click(`div[title="Logout"]`)
     }
     cloudNavigate() {
         if (Config.isMultiTenancy) {
@@ -47,7 +52,7 @@ class Testcase {
             this.wait(3000)
         }
     }
-    import() {
+    import () {
         this.click(`//button[text()="Import"]`)
         this.click(`//span[text()="YES"]`)
         this.wait(10000)
@@ -66,6 +71,9 @@ class Testcase {
         this.click(`button#login_button`)
         this.click(`//button[text()="Later"]`)
         this.wait(3000)
+    }
+    fosLogout() {
+        // this.click()
     }
     capture(filename) {
         this.seq.push({ action: `screenshot`, filename: filename })
