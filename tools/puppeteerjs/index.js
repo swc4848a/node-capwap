@@ -20,6 +20,8 @@ commander.show();
 (async() => {
     let page = new Page();
     await page.setup({ headless: commander.headless() });
+    await page.goto();
+    await page.login();
 
     try {
         for (const testcase of cases) {
@@ -28,6 +30,7 @@ commander.show();
                 continue
             }
             console.log(`  run testcase: ${testcase.name}`)
+            await page.goto()
             await page.run(testcase)
         }
     } catch (error) {

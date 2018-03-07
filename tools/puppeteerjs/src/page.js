@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const assert = require('chai').assert;
+const Config = require('../conf/config')
 
 class Page {
     constructor() {
@@ -42,6 +43,16 @@ class Page {
             width: width,
             height: height,
         });
+    }
+    async goto() {
+        await this.page.goto(Config.cloudUrl)
+    }
+    async login() {
+        await this.page.waitFor(3000)
+        await this.page.type(`input#email`, Config.cloudUsername)
+        await this.page.type(`input[name="password"]`, Config.cloudPassword)
+        await this.page.click(`input[type="submit"]`)
+        await this.page.waitFor(3000)
     }
     async close() {
         await this.page.screenshot({ path: path.join(__dirname, '../out/result.png') });
