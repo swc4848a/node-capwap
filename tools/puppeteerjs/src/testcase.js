@@ -37,6 +37,7 @@ class Testcase {
     }
     cloudLogout() {
         this.click(`div[title="Logout"]`)
+        this.wait(10000)
     }
     cloudNavigate() {
         if (Config.isMultiTenancy) {
@@ -63,6 +64,8 @@ class Testcase {
         this.click(`//label[text()="Immediately"]`)
         this.click(`//button[text()="Apply"]`)
         this.wait(`//button[text()="OK"]`)
+        this.click(`//button[text()="OK"]`)
+        this.click(`//span[text()="Close"]`)
     }
     fosLogin() {
         this.goto(Config.fortigateUrl)
