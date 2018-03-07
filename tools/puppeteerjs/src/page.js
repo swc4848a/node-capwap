@@ -34,7 +34,7 @@ class Page {
         this.page.on('console', msg => {
             const message = msg.text()
             if (!(message.includes(`Google Maps API warning`) ||
-                    message.includes(`WANIPBlacklist`))) {
+                message.includes(`WANIPBlacklist`))) {
                 console.log('  page log:', message)
             }
         });
@@ -130,12 +130,22 @@ class Page {
                     assert.equal(result, item.expect, `${item.sel} should be ${item.expect}`)
                     break
                 case `isDelete`:
-                    result = await this.page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
+                    frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                    if (frame) {
+                        result = await frame.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
+                    } else {
+                        result = await this.page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
+                    }
                     console.log(`  result: [${result}] expect: [${0}] => ${result === 0 ? 'success' : 'failed'}`)
                     assert.equal(result, 0, `${item.sel} should be ${0}`)
                     break
                 case `has`:
-                    result = await this.page.evaluate(`$(':contains("${item.target}")').length`);
+                    frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                    if (frame) {
+                        result = await frame.evaluate(`$(':contains("${item.target}")').length`);
+                    } else {
+                        result = await this.page.evaluate(`$(':contains("${item.target}")').length`);
+                    }
                     console.log(`  result: [${result}] expect: [${1}] => ${result !== 0 ? 'success' : 'failed'}`)
                     assert.equal(result, 1, `${item.sel} should be ${1}`)
                     break
