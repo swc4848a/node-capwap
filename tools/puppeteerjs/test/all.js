@@ -22,6 +22,8 @@ describe("All Testcases", function() {
     before(async function() {
         page = new Page();
         await page.setup({ headless: true });
+        await page.goto();
+        await page.login();
     });
 
     after(async function() {
@@ -30,6 +32,7 @@ describe("All Testcases", function() {
 
     for (const testcase of cases) {
         it(testcase.name, async function() {
+            await page.goto();
             await page.run(testcase);
         });
     }
