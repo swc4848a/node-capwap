@@ -15,6 +15,7 @@ class Testcase {
         if (!(commander.skip() && commander.skip().includes(`testcase`))) {
             this.cloudLogin()
             this.cloudNavigate()
+            this.import()
             this.testcase()
         }
         if (!(commander.skip() && commander.skip().includes(`deploy`))) {
@@ -45,6 +46,11 @@ class Testcase {
             this.click(`//div[text()="Management"]`)
             this.wait(3000)
         }
+    }
+    import() {
+        this.click(`//button[text()="Import"]`)
+        this.click(`//span[text()="YES"]`)
+        this.wait(10000)
     }
     cloudDeploy() {
         this.wait(1000)

@@ -44,6 +44,7 @@ new Testcase({
     name: 'address new',
     testcase() {
         this.click(cloudMap['Addresses'])
+        this.wait(300)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Create Address'])
         this.set(cloudMap['Name'], "address new")

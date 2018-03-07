@@ -30,7 +30,12 @@ class Page {
         this.browser = await puppeteer.launch(launchOptions);
 
         this.page = await this.browser.newPage();
-        this.page.on('console', msg => console.log('  page log:', msg.text()));
+        this.page.on('console', msg => {
+            const message = msg.text()
+            if (!message.includes(`Google Maps API warning`)) {
+                console.log('  page log:', message)
+            }
+        });
 
         this.page.setViewport({
             width: width,
