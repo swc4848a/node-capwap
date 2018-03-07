@@ -32,7 +32,8 @@ class Page {
         this.page = await this.browser.newPage();
         this.page.on('console', msg => {
             const message = msg.text()
-            if (!message.includes(`Google Maps API warning`)) {
+            if (!(message.includes(`Google Maps API warning`) ||
+                    message.includes(`WANIPBlacklist`))) {
                 console.log('  page log:', message)
             }
         });

@@ -11,6 +11,7 @@ commander.show();
     const files = fs.readdirSync('./it');
 
     for (const file of files) {
+        if (file.includes(`.svn`)) continue;
         require(`./it/${file}`);
         console.log(`  load ${file}`);
     };

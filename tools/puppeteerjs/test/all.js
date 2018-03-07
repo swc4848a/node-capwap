@@ -8,7 +8,7 @@ const path = require('path');
     const files = fs.readdirSync(path.join(__dirname, '../it'));
 
     for (const file of files) {
-        if (file === `.svn`) continue;
+        if (file.includes(`.svn`)) continue;
         require(path.join(__dirname, `../it/${file}`));
         console.log(`  load ${file}`);
     };
