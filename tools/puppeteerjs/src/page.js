@@ -168,7 +168,7 @@ class Page {
             try {
                 await this.action(item)
             } catch (error) {
-                console.error(`  catch: `, error)
+                console.error(`  catch: ${item.sel} `, error)
                 if (error.message.includes(`waiting failed`) ||
                     error.message.includes(`disabled failed`)) {
                     assert(false, `${item.sel}: ${error.message}`)
