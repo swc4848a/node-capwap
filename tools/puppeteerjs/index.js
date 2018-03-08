@@ -25,7 +25,7 @@ commander.show();
         await page.login();
     }
 
-    try {
+    // try {
         for (const testcase of cases) {
             if (commander.case() && !commander.case().includes(testcase.name)) {
                 console.log(`  skip ${testcase.name}`)
@@ -35,9 +35,9 @@ commander.show();
             await page.goto()
             await page.run(testcase)
         }
-    } catch (error) {
-        console.error(`  catch: `, error)
-    }
+    // } catch (error) {
+    //     console.error(`  catch: `, error)
+    // }
 
     await page.close();
 })();

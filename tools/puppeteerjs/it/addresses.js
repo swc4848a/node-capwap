@@ -1,14 +1,17 @@
 let Testcase = require('../src/testcase.js');
 
+let type = "IP/Netmask"
+let fgtType = "ipmask"
+
+/*
+ * more elements can be tested: "fqdn", "ipRange", "wildcardFqdn"
+ * more UI Objects can be tested: "country", "associatedInterface"
+ */
+	
 let cloudMap = {
     'Addresses': "div.gwt-HTML:contains('Addresses')",
     'Create New': "button:contains('Create New')",
     'Create Address': "div.filter_text:contains('Address'):eq(0)",
-    'Name': "input.gwt-TextBox:eq(0)",
-    'IP/Netmask': "input.gwt-TextBox:eq(1)",
-    'Visibility': "input:checkbox:eq(0)",
-    'Static Route': "input:checkbox:eq(1)",
-    'Comments': "textarea.gwt-TextArea",
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
 
@@ -25,6 +28,7 @@ let cloudMap = {
 
 let gateMap = {
     'Name': "input#name",
+    'Type': "#addr_type",
     'IP/Netmask': "input#ipmask",
     'Visibility': "input#visibility",
     'Static Route': "input#allow-routing",
@@ -44,14 +48,15 @@ new Testcase({
     name: 'address new',
     testcase() {
         this.click(cloudMap['Addresses'])
-        this.wait(300)
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Create Address'])
-        this.set(cloudMap['Name'], "address new")
-        this.set(cloudMap['IP/Netmask'], "192.168.100.100/255.255.255.0")
-        this.check(cloudMap['Visibility'])
-        this.check(cloudMap['Static Route'])
-        this.set(cloudMap['Comments'], "test comments")
+        this.set('#fcld-addressEditor-name', "address new")
+        this.evaluate(`FcldUiTest.setUiObjectValue("addressEditor-type", "${type}")`)
+        this.set('#fcld-addressEditor-subnet', "192.168.102.100/255.255.255.0")
+        this.check('#fcld-addressEditor-visibility > input')
+        this.check('#fcld-addressEditor-allowRouting > input')
+        this.set('#fcld-addressEditor-comment', "test comments")
         this.click(cloudMap['Save'])
         this.wait(1000)
         this.click(cloudMap['OK'])
@@ -64,7 +69,8 @@ new Testcase({
         this.click(gateMap['Edit'])
         this.wait(3000)
         this.isSet(gateMap['Name'], "address new")
-        this.isSet(gateMap['IP/Netmask'], "192.168.100.0/255.255.255.0")
+        this.isSet(gateMap['Type'], fgtType)
+        this.isSet(gateMap['IP/Netmask'], "192.168.102.0/255.255.255.0")
         this.isCheck(gateMap['Visibility'])
         this.isCheck(gateMap['Static Route'])
         this.isSet(gateMap['Comments'], "test comments")
