@@ -22,6 +22,7 @@ describe("All Testcases", function() {
     before(async function() {
         page = new Page();
         await page.setup({ headless: true });
+        // await page.setup({ headless: false });
         await page.goto();
         await page.login();
     });

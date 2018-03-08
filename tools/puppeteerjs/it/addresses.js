@@ -57,6 +57,7 @@ new Testcase({
         this.check('#fcld-addressEditor-visibility > input')
         this.check('#fcld-addressEditor-allowRouting > input')
         this.set('#fcld-addressEditor-comment', "test comments")
+        this.capture('debugAddress.png')
         this.click(cloudMap['Save'])
         this.wait(1000)
         this.click(cloudMap['OK'])
