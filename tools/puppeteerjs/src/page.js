@@ -143,7 +143,7 @@ class Page {
                 } else {
                     result = await this.page.evaluate(`$('div.first-cell span:contains("${item.target}")').length`);
                     if (0 === result) {
-                        result = await frame.evaluate(`$('tr[mkey="${item.target}"]').length`);
+                        result = await this.page.evaluate(`$('tr[mkey="${item.target}"]').length`);
                     }
                 }
                 console.log(`  result: [${result}] expect: [${0}] => ${result === 0 ? 'success' : 'failed'}`)
