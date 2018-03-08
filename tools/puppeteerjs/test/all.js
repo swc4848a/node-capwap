@@ -10,7 +10,7 @@ const path = require('path');
     for (const file of files) {
         if (file.includes(`.svn`)) continue;
         require(path.join(__dirname, `../it/${file}`));
-        console.log(`  load ${file}`);
+        // console.log(`  load ${file}`);
     };
 })();
 
@@ -32,6 +32,7 @@ describe("All Testcases", function() {
 
     for (const testcase of cases) {
         it(testcase.name, async function () {
+            console.log(`  ==> run testcase: ${testcase.name}`)
             await page.goto();
             await page.run(testcase);
         });

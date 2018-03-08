@@ -30,7 +30,7 @@ commander.show();
             // console.log(`  skip ${testcase.name}`)
             continue
         }
-        console.log(`  run testcase: ${testcase.name}`)
+        console.log(`  ==> run testcase: ${testcase.name}`)
         await page.goto()
         await page.run(testcase)
     }

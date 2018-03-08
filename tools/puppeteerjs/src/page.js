@@ -171,8 +171,10 @@ class Page {
                 console.error(`  catch: `, error)
                 if (error.message.includes(`waiting failed`) ||
                     error.message.includes(`disabled failed`)) {
+                    assert(false, `${item.sel}: ${error.message}`)
                     return
                 }
+                assert(false, `${item.sel}: ${error.message}`)
                 // this.page.capture(``)
             }
         }
