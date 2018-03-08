@@ -147,7 +147,7 @@ class Page {
                         result = await this.page.evaluate(`$(':contains("${item.target}")').length`);
                     }
                     console.log(`  result: [${result}] expect: [${1}] => ${result !== 0 ? 'success' : 'failed'}`)
-                    assert.equal(result, 1, `${item.sel} should be ${1}`)
+                    assert(result !== 0, `${item.sel} should not eq 0`)
                     break
                 default:
                     console.error(`  unsupport action: ${action}`)

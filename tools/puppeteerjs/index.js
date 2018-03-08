@@ -20,8 +20,10 @@ commander.show();
 (async() => {
     let page = new Page();
     await page.setup({ headless: commander.headless() });
-    await page.goto();
-    await page.login();
+    if (!(commander.skip() && commander.skip().includes(`testcase`))) {
+        await page.goto();
+        await page.login();
+    }
 
     try {
         for (const testcase of cases) {
