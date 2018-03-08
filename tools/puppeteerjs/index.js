@@ -13,7 +13,7 @@ commander.show();
     for (const file of files) {
         if (file.includes(`.svn`)) continue;
         require(`./it/${file}`);
-        console.log(`  load ${file}`);
+        // console.log(`  load ${file}`);
     };
 })();
 
@@ -25,19 +25,15 @@ commander.show();
         await page.login();
     }
 
-    // try {
-        for (const testcase of cases) {
-            if (commander.case() && !commander.case().includes(testcase.name)) {
-                console.log(`  skip ${testcase.name}`)
-                continue
-            }
-            console.log(`  run testcase: ${testcase.name}`)
-            await page.goto()
-            await page.run(testcase)
+    for (const testcase of cases) {
+        if (commander.case() && !commander.case().includes(testcase.name)) {
+            // console.log(`  skip ${testcase.name}`)
+            continue
         }
-    // } catch (error) {
-    //     console.error(`  catch: `, error)
-    // }
+        console.log(`  run testcase: ${testcase.name}`)
+        await page.goto()
+        await page.run(testcase)
+    }
 
     await page.close();
 })();

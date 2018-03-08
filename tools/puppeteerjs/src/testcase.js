@@ -46,7 +46,7 @@ class Testcase {
     }
     cloudDeploy() {
         this.wait(1000)
-        this.click(`//button[text()="Deploy"]`)
+        this.click(`button:contains('Deploy')`)
         this.click(`//label[text()="Immediately"]`)
         this.click(`//button[text()="Apply"]`)
         this.wait(`//button[text()="OK"]`)
