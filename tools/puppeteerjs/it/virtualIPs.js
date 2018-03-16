@@ -1,5 +1,23 @@
 let Testcase = require('../src/testcase.js');
 
+let name = "virtual ip one";
+let grpName = "VIP group 1";
+let extintf = "wan1";
+let extip0 = "1.1.1.1";
+let extip1 = "2.2.2.2";
+let mappedip0 = "3.3.3.3";
+let mappedip1 = "4.4.4.4";
+let srcAddr1 = "1.1.1.1";
+let srcAddr2 = "2.2.2.2";
+let extport0 = 1;
+let extport1 = 2;
+let portforward = true;
+let protocol = "UDP";
+let mappedport0 = 3;
+let mappedport1 = 4;
+let comment = "test comments";
+let grpComment = "test group comments";
+
 let cloudMap = {
     'Virtual IPs': "div.gwt-HTML:contains('Virtual IPs')",
     'Create New': "button:contains('Create New')",
@@ -13,7 +31,8 @@ let cloudMap = {
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
 
-    'Delete Virtual IP One': "td.left:contains('virtual ip one')~td.right div[title='Delete']",
+    'Delete Virtual IP One': "td.left:contains('" + name + "')~td.right div[title='Delete']",
+    'Delete Virtual IP Group': "td.left:contains('" + grpName + "')~td.right div[title='Delete']",
     'YES': "span:contains('YES')",
 }
 
@@ -39,26 +58,12 @@ let gateMap = {
     'Map to Port Start': "input#mappedport1",
     'Map to Port End': "input#mappedport2",
     'Comments': "textarea#comment",
+    'Group Comments': "textarea#comments",
 
-    'Virtual IP One': "tr[mkey='virtual ip one']",
+    'Virtual IP One': "tr[mkey='" + name + "']",
+    'Virtual IP Group': "tr[mkey='" + grpName + "']",
     'Edit': "button:contains('Edit'):eq(0)",
 }
-
-let name = "virtual ip one";
-let extintf = "wan1";
-let extip0 = "1.1.1.1";
-let extip1 = "2.2.2.2";
-let mappedip0 = "3.3.3.3";
-let mappedip1 = "4.4.4.4";
-let srcAddr1 = "1.1.1.1";
-let srcAddr2 = "2.2.2.2";
-let extport0 = 1;
-let extport1 = 2;
-let portforward = true;
-let protocol = "UDP";
-let mappedport0 = 3;
-let mappedport1 = 4;
-let comment = "test comments";
 
 new Testcase({
     name: 'virtual ip new',
@@ -93,6 +98,7 @@ new Testcase({
     },
     verify() {
         this.click(gateMap['Policy & Objects'])
+        this.wait(2000)
         this.click(gateMap['Virtual IPs'])
         this.wait(5000)
         this.click(gateMap['Virtual IP One'])
@@ -123,7 +129,61 @@ new Testcase({
         this.click(cloudMap['YES'])
     },
     verify() {
+        this.click(gateMap['Policy & Objects'])
+        this.wait(1000)
         this.click(gateMap['Virtual IPs'])
-        this.isDelete(gateMap['Virtual IP One'])
+        this.wait(5000)
+        this.isDelete(name)
+    }
+})
+
+new Testcase({
+    name: 'virtual ip group new',
+    testcase() {
+        
+        this.click(cloudMap['Virtual IPs'])
+        this.wait(1000)
+        this.click(cloudMap['Create New'])
+        this.click(cloudMap['Create Virtual IP Group'])
+
+        this.set('#fcld-vipgrpEditor-name', grpName)
+        this.evaluate(`FcldUiTest.setUiObjectValue("vipgrpEditor-interface", "${extintf}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("vipgrpEditor-member", ["${name}"])`)
+        this.set('#fcld-vipgrpEditor-comment', grpComment)
+
+        this.capture('debugVIPGrp.png')
+        this.click(cloudMap['Save'])
+        this.wait(1000)
+        this.click(cloudMap['OK']) // todo: GUI send two json put when trigger click() event
+        
+    },
+    verify() {
+        this.click(gateMap['Policy & Objects'])
+        this.wait(2000)
+        this.click(gateMap['Virtual IPs'])
+        this.wait(5000)
+        this.click(gateMap['Virtual IP Group'])
+        this.click(gateMap['Edit'])
+        this.wait(3000)
+        this.isSet(gateMap['Name'], grpName)
+        this.has(`${extintf}`)
+        this.has(name)
+        this.isSet(gateMap['Group Comments'], grpComment)
+    }
+})
+
+new Testcase({
+    name: 'virtual ip group delete',
+    testcase() {
+        this.click(cloudMap['Virtual IPs'])
+        this.click(cloudMap['Delete Virtual IP Group'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+        this.click(gateMap['Policy & Objects'])
+        this.wait(1000)
+        this.click(gateMap['Virtual IPs'])
+        this.wait(5000)
+        this.isDelete(grpName)
     }
 })

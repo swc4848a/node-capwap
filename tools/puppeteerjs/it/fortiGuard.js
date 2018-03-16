@@ -2,12 +2,12 @@ let Testcase = require('../src/testcase.js');
 
 let cloudMap = {
     'FortiGuard': "div.gwt-HTML:contains('FortiGuard')",
-    'Accept Push Updates': "input:checkbox:eq(0)~label",
-    'Scheduled Updates': "input:checkbox:eq(1)~label",
-    'Improve IPS Quality': "input:checkbox:eq(2)~label",
-    'Use Extended IPS Signature Package': "input:checkbox:eq(3)~label",
-    'Web Filter Cache': "input:checkbox:eq(4)~label",
-    'Anti-Spam Cache': "input:checkbox:eq(5)~label",
+    'Accept Push Updates': "input:checkbox:eq(0)",
+    'Scheduled Updates': "input:checkbox:eq(1)",
+    'Improve IPS Quality': "input:checkbox:eq(2)",
+    'Use Extended IPS Signature Package': "input:checkbox:eq(3)",
+    'Web Filter Cache': "input:checkbox:eq(4)",
+    'Anti-Spam Cache': "input:checkbox:eq(5)",
     'All Checkbox': "input:checkbox",
 
     'Scheduled Updates Type': "select.gwt-ListBox:eq(0)",
@@ -38,11 +38,16 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'fortigurad edit, enable all checkbox',
+    name: 'fortigurad edit enable all checkbox',
     testcase() {
         this.click(cloudMap['FortiGuard'])
         this.wait(2000)
-        this.check(cloudMap['All Checkbox'])
+        this.check(cloudMap['Accept Push Updates'])
+        this.check(cloudMap['Scheduled Updates'])
+        this.check(cloudMap['Improve IPS Quality'])
+        this.check(cloudMap['Use Extended IPS Signature Package'])
+        this.check(cloudMap['Web Filter Cache'])
+        this.check(cloudMap['Anti-Spam Cache'])
         this.click(cloudMap['Save'])
         this.wait(2000)
     },
@@ -112,11 +117,18 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'fortigurad edit, disable all checkbox',
+    name: 'fortigurad edit disable all checkbox',
     testcase() {
         this.click(cloudMap['FortiGuard'])
-        this.uncheck(cloudMap['All Checkbox'])
-        this.click(cloudMap['Save'])
+        this.wait(2000)
+        this.uncheck(cloudMap['Accept Push Updates'])
+        this.uncheck(cloudMap['Scheduled Updates'])
+        this.uncheck(cloudMap['Improve IPS Quality'])
+        this.uncheck(cloudMap['Use Extended IPS Signature Package'])
+        this.uncheck(cloudMap['Web Filter Cache'])
+        this.uncheck(cloudMap['Anti-Spam Cache'])
+        this.uncheck(cloudMap['Save'])
+        this.wait(2000)
     },
     verify() {
         this.click(gateMap['FortiGuard'])
