@@ -102,6 +102,16 @@ class Page {
                     await gui.click(item.sel)
                 }
                 break
+            case `condClick`:
+                await this.page.waitFor(2000) 
+                if (item.cond == `ifExist`) {
+                    if(await this.page.evaluate(`$('${item.sel}').length`)){
+                        await this.page.evaluate(`$('${item.sel}').click()`)
+                    }
+                } else {
+                    console.error(`  unknown condition ${item.cond} for ${item.sel}`)
+                }
+                break
             case `wait`:
                 console.log(`  wait ${item.timeout}ms`)
                 await this.page.waitFor(item.timeout)

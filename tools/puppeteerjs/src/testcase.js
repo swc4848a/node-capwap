@@ -58,7 +58,7 @@ class Testcase {
         this.type(`input#username`, Config.fortigateUsername)
         this.type(`input#secretkey`, Config.fortigatePassword)
         this.click(`button#login_button`)
-        this.click(`//button[text()="Later"]`)
+        this.condClick(`button:contains("Later")`, `ifExist`)
         this.wait(3000)
     }
     capture(filename) {
@@ -68,7 +68,10 @@ class Testcase {
         this.seq.push({ action: `evaluate`, script: script })
     }
     click(sel) {
-        this.seq.push({ action: `click`, sel: sel })
+        this.seq.push({ action: `click`, sel: sel})
+    }
+    condClick(sel, cond) {
+        this.seq.push({ action: `condClick`, sel: sel, cond: cond})
     }
     goto(url) {
         this.seq.push({ action: `goto`, url: url })
@@ -88,6 +91,22 @@ class Testcase {
     uncheck(sel) {
         this.seq.push({ action: `check`, sel: sel, val: false })
     }
+    readApiData(editor, data) {
+        for (let prop in data) {
+            if (data.hasOwnProperty(prop)) {
+                let value = data[prop];
+                if (typeof value === 'string') {
+                    if (value.startsWith('[') && value.endsWith(']')) {
+                        this.evaluate(`FcldUiTest.setUiObjectValue("${editor}-${prop}", ${value})`)
+                    } else {
+                        this.evaluate(`FcldUiTest.setUiObjectValue("${editor}-${prop}", "${value}")`)
+                    }
+                } else {
+                    this.evaluate(`FcldUiTest.setUiObjectValue("${editor}-${prop}", ${value})`)
+                }
+            }
+        }
+    }
     wait(selectorOrTimeout) {
         if (Number.isInteger(selectorOrTimeout)) {
             this.seq.push({ action: `wait`, timeout: selectorOrTimeout })
@@ -101,8 +120,8 @@ class Testcase {
     isSet(sel, expect) {
         this.seq.push({ action: `isType`, sel: sel, expect: expect })
     }
-    isCheck(sel) {
-        this.seq.push({ action: `isCheck`, sel: sel, expect: true })
+    isCheck(sel, expect) {
+        this.seq.push({ action: `isCheck`, sel: sel, expect: (expect === undefined) ? true : expect })
     }
     isUncheck(sel) {
         this.seq.push({ action: `isCheck`, sel: sel, expect: false })
