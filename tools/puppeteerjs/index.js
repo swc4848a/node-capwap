@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
-
+const chalk = require('chalk');
 const Page = require('./src/page');
 const cases = require('./src/cases');
 const commander = require('./src/commander');
@@ -30,7 +30,7 @@ commander.show();
             // console.log(`  skip ${testcase.name}`)
             continue
         }
-        console.log(`  ==> run testcase: ${testcase.name}`)
+        console.log(chalk`  {blue ==>} run testcase: {blue ${testcase.name}}`)
         await page.goto()
         await page.run(testcase)
     }
