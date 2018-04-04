@@ -23,6 +23,7 @@ class Testcase {
         if (!(commander.skip() && commander.skip().includes(`verify`))) {
             this.fosLogin()
             this.verify()
+            this.fosLogout()
         }
     }
     cloudNavigate() {
@@ -60,6 +61,10 @@ class Testcase {
         this.click(`button#login_button`)
         this.condClick(`button:contains("Later")`, `ifExist`)
         this.wait(3000)
+    }
+    fosLogout() {
+        this.click(`div:contains('admin')`)
+        this.click(`span:contains('Logout')`)
     }
     capture(filename) {
         this.seq.push({ action: `screenshot`, filename: filename })

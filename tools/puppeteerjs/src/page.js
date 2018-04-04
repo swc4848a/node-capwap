@@ -119,8 +119,14 @@ class Page {
                 await this.page.waitFor(item.timeout)
                 break
             case `waitFor`:
+                this.page.waitFor(1000)
+                frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
+                if (frame) {
+                    await frame.waitFor(item.sel, { timeout: item.timeout })
+                } else {
+                    await this.page.waitFor(item.sel, { timeout: item.timeout })
+                }
                 console.log(`  ${chalk.blue('waitFor')} ${item.sel} timeout ${item.timeout}`)
-                await this.page.waitFor(item.sel, { timeout: item.timeout })
                 break
             case `check`:
                 console.log(`  ${chalk.blue('check')} ${item.sel} '${item.val}'`)
@@ -186,10 +192,11 @@ class Page {
                 if (error.message.includes(`waiting failed`) ||
                     error.message.includes(`disabled failed`)) {
                     assert(false, `${item.sel}: ${error.message}`)
-                    return
+                    break
                 }
                 assert(false, `${item.sel}: ${error.message}`)
                 // this.page.capture(``)
+                break
             }
         }
     }
