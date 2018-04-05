@@ -119,6 +119,7 @@ class Page {
                 await this.page.waitFor(item.timeout)
                 break
             case `waitFor`:
+                // wait embedded-iframe render when context change
                 this.page.waitFor(1000)
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 if (frame) {

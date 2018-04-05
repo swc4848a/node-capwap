@@ -338,10 +338,12 @@ this.has(`126.Mail`)
 
 ## FAQ
 
-#### Q: How to handle FortiGate SSL Error When Goto URL First Time?
+#### Q: What kinds of Testcase we should avoid?
 
-Please make sure `Redirect to HTTPS` is diabled in System => Settings.  
+NOT Modify 'System => Settings SSH port/HTTP/HTTPS port/Central Management'  
+Network Static Route => NOT DELETE default route 0.0.0.0/0  
+Network DNS => DNS Servers must change to Use FortiGuard Servers at last step  
 
+REASON: change this kind of critical settings will break the autotest env  
 
 ## Todo List
-1. testcase pause option  
