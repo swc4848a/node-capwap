@@ -1,19 +1,27 @@
-const Config = require('../conf/config')
-const Cases = require('../src/cases')
+const config = require('../conf/config')
+const cases = require('../src/cases')
 const commander = require('../src/commander');
 
 class Testcase {
     constructor(options) {
         this.name = options.name
+        this.category = options.category
         this.testcase = options.testcase
         this.verify = options.verify
         this.seq = []
-        this.setup()
-        Cases.push(this)
+
+        if (this.category === 'Analysis/Reports') {
+            this.analysisReportsSetup()
+            cases.report.push(this)
+        } else {
+            // default category is 'Management'
+            this.managementSetup()
+            cases.cfg.push(this)
+        }
     }
-    setup() {
+    managementSetup() {
         if (!(commander.skip() && commander.skip().includes(`testcase`))) {
-            this.cloudNavigate()
+            this.cloudNavigate('Management')
             this.import()
             this.testcase()
         }
@@ -26,17 +34,21 @@ class Testcase {
             this.fosLogout()
         }
     }
-    cloudNavigate() {
-        if (Config.isMultiTenancy) {
+    analysisReportsSetup() {
+        this.cloudNavigate('Analysis')
+        this.click(`div:contains('Reports')`)
+    }
+    cloudNavigate(module) {
+        if (config.isMultiTenancy) {
             this.wait(3000)
             this.click(`//label[text()="Including lower level"]`)
             this.wait(1000)
-            this.click(`//div[text()="${Config.fortigateSN}"]`)
-            this.click(`//div[text()="Management"]`)
+            this.click(`//div[text()="${config.fortigateSN}"]`)
+            this.click(`//div[text()="${module}"]`)
             this.wait(3000)
         } else {
-            this.click(`//div[text()="${Config.fortigateSN}"]`)
-            this.click(`//div[text()="Management"]`)
+            this.click(`//div[text()="${config.fortigateSN}"]`)
+            this.click(`//div[text()="${module}"]`)
             this.wait(3000)
         }
     }
@@ -55,10 +67,11 @@ class Testcase {
         this.click(`//span[text()="Close"]`)
     }
     fosLogin() {
-        this.goto(Config.fortigateUrl)
-        this.type(`input#username`, Config.fortigateUsername)
-        this.type(`input#secretkey`, Config.fortigatePassword)
+        this.goto(config.fortigateUrl)
+        this.type(`input#username`, config.fortigateUsername)
+        this.type(`input#secretkey`, config.fortigatePassword)
         this.click(`button#login_button`)
+        this.wait(1000)
         this.condClick(`button:contains("Later")`, `ifExist`)
         this.wait(3000)
     }
@@ -82,7 +95,7 @@ class Testcase {
         this.seq.push({ action: `goto`, url: url })
     }
     redirect(url) {
-        this.seq.push({ action: `goto`, url: Config.fortigateUrl + url })
+        this.seq.push({ action: `goto`, url: config.fortigateUrl + url })
     }
     type(sel, val) {
         this.seq.push({ action: `type`, sel: sel, val: val })

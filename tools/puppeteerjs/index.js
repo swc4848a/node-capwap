@@ -8,12 +8,16 @@ const commander = require('./src/commander');
 commander.show();
 
 (async() => {
-    const files = fs.readdirSync('./it');
+    const it = fs.readdirSync('./it');
 
-    for (const file of files) {
-        if (file.includes(`.svn`)) continue;
-        require(`./it/${file}`);
-        // console.log(`  load ${file}`);
+    for (const module of it) {
+        if (module.includes(`.svn`)) continue;
+        const files = fs.readdirSync(`./it/${module}/`);
+        for (const file of files) {
+            if (file.includes(`.svn`)) continue;
+            require(`./it/${module}/${file}`);
+            // console.log(`  load ${module}/${file}`);
+        }
     };
 })();
 
@@ -25,7 +29,17 @@ commander.show();
         await page.login();
     }
 
-    for (const testcase of cases) {
+    for (const testcase of cases.cfg) {
+        if (commander.case() && !commander.case().includes(testcase.name)) {
+            // console.log(`  skip ${testcase.name}`)
+            continue
+        }
+        console.log(chalk`  {blue ==>} run testcase: {blue ${testcase.name}}`)
+        await page.goto()
+        await page.run(testcase)
+    }
+
+    for (const testcase of cases.report) {
         if (commander.case() && !commander.case().includes(testcase.name)) {
             // console.log(`  skip ${testcase.name}`)
             continue

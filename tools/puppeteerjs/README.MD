@@ -79,7 +79,7 @@ result: [192.168.100.0/255.255.255.0] expect: [192.168.100.0/255.255.255.0] => f
 ### Develop your testcases
 * create a testcase source file in it folder and name it with menu label name  
 ```javascript
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Addresses': "div.gwt-HTML:contains('Addresses')",
