@@ -37,6 +37,8 @@ class Testcase {
     analysisReportsSetup() {
         this.cloudNavigate('Analysis')
         this.click(`div:contains('Reports')`)
+        this.testcase()
+        this.verify()
     }
     cloudNavigate(module) {
         if (config.isMultiTenancy) {
@@ -80,34 +82,69 @@ class Testcase {
         this.click(`span:contains('Logout')`)
     }
     capture(filename) {
-        this.seq.push({ action: `screenshot`, filename: filename })
+        this.seq.push({
+            action: `screenshot`,
+            filename: filename
+        })
     }
     evaluate(script) {
-        this.seq.push({ action: `evaluate`, script: script })
+        this.seq.push({
+            action: `evaluate`,
+            script: script
+        })
     }
     click(sel) {
-        this.seq.push({ action: `click`, sel: sel})
+        this.seq.push({
+            action: `click`,
+            sel: sel
+        })
     }
     condClick(sel, cond) {
-        this.seq.push({ action: `condClick`, sel: sel, cond: cond})
+        this.seq.push({
+            action: `condClick`,
+            sel: sel,
+            cond: cond
+        })
     }
     goto(url) {
-        this.seq.push({ action: `goto`, url: url })
+        this.seq.push({
+            action: `goto`,
+            url: url
+        })
     }
     redirect(url) {
-        this.seq.push({ action: `goto`, url: config.fortigateUrl + url })
+        this.seq.push({
+            action: `goto`,
+            url: config.fortigateUrl + url
+        })
     }
     type(sel, val) {
-        this.seq.push({ action: `type`, sel: sel, val: val })
+        this.seq.push({
+            action: `type`,
+            sel: sel,
+            val: val
+        })
     }
     set(sel, val) {
-        this.seq.push({ action: `set`, sel: sel, val: val })
+        this.seq.push({
+            action: `set`,
+            sel: sel,
+            val: val
+        })
     }
     check(sel) {
-        this.seq.push({ action: `check`, sel: sel, val: true })
+        this.seq.push({
+            action: `check`,
+            sel: sel,
+            val: true
+        })
     }
     uncheck(sel) {
-        this.seq.push({ action: `check`, sel: sel, val: false })
+        this.seq.push({
+            action: `check`,
+            sel: sel,
+            val: false
+        })
     }
     readApiData(editor, data) {
         for (let prop in data) {
@@ -127,28 +164,57 @@ class Testcase {
     }
     wait(selectorOrTimeout) {
         if (Number.isInteger(selectorOrTimeout)) {
-            this.seq.push({ action: `wait`, timeout: selectorOrTimeout })
+            this.seq.push({
+                action: `wait`,
+                timeout: selectorOrTimeout
+            })
         } else {
-            this.seq.push({ action: `waitFor`, sel: selectorOrTimeout, timeout: 40000 })
+            this.seq.push({
+                action: `waitFor`,
+                sel: selectorOrTimeout,
+                timeout: 40000
+            })
         }
     }
     isType(sel, expect) {
-        this.seq.push({ action: `isType`, sel: sel, expect: expect })
+        this.seq.push({
+            action: `isType`,
+            sel: sel,
+            expect: expect
+        })
     }
     isSet(sel, expect) {
-        this.seq.push({ action: `isType`, sel: sel, expect: expect })
+        this.seq.push({
+            action: `isType`,
+            sel: sel,
+            expect: expect
+        })
     }
     isCheck(sel, expect) {
-        this.seq.push({ action: `isCheck`, sel: sel, expect: (expect === undefined) ? true : expect })
+        this.seq.push({
+            action: `isCheck`,
+            sel: sel,
+            expect: (expect === undefined) ? true : expect
+        })
     }
     isUncheck(sel) {
-        this.seq.push({ action: `isCheck`, sel: sel, expect: false })
+        this.seq.push({
+            action: `isCheck`,
+            sel: sel,
+            expect: false
+        })
     }
     isDelete(target) {
-        this.seq.push({ action: `isDelete`, target: target })
+        this.seq.push({
+            action: `isDelete`,
+            target: target
+        })
     }
     has(target) {
-        this.seq.push({ action: `has`, target: target })
+        this.seq.push({
+            action: `has`,
+            target: target
+        })
     }
 }
 
