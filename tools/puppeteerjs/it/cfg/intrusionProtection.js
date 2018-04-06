@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Intrusion Protection': "div.gwt-HTML:contains('Intrusion Protection'):eq(0)",

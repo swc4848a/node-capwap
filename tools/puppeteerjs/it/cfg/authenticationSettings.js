@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'User & Device': "//div[text()='User & Device']",

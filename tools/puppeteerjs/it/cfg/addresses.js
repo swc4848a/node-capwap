@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let type = "IP/Netmask"
 let fgtType = "ipmask"

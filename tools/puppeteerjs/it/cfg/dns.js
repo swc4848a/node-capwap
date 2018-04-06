@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'DNS': "div.gwt-HTML:contains('DNS'):eq(0)",

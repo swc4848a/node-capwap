@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Routing': "div.gwt-HTML:contains('Static Routes')",

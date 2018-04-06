@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let name = "trafficShaperShared auto-test"
 let priority = "LOW"

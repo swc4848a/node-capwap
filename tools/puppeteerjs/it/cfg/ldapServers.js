@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'LDAP Servers': "div.gwt-HTML:contains('LDAP Servers')",

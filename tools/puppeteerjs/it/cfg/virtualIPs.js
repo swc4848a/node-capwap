@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let name = "virtual ip one";
 let grpName = "VIP group 1";

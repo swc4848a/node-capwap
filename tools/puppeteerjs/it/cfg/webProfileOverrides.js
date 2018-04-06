@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Web Profile Overrides': "div.gwt-HTML:contains('Web Profile Overrides')",

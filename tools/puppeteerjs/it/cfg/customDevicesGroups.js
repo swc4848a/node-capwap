@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Custom Devices & Groups': "div.gwt-HTML:contains('Custom Devices & Groups')",

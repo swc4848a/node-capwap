@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Admin Settings': "div.gwt-HTML:contains('Settings'):eq(0)",

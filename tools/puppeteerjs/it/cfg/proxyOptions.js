@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Proxy Options': "div.gwt-HTML:contains('Proxy Options'):eq(0)",

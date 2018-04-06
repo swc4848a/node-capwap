@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'AntiVirus': "div.gwt-HTML:contains('AntiVirus')",

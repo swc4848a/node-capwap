@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'RADIUS Servers': "div.gwt-HTML:contains('RADIUS Servers')",

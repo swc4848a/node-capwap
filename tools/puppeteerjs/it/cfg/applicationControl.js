@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Application Control': "div.gwt-HTML:contains('Application Control'):eq(0)",

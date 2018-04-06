@@ -1,4 +1,4 @@
-let Testcase = require('../src/testcase.js');
+let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
     'Web Rating Overrides': "div.gwt-HTML:contains('Web Rating Overrides')",
