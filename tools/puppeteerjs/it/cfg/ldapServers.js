@@ -36,17 +36,16 @@ new Testcase({
     testcase() {
         this.click(cloudMap['LDAP Servers'])
         this.click(cloudMap['Create New'])
-        this.wait(1000)
-        this.set('#fcld-userLdapServersEditor-name', "server one")
-        this.set('#fcld-userLdapServersEditor-serverIp', "3.3.3.3")
-        this.set('#fcld-userLdapServersEditor-serverPort', 100)
-        this.set('#fcld-userLdapServersEditor-cnid', "ldap id")
-        this.set('#fcld-userLdapServersEditor-dn', "ldap dis")
-        this.evaluate(`FcldUiTest.setUiObjectValue("userLdapServersEditor-type", "Anonymous")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userLdapServersEditor-secureConnection", "false")`)
 
-        this.wait(1000)
+        this.set(cloudMap['Name'], "server one")
+        this.set(cloudMap['Server IP/Name'], "3.3.3.3")
+        this.set(cloudMap['Server Port'], 100)
+        this.set(cloudMap['Common Name Identifier'], "ldap id")
+        this.set(cloudMap['Distinguished Name'], "ldap dis")
+        this.check(cloudMap['Secure Connection'])
+
         this.click(cloudMap['Save'])
+        this.wait(2000)
         this.click(cloudMap['OK'])
     },
     verify() {

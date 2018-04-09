@@ -43,7 +43,6 @@ let gateMap = {
 new Testcase({
     name: 'ssl inspection edit',
     testcase() {
-        /* read only, don't test.
         this.click(cloudMap['SSL Inspection'])
 
         this.set(cloudMap['Comments'], "test comemnts")
@@ -54,7 +53,6 @@ new Testcase({
         this.click(cloudMap['Log Invalid Certificates'])
 
         this.click(cloudMap['Save'])
-        */
     },
     verify() {
         this.click(gateMap['SSL Inspection'])

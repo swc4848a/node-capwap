@@ -1,23 +1,4 @@
 let Testcase = require('../../src/testcase.js');
-/**
- * Editor: utmIpsEditor
- * Key/Id: both
- * 	   // "name",
-		"comment",
-		//"entries",
-		//"deepAppInspection",
-		//"allowDNS",
-		//"appReplaceMsg",
- */
-
- let apiData = {
-    // "name",
-		"comment" : "IPS comments"
-		//"entries",
-		//"deepAppInspection",
-		//"allowDNS",
-		//"appReplaceMsg"
-};
 
 let cloudMap = {
     'Intrusion Protection': "div.gwt-HTML:contains('Intrusion Protection'):eq(0)",
@@ -31,41 +12,32 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Security Profiles': "//span[text()='Security Profiles']",
     'Intrusion Protection': "a[ng-href='page/p/utm/ips/sensor/edit/default/']",
     'Comments': "textarea",
-    '3Com.Intelligent.Management.Center.Information.Disclosure': '3Com.Intelligent.Management.Center.Information.Disclosure',
+    '3Com.Intelligent.Management.Center.Information.Disclosure': "section#sig_section tr[mkey='3Com.Intelligent.Management.Center.Information.Disclosure']",
 }
 
 new Testcase({
     name: 'IPS sensor edit',
     testcase() {
         this.click(cloudMap['Intrusion Protection'])
-        this.wait(1000)
 
-        this.readApiData('utmIpsEditor', apiData)
+        this.set(cloudMap['Comments'], "test comments")
 
         this.click(cloudMap['IPS Signatures Add'])
-        this.wait(4000)
         this.click(cloudMap['3Com.Intelligent.Management.Center.Information.Disclosure'])
         this.click(cloudMap['Ok'])
 
-        /*
         this.click(cloudMap['IPS Filters Add'])
         this.click(cloudMap['Set Filter'])
         this.click(cloudMap['Ok'])
-        */
 
-        this.click('#fcld-utmIpsEditor-save');
+        this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Intrusion Protection'])
-        // this.wait("div.section-title:contains(IPS Signatures)")
-        this.wait(20000)
 
-        this.isSet(gateMap['Comments'], apiData['comment'])
+        this.isSet(gateMap['Comments'], "test comments")
         this.has(gateMap['3Com.Intelligent.Management.Center.Information.Disclosure'])
     }
 })
@@ -74,19 +46,16 @@ new Testcase({
     name: 'IPS sensor clean',
     testcase() {
         this.click(cloudMap['Intrusion Protection'])
-        this.wait(500)
+
         this.set(cloudMap['Comments'], "")
         this.click(cloudMap['Signatures Delete'])
 
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
-        this.click(gateMap['Intrusion Protection'])
-        this.wait(20000)
+        this.click('Intrusion Protection')
 
-        this.isSet(gateMap['Comments'], "")
+        this.isSet('Comments', "")
         this.isDelete(gateMap['3Com.Intelligent.Management.Center.Information.Disclosure'])
     }
 })

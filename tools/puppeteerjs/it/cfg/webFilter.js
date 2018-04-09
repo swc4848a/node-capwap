@@ -1,82 +1,5 @@
 let Testcase = require('../../src/testcase.js');
 
-/**
- * Editor: utmWebFilterEditor, apiData)
- * Key/Id: both
- * "ftgdCategoryBasedFilter.status",
-	"ftgdCategoryBasedFilter.filters",
-	"ftgdCategoryBasedFilter.quota",
-	"overrideChecked",
-	"override.groups",
-	"override.profiles",
-	"override.scope",
-	"override.durationMode",
-    "override.duration-day",
-    "override.duration-hour",
-    "override.duration-minute",
-	"searchEngineOptions.safeSearch",
-//		YoutubeEdu("youtube_edu", "YouTube Education Filter"),
-	"searchEngineOptions.youtubeEduationFilterId",
-	"searchEngineOptions.logSearchKeyWords",
-		
-	"staticUrlFilter.blockInvalidURLs",
-	"staticUrlFilter.urlListBySandbox",
-	"staticUrlFilter.urlFiltersEnable",
-	"staticUrlFilter.urlFilters"),
-	"staticUrlFilter.contentFiltersEnable",
-	"staticUrlFilter.contentFilters",
-		
-	"ratingOptions.allowErrorRating",
-	"ratingOptions.rateByDomainAndIp",
-	"ratingOptions.blockRedirectByRating",
-	"ratingOptions.rateImgByURL",
-		
-	"proxyOptions.domainsUseGoogleAccountEnable",
-	"proxyOptions.domainsUseGoogleAccount",
-	"proxyOptions.httpErrorDetail",
-	"proxyOptions.httpPostAction",
-	"proxyOptions.javaFilter",
-	"proxyOptions.activeXFilter",
-	"proxyOptions.cookiesFilter"
- */
-let apiData = {
-    "ftgdCategoryBasedFilter.status" : true,
-	//"ftgdCategoryBasedFilter.filters",
-	//"ftgdCategoryBasedFilter.quota",
-	"overrideChecked" : true,
-	"override.groups" : "['Guest-group', 'SSO_Guest_Users']",
-	"override.profiles" : "monitor-all",
-	"override.scope" : "User Group",
-	"override.durationMode" : "Predefined",
-    "override.duration-day" : 3,
-    "override.duration-hour" : 4,
-    "override.duration-minute" : 5,
-	"searchEngineOptions.safeSearch" : true,
-//		YoutubeEdu("youtube_edu", "YouTube Education Filter"),
-	"searchEngineOptions.youtubeEduationFilterId" : "testId",
-	"searchEngineOptions.logSearchKeyWords" : true,
-		
-	"staticUrlFilter.blockInvalidURLs" : true,
-	"staticUrlFilter.urlListBySandbox" : false,
-	"staticUrlFilter.urlFiltersEnable" : true,
-	//"staticUrlFilter.urlFilters",
-	"staticUrlFilter.contentFiltersEnable" : true,
-	//"staticUrlFilter.contentFilters",
-		
-	"ratingOptions.allowErrorRating" : true,
-	"ratingOptions.rateByDomainAndIp" : true,
-	"ratingOptions.blockRedirectByRating" : false,
-	"ratingOptions.rateImgByURL" : false,
-		
-	"proxyOptions.domainsUseGoogleAccountEnable" : true,
-	//"proxyOptions.domainsUseGoogleAccount",
-	"proxyOptions.httpErrorDetail" : true,
-	"proxyOptions.httpPostAction" : "Block",
-	"proxyOptions.javaFilter" : false,
-	"proxyOptions.activeXFilter" : true,
-	"proxyOptions.cookiesFilter" : false
-};
-
 let cloudMap = {
     'Web Filter': "div.gwt-HTML:contains('Web Filter')",
 
@@ -120,7 +43,6 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Security Profiles': "//span[text()='Security Profiles']",
     'Web Filter': "a[ng-href='page/p/utm/wf/profile/edit/default/']",
 
     'FortiGuard category based filter': "input#ftgd_ftgd_cats",
@@ -143,27 +65,20 @@ let gateMap = {
     'Remove ActiveX': "input#options_activexfilter",
     'Remove Cookies': "input#options_cookiefilter",
 
-    'SSO_Guest_Users': "SSO_Guest_Users",
-    'Guest-group': "span.entry-value span span:contains(Guest-group)",
-    'monitor-all': "monitor-all",
-    'sniffer-profile': "span.entry-value span span:contains(sniffer-profile)",
-    'Category Usage Quota With Discrimination': "td.category:contains(Discrimination)",
+    'SSO_Guest_Users': "span.entry-value:contains('SSO_Guest_Users')",
+    'Guest-group': "span.entry-value:contains('Guest-group')",
+    'monitor-all': "span.entry-value:contains('monitor-all')",
+    'sniffer-profile': "span.entry-value:contains('sniffer-profile')",
+    'Category Usage Quota With Discrimination': "td.category:contains('Discrimination')",
 
-    'Switch applies to': "input[name='override.ovrd-scope']:checked",
-    //'Switch Duration': "input:radio[name='override.ovrd-dur-mode']:checked",
-    'Switch Duration': "input#ovrd-dur-mode-constant",
-    'Duration Days': 'input#override_ovrd-dur_d',
-    'Duration Hours': 'input#override_ovrd-dur_h',
-    'Duration Minutes': 'input#override_ovrd-dur_m'
+    'Switch applies to': "input:radio[name='override.ovrd-scope']:checked",
+    'Switch Duration': "input:radio[name='override.ovrd-dur-mode']:checked",
 }
 
 new Testcase({
     name: 'web filter edit common',
     testcase() {
         this.click(cloudMap['Web Filter'])
-        this.wait(1000)
-        this.readApiData('utmWebFilterEditor', apiData)
-        /*
         this.uncheck(cloudMap['Checkbox All'])
         this.click(cloudMap['FortiGuard category based filter'])
         this.click(cloudMap['Allow All'])
@@ -182,45 +97,26 @@ new Testcase({
         this.click(cloudMap['Remove Java Applets'])
         this.click(cloudMap['Remove ActiveX'])
         this.click(cloudMap['Remove Cookies'])
-        */
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Web Filter'])
-        this.wait(4000)
-    //		YoutubeEdu("youtube_edu", "YouTube Education Filter"),
-        //"searchEngineOptions.youtubeEduationFilterId" : "testId",
-        //"staticUrlFilter.urlFilters",
-        //"staticUrlFilter.contentFilters",
-        //"ratingOptions.blockRedirectByRating" : false,
-        //"proxyOptions.domainsUseGoogleAccount",
-        this.isCheck(gateMap['FortiGuard category based filter'], apiData['ftgdCategoryBasedFilter.status'])
-        this.isCheck(gateMap['Allow users to override blocked categories'], apiData['overrideChecked'])
+        this.isCheck(gateMap['FortiGuard category based filter'])
+        this.isCheck(gateMap['Allow users to override blocked categories'])
         this.has(gateMap['SSO_Guest_Users'])
         this.has(gateMap['monitor-all'])
-        this.isCheck(gateMap['Enforce Safe Search on Google, Yahoo!, Bing, Yandex'], apiData['searchEngineOptions.safeSearch'])
-        this.isCheck(gateMap['Log all search keywords'], apiData['searchEngineOptions.logSearchKeyWords'])
-        this.isCheck(gateMap['Block invalid URLs'], apiData['staticUrlFilter.blockInvalidURLs'])
-        this.isCheck(gateMap['Block malicious URLs discovered by FortiSandbox'], apiData['staticUrlFilter.urlListBySandbox'])
-        this.isCheck(gateMap['Allow websites when a rating error occurs'], apiData['ratingOptions.allowErrorRating'])
-        this.isCheck(gateMap['Rate URLs by domain and IP Address'], apiData['ratingOptions.rateByDomainAndIp'])
-        this.isCheck(gateMap['Rate images by URL'], apiData['ratingOptions.rateImgByURL'])
-        this.isCheck(gateMap['Provide details for blocked HTTP 4xx and 5xx errors'], apiData['proxyOptions.httpErrorDetail'])
-        this.isCheck(gateMap['HTTP POST Action Allow'], apiData['proxyOptions.httpPostAction'] == 'Block')
-        this.isCheck(gateMap['Remove Java Applets'], apiData['proxyOptions.javaFilter'])
-        this.isCheck(gateMap['Remove ActiveX'], apiData['proxyOptions.activeXFilter'])
-        this.isCheck(gateMap['Remove Cookies'], apiData['proxyOptions.cookiesFilter'])
-        this.isCheck(gateMap['Switch Duration'], apiData['override.durationMode'] == "Predefined")
-        this.isCheck(gateMap['URL Filter'], apiData['staticUrlFilter.urlFiltersEnable'])
-        this.isCheck(gateMap['Web Content Filter'], apiData['staticUrlFilter.contentFiltersEnable'])
-        this.isCheck(gateMap['Restrict Google account usage to specific domains'], apiData['proxyOptions.domainsUseGoogleAccountEnable'])
-        let scope = apiData['override.scope'].toLowerCase().replace(/ /g, "-")
-        this.isSet(gateMap['Switch applies to'], scope)
-        this.isSet(gateMap['Duration Days'], apiData['override.duration-day'])
-        this.isSet(gateMap['Duration Hours'], apiData['override.duration-hour'])
-        this.isSet(gateMap['Duration Minutes'], apiData['override.duration-minute'])
+        this.isCheck(gateMap['Enforce Safe Search on Google, Yahoo!, Bing, Yandex'])
+        this.isCheck(gateMap['Log all search keywords'])
+        this.isCheck(gateMap['Block invalid URLs'])
+        this.isCheck(gateMap['Block malicious URLs discovered by FortiSandbox'])
+        this.isCheck(gateMap['Allow websites when a rating error occurs'])
+        this.isCheck(gateMap['Rate URLs by domain and IP Address'])
+        this.isCheck(gateMap['Rate images by URL'])
+        this.isCheck(gateMap['Provide details for blocked HTTP 4xx and 5xx errors'])
+        this.isCheck(gateMap['HTTP POST Action Allow'])
+        this.isCheck(gateMap['Remove Java Applets'])
+        this.isCheck(gateMap['Remove ActiveX'])
+        this.isCheck(gateMap['Remove Cookies'])
     }
 })
 
@@ -235,10 +131,7 @@ new Testcase({
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Web Filter'])
-        this.wait(4000)
         this.has(gateMap['Category Usage Quota With Discrimination'])
     }
 })
@@ -251,10 +144,7 @@ new Testcase({
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Web Filter'])
-        this.wait(4000)
         this.isDelete(gateMap['Category Usage Quota With Discrimination'])
     }
 })
@@ -267,10 +157,7 @@ new Testcase({
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Web Filter'])
-        this.wait(4000)
         this.isSet(gateMap['Switch applies to'], "ask")
         this.isSet(gateMap['Switch Duration'], "ask")
     }
@@ -285,10 +172,7 @@ new Testcase({
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Web Filter'])
-        this.wait(4000)
     }
 })
 
@@ -296,17 +180,11 @@ new Testcase({
     name: 'web filter clean',
     testcase() {
         this.click(cloudMap['Web Filter'])
-        this.wait(1000)
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmWebFilterEditor-ftgdCategoryBasedFilter.status", ${!apiData['ftgdCategoryBasedFilter.status']})`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmWebFilterEditor-overrideChecked", ${!apiData['overrideChecked']})`)
+        this.uncheck('Checkbox All')
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Web Filter'])
-        this.wait(4000)
-        this.isCheck(gateMap['FortiGuard category based filter'], !apiData['ftgdCategoryBasedFilter.status'])
-        this.isCheck(gateMap['Allow users to override blocked categories'], !apiData['overrideChecked'])
+        this.isUncheck(gateMap['Checkbox All'])
     }
 })

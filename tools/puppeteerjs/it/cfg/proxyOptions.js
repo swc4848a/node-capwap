@@ -1,98 +1,5 @@
 let Testcase = require('../../src/testcase.js');
 
-/**
- * Editor: utmProxyOptionsEditor
- * Key/Id: both
-        "oversizeLog",
-	    "rpcOverHttp",
-	    "httpStatus",
-		"httpInspectAll",
-		"httpPorts",
-		"smtpStatus",
-		"smtpInspectAll",
-		"smtpPorts",
-		"pop3Status",
-		"pop3InspectAll",
-		"pop3Ports",
-		"imapStatus",
-		"imapInspectAll",
-		"imapPorts",
-		
-		"ftpStatus",
-		"ftpInspectAll",
-		"ftpPorts",
-		"nntpStatus",
-		"nntpInspectAll",
-		"nntpPorts",
-		
-		"mapiStatus",
-		"mapiPorts",		
-		"dnsStatus",
-		"dnsPorts",
-		
-		"clientcomfort",
-		"comfortInterval",
-		"comfortAmount",
-		
-		"oversize",
-		"oversizeLimit",
-		
-		"chunkedbypass",
-		
-		"fortinetBar",
-		"fortinetBarPort",
-		
-		"fragmail",
-		
-		"mailSignature",
-		"signature"
- */
-let apiData = {
-    "oversizeLog" : true,
-    "rpcOverHttp" : false,
-    "httpStatus" : true,
-    "httpInspectAll" : "Specify",
-    "httpPorts" : 80,
-    "smtpStatus" : true,
-    "smtpInspectAll" : "Specify",
-    "smtpPorts" : 25,
-    "pop3Status" : true,
-    "pop3InspectAll" : "Specify",
-    "pop3Ports" : 110,
-    "imapStatus" : true,
-    "imapInspectAll" : "Specify",
-    "imapPorts" : 143,
-    
-    "ftpStatus" : true,
-    "ftpInspectAll" : "Specify",
-    "ftpPorts" : 21,
-    "nntpStatus" : true,
-    "nntpInspectAll" : "Specify",
-    "nntpPorts" : 119,
-    
-    "mapiStatus" : true,
-    "mapiPorts" : 135,		
-    "dnsStatus" : true,
-    "dnsPorts" : 53,
-    
-    "clientcomfort" : true,
-    "comfortInterval" : 10,
-    "comfortAmount" : 11,
-    
-    "oversize" : true,
-    "oversizeLimit" : 8,
-    
-    "chunkedbypass" : false,
-    
-    "fortinetBar" : true,
-    "fortinetBarPort" : 13,
-    
-    "fragmail" : false,
-    
-    "mailSignature" : true,
-    "signature" : "my signature text"
-};
-
 let cloudMap = {
     'Proxy Options': "div.gwt-HTML:contains('Proxy Options'):eq(0)",
 
@@ -125,36 +32,35 @@ let cloudMap = {
 }
 
 let gateMap = {
-    'Security Profiles': "//span[text()='Security Profiles']",
     'Proxy Options': "a[ng-href='page/p/firewall/proxy_options/edit/default/']",
     'Log Oversized Files': "input#oversize-log",
     'RPC over HTTP': "input#rpc-over-http",
-    'HTTP': "input[name=\\'http.status\\']",
+    'HTTP': "input[name='http.status']",
     'HTTP ports': "input[name='http.ports']",
-    'SMTP': "input[name=\\'smtp.status\\']",
+    'SMTP': "input[name='smtp.status']",
     'SMTP ports': "input[name='smtp.ports']",
-    'POP3': "input[name=\\'pop3.status\\']",
+    'POP3': "input[name='pop3.status']",
     'POP3 ports': "input[name='pop3.ports']",
-    'IMAP': "input[name=\\'imap.status\\']",
+    'IMAP': "input[name='imap.status']",
     'IMAP ports': "input[name='imap.ports']",
-    'FTP': "input[name=\\'ftp.status\\']",
+    'FTP': "input[name='ftp.status']",
     'FTP ports': "input[name='ftp.ports']",
-    'NNTP': "input[name=\\'nntp.status\\']",
+    'NNTP': "input[name='nntp.status']",
     'NNTP ports': "input[name='nntp.ports']",
-    'MAPI': "input[name=\\'mapi.status\\']",
+    'MAPI': "input[name='mapi.status']",
     'MAPI ports': "input[name='mapi.ports']",
-    'DNS': "input[name=\\'dns.status\\']",
+    'DNS': "input[name='dns.status']",
     'DNS ports': "input[name='dns.ports']",
-    'Comfort Clients': "input[name=\\'common.options.clientcomfort\\']",
+    'Comfort Clients': "input[name='common.options.clientcomfort']",
     'Interval(seconds)': "input[name='common.comfort-interval']",
     'Amount(bytes)': "input[name='common.comfort-amount']",
-    'Block Oversized File/Email': "input[name=\\'common.options.oversize\\']",
+    'Block Oversized File/Email': "input[name='common.options.oversize']",
     'Threshold(MB)': "input[name='common.oversize-limit']",
-    'Chunked Bypass': "input[name=\\'http.options.chunkedbypass\\']",
-    'Add Fortinet Bar': "input[name=\\'http.fortinet-bar\\']",
+    'Chunked Bypass': "input[name='http.options.chunkedbypass']",
+    'Add Fortinet Bar': "input[name='http.fortinet-bar']",
     'Communication Port': "input[name='http.fortinet-bar-port']",
-    'Allow Fragmented Messages': "input[name=\\'common.options.fragmail\\']",
-    'Append Signature (SMTP)': "input[name=\\'mail-signature.status\\']",
+    'Allow Fragmented Messages': "input[name='common.options.fragmail']",
+    'Append Signature (SMTP)': "input[name='mail-signature.status']",
     'Email Signature Text': "textarea[name='mail-signature.signature']",
 }
 
@@ -162,8 +68,7 @@ new Testcase({
     name: 'proxy options edit',
     testcase() {
         this.click(cloudMap['Proxy Options'])
-        this.wait(1000)
-        /*
+
         this.click(cloudMap['Log Oversized Files'])
         this.click(cloudMap['RPC over HTTP'])
         this.click(cloudMap['HTTP'])
@@ -189,44 +94,40 @@ new Testcase({
         this.click(cloudMap['Allow Fragmented Messages'])
         this.click(cloudMap['Append Signature (SMTP)'])
         this.set(cloudMap['Email Signature Text'], "Email Signature Text test")
-*/
-        this.readApiData('utmProxyOptionsEditor', apiData)
+
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Proxy Options'])
-        this.wait(1000)
-        this.isCheck(gateMap['Log Oversized Files'], apiData['oversizeLog'])
-        this.isCheck(gateMap['RPC over HTTP'], apiData['rpcOverHttp'])
-        this.isCheck(gateMap['HTTP'], apiData['httpStatus'])
-        this.isSet(gateMap['HTTP ports'], apiData['httpPorts'])
-        this.isCheck(gateMap['SMTP'], apiData['smtpStatus'])
-        this.isSet(gateMap['SMTP ports'], apiData['smtpPorts'])
-        this.isCheck(gateMap['POP3'], apiData['pop3Status'])
-        this.isSet(gateMap['POP3 ports'], apiData['pop3Ports'])
-        this.isCheck(gateMap['IMAP'], apiData['imapStatus'])
-        this.isSet(gateMap['IMAP ports'], apiData['imapPorts'])
-        this.isCheck(gateMap['FTP'], apiData['ftpStatus'])
-        this.isSet(gateMap['FTP ports'], apiData['ftpPorts'])
-        this.isCheck(gateMap['NNTP'], apiData['nntpStatus'])
-        this.isSet(gateMap['NNTP ports'], apiData['nntpPorts'])
-        this.isCheck(gateMap['MAPI'], apiData['mapiStatus'])
-        this.isSet(gateMap['MAPI ports'], apiData['mapiPorts'])
-        this.isCheck(gateMap['DNS'], apiData['dnsStatus'])
-        this.isSet(gateMap['DNS ports'], apiData['dnsPorts'])
-        this.isCheck(gateMap['Comfort Clients'], apiData['clientcomfort'])
-        this.isSet(gateMap['Interval(seconds)'], apiData['comfortInterval'])
-        this.isSet(gateMap['Amount(bytes)'], apiData['comfortAmount'])
-        this.isCheck(gateMap['Block Oversized File/Email'], apiData['oversize'])
-        this.isSet(gateMap['Threshold(MB)'], apiData['oversizeLimit'])
-        this.isCheck(gateMap['Chunked Bypass'], apiData['chunkedbypass'])
-        this.isCheck(gateMap['Add Fortinet Bar'], apiData['fortinetBar'])
-        this.isSet(gateMap['Communication Port'], apiData['fortinetBarPort'])
-        this.isCheck(gateMap['Allow Fragmented Messages'], apiData['fragmail'])
-        this.isCheck(gateMap['Append Signature (SMTP)'], apiData['mailSignature'])
-        this.isSet(gateMap['Email Signature Text'], apiData['signature'])
+        this.isCheck(gateMap['Log Oversized Files'])
+        this.isCheck(gateMap['RPC over HTTP'])
+        this.isCheck(gateMap['HTTP'])
+        this.isSet(gateMap['HTTP ports'], 80)
+        this.isCheck(gateMap['SMTP'])
+        this.isSet(gateMap['SMTP ports'], 25)
+        this.isCheck(gateMap['POP3'])
+        this.isSet(gateMap['POP3 ports'], 110)
+        this.isCheck(gateMap['IMAP'])
+        this.isSet(gateMap['IMAP ports'], 143)
+        this.isCheck(gateMap['FTP'])
+        this.isSet(gateMap['FTP ports'], 21)
+        this.isCheck(gateMap['NNTP'])
+        this.isSet(gateMap['NNTP ports'], 119)
+        this.isCheck(gateMap['MAPI'])
+        this.isSet(gateMap['MAPI ports'], 135)
+        this.isCheck(gateMap['DNS'])
+        this.isSet(gateMap['DNS ports'], 53)
+        this.isCheck(gateMap['Comfort Clients'])
+        this.isSet(gateMap['Interval(seconds)'], 1)
+        this.isSet(gateMap['Amount(bytes)'], 2)
+        this.isCheck(gateMap['Block Oversized File/Email'])
+        this.isSet(gateMap['Threshold(MB)'], 10)
+        this.isCheck(gateMap['Chunked Bypass'])
+        this.isCheck(gateMap['Add Fortinet Bar'])
+        this.isSet(gateMap['Communication Port'], 400)
+        this.isCheck(gateMap['Allow Fragmented Messages'])
+        this.isCheck(gateMap['Append Signature (SMTP)'])
+        this.isSet(gateMap['Email Signature Text'], "Email Signature Text test")
     }
 })
 
@@ -234,22 +135,15 @@ new Testcase({
     name: 'proxy options clean',
     testcase() {
         this.click(cloudMap['Proxy Options'])
-        this.wait(1000)
 
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmProxyOptionsEditor-oversizeLog", ${!apiData['oversizeLog']})`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmProxyOptionsEditor-rpcOverHttp", ${!apiData['rpcOverHttp']})`)
+        this.uncheck(cloudMap['All Checkbox'])
 
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Proxy Options'])
-        this.wait(1000)
-
-        this.isCheck(gateMap['Log Oversized Files'], !apiData['oversizeLog'])
-        this.isCheck(gateMap['RPC over HTTP'], !apiData['rpcOverHttp'])
-        /*
+        this.isUncheck(gateMap['Log Oversized Files'])
+        this.isUncheck(gateMap['RPC over HTTP'])
         this.isUncheck(gateMap['HTTP'])
         this.isUncheck(gateMap['SMTP'])
         this.isUncheck(gateMap['POP3'])
@@ -264,6 +158,5 @@ new Testcase({
         this.isUncheck(gateMap['Add Fortinet Bar'])
         this.isUncheck(gateMap['Allow Fragmented Messages'])
         this.isUncheck(gateMap['Append Signature (SMTP)'])
-        */
     }
 })

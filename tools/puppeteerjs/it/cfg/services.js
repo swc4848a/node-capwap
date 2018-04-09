@@ -1,8 +1,6 @@
 let Testcase = require('../../src/testcase.js');
 
 let cloudMap = {
-
-    'PolicyAndObjects': "div.second_menu_button_on_n",
     'Services': "div.gwt-HTML:contains('Services')",
     'Create New': "button:contains('Create New')",
     'Create Service': "div.filter_text:contains('Service'):eq(0)",
@@ -55,13 +53,11 @@ new Testcase({
         this.click(cloudMap['Services'])
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Create Service'])
-        this.set('#fcld-serviceEditor-name', "w service one")
-        this.set('#fcld-serviceEditor-ipFqdn', "1.1.1.1")
-        this.evaluate(`FcldUiTest.setUiObjectValue("serviceEditor-category", "General")`)
-        //this.evaluate(`FcldUiTest.setUiObjectValue("serviceEditor-protocol", "TCP/UDP/SCTP")`)
+        this.set(cloudMap['Name'], "w service one")
+        this.set(cloudMap['IP/FQDN'], "1.1.1.1")
         this.set(cloudMap['Destination Port Low'], "111")
         this.set(cloudMap['Destination Port High'], "222")
-        this.set('#fcld-serviceEditor-comments', "test comments")
+        this.set(cloudMap['Comments'], "test comments")
         this.click(cloudMap['Save'])
         this.click(cloudMap['OK'])
     },
@@ -94,13 +90,12 @@ new Testcase({
         this.click(cloudMap['Services'])
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Create Service Group'])
-        this.set('#fcld-serviceGroupEditor-name', "group one")
-        this.evaluate(`FcldUiTest.setUiObjectValue("serviceGroupEditor-member", ["HTTP","AFS3"])`)
-        // this.click(cloudMap['Members'])
-        // this.click(cloudMap['Member HTTP'])
-        // this.click(cloudMap['Member FTP'])
-        // this.click(cloudMap['Popup Panel'])
-        this.set('#fcld-serviceGroupEditor-comments', "test comments")
+        this.set(cloudMap['Name'], "group one")
+        this.click(cloudMap['Members'])
+        this.click(cloudMap['Member HTTP'])
+        this.click(cloudMap['Member FTP'])
+        this.click(cloudMap['Popup Panel'])
+        this.set(cloudMap['Comments'], "test comments")
         this.click(cloudMap['Save'])
         this.click(cloudMap['OK'])
     },
@@ -126,19 +121,14 @@ new Testcase({
     }
 })
 
-
-// Test schedule:, create first, then delete
-// if many categories exist, delete one item  maybe throw exception, because gwt framework.
-
 new Testcase({
     name: 'category new',
     testcase() {
-        this.click(cloudMap['PolicyAndObjects'])
         this.click(cloudMap['Services'])
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Create Category'])
-        this.set('#fcld-serviceCategoryEditor-name', "category one")
-        this.set('#fcld-serviceCategoryEditor-comments', "test comments")
+        this.set(cloudMap['Name'], "category one")
+        this.set(cloudMap['Comments'], "test comments")
         this.click(cloudMap['Save'])
         this.click(cloudMap['OK'])
     },
@@ -152,7 +142,6 @@ new Testcase({
 new Testcase({
     name: 'category delete',
     testcase() {
-        this.click(cloudMap['PolicyAndObjects'])
         this.click(cloudMap['Services'])
         this.click(cloudMap['Categories'])
         this.click(cloudMap['Delete Category One'])

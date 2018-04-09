@@ -43,31 +43,19 @@ let gateMap = {
     'Group Name one': "div.cell-collection-member:contains('remote groups one')",
     'Group Name two': "div.cell-collection-member:contains('remote groups two')",
 }
-/*
-Editor: userUserEditor
-Key/Id:
-	i: "name",
-    k: "type",
-    i: "passwd",
-    k: "radiusServer",
-    k: "ldapServer",
-    i: "emailTo",
-    i: "smsPhone",
-    i: "status".
- */
+
 new Testcase({
     name: 'user new',
     testcase() {
         this.click(cloudMap['Users & Groups'])
         this.click(cloudMap['Create New'])
         this.click(cloudMap['User'])
-        this.wait(1000)
-        this.set('#fcld-userUserEditor-name', 'user one')
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserEditor-type", "LDAP User")`)
-        //this.set('#fcld-userUserEditor-passwd', '12345678')
-        this.set('#fcld-userUserEditor-emailTo', 'a@qq.com')
-        this.set('#fcld-userUserEditor-smsPhone', '+16668888888')
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserEditor-status", "false")`)
+
+        this.set(cloudMap['Name'], 'user one')
+        this.set(cloudMap['Password'], '12345678')
+        this.set(cloudMap['Email Address'], 'a@qq.com')
+        this.set(cloudMap['SMS'], '+16668888888')
+        this.check(cloudMap['Enabled'])
 
         this.click(cloudMap['Save'])
         this.click(cloudMap['OK'])
@@ -80,88 +68,23 @@ new Testcase({
         this.isSet(gateMap['User Account Status'], "enable")
     }
 })
-/*
-Editor: userUserGroupEditor
-Key/Id:
-    i: "name",
-    k: "groupType",
-    k: "member",
-    k: "multipleGuestAdd",
-    k: "userId",
-    k: "password",
-    k: "expireType",
-    i: "expire",
-    k: "expireTimeUnit",
-    i: "maxAccounts",
-    k: "userName",
-    k: "sponsorEnable",
-    k: "sponsorRequired",
-    k: "companyEnable",
-    k: "companyRequired",
-    k: "email",
-    k: "mobilePhone"
- */
+
 new Testcase({
-    name: 'user group firewall new',
+    name: 'user group new',
     testcase() {
         this.click(cloudMap['Users & Groups'])
         this.click(cloudMap['Create New'])
         this.click(cloudMap['User Group'])
-        this.wait(1000)
-        this.set('#fcld-userUserGroupEditor-name', 'group one')
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-groupType", "Firewall User Group")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-member", ["guest"])`)
+
+        this.set(cloudMap['Name'], 'group one')
+        this.click(cloudMap['Members'])
+        this.click(cloudMap['guest'])
         // this.hide('Members Panel')
-        // this.click(cloudMap['Remote Groups Add'])
-        // this.set(cloudMap['Remote Groups Group Name one'], 'remote groups one')
-        // this.click(cloudMap['Remote Groups Add'])
-        // this.set(cloudMap['Remote Groups Group Name two'], 'remote groups two')
-        this.wait(1000)
-        this.click(cloudMap['Save'])
-        this.click(cloudMap['OK'])
-    },
-    verify() {
-        this.isSet(gateMap['Group Name'], "group one")
-        this.has(gateMap['Guest Members'])
-        this.has(gateMap['Remote Server windows'])
-        this.has(gateMap['Group Name one'])
-        this.has(gateMap['Group Name two'])
-    }
-})
+        this.click(cloudMap['Remote Groups Add'])
+        this.set(cloudMap['Remote Groups Group Name one'], 'remote groups one')
+        this.click(cloudMap['Remote Groups Add'])
+        this.set(cloudMap['Remote Groups Group Name two'], 'remote groups two')
 
-
-new Testcase({
-    name: 'user group guest new',
-    testcase() {
-        this.click(cloudMap['Users & Groups'])
-        this.click(cloudMap['Create New'])
-        this.click(cloudMap['User Group'])
-        this.wait(1000)
-        this.set('#fcld-userUserGroupEditor-name', 'group one')
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-groupType", "Guest User Group")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-multipleGuestAdd", "false")`)
-
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-userId", "Email")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-password", "Specify")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-expireType", "After First Login")`)
-        this.set('#fcld-userUserGroupEditor-expire', '5')
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-expireTimeUnit", "days")`)
-        this.set('#fcld-userUserGroupEditor-maxAccounts', '5')
-        this.wait(1000)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-userName", "true")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-sponsorEnable", "false")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-companyEnable", "false")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-email", "false")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-mobilePhone", "false")`)
-
-
-        // this.click(cloudMap['guest'])
-        // // this.hide('Members Panel')
-        // this.click(cloudMap['Remote Groups Add'])
-        // this.set(cloudMap['Remote Groups Group Name one'], 'remote groups one')
-        // this.click(cloudMap['Remote Groups Add'])
-        // this.set(cloudMap['Remote Groups Group Name two'], 'remote groups two')
-        this.wait(1000)
         this.click(cloudMap['Save'])
         this.click(cloudMap['OK'])
     },

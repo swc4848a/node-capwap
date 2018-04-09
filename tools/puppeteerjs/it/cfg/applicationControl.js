@@ -1,23 +1,4 @@
 let Testcase = require('../../src/testcase.js');
-/**
- * Editor: "utmApplicationControlEditor"
- * Key/Id: both
-    "name",
-    "comment",
-    //"entries",
-    "deepAppInspection",
-    "allowDNS",
-    "appReplaceMsg"
- */
-let apiData = {
-    "comment" : "test comment",
-    "deepAppInspection" : false,
-    "allowDNS" : true,
-    "appReplaceMsg" : true
-};
-let elmData = {
-
-};
 
 let cloudMap = {
     'Application Control': "div.gwt-HTML:contains('Application Control'):eq(0)",
@@ -50,25 +31,23 @@ new Testcase({
     name: 'application control edit',
     testcase() {
         this.click(cloudMap['Application Control'])
-        this.wait(1000)
-        this.readApiData('utmApplicationControlEditor', apiData)
+        this.set(cloudMap['Comments'], "test comments")
         this.click(cloudMap['Allow All'])
         this.click(cloudMap['Add Signature'])
-        this.wait(5000)
         this.click(cloudMap['Signature 126.mail'])
         this.click(cloudMap['Ok'])
+        this.check(cloudMap['Checkbox All'])
         this.click(cloudMap['Save'])
     },
     verify() {
         this.click(gateMap['Security Profiles'])
-        this.wait(1000)
         this.click(gateMap['Application Control'])
-        this.wait(8000)
-        this.isSet(gateMap['Comments'], apiData['comment'])
+        this.wait(5000)
+        this.isSet(gateMap['Comments'], "test comments")
         // this.has('')
         this.has('126.Mail')
-        this.isCheck(gateMap['Allow and Log DNS Traffic'], apiData['allowDNS'])
-        this.isCheck(gateMap['Replacement Messages for HTTP-based Applications'], apiData['appReplaceMsg'])
+        this.isCheck(gateMap['Allow and Log DNS Traffic'])
+        this.isCheck(gateMap['Replacement Messages for HTTP-based Applications'])
     }
 })
 
@@ -76,22 +55,14 @@ new Testcase({
     name: 'application control clean',
     testcase() {
         this.click(cloudMap['Application Control'])
-        this.wait(1000)
-
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmApplicationControlEditor-comment", "")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmApplicationControlEditor-allowDNS", ${!apiData['allowDNS']})`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmApplicationControlEditor-appReplaceMsg", ${!apiData['appReplaceMsg']})`)
-
+        this.uncheck(cloudMap['Checkbox All'])
         this.click(cloudMap['Save'])
     },
     verify() {
         this.click(gateMap['Security Profiles'])
-        this.wait(500)
         this.click(gateMap['Application Control'])
-        this.wait(8000)
-
-        this.isSet(gateMap['Comments'], '')
-        this.isCheck(gateMap['Allow and Log DNS Traffic'], !apiData['allowDNS'])
-        this.isCheck(gateMap['Replacement Messages for HTTP-based Applications'], !apiData['appReplaceMsg'])
+        this.wait(5000)
+        this.isUncheck(gateMap['Allow and Log DNS Traffic'])
+        this.isUncheck(gateMap['Replacement Messages for HTTP-based Applications'])
     }
 })
