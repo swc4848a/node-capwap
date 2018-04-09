@@ -12,7 +12,7 @@ const path = require('path');
         for (const file of files) {
             if (file.includes(`.svn`)) continue;
             require(`../it/${module}/${file}`);
-            console.log(`  load ${module}/${file}`);
+            // console.log(`  load ${module}/${file}`);
         }
     };
 })();

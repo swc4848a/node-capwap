@@ -21,6 +21,7 @@ let cloudMap = {
     'YES': "span:contains('YES')",
 
     'Create Address Group': "div.filter_text:contains('Address'):eq(1)",
+    'Name': "input.gwt-TextBox",
     'Members': "div.gwt-HTML:contains(' - ')",
     'all': "div.gwt-HTML:contains('all'):eq(0)",
     'Popup Pannel': "div.gwt-DecoratedPopupPanel",

@@ -3,33 +3,12 @@ let Testcase = require('../../src/testcase.js');
 let cloudMap = {
     'Interfaces': "div.gwt-HTML:contains('Interfaces')",
     'Create New': "button:contains('Create New')",
-    'Interface Name': "input.gwt-TextBox:eq(0)",
-    'Alias': "input.gwt-TextBox:eq(1)",
-    'Type': "select.gwt-ListBox:eq(0)",
-    'VLAN ID': "select.gwt-ListBox:eq(2)",
-    'Role': "select.gwt-ListBox:eq(3)",
-    'Address Mode Manual': "input[value='STATIC']",
-    'Address Mode DHCP': "input[value='DHCP']~label",
-    'Distance': "td>input:eq(2)",
-    'IP/Netmask': "input.gwt-TextBox:eq(2)",
-    'Device Detection': "input:checkbox:eq(12)",
-    'Device Detection for dhcp mode': "input:checkbox:eq(13)",
-    'Miscellaneous Block': "input:radio[value='BLOCK']",
-    'Miscellaneous Monitor': "input:radio[value='MONITOR']",
-    'Interface Status Disable': "input:radio[value='DOWN']",
-    'Comments': "textarea.gwt-TextArea",
     'Save': "button:contains('Save')",
-
-    'Delete for interface manual': "tr.disabled:contains('interface man') div[title='Delete']",
-    'Delete for interface dhcp': "tr.disabled:contains('interface dhcp') div[title='Delete']",
-    'Delete for interface loopback': "tr.disabled:contains('interface loop') div[title='Delete']",
-    'Delete for interface wan': "tr.disabled:contains('interface wan') div[title='Delete']",
-    'Delete for interface dmz': "tr.disabled:contains('interface dmz') div[title='Delete']",
-    'Delete for interface undef': "tr.disabled:contains('interface undef') div[title='Delete']",
     'YES': "span:contains('YES')",
 }
 
 let gateMap = {
+    'Network': "//span[text()='Network']",
     'Interfaces': "a[ng-href='page/p/system/interface/']",
     'Interface Name': "input#name",
     'Type': "input#type",
@@ -54,295 +33,386 @@ let gateMap = {
     'Edit': "button span:contains('Edit'):eq(0)",
 }
 
+let interfaceName = "interface man"
+let interfaceNameAlias = "alias manual"
+
 new Testcase({
-    name: 'interface manual new',
+    name: 'interface_type_vlan new',
     testcase() {
         this.click(cloudMap['Interfaces'])
         this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface man")
-        this.set(cloudMap['Alias'], "alias manual")
-        this.check('Address Mode Manual')
-        this.set(cloudMap['IP/Netmask'], "1.1.1.1/24")
-        this.check('Device Detection')
-        this.check('Miscellaneous Block')
-        this.check('Interface Status Disable')
-        this.set(cloudMap['Comments'], "test comments")
+
+        this.wait(1000)
+        this.set('#fcld-interfaceEditor-name', interfaceName)
+        this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "VLAN")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-physIntf", "wan1")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "WAN")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-vlanid", "2048")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "DHCP")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDefaultgw", "false")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDnsServerOverride", "false")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-miscScanGroup", "Monitor")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Disable")`)
+
+        this.set('#fcld-interfaceEditor-comments', "test comments")
+        this.wait(1000)
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.isSet(gateMap['Interface Name'], "interface man")
-        this.isSet(gateMap['Alias'], "alias manual")
+
+        this.click(gateMap['Network'])
+        this.wait(500)
+        this.click(gateMap['Interfaces'])
+        this.wait(1000)
+        this.has(interfaceName)
+        this.has(interfaceNameAlias)
         // this.isSet(gateMap['Address Mode Manual', "static")
-        this.isSet(gateMap['IP/Netmask'], "1.1.1.1/255.255.255.0")
+        //this.isSet(gateMap['IP/Netmask'], "1.1.1.1/255.255.255.0")
         // this.isCheck('Device Detection')
         // this.isCheck('Miscellaneous Block')
-        this.isCheck(gateMap['Interface Status Disable'])
-        this.isSet(gateMap['Comments'], "test comments")
+        //this.isCheck(gateMap['Interface Status Disable'])
+        //this.isSet(gateMap['Comments'], "test comments")
+    }
+})
+
+
+
+new Testcase({
+    name: 'interface_type_lookback new',
+    testcase() {
+        this.click(cloudMap['Interfaces'])
+        this.click(cloudMap['Create New'])
+
+        this.wait(1000)
+        this.set('#fcld-interfaceEditor-name', interfaceName)
+        this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
+
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "Loopback Interface")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "DMZ")`)
+        this.set('#fcld-interfaceEditor-ipNetMask', "1.1.1.1/255.255.255.0")
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-allowAccess", ["HTTPS","SSH"])`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Enable")`)
+        this.set('#fcld-interfaceEditor-comments', "test comments")
+
+        this.wait(1000)
+        this.click(cloudMap['Save'])
+    },
+    verify() {
+
+        this.click(gateMap['Network'])
+        this.wait(500)
+        this.click(gateMap['Interfaces'])
+        this.wait(1000)
+        this.has(interfaceName)
+        this.has(interfaceNameAlias)
+    }
+})
+
+
+new Testcase({
+    name: 'interface_type_hardware_switch new',
+    testcase() {
+        this.click(cloudMap['Interfaces'])
+        this.click(cloudMap['Create New'])
+
+        this.wait(1000)
+        this.set('#fcld-interfaceEditor-name', interfaceName)
+        this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
+
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "Hardware Switch")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "DMZ")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "Dedicated to FortiSwitch")`)
+        this.set('#fcld-interfaceEditor-ipNetMask', "1.1.1.1/255.255.255.0")
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-autoAuthDevices", "true")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-allowAccess", ["HTTPS","SSH"])`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Enable")`)
+        this.set('#fcld-interfaceEditor-comments', "test comments")
+
+        this.wait(1000)
+        this.click(cloudMap['Save'])
+    },
+    verify() {
+
+        this.click(gateMap['Network'])
+        this.wait(500)
+        this.click(gateMap['Interfaces'])
+        this.wait(1000)
+        this.has(interfaceName)
+        this.has(interfaceNameAlias)
     }
 })
 
 new Testcase({
-    name: 'interface manual delete',
+    name: 'interface delete',
     testcase() {
+        this.wait(1000)
         this.click(cloudMap['Interfaces'])
         this.click(cloudMap['Delete for interface manual'])
         this.click(cloudMap['YES'])
     },
     verify() {
+
+        this.click(gateMap['Network'])
+        this.wait(500)
         this.click(gateMap['Interfaces'])
-        this.isDelete(gateMap['interface man'])
+        this.wait(1000)
+        //todo isDelete now work now.
+        this.isDelete(interfaceName)
     }
 })
 
-new Testcase({
-    name: 'interface dhcp new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface dhcp")
-        this.set(cloudMap['Alias'], "alias dhcp")
-        this.set(cloudMap['VLAN ID'], 2)
-        this.click(cloudMap['Address Mode DHCP'])
-        this.set(cloudMap['Distance'], 100)
-        this.check('Device Detection for dhcp mode')
-        this.check('Miscellaneous Monitor')
-        this.check('Interface Status Disable')
-        this.set(cloudMap['Comments'], "test comments")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.isSet(gateMap['Interface Name'], "interface dhcp")
-        this.isSet(gateMap['Alias'], "alias dhcp")
-        this.isSet(gateMap['VLAN ID'], 2)
-        this.isSet(gateMap['Address Mode DHCP'], "dhcp")
-        this.isSet(gateMap['Distance'], 100)
-        this.isCheck('Device Detection')
-        this.isCheck('Miscellaneous Monitor')
-        this.isCheck('Interface Status Disable')
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
-new Testcase({
-    name: 'interface dhcp delete',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface dhcp'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-        this.click(gateMap['Interfaces'])
-        this.isDelete(gateMap['interface dhcp'])
-    }
-})
-
-new Testcase({
-    name: 'interface loopback new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface loop")
-        this.set(cloudMap['Alias'], "alias loop")
-        this.set(cloudMap['Type'], "LOOPBACK")
-        // this.check('Device Detection') // todo: GUI bug, no device detection
-        this.check('Miscellaneous Monitor')
-        this.check('Interface Status Disable')
-        this.set(cloudMap['Comments'], "test comments")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.isSet(gateMap['Interface Name'], "interface loop")
-        this.isSet(gateMap['Alias'], "alias loop")
-        this.isSet(gateMap['Type'], "loopback")
-        this.isCheck('Miscellaneous Monitor')
-        this.isCheck('Interface Status Disable')
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
-new Testcase({
-    name: 'interface loopback delete',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface loopback'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-        this.click(gateMap['Interfaces'])
-        this.isDelete(gateMap['interface loop'])
-    }
-})
-
-// todo: Physical Interface Members need validataion
-new Testcase({
-    name: 'interface hardswitch new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface hard")
-        this.set(cloudMap['Alias'], "alias hard")
-        this.set(cloudMap['Type'], "HARD_SWITCH")
-        this.check(cloudMap['Address Mode DHCP'])
-        this.check(cloudMap['Device Detection'])
-        this.check(cloudMap['Miscellaneous Monitor'])
-        this.check(cloudMap['Interface Status Disable'])
-        this.set(cloudMap['Comments'], "test comments")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.isSet(gateMap['Interface Name'], "interface hard")
-        this.isSet(gateMap['Alias'], "alias hard")
-        this.isSet(gateMap['Type'], "HARD_SWITCH")
-        this.isCheck('Address Mode DHCP')
-        this.isCheck('Device Detection')
-        this.isCheck('Miscellaneous Monitor')
-        this.isCheck('Interface Status Disable')
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
-// todo: Attribute 'interface' MUST be set.
-new Testcase({
-    name: 'interface softswitch new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface soft")
-        this.set(cloudMap['Alias'], "alias soft")
-        this.set(cloudMap['Type'], "SWITCH")
-        this.check('Address Mode DHCP')
-        this.check('Device Detection')
-        this.check('Miscellaneous Monitor')
-        this.check('Interface Status Disable')
-        this.set(cloudMap['Comments'], "test comments")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.isSet(gateMap['Interface Name'], "interface soft")
-        this.isSet(gateMap['Alias'], "alias soft")
-        this.isSet(gateMap['Type'], "SWITCH")
-        this.isCheck('Address Mode DHCP')
-        this.isCheck('Device Detection')
-        this.isCheck('Miscellaneous Monitor')
-        this.isCheck('Interface Status Disable')
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
-new Testcase({
-    name: 'interface wan new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface wan")
-        this.set(cloudMap['Alias'], "alias wan")
-        this.set(cloudMap['VLAN ID'], 5)
-        this.set(cloudMap['Role'], "WAN")
-        this.check('Miscellaneous Monitor')
-        this.check('Interface Status Disable')
-        this.set(cloudMap['Comments'], "test comments")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.isSet(gateMap['Interface Name'], "interface wan")
-        this.isSet(gateMap['Alias'], "alias wan")
-        this.isSet(gateMap['VLAN ID'], 5)
-        this.isSet(gateMap['Role'], "wan")
-        this.isCheck('Miscellaneous Monitor')
-        this.isCheck('Interface Status Disable')
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
-new Testcase({
-    name: 'interface wan delete',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface wan'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-        this.click(gateMap['Interfaces'])
-        this.isDelete(gateMap['interface wan'])
-    }
-})
-
-new Testcase({
-    name: 'interface dmz new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface dmz")
-        this.set(cloudMap['Alias'], "alias dmz")
-        this.set(cloudMap['VLAN ID'], 3)
-        this.set(cloudMap['Role'], "DMZ")
-        this.check('Device Detection')
-        this.check('Miscellaneous Monitor')
-        this.check('Interface Status Disable')
-        this.set(cloudMap['Comments'], "test comments")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.isSet(gateMap['Interface Name'], "interface dmz")
-        this.isSet(gateMap['Alias'], "alias dmz")
-        this.isSet(gateMap['VLAN ID'], 3)
-        this.isSet(gateMap['Role'], "dmz")
-        this.isCheck('Device Detection')
-        this.isCheck('Miscellaneous Monitor')
-        this.isCheck('Interface Status Disable')
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
-new Testcase({
-    name: 'interface dmz delete',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface dmz'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-        this.click(gateMap['Interfaces'])
-        this.isDelete(gateMap['interface dmz'])
-    }
-})
-
-new Testcase({
-    name: 'interface undef new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-        this.set(cloudMap['Interface Name'], "interface undef")
-        this.set(cloudMap['Alias'], "alias undefined")
-        this.set(cloudMap['VLAN ID'], 4)
-        this.set(cloudMap['Role'], "UNDEFINED")
-        this.check('Device Detection')
-        this.check('Miscellaneous Monitor')
-        this.check('Interface Status Disable')
-        this.set(cloudMap['Comments'], "test comments")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.isSet(gateMap['Interface Name'], "interface undef")
-        this.isSet(gateMap['Alias'], "alias undefined")
-        this.isSet(gateMap['VLAN ID'], 4)
-        this.isSet(gateMap['Role'], "undefined")
-        this.isCheck('Device Detection')
-        this.isCheck('Miscellaneous Monitor')
-        this.isCheck('Interface Status Disable')
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
-new Testcase({
-    name: 'interface undef delete',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface undef'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-        this.click(gateMap['Interfaces'])
-        this.isDelete(gateMap['interface undef'])
-    }
-})
+// new Testcase({
+//     name: 'interface dhcp new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+//         this.set(cloudMap['Interface Name'], "interface dhcp")
+//         this.set(cloudMap['Alias'], "alias dhcp")
+//         this.set(cloudMap['VLAN ID'], 2)
+//         this.click(cloudMap['Address Mode DHCP'])
+//         this.set(cloudMap['Distance'], 100)
+//         this.check('Device Detection for dhcp mode')
+//         this.check('Miscellaneous Monitor')
+//         this.check('Interface Status Disable')
+//         this.set(cloudMap['Comments'], "test comments")
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.isSet(gateMap['Interface Name'], "interface dhcp")
+//         this.isSet(gateMap['Alias'], "alias dhcp")
+//         this.isSet(gateMap['VLAN ID'], 2)
+//         this.isSet(gateMap['Address Mode DHCP'], "dhcp")
+//         this.isSet(gateMap['Distance'], 100)
+//         this.isCheck('Device Detection')
+//         this.isCheck('Miscellaneous Monitor')
+//         this.isCheck('Interface Status Disable')
+//         this.isSet(gateMap['Comments'], "test comments")
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface dhcp delete',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Delete for interface dhcp'])
+//         this.click(cloudMap['YES'])
+//     },
+//     verify() {
+//         this.click(gateMap['Interfaces'])
+//         this.isDelete(gateMap['interface dhcp'])
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface loopback new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+//         this.set(cloudMap['Interface Name'], "interface loop")
+//         this.set(cloudMap['Alias'], "alias loop")
+//         this.set(cloudMap['Type'], "LOOPBACK")
+//         // this.check('Device Detection') // todo: GUI bug, no device detection
+//         this.check('Miscellaneous Monitor')
+//         this.check('Interface Status Disable')
+//         this.set(cloudMap['Comments'], "test comments")
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.isSet(gateMap['Interface Name'], "interface loop")
+//         this.isSet(gateMap['Alias'], "alias loop")
+//         this.isSet(gateMap['Type'], "loopback")
+//         this.isCheck('Miscellaneous Monitor')
+//         this.isCheck('Interface Status Disable')
+//         this.isSet(gateMap['Comments'], "test comments")
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface loopback delete',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Delete for interface loopback'])
+//         this.click(cloudMap['YES'])
+//     },
+//     verify() {
+//         this.click(gateMap['Interfaces'])
+//         this.isDelete(gateMap['interface loop'])
+//     }
+// })
+//
+// // todo: Physical Interface Members need validataion
+// new Testcase({
+//     name: 'interface hardswitch new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+//         this.set(cloudMap['Interface Name'], "interface hard")
+//         this.set(cloudMap['Alias'], "alias hard")
+//         this.set(cloudMap['Type'], "HARD_SWITCH")
+//         this.check(cloudMap['Address Mode DHCP'])
+//         this.check(cloudMap['Device Detection'])
+//         this.check(cloudMap['Miscellaneous Monitor'])
+//         this.check(cloudMap['Interface Status Disable'])
+//         this.set(cloudMap['Comments'], "test comments")
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.isSet(gateMap['Interface Name'], "interface hard")
+//         this.isSet(gateMap['Alias'], "alias hard")
+//         this.isSet(gateMap['Type'], "HARD_SWITCH")
+//         this.isCheck('Address Mode DHCP')
+//         this.isCheck('Device Detection')
+//         this.isCheck('Miscellaneous Monitor')
+//         this.isCheck('Interface Status Disable')
+//         this.isSet(gateMap['Comments'], "test comments")
+//     }
+// })
+//
+// // todo: Attribute 'interface' MUST be set.
+// new Testcase({
+//     name: 'interface softswitch new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+//         this.set(cloudMap['Interface Name'], "interface soft")
+//         this.set(cloudMap['Alias'], "alias soft")
+//         this.set(cloudMap['Type'], "SWITCH")
+//         this.check('Address Mode DHCP')
+//         this.check('Device Detection')
+//         this.check('Miscellaneous Monitor')
+//         this.check('Interface Status Disable')
+//         this.set(cloudMap['Comments'], "test comments")
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.isSet(gateMap['Interface Name'], "interface soft")
+//         this.isSet(gateMap['Alias'], "alias soft")
+//         this.isSet(gateMap['Type'], "SWITCH")
+//         this.isCheck('Address Mode DHCP')
+//         this.isCheck('Device Detection')
+//         this.isCheck('Miscellaneous Monitor')
+//         this.isCheck('Interface Status Disable')
+//         this.isSet(gateMap['Comments'], "test comments")
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface wan new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+//         this.set(cloudMap['Interface Name'], "interface wan")
+//         this.set(cloudMap['Alias'], "alias wan")
+//         this.set(cloudMap['VLAN ID'], 5)
+//         this.set(cloudMap['Role'], "WAN")
+//         this.check('Miscellaneous Monitor')
+//         this.check('Interface Status Disable')
+//         this.set(cloudMap['Comments'], "test comments")
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.isSet(gateMap['Interface Name'], "interface wan")
+//         this.isSet(gateMap['Alias'], "alias wan")
+//         this.isSet(gateMap['VLAN ID'], 5)
+//         this.isSet(gateMap['Role'], "wan")
+//         this.isCheck('Miscellaneous Monitor')
+//         this.isCheck('Interface Status Disable')
+//         this.isSet(gateMap['Comments'], "test comments")
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface wan delete',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Delete for interface wan'])
+//         this.click(cloudMap['YES'])
+//     },
+//     verify() {
+//         this.click(gateMap['Interfaces'])
+//         this.isDelete(gateMap['interface wan'])
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface dmz new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+//         this.set(cloudMap['Interface Name'], "interface dmz")
+//         this.set(cloudMap['Alias'], "alias dmz")
+//         this.set(cloudMap['VLAN ID'], 3)
+//         this.set(cloudMap['Role'], "DMZ")
+//         this.check('Device Detection')
+//         this.check('Miscellaneous Monitor')
+//         this.check('Interface Status Disable')
+//         this.set(cloudMap['Comments'], "test comments")
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.isSet(gateMap['Interface Name'], "interface dmz")
+//         this.isSet(gateMap['Alias'], "alias dmz")
+//         this.isSet(gateMap['VLAN ID'], 3)
+//         this.isSet(gateMap['Role'], "dmz")
+//         this.isCheck('Device Detection')
+//         this.isCheck('Miscellaneous Monitor')
+//         this.isCheck('Interface Status Disable')
+//         this.isSet(gateMap['Comments'], "test comments")
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface dmz delete',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Delete for interface dmz'])
+//         this.click(cloudMap['YES'])
+//     },
+//     verify() {
+//         this.click(gateMap['Interfaces'])
+//         this.isDelete(gateMap['interface dmz'])
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface undef new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+//         this.set(cloudMap['Interface Name'], "interface undef")
+//         this.set(cloudMap['Alias'], "alias undefined")
+//         this.set(cloudMap['VLAN ID'], 4)
+//         this.set(cloudMap['Role'], "UNDEFINED")
+//         this.check('Device Detection')
+//         this.check('Miscellaneous Monitor')
+//         this.check('Interface Status Disable')
+//         this.set(cloudMap['Comments'], "test comments")
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.isSet(gateMap['Interface Name'], "interface undef")
+//         this.isSet(gateMap['Alias'], "alias undefined")
+//         this.isSet(gateMap['VLAN ID'], 4)
+//         this.isSet(gateMap['Role'], "undefined")
+//         this.isCheck('Device Detection')
+//         this.isCheck('Miscellaneous Monitor')
+//         this.isCheck('Interface Status Disable')
+//         this.isSet(gateMap['Comments'], "test comments")
+//     }
+// })
+//
+// new Testcase({
+//     name: 'interface undef delete',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Delete for interface undef'])
+//         this.click(cloudMap['YES'])
+//     },
+//     verify() {
+//         this.click(gateMap['Interfaces'])
+//         this.isDelete(gateMap['interface undef'])
+//     }
+// })

@@ -11,6 +11,7 @@ let cloudMap = {
 }
 
 let gateMap = {
+    'Network': "//span[text()='Network']",
     'DNS': "a[ng-href='page/p/system/dns/']",
     'Use FortiGuard Servers': "input#type_fortiguard",
     'Specify': "input#type_specify",
@@ -19,40 +20,53 @@ let gateMap = {
     'Local Domain Name': "input#domain",
 }
 
-new Testcase({
-    name: 'dns edit use fortigurad',
-    testcase() {
-        this.click(cloudMap['DNS'])
-        this.set(cloudMap['Primary DNS Server'], "208.91.112.53")
-        this.set(cloudMap['Secondary DNS Server'], "208.91.112.52")
-        this.click(cloudMap['Use FortiGuard Servers'])
-        this.set(cloudMap['Local Domain Name'], "test domain")
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.click(gateMap['DNS'])
-        this.isCheck(gateMap['Use FortiGuard Servers'])
-        this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
-        this.isSet(gateMap['Secondary DNS Server'], "208.91.112.52")
-        this.isSet(gateMap['Local Domain Name'], "test domain")
-    }
-})
+let domainName = "12.12.12.12"
+
+
+function openDNS(self) {
+    self.click(gateMap['Network'])
+    self.wait(500)
+    self.click(gateMap['DNS'])
+    self.wait(1000)
+}
+
 
 new Testcase({
     name: 'dns edit specify',
     testcase() {
         this.click(cloudMap['DNS'])
-        this.click(cloudMap['Specify'])
-        this.set(cloudMap['Primary DNS Server'], "172.16.100.100")
-        this.set(cloudMap['Secondary DNS Server'], "172.16.100.80")
-        this.set(cloudMap['Local Domain Name'], "test domain")
+        this.wait(1000)
+        this.evaluate(`FcldUiTest.setUiObjectValue("dnsEditor-dnsModeGroup", "Specify")`)
+        this.set('#fcld-dnsEditor-priDns', "208.91.112.53")
+        this.set('#fcld-dnsEditor-secDns', "208.91.112.52")
+        this.wait(1000)
+        this.set('#fcld-dnsEditor-localDomain', domainName)
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['DNS'])
+        openDNS(this)
         this.isCheck(gateMap['Specify'])
-        this.isSet(gateMap['Primary DNS Server'], "172.16.100.100")
-        this.isSet(gateMap['Secondary DNS Server'], "172.16.100.80")
-        this.isSet(gateMap['Local Domain Name'], "test domain")
+        this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
+        this.isSet(gateMap['Secondary DNS Server'], "208.91.112.52")
+        this.isSet(gateMap['Local Domain Name'], domainName)
+    }
+})
+
+
+new Testcase({
+    name: 'dns edit use fortigurad',
+    testcase() {
+        this.wait(1000)
+        this.click(cloudMap['DNS'])
+        this.evaluate(`FcldUiTest.setUiObjectValue("dnsEditor-dnsModeGroup", "Use FortiGuard Servers")`)
+        this.wait(1000)
+        this.set('#fcld-dnsEditor-localDomain', domainName)
+        this.wait(3000)
+        this.click(cloudMap['Save'])
+    },
+    verify() {
+        openDNS(this)
+        this.isCheck(gateMap['Use FortiGuard Servers'], true)
+        this.isSet(gateMap['Local Domain Name'], domainName)
     }
 })

@@ -37,7 +37,7 @@ new Testcase({
         this.check("#fcld-trafficShaperSharedEditor-diffserv>input:checkbox")
         // this.capture('DSCP_checkbox.png')
         this.set("#fcld-trafficShaperSharedEditor-diffservcode", diffservcode)
-        this.click("#fcld-save")
+        this.click("#fcld-trafficShaperSharedEditor-save")
     },
     verify() {
         this.click(gateMap['Policy & Objects'])

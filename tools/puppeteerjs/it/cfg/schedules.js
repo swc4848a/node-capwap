@@ -1,5 +1,18 @@
 let Testcase = require('../../src/testcase.js');
 
+let nameOneTime = "onetime one";
+let startTime = "2019/06/18 06:07";
+let endTime = "2019/07/18 08:09";
+let nameRecurring = "recurring one";
+let nameGroup = "schedule group one";
+
+function goToScheduleList(obj) {
+    obj.click(gateMap['Policy & Objects'])
+    obj.wait(500)
+    obj.click(gateMap['Schedules'])
+    obj.wait(2000)
+}
+
 let cloudMap = {
     'Schedules': "div.gwt-HTML:contains('Schedules')",
     'Create New': "button:contains('Create New')",
@@ -31,12 +44,13 @@ let cloudMap = {
     'Members None': "div.gwt-HTML:contains('none')",
     'Popup Panel': "div.gwt-DecoratedPopupPanel",
 
-    'Delete Onetime one': "td.left:contains('onetime one')~td.right div[title='Delete']",
-    'Delete Recurring One': "td.left:contains('recurring one')~td.right div[title='Delete']",
-    'Delete Schedule Group One': "td.left:contains('schedule group one')~td.right div[title='Delete']",
+    'Delete Onetime one': "td.left:contains('" + nameOneTime + "')~td.right div[title='Delete']",
+    'Delete Recurring One': "td.left:contains('" + nameRecurring + "')~td.right div[title='Delete']",
+    'Delete Schedule Group One': "td.left:contains('" + nameGroup + "')~td.right div[title='Delete']",
 }
 
 let gateMap = {
+    'Policy & Objects': "//span[text()='Policy & Objects']",
     'Schedules': "a[href='page/p/firewall/object/schedule/']",
     'OneTime One': "tr[mkey='onetime one']",
     'Edit': "button:contains('Edit'):eq(0)",
@@ -76,24 +90,23 @@ new Testcase({
     name: 'onetime schedule new',
     testcase() {
         this.click(cloudMap['Schedules'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
+        this.wait(50)
         this.click(cloudMap['Create One-Time Schedule'])
-        this.set(cloudMap['Name'], "onetime one")
-        this.click(cloudMap['Start Date'])
-        this.click(cloudMap['Select'])
-        this.click(cloudMap['End Date'])
-        this.set(cloudMap['Last Day'], 22)
-        this.click(cloudMap['Select'])
-        this.set(cloudMap['Pre-expiration Event Log'], 5)
-        this.click(cloudMap['Save'])
+        this.wait(100)
+        this.set('#fcld-scheduleOnetimeEditor-name', nameOneTime)
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleOnetimeEditor-start", "${startTime}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleOnetimeEditor-end", "${endTime}")`)
+        this.set('#fcld-scheduleOnetimeEditor-expirationDays', 5)
+        this.click('#fcld-scheduleOnetimeEditor-save')
         this.click(cloudMap['OK'])
     },
     verify() {
-        this.isCheck(gateMap['Type Onetime'])
-        this.isSet(gateMap['Name'], "onetime one")
-
-        this.isCheck(gateMap['Pre-expiration event log'])
-        this.isSet(gateMap['Number of days before'], 5)
+        goToScheduleList(this)
+        this.has(nameOneTime)
+        this.has(startTime)
+        this.has(endTime)
     }
 })
 
@@ -101,33 +114,53 @@ new Testcase({
     name: 'onetime schedule delete',
     testcase() {
         this.click(cloudMap['Schedules'])
+        this.wait(1000)
         this.click(cloudMap['Delete Onetime one'])
         this.click(cloudMap['YES'])
     },
     verify() {
-        this.click(gateMap['Schedules'])
-        this.isDelete(gateMap['OneTime One'])
+        goToScheduleList(this)
+        this.isDelete(nameOneTime)
     }
 })
+/**
+ * Editor: "scheduleRecurringEditor"
+ * Key/Id:
+ *  i: "name",
+ *  k: "day", // array-> "Monday", "Tuesday", etc
+ *  i: "startHour",
+ *  i: "startMinute",
+ *  i: "endHour",
+ *  i: "endMinute".
+ */
+
+let startHour = "01";
+let startMinute = "02";
+let endHour = "04";
+let endMinute = "05";
 
 new Testcase({
     name: 'recurring schedule new',
     testcase() {
         this.click(cloudMap['Schedules'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
+        this.wait(50)
         this.click(cloudMap['Create Recurring Schedule'])
-        this.set('Name', "recurring one")
-        this.check(cloudMap['Monday'])
-        this.check(cloudMap['Tuesday'])
-        this.check(cloudMap['Wednesday'])
-        this.check(cloudMap['Thursday'])
-        this.check(cloudMap['Friday'])
-        this.check(cloudMap['Saturday'])
-        this.set('Time', 10) // todo: can't set by call val(), when click add success
-        this.click(cloudMap['Save'])
+        this.wait(100)
+        this.set('#fcld-scheduleRecurringEditor-name', "recurring one")
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleRecurringEditor-day", ["Sunday","Saturday", "Tuesday"])`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleRecurringEditor-startHour", "${startHour}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleRecurringEditor-startMinute", "${startMinute}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleRecurringEditor-endHour", "${endHour}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleRecurringEditor-endMinute", "${endMinute}")`)
+        this.click('#fcld-scheduleRecurringEditor-save')
         this.click(cloudMap['OK'])
     },
     verify() {
+        goToScheduleList(this)
+        this.has(nameRecurring)
+        /*
         this.isCheck(gateMap['Type Recurring'])
         this.isSet(gateMap['Name'], "recurring one")
         this.isUncheck(gateMap['Sunday'])
@@ -142,6 +175,7 @@ new Testcase({
         this.isSet(gateMap['Start Min'], 10)
         this.isSet(gateMap['Stop Hour'], 10)
         this.isSet(gateMap['Stop Min'], 10)
+        */
     }
 })
 
@@ -149,32 +183,38 @@ new Testcase({
     name: 'recurring schedule delete',
     testcase() {
         this.click(cloudMap['Schedules'])
+        this.wait(1000)
         this.click(cloudMap['Delete Recurring One'])
         this.click(cloudMap['YES'])
     },
     verify() {
-        this.click(gateMap['Schedules'])
-        this.isDelete(gateMap['Recurring One'])
+        goToScheduleList(this)
+        this.isDelete(nameRecurring)
     }
 })
-
+/**
+ * Editor: "scheduleGroupEditor"
+ * Key/Id:
+ *  i: "name",
+ *  k: "member".
+ */
 new Testcase({
     name: 'schedule group new',
     testcase() {
         this.click(cloudMap['Schedules'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
+        this.wait(50)
         this.click(cloudMap['Create Schedule Group'])
-        this.set(cloudMap['Name'], "schedule group one")
-        this.click(cloudMap['Members'])
-        this.click(cloudMap['Members Always'])
-        this.click(cloudMap['Members None'])
-        this.click(cloudMap['Save'])
+        this.wait(100)
+        this.set('#fcld-scheduleGroupEditor-name', nameGroup)
+        this.evaluate(`FcldUiTest.setUiObjectValue("scheduleGroupEditor-member", ["always", "none"])`)
+        this.click('#fcld-scheduleGroupEditor-save')
         this.click(cloudMap['OK'])
     },
     verify() {
-        this.isSet(gateMap['Name'], "schedule group one")
-        this.has(gateMap['Members Always'])
-        this.has(gateMap['Members None'])
+        goToScheduleList(this)
+        this.has(nameGroup)
     }
 })
 
@@ -182,11 +222,12 @@ new Testcase({
     name: 'schedule group delete',
     testcase() {
         this.click(cloudMap['Schedules'])
+        this.wait(1000)
         this.click(cloudMap['Delete Schedule Group One'])
         this.click(cloudMap['YES'])
     },
     verify() {
-        this.click(gateMap['Schedules'])
-        this.isDelete(gateMap['Schedule Group One'])
+        goToScheduleList(this)
+        this.isDelete(nameGroup)
     }
 })

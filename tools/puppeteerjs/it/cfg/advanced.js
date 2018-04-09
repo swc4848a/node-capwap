@@ -11,14 +11,14 @@ let cloudMap = {
     'Security Mode None': "input:radio:eq(0)",
     'Security Mode SMTPS': "input:radio:eq(1)",
     'Security Mode STARTTLS': "input:radio:eq(2)",
-    'Port': "input[type='text']:eq(41)",
+    // 'Port': "input[type='text']:eq(41)",
 
     'Time Zone': "select",
     'Synchronize with NTP Server': "input:checkbox:eq(1)",
     'Use FortiGuard Server': "input:radio:eq(3)~label",
     'Specify': "input:radio:eq(1)~label",
-    'Sync Interval': "input:eq(57)",
-    'Server': "input:eq(51)",
+    // 'Sync Interval': "input:eq(57)",
+    // 'Server': "input:eq(51)",
 
     'Save': "span:contains('Save')",
 }

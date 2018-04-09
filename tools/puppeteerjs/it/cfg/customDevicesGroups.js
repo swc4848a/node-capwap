@@ -27,7 +27,9 @@ let gateMap = {
     'MAC Address': "input#mac",
     'Comments': "textarea#comment",
 
-    'Custom Devices & Groups': "a[ng-href='page/p/user/device_group/']",
+    'User & Device': "span:contains('User & Device')",
+    'Custom Devices & Groups': "span:contains('Custom Devices & Groups')",
+    'Edit': "span:contains('Edit')",
     'device one': "tr[mkey='device one']",
 
     'Name': "input#name",
@@ -36,22 +38,37 @@ let gateMap = {
 
     'device group one': "tr[mkey='device group one']",
 }
-
+/**
+ * Editor: userDeviceEditor
+ * Key/Id:
+ *  i: "alias",
+ *  i: "mac",
+ *  k: "macPerDevice"
+ *  k: "type",
+ *  i: "comment".
+ */
 new Testcase({
     name: 'device new',
     testcase() {
         this.click(cloudMap['Custom Devices & Groups'])
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Device'])
-
-        this.set(cloudMap['Alias'], 'device one')
-        this.set(cloudMap['MAC Address'], '11:22:33:44:55:67')
-        this.set(cloudMap['Comments'], "test Comments")
-
+        this.wait(1000)
+        this.set('#fcld-userDeviceEditor-alias', 'device one')
+        this.set('#fcld-userDeviceEditor-mac', '11:22:33:44:55:67')
+        this.evaluate(`FcldUiTest.setUiObjectValue("userDeviceEditor-type", "Fortinet Device")`)
+        this.set('#fcld-userDeviceEditor-comment', "test Comments")
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
+        this.click(gateMap['User & Device'])
+        this.click(gateMap['Custom Devices & Groups'])
+        this.wait(1000)
+        this.click(gateMap['device one'])
+        this.click(gateMap['Edit'])
+        this.wait(1000)
         this.isSet(gateMap['Alias'], "device one")
         this.isSet(gateMap['MAC Address'], "11:22:33:44:55:67")
         this.isSet(gateMap['Comments'], "test Comments")
@@ -66,25 +83,30 @@ new Testcase({
         this.click(cloudMap['YES'])
     },
     verify() {
+        this.click(gateMap['User & Device'])
         this.click(gateMap['Custom Devices & Groups'])
-        this.isDelete(gateMap['device one'])
+        this.wait(`div.qlist-table`)
+        this.isDelete('device one')
     }
 })
-
+/**
+ * Editor: userDeviceGroupEditor
+ * Key/Id:
+ *  i: "name",
+ *  k: "member",
+ *  k: "comment".
+ */
 new Testcase({
     name: 'device group new',
     testcase() {
         this.click(cloudMap['Custom Devices & Groups'])
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Device Group'])
-
-        this.set(cloudMap['Name'], 'device group one')
-        this.click(cloudMap['Members'])
-        this.click(cloudMap['All'])
-        // this.hide(cloudMap['Members Panel'])
-
-        this.set(cloudMap['Comments'], "test Comments")
-
+        this.wait(1000)
+        this.set('#fcld-userDeviceGroupEditor-name', 'device group one')
+        this.evaluate(`FcldUiTest.setUiObjectValue("userDeviceGroupEditor-member", "Mac")`)
+        this.set('#fcld-userDeviceGroupEditor-comment', "test Comments")
+        this.wait(1000)
         this.click(cloudMap['Save'])
         this.click(cloudMap['OK'])
     },

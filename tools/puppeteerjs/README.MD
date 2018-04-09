@@ -173,6 +173,37 @@ new Testcase({
 4. testcase callback define cloud GUI actions exempt the develop action which will do in the framework  
 5. verify callback define gate GUI verify actions  
 
+* create a free style testcase source file in test folder and name it with menu label name  
+```javascript
+describe(`Free Style Module Demo`, function() {
+    // disable timeouts
+    this.timeout(0);
+
+    let page;
+    let p;
+
+    before(async function() {
+        page = new Page();
+        await page.setup({ headless: false });
+        p = page.page;
+    });
+
+    after(async function() {
+        await page.close();
+    });
+
+    it(`free style testcase demo`, async function () {
+        await p.goto(`https://alpha.forticloud.com`)
+        await p.waitFor(`input#email`)
+        await p.type(`input#email`, `xxx@domain.com`)
+        await p.type(`input[name="password"]`, `XXX`)
+        await p.click(`input[type="submit"]`)
+
+        // do everything you want
+    });
+})
+```
+
 ### API documentation
 
 #### testcase.click(selector)
