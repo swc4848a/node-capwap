@@ -63,6 +63,9 @@ class Page {
     async action(item) {
         let frame = undefined;
         let result = undefined;
+        if (item.sel && !item.sel.startsWith(`//`)) {
+            item.sel = item.sel.replace(/"/g, '\\"')
+        }
         switch (item.action) {
             case `screenshot`:
                 console.log(`  ${chalk.blue('screenshot')} ./out/${item.filename}`)
@@ -107,8 +110,8 @@ class Page {
             case `condClick`:
                 await this.page.waitFor(2000) 
                 if (item.cond == `ifExist`) {
-                    if(await this.page.evaluate(`$('${item.sel}').length`)){
-                        await this.page.evaluate(`$('${item.sel}').click()`)
+                    if(await this.page.evaluate(`$("${item.sel}").length`)){
+                        await this.page.evaluate(`$("${item.sel}").click()`)
                     }
                 } else {
                     console.error(`  ${chalk.red('unknown condition')} ${item.cond} for ${item.sel}`)
@@ -130,7 +133,7 @@ class Page {
                 console.log(`  ${chalk.blue('waitFor')} ${item.sel} timeout ${item.timeout}`)
                 break
             case `check`:
-                console.log(`  ${chalk.blue('check')} ${item.sel} '${item.val}'`)
+                console.log(`  ${chalk.blue('check')} ${item.sel} "${item.val}"`)
                 await this.page.evaluate(`$("${item.sel}").prop("checked", ${item.val})`)
                 break
             case `isType`:
@@ -146,9 +149,9 @@ class Page {
             case `isCheck`:
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 if (frame) {
-                    result = await frame.evaluate(`$('${item.sel}').prop("checked")`)
+                    result = await frame.evaluate(`$("${item.sel}").prop("checked")`)
                 } else {
-                    result = await this.page.evaluate(`$('${item.sel}').prop("checked")`)
+                    result = await this.page.evaluate(`$("${item.sel}").prop("checked")`)
                 }
                 console.log(`  ${chalk.blue('result:')} [${result}] expect: [${item.expect}] => ${result === item.expect ? chalk.green('success') : chalk.red('failed')}`)
                 assert.equal(result, item.expect, `${item.sel} should be ${item.expect}`)

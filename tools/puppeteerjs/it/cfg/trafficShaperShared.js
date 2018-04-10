@@ -27,7 +27,9 @@ new Testcase({
     name: 'trafficShaperShared new', 
     testcase() {
         this.click(cloudMap['Traffic Shapers'])
+        this.wait(3000)
         this.click(cloudMap['Create New'])
+        this.wait(100)
         this.click(cloudMap['Shared'])
         this.set("#fcld-trafficShaperSharedEditor-name", name)
         this.check("#fcld-trafficShaperSharedEditor-perPolicy")
@@ -41,6 +43,7 @@ new Testcase({
     },
     verify() {
         this.click(gateMap['Policy & Objects'])
+        this.wait(1000)
         this.click(gateMap['Traffic Shapers'])
         this.wait(3000)
         this.click(gateMap['objectRow'])
@@ -61,12 +64,13 @@ new Testcase({
     name: 'trafficShaperShared delete',
     testcase() {
         this.click(cloudMap['Traffic Shapers'])
-        this.wait(1000)
+        this.wait(3000)
         this.click(cloudMap['Delete for'])
         this.click(cloudMap['YES'])
     },
     verify() {
         this.click(gateMap['Policy & Objects'])
+        this.wait(1000)
         this.click(gateMap['Traffic Shapers'])
         this.wait(3000)
         this.isDelete(name)
