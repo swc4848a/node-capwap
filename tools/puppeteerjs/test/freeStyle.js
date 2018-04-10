@@ -1,5 +1,5 @@
-const Page = require('../../src/page');
-const cases = require('../../src/cases');
+const Page = require('../src/page');
+const cases = require('../src/cases');
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
@@ -21,7 +21,7 @@ describe(`Free Style Module Demo`, function() {
         await page.close();
     });
 
-    // .\node_modules\.bin\mocha.cmd --grep 'free style testcase demo'
+    // .\node_modules\.bin\mocha.cmd --grep "free style testcase demo"
     it(`free style testcase demo`, async function () {
         await p.goto(`https://alpha.forticloud.com`)
         await p.waitFor(`input#email`)
@@ -32,4 +32,4 @@ describe(`Free Style Module Demo`, function() {
         // do everything you want
         assert.equal(true, true, `should be the same`)
     });
-})
+});
