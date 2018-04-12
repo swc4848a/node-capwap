@@ -1,12 +1,12 @@
 const Config = {
     cloudUrl: `https://alpha.forticloud.com`,
-    cloudUsername: `zqqiang@fortinet.com`,
-    cloudPassword: `SuperCRM801`,
+    cloudUsername: `xxxx@fortinet.com`,
+    cloudPassword: `xxxx`,
     isMultiTenancy: true,
     fortigateUrl: `http://xxx.xxx.xxx.xxx/login`,
     fortigateUsername: `admin`,
-    fortigatePassword: `admin`,
-    fortigateSN: `FGT60D4615007833`,
+    fortigatePassword: `xxxx`,
+    fortigateSN: `FGT60D461500XXXX`,
 }
 
 module.exports = Config
