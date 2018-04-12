@@ -99,8 +99,10 @@ new Testcase({
     name: 'address group new',
     testcase() {
         this.click(cloudMap['Addresses'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Create Address Group'])
+        this.wait(1000)
         this.set(cloudMap['Name'], "group new")
         this.click(cloudMap['Members'])
         this.click(cloudMap['all'])
