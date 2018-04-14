@@ -73,7 +73,7 @@ new Testcase({
     },
     verify() {
         openDNSServer(this)
-        this.isDelete(interfaceName)
+        this.isDelete(interfaceName, `div.qlist-table`)
         // this.click(gateMap['DNS Servers'])
         // this.isCheck(gateMap['Use FortiGuard Servers'])
         // this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
@@ -101,6 +101,9 @@ new Testcase({
 
         this.wait(3000)
         this.click(cloudMap['Save'])
+        //It's bug, test case trigger two requests, so it's necessary to click yes,
+        //when bug fixed, remove this clause.
+        this.wait(cloudMap['YES'])
     },
     verify() {
         openDNSServer(this)
@@ -149,6 +152,9 @@ new Testcase({
 
         this.wait(2000)
         this.click(cloudMap['Save'])
+        //It's bug, test case trigger two requests, so it's necessary to click yes,
+        //when bug fixed, remove this clause.
+        this.click(cloudMap[`YES`])
     },
     verify() {
         openDNSServer(this)

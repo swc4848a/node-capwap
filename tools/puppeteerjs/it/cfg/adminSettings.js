@@ -64,6 +64,7 @@ new Testcase({
     },
     verify() {
         this.click(gateMap['System'])
+        this.wait(1000)
         this.click(gateMap['Admin Settings'])
         this.wait(2000)
         this.isSet(gateMap['HTTP Port'], httpPort)
@@ -96,6 +97,7 @@ new Testcase({
     },
     verify() {
         this.click(gateMap['System'])
+        this.wait(1000)
         this.click(gateMap['Admin Settings'])
         this.wait(2000)
         this.isSet(gateMap['HTTP Port'], httpPort)

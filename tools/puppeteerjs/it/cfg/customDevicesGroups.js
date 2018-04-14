@@ -19,7 +19,7 @@ let cloudMap = {
     'OK': "button:contains('OK')",
     'Delete device one': "div[title='Delete']:eq(0)",
     'Delete device group one': "div[title='Delete']:eq(0)",
-    'YES': "div.gwt-PopupPanel button:contains('YES')"
+    'YES': "button:contains('YES')"
 }
 
 let gateMap = {
@@ -33,10 +33,10 @@ let gateMap = {
     'device one': "tr[mkey='device one']",
 
     'Name': "input#name",
-    'Members All': "span.entry-value>span:contains('All')",
+    'Members Mac': "span.entry-value>span:contains('Mac')",
     'Comments': "textarea#comment",
 
-    'device group one': "tr[mkey='device group one']",
+    'device group one': `tr[mkey="device group one"]`,
 }
 /**
  * Editor: userDeviceEditor
@@ -51,6 +51,7 @@ new Testcase({
     name: 'device new',
     testcase() {
         this.click(cloudMap['Custom Devices & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Device'])
         this.wait(1000)
@@ -79,7 +80,9 @@ new Testcase({
     name: 'device delete',
     testcase() {
         this.click(cloudMap['Custom Devices & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Delete device one'])
+        this.wait(1000)
         this.click(cloudMap['YES'])
     },
     verify() {
@@ -100,19 +103,28 @@ new Testcase({
     name: 'device group new',
     testcase() {
         this.click(cloudMap['Custom Devices & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['Device Group'])
         this.wait(1000)
         this.set('#fcld-userDeviceGroupEditor-name', 'device group one')
-        this.evaluate(`FcldUiTest.setUiObjectValue("userDeviceGroupEditor-member", "Mac")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("userDeviceGroupEditor-member", ["Mac"])`)
         this.set('#fcld-userDeviceGroupEditor-comment', "test Comments")
         this.wait(1000)
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
+        this.click(`span:contains("User & Device")`)
+        this.click(`span:contains("Custom Devices & Groups")`)
+        this.wait(3000)
+        this.click(`//span[text()="device group one"]`)
+        this.wait(1000)
+        this.click(`button:contains("Edit")`)
+        this.wait(3000)
         this.isSet(gateMap['Name'], "device group one")
-        this.has(gateMap['Members All'])
+        this.has('Mac')
         this.isSet(gateMap['Comments'], "test Comments")
     }
 })
@@ -121,11 +133,14 @@ new Testcase({
     name: 'device group delete',
     testcase() {
         this.click(cloudMap['Custom Devices & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Delete device group one'])
         this.click(cloudMap['YES'])
     },
     verify() {
+        this.click(`span:contains("User & Device")`)
         this.click(gateMap['Custom Devices & Groups'])
-        this.isDelete(gateMap['device group one'])
+        this.wait(1000)
+        this.isDelete('device group one')
     }
 })

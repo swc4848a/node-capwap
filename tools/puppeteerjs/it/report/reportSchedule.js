@@ -38,10 +38,12 @@ new Testcase({
     verify() {
     	this.wait(reportMap['scheduleBtn']);
     	this.click(reportMap['scheduleBtn']);
+    	this.wait(scheduleDlgMap['dailyCheckBox']);
     	this.isCheck(scheduleDlgMap['dailyCheckBox']);
+    	this.wait(scheduleDlgMap['dailyEmailCheckBox']);
     	this.isCheck(scheduleDlgMap['dailyEmailCheckBox']);
+    	this.wait(scheduleDlgMap['dailyEmailTextBox']);
     	this.isSet(scheduleDlgMap['dailyEmailTextBox'], 'leonfan@fortinet.com');
-    	this.wait(3000);
     	this.click(scheduleDlgMap['cancelBtn']);
     }
 })
@@ -66,8 +68,11 @@ new Testcase({
 	verify() {
     	this.wait(reportMap['scheduleBtn']);
     	this.click(reportMap['scheduleBtn']);
+    	this.wait(scheduleDlgMap['dailyCheckBox']);
     	this.isCheck(scheduleDlgMap['dailyCheckBox'], false);		
+    	this.wait(scheduleDlgMap['dailyEmailCheckBox']);
     	this.isCheck(scheduleDlgMap['dailyEmailCheckBox'], false);
+    	this.wait(scheduleDlgMap['dailyEmailTextBox']);
     	this.isSet(scheduleDlgMap['dailyEmailTextBox'], '');
 	}
 })

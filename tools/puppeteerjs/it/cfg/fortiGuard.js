@@ -18,6 +18,7 @@ let cloudMap = {
 }
 
 let gateMap = {
+    'System': "//span[text()='System']",
     'FortiGuard': "a[ng-href='system/fortiguard']",
     'Accept Push Updates': "input#avips-push-chk",
     'Scheduled Updates': "input#avips-schd-chk",
@@ -38,28 +39,42 @@ let gateMap = {
     "Anti Spam Cache Mins": "input[ng-model='filter.antispamCache.ttl']",
 }
 
-let every_hour = undefined
-let daily_clock = undefined
-let daily_AMPM = undefined
-let weekly_AMPM = undefined
-let weekly_day = undefined
-let web_filter_cache = undefined
-let anti_spam_cache = undefined
-let weekly_clock = undefined
+function displayCloudPage(obj) {
+    obj.click(cloudMap['FortiGuard'])
+    obj.wait(3000)
+}
+
+function displayGatePage(obj) {
+    obj.click(gateMap['System'])
+    obj.wait(500)
+    obj.click(gateMap['FortiGuard'])
+    obj.wait(2000)
+}
+
+let every_hour = 5
+let daily_clock = 2
+let daily_AMPM = "AM"
+let weekly_AMPM = "PM"
+let weekly_day = "Monday"
+let web_filter_cache = 50
+let anti_spam_cache = 40
+let weekly_clock = 3
 
 new Testcase({
     name: 'fortigurad edit enable all checkbox',
     testcase() {
-        this.click(cloudMap['FortiGuard'])
-        this.wait(3000)
+        displayCloudPage(this)
         this.check('#fcld-fortiGuardEditor-acceptPush > input')
         this.check('#fcld-fortiGuardEditor-improveIpsQ > input')
         this.check('#fcld-fortiGuardEditor-useExtendedIps > input')
-        this.click(cloudMap['Save'])
+        this.check('#fcld-fortiGuardEditor-scheduledUpdate > input')
+        this.check('#fcld-fortiGuardEditor-webfilterCache > input')
+        this.check('#fcld-fortiGuardEditor-antispamCache > input')
+        this.click('#fcld-fortiGuardEditor-save')
         this.wait(2000)
     },
     verify() {
-        this.click(gateMap['FortiGuard'])
+        displayGatePage(this)
         this.isCheck(gateMap['Accept Push Updates'])
         this.isCheck(gateMap['Scheduled Updates'])
         this.isCheck(gateMap['Improve IPS Quality'])
@@ -72,18 +87,18 @@ new Testcase({
 new Testcase({
     name: 'fortigurad edit disable all checkbox',
     testcase() {
-        this.click(cloudMap['FortiGuard'])
-        this.uncheck(cloudMap['Accept Push Updates'])
-        this.uncheck(cloudMap['Scheduled Updates'])
-        this.uncheck(cloudMap['Improve IPS Quality'])
-        this.uncheck(cloudMap['Use Extended IPS Signature Package'])
-        this.uncheck(cloudMap['Web Filter Cache'])
-        this.uncheck(cloudMap['Anti-Spam Cache'])
-        this.click(cloudMap['Save'])
+        displayCloudPage(this)
+        this.uncheck('#fcld-fortiGuardEditor-acceptPush > input')
+        this.uncheck('#fcld-fortiGuardEditor-improveIpsQ > input')
+        this.uncheck('#fcld-fortiGuardEditor-useExtendedIps > input')
+        this.uncheck('#fcld-fortiGuardEditor-scheduledUpdate > input')
+        this.uncheck('#fcld-fortiGuardEditor-webfilterCache > input')
+        this.uncheck('#fcld-fortiGuardEditor-antispamCache > input')
+        this.click('#fcld-fortiGuardEditor-save')
         this.wait(2000)
     },
     verify() {
-        this.click(gateMap['FortiGuard'])
+        displayGatePage(this)
         this.isUncheck(gateMap['Accept Push Updates'])
         this.isUncheck(gateMap['Scheduled Updates'])
         this.isUncheck(gateMap['Improve IPS Quality'])
@@ -92,20 +107,20 @@ new Testcase({
         this.isUncheck(gateMap['Anti-Spam Cache'])
     }
 })
-
+/*
 new Testcase({
     name: 'fortigurad edit every',
     testcase() {
         this.click(cloudMap['FortiGuard'])
-        this.wait(2000)
-        this.click(cloudMap['Scheduled Updates'])
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-frequency", "Every")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-timeHours24", "${every_hour}")`)
+        this.wait(3000)
+        this.click('#fcld-fortiGuardEditor-scheduledUpdate > input')
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-frequency", "Every")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-timeHours24", "${every_hour}")`)
         this.wait(1000)
         this.click(cloudMap['Save'])
     },
     verify() {
-        this.click(gateMap['FortiGuard'])
+        displayGatePage(this)
         this.isSet(gateMap['Scheduled Updates Type'], "every")
         this.isSet(gateMap['Scheduled Updates Every Hour'], every_hour)
     }
@@ -117,10 +132,10 @@ new Testcase({
         this.click(cloudMap['FortiGuard'])
         this.wait(2000)
         this.click(cloudMap['Scheduled Updates'])
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-frequency", "Daily")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-timeClock12", "${daily_clock}")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-amPm", "${daily_AMPM}")`)
-        this.click(cloudMap['Save'])
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-frequency", "Daily")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-timeClock12", "${daily_clock}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-amPm", "${daily_AMPM}")`)
+        this.click(cloudMap['Save']
     },
     verify() {
         this.click(gateMap['FortiGuard'])
@@ -135,10 +150,10 @@ new Testcase({
     testcase() {
         this.click(cloudMap['FortiGuard'])
         this.click(cloudMap['Scheduled Updates'])
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-frequency", "weekly")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-day", "${weekly_day}")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-timeClock12", "${weekly_clock}")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-amPm", "${weekly_AMPM}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-frequency", "Weekly")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-day", "${weekly_day}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-timeClock12", "${weekly_clock}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-amPm", "${weekly_AMPM}")`)
         this.click(cloudMap['Save'])
     },
     verify() {
@@ -155,7 +170,7 @@ new Testcase({
     testcase() {
         this.click(cloudMap['FortiGuard'])
         this.click(cloudMap['Web Filter Cache'])
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-webfilterCacheTtl", "${web_filter_cache}")`)
+        this.set("#fcld-fortiGuardEditor-webfilterCacheTtl", ${web_filter_cache})
         this.click(cloudMap['Save'])
     },
     verify() {
@@ -169,7 +184,7 @@ new Testcase({
     testcase() {
         this.click(cloudMap['FortiGuard'])
         this.click(cloudMap['Anti-Spam Cache'])
-        this.evaluate(`FcldUiTest.setUiObjectValue("FortiGuardEditor-antispamCacheTtl", "${anti_spam_cache}")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("fortiGuardEditor-antispamCacheTtl", "${anti_spam_cache}")`)
         this.click(cloudMap['Save'])
     },
     verify() {
@@ -177,3 +192,4 @@ new Testcase({
         this.isSet(gateMap['Anti Spam Cache Mins'], "anti_spam_cache")
     }
 })
+*/

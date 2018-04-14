@@ -23,9 +23,9 @@ let cloudMap = {
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
 
-    'Delete user one': "div[title='Delete']:last())",
-    'Delete group one': "div[title='Delete']:last())",
-    'YES': "div.gwt-PopupPanel button:contains('YES')"
+    'Delete user one': `td.left:contains('${userName}')~td.right div[title='Delete']:last()`,
+    'Delete group one': `td.left:contains('${groupName}')~td.right div[title='Delete']:last()`,
+    'YES': "button:contains('YES')"
 }
 
 let gateMap = {
@@ -83,7 +83,7 @@ new Testcase({
         this.click(cloudMap['User'])
         this.wait(1000)
         this.set('#fcld-userUserEditor-name', userName)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserEditor-type", "LDAP User")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("userUserEditor-type", "RADIUS User")`)
         //this.set('#fcld-userUserEditor-passwd', '12345678')
         this.set('#fcld-userUserEditor-emailTo', 'a@qq.com')
         this.set('#fcld-userUserEditor-smsPhone', '+16668888888')
@@ -164,8 +164,11 @@ new Testcase({
     name: 'user_group_firewall delete',
     testcase() {
         this.click(cloudMap['Users & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Delete group one'])
+        this.wait(1000)
         this.click(cloudMap['YES'])
+        this.wait(1000)
     },
     verify() {
         openUserGroups(this)

@@ -204,10 +204,11 @@ class Testcase {
             expect: false
         })
     }
-    isDelete(target) {
+    isDelete(target, container) {
         this.seq.push({
             action: `isDelete`,
-            target: target
+            target: target,
+            container: container
         })
     }
     has(target) {

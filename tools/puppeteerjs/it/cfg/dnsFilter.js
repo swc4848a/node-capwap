@@ -16,7 +16,8 @@ let apiData = {
     "blockBotnet" : true,
     "ftgdDisable" : true,
     // "filters",
-    "urlfilter" : true,
+    // url eanble can't be deploy by checkbox.
+    // "urlfilter" : true,
     // "urlfilterItems",
     "errorAllow" : true,
     "logAllUrl" : false,
@@ -79,12 +80,15 @@ new Testcase({
         //this.click(cloudMap['FortiGuard category based filter'])
         this.readApiData('utmDnsFilterEditor', apiData)
         this.click(cloudMap['Monitor All'])
+        
         //this.click(cloudMap['Domain Filter'])
-        this.click(cloudMap['Add Domain Filter'])
-        this.set(cloudMap['Domain'], "a.com")
-        this.click(cloudMap['Type RegEx'])
-        this.click(cloudMap['Action Allow'])
-        this.click(cloudMap['Status'])
+
+        //this.click(cloudMap['Add Domain Filter'])
+        //this.set(cloudMap['Domain'], "a.com")
+        //this.click(cloudMap['Type RegEx'])
+        //this.click(cloudMap['Action Allow'])
+        //this.click(cloudMap['Status'])
+
         this.click(cloudMap['Ok'])
         //this.click(cloudMap['Allow DNS requests when a rating error occurs'])
         //this.click(cloudMap['Log all Domains'])
@@ -100,7 +104,8 @@ new Testcase({
         this.wait(1000)
         this.isCheck(gateMap['Block DNS requests to known botnet C&C'], apiData["blockBotnet"])
         this.isCheck(gateMap['FortiGuard category based filter'], apiData["ftgdDisable"])
-        this.isCheck(gateMap['Domain Filter'], apiData["urlfilter"])
+        // can't deploy this checkbox only
+        //this.isCheck(gateMap['Domain Filter'], apiData["urlfilter"])
         this.isCheck(gateMap['Allow DNS requests when a rating error occurs'], apiData["errorAllow"])
         this.isCheck(gateMap['Log all Domains'], apiData["logAllUrl"])
         this.isCheck(gateMap['Redirect'], apiData["blockAction"] != "Block")
@@ -117,7 +122,7 @@ new Testcase({
 
         this.evaluate(`FcldUiTest.setUiObjectValue("utmDnsFilterEditor-blockBotnet", ${!apiData['blockBotnet']})`)
         this.evaluate(`FcldUiTest.setUiObjectValue("utmDnsFilterEditor-ftgdDisable", ${!apiData['ftgdDisable']})`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("utmDnsFilterEditor-urlfilter", ${!apiData['urlfilter']})`)
+        //this.evaluate(`FcldUiTest.setUiObjectValue("utmDnsFilterEditor-urlfilter", ${!apiData['urlfilter']})`)
 
         this.click(cloudMap['Save'])
     },
@@ -129,6 +134,6 @@ new Testcase({
 
         this.isCheck(gateMap['Block DNS requests to known botnet C&C'], !apiData["blockBotnet"])
         this.isCheck(gateMap['FortiGuard category based filter'], !apiData["ftgdDisable"])
-        this.isCheck(gateMap['Domain Filter'], !apiData["urlfilter"])
+        //this.isCheck(gateMap['Domain Filter'], !apiData["urlfilter"])
     }
 })

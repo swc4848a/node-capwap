@@ -157,15 +157,19 @@ class Page {
                 assert.equal(result, item.expect, `${item.sel} should be ${item.expect}`)
                 break
             case `isDelete`:
-                await this.page.waitFor(`div.table-container, div.content`);
+                if (item.container) {
+                    await this.page.waitFor(item.container)
+                } else {
+                    await this.page.waitFor(`div.table-container, div.content`);
+                }
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 if (frame) {
-                    result = await frame.evaluate(`$(':contains("${item.target}")').length`);
+                    result = await frame.evaluate(`$('${item.container}:contains("${item.target}")').length`);
                     if (0 === result) {
                         result = await frame.evaluate(`$('tr[mkey="${item.target}"]').length`);
                     }
                 } else {
-                    result = await this.page.evaluate(`$(':contains("${item.target}")').length`);
+                    result = await this.page.evaluate(`$('${item.container}:contains("${item.target}")').length`);
                     if (0 === result) {
                         result = await this.page.evaluate(`$('tr[mkey="${item.target}"]').length`);
                     }

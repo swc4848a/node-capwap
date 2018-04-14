@@ -55,6 +55,7 @@ new Testcase({
         this.evaluate(`FcldUiTest.setUiObjectValue("ippoolEditor-arpReplyCheckBox", "true")`)
         this.set('#fcld-ippoolEditor-comments', "test comments")
         this.click(cloudMap['Save'])
+        this.wait(2000)
         this.click(cloudMap['OK'])
     },
     verify() {

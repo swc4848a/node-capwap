@@ -1,10 +1,21 @@
 let Testcase = require('../../src/testcase.js');
 
+
+let interfaceNameVlan = "vantest"
+let interfaceNameLookBack = "lookbacktest"
+let interfaceNameHardWare = "hardwaretest"
+let interfaceNameAlias = "alias manual"
+
+
 let cloudMap = {
     'Interfaces': "div.gwt-HTML:contains('Interfaces')",
     'Create New': "button:contains('Create New')",
     'Save': "button:contains('Save')",
     'YES': "span:contains('YES')",
+
+    'Delete for interface van': `tr.disabled:contains('${interfaceNameVlan}') div[title='Delete']`,
+    'Delete for interface lookBack': `tr.disabled:contains('${interfaceNameLookBack}') div[title='Delete']`,
+    'Delete for interface hardware': `tr.disabled:contains('${interfaceNameHardWare}') div[title='Delete']`,
 }
 
 let gateMap = {
@@ -33,8 +44,6 @@ let gateMap = {
     'Edit': "button span:contains('Edit'):eq(0)",
 }
 
-let interfaceName = "interface man"
-let interfaceNameAlias = "alias manual"
 
 new Testcase({
     name: 'interface_type_vlan new',
@@ -43,7 +52,7 @@ new Testcase({
         this.click(cloudMap['Create New'])
 
         this.wait(1000)
-        this.set('#fcld-interfaceEditor-name', interfaceName)
+        this.set('#fcld-interfaceEditor-name', interfaceNameVlan)
         this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "VLAN")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-physIntf", "wan1")`)
@@ -59,6 +68,7 @@ new Testcase({
         this.set('#fcld-interfaceEditor-comments', "test comments")
         this.wait(1000)
         this.click(cloudMap['Save'])
+        this.wait(5000)
     },
     verify() {
 
@@ -66,7 +76,7 @@ new Testcase({
         this.wait(500)
         this.click(gateMap['Interfaces'])
         this.wait(1000)
-        this.has(interfaceName)
+        this.has(interfaceNameVlan)
         this.has(interfaceNameAlias)
         // this.isSet(gateMap['Address Mode Manual', "static")
         //this.isSet(gateMap['IP/Netmask'], "1.1.1.1/255.255.255.0")
@@ -78,15 +88,34 @@ new Testcase({
 })
 
 
+new Testcase({
+    name: 'interface_vlan delete',
+    testcase() {
+        this.wait(1000)
+        this.click(cloudMap['Interfaces'])
+        this.click(cloudMap['Delete for interface van'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+
+        this.click(gateMap['Network'])
+        this.wait(500)
+        this.click(gateMap['Interfaces'])
+        this.wait(1000)
+        //todo isDelete now work now.
+        this.isDelete(interfaceNameVlan)
+    }
+})
+
 
 new Testcase({
-    name: 'interface_type_lookback new',
+    name: 'interface_type_lookBack new',
     testcase() {
         this.click(cloudMap['Interfaces'])
         this.click(cloudMap['Create New'])
 
         this.wait(1000)
-        this.set('#fcld-interfaceEditor-name', interfaceName)
+        this.set('#fcld-interfaceEditor-name', interfaceNameLookBack)
         this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
 
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "Loopback Interface")`)
@@ -106,8 +135,28 @@ new Testcase({
         this.wait(500)
         this.click(gateMap['Interfaces'])
         this.wait(1000)
-        this.has(interfaceName)
+        this.has(interfaceNameLookBack)
         this.has(interfaceNameAlias)
+    }
+})
+
+
+new Testcase({
+    name: 'interface_type_lookBack delete',
+    testcase() {
+        this.wait(1000)
+        this.click(cloudMap['Interfaces'])
+        this.click(cloudMap['Delete for interface lookBack'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+
+        this.click(gateMap['Network'])
+        this.wait(500)
+        this.click(gateMap['Interfaces'])
+        this.wait(1000)
+        //todo isDelete now work now.
+        this.isDelete(interfaceNameLookBack)
     }
 })
 
@@ -119,7 +168,7 @@ new Testcase({
         this.click(cloudMap['Create New'])
 
         this.wait(1000)
-        this.set('#fcld-interfaceEditor-name', interfaceName)
+        this.set('#fcld-interfaceEditor-name', interfaceNameHardWare)
         this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
 
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "Hardware Switch")`)
@@ -140,17 +189,17 @@ new Testcase({
         this.wait(500)
         this.click(gateMap['Interfaces'])
         this.wait(1000)
-        this.has(interfaceName)
+        this.has(interfaceNameHardWare)
         this.has(interfaceNameAlias)
     }
 })
 
 new Testcase({
-    name: 'interface delete',
+    name: 'interface_hardware delete',
     testcase() {
         this.wait(1000)
         this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface manual'])
+        this.click(cloudMap['Delete for interface hardware'])
         this.click(cloudMap['YES'])
     },
     verify() {
@@ -160,7 +209,7 @@ new Testcase({
         this.click(gateMap['Interfaces'])
         this.wait(1000)
         //todo isDelete now work now.
-        this.isDelete(interfaceName)
+        this.isDelete(interfaceNameHardWare)
     }
 })
 

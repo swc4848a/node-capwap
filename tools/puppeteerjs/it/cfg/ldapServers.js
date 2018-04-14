@@ -14,7 +14,7 @@ let cloudMap = {
     'Save': "span:contains('Save')",
     'OK': "button:contains('OK')",
     'Delete server one': "div[title='Delete']:eq(0)",
-    'YES': "div.gwt-PopupPanel button:contains('YES')"
+    'YES': "button:contains('YES')"
 }
 
 let gateMap = {
@@ -63,12 +63,15 @@ new Testcase({
     name: 'ldap server delete',
     testcase() {
         this.click(cloudMap['LDAP Servers'])
+        this.wait(1000)
         this.click(cloudMap['Delete server one'])
+        this.wait(1000)
         this.click(cloudMap['YES'])
-
     },
     verify() {
-        this.click(gateMap['LDAP Servers'])
-        this.isDelete(gateMap['server one'])
+        this.click(`span:contains("User & Device")`)
+        this.click(`span:contains("LDAP Servers")`)
+        this.wait(3000)
+        this.isDelete('server one')
     }
 })
