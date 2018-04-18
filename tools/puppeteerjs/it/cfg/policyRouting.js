@@ -30,22 +30,25 @@ function openPolicyRoute(self) {
     self.click(gateMap['RoutingPolicy'])
     self.wait(1000)
 }
+
+// todo: policy route add failed if interface choose any.
 new Testcase({
     //tcp, udp, sctp mode
     name: 'policy_route_tcp new',
     testcase() {
         this.click(cloudMap['RoutingPolicy'])
+        this.wait(3000)
         this.click(cloudMap['Create New'])
         this.wait(2000)
 
         //"If incoming traffic matches" module
         this.evaluate(`FcldUiTest.setUiObjectValue("routingPolicyEditor-protocol", "TCP")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("routingPolicyEditor-inIntf", ["dmz","internal"])`)
-        this.set('#fcld-routingPolicyEditor-srcAddr', "192.168.18.1/24")
-        this.set('#fcld-routingPolicyEditor-dstAddr', "192.168.18.2/24")
+        this.evaluate(`FcldUiTest.setUiObjectValue("routingPolicyEditor-inIntf", ["any"])`)
+        this.set('#fcld-routingPolicyEditor-srcAddr', "192.168.18.0/24")
+        this.set('#fcld-routingPolicyEditor-dstAddr', "192.168.19.0/24")
         this.set('#fcld-routingPolicyEditor-portSrcFrom', "1")
-        this.set('#fcld-routingPolicyEditor-portSrcTo', "65536")
-        this.set('#fcld-routingPolicyEditor-portDstFrom', "1")
+        this.set('#fcld-routingPolicyEditor-portSrcTo', "30000")
+        this.set('#fcld-routingPolicyEditor-portDstFrom', "30001")
         this.set('#fcld-routingPolicyEditor-portDstTo', "65535")
         this.set('#fcld-routingPolicyEditor-service', "0xff")
         this.set('#fcld-routingPolicyEditor-serviceMask', "0xff")
@@ -93,11 +96,12 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'routing policy edit',
+    name: 'policy_route edit',
     testcase() {
         //subnet case
         this.click(cloudMap['RoutingPolicy'])
-        this.click(cloudMap['Edit Second Item'])
+        this.wait(3000)
+        this.click(cloudMap['Edit Last Item'])
         this.wait(2000)
         this.set('#fcld-routingEditor-destIp', "192.168.18.1")
         this.set('#fcld-routingEditor-destMask', "255.255.0.0")
@@ -128,9 +132,9 @@ new Testcase({
 
         //"If incoming traffic matches" module
         this.evaluate(`FcldUiTest.setUiObjectValue("routingPolicyEditor-protocol", "Any")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("routingPolicyEditor-inIntf", ["dmz","internal"])`)
-        this.set('#fcld-routingPolicyEditor-srcAddr', "192.168.18.1/24")
-        this.set('#fcld-routingPolicyEditor-dstAddr', "192.168.18.2/24")
+        this.evaluate(`FcldUiTest.setUiObjectValue("routingPolicyEditor-inIntf", ["wan","lan"])`)
+        this.set('#fcld-routingPolicyEditor-srcAddr', "192.168.18.0/24")
+        this.set('#fcld-routingPolicyEditor-dstAddr', "192.168.19.0/24")
         this.set('#fcld-routingPolicyEditor-service', "0xff")
         this.set('#fcld-routingPolicyEditor-serviceMask', "0xff")
 

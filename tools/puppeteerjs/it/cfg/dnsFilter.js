@@ -89,7 +89,7 @@ new Testcase({
         //this.click(cloudMap['Action Allow'])
         //this.click(cloudMap['Status'])
 
-        this.click(cloudMap['Ok'])
+        //this.click(cloudMap['Ok'])
         //this.click(cloudMap['Allow DNS requests when a rating error occurs'])
         //this.click(cloudMap['Log all Domains'])
         //this.click(cloudMap['Redirect'])
@@ -101,7 +101,7 @@ new Testcase({
         this.click(gateMap['Security Profiles'])
         this.wait(1000)
         this.click(gateMap['DNS Filter'])
-        this.wait(1000)
+        this.wait(2000)
         this.isCheck(gateMap['Block DNS requests to known botnet C&C'], apiData["blockBotnet"])
         this.isCheck(gateMap['FortiGuard category based filter'], apiData["ftgdDisable"])
         // can't deploy this checkbox only

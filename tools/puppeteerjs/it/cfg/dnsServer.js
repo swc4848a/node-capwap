@@ -19,6 +19,7 @@ let cloudMap = {
     'Database_slave delete': `td.left:contains('${slaveDomain}')~td.right div[title='Delete']:eq(0)`,
     'YES': "span:contains('YES')",
     'Save': "span:contains('Save')",
+    'OK': `//button[text()="OK"]`,
 }
 
 let gateMap = {
@@ -53,12 +54,15 @@ new Testcase({
     },
     verify() {
         openDNSServer(this)
-        this.has(interfaceName)
-        // this.click(gateMap['DNS Servers'])
-        // this.isCheck(gateMap['Use FortiGuard Servers'])
-        // this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
-        // this.isSet(gateMap['Secondary DNS Server'], "208.91.112.52")
-        // this.isSet(gateMap['Local Domain Name'], "test domain")
+        this.click(`//span[text()="Network"]`)
+        this.click(`//span[text()="DNS Servers"]`)
+        this.wait(2000)
+        this.click(`//span[text()="${interfaceName}"]`)
+        this.click(`span:contains('Edit'):eq(0)`)
+        this.wait(2000)
+        this.has(`${interfaceName}`, `div.single-select`)
+        // todo:
+        // this.isSet(`input[ng-model="$ctrl.server.mode"]`, ``)
     }
 })
 
@@ -74,11 +78,6 @@ new Testcase({
     verify() {
         openDNSServer(this)
         this.isDelete(interfaceName, `div.qlist-table`)
-        // this.click(gateMap['DNS Servers'])
-        // this.isCheck(gateMap['Use FortiGuard Servers'])
-        // this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
-        // this.isSet(gateMap['Secondary DNS Server'], "208.91.112.52")
-        // this.isSet(gateMap['Local Domain Name'], "test domain")
     }
 })
 
@@ -103,7 +102,8 @@ new Testcase({
         this.click(cloudMap['Save'])
         //It's bug, test case trigger two requests, so it's necessary to click yes,
         //when bug fixed, remove this clause.
-        this.wait(cloudMap['YES'])
+        this.wait(1000)
+        this.click(cloudMap['OK'])
     },
     verify() {
         openDNSServer(this)
@@ -129,11 +129,6 @@ new Testcase({
     verify() {
         openDNSServer(this)
         this.isDelete(masterDomain)
-        // this.click(gateMap['DNS Servers'])
-        // this.isCheck(gateMap['Use FortiGuard Servers'])
-        // this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
-        // this.isSet(gateMap['Secondary DNS Server'], "208.91.112.52")
-        // this.isSet(gateMap['Local Domain Name'], "test domain")
     }
 })
 new Testcase({
@@ -154,16 +149,23 @@ new Testcase({
         this.click(cloudMap['Save'])
         //It's bug, test case trigger two requests, so it's necessary to click yes,
         //when bug fixed, remove this clause.
-        this.click(cloudMap[`YES`])
+        this.wait(1000)
+        this.click(cloudMap[`OK`])
     },
     verify() {
         openDNSServer(this)
-        this.has(slaveDomain)
-        // this.click(gateMap['DNS Servers'])
-        // this.isCheck(gateMap['Use FortiGuard Servers'])
-        // this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
-        // this.isSet(gateMap['Secondary DNS Server'], "208.91.112.52")
-        // this.isSet(gateMap['Local Domain Name'], "test domain")
+        this.click(`//span[text()="Network"]`)
+        this.click(`//span[text()="DNS Servers"]`)
+        this.wait(2000)
+        this.click(`//td[text()="slave_zone"]`)
+        this.click(`span:contains('Edit'):eq(1)`)
+        this.wait(2000)
+        // todo:
+        // this.isSet(`input#type_slave`, ``)
+        this.isSet(`input[ng-model="$ctrl.database.name"]`, `slave_zone`)
+        this.isSet(`input[ng-model="$ctrl.database.domain"]`, `dns_slave_test`)
+        this.isSet(`input[ng-model="$ctrl.database['ip-master']"]`, `192.168.1.1`)
+        this.isCheck(`input#authoritative`)
     }
 })
 
@@ -182,10 +184,5 @@ new Testcase({
     verify() {
         openDNSServer(this)
         this.isDelete(slaveDomain)
-        // this.click(gateMap['DNS Servers'])
-        // this.isCheck(gateMap['Use FortiGuard Servers'])
-        // this.isSet(gateMap['Primary DNS Server'], "208.91.112.53")
-        // this.isSet(gateMap['Secondary DNS Server'], "208.91.112.52")
-        // this.isSet(gateMap['Local Domain Name'], "test domain")
     }
 })

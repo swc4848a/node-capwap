@@ -73,7 +73,7 @@ class Testcase {
         this.type(`input#username`, config.fortigateUsername)
         this.type(`input#secretkey`, config.fortigatePassword)
         this.click(`button#login_button`)
-        this.wait(1000)
+        this.wait(3000)
         this.condClick(`button:contains("Later")`, `ifExist`)
         this.wait(3000)
     }

@@ -26,7 +26,7 @@ let gateMap = {
     'Network': "//span[text()='Network']",
     'Routing': "a[href='page/p/router/static/']",
     '192.168.18.0 routing': "tr>td>span:contains('192.168.18.0')",
-    'Destination IPMask': "input#dst",
+    'Destination IP/Netmask': `input#dst`,
     'Gateway': "input#gateway",
     'Administrative Distance': "input#distance",
     'Device Interface': "div.selected-entry>span>span>span",
@@ -84,6 +84,37 @@ new Testcase({
     }
 })
 
+new Testcase({
+    name: 'routing edit',
+    testcase() {
+        //subnet case
+        this.click(cloudMap['Routing'])
+        this.click(cloudMap['Edit Second Item'])
+        this.wait(2000)
+        this.set('#fcld-routingEditor-destIp', "192.168.18.1")
+        this.set('#fcld-routingEditor-destMask', "255.255.0.0")
+        this.set('#fcld-routingEditor-gateway', "192.168.1.1")
+        this.set('#fcld-routingEditor-distance', 12)
+        this.evaluate(`FcldUiTest.setUiObjectValue("routingEditor-device", "dmz")`)
+        this.wait(1000)
+        this.evaluate(`FcldUiTest.setUiObjectValue("routingEditor-status", "Disabled")`)
+        this.set('#fcld-routingEditor-comment', "test comments test")
+        this.set('#fcld-routingEditor-priority', "2")
+        this.wait(3000)
+        this.click(cloudMap['Save'])
+    },
+    verify() {
+        openStaticRoutes(this)
+        this.click(`//span[text()="192.168.0.0/16"]`)
+        this.click(`//span[text()="Edit"]`)
+        this.wait(2000)
+        this.isSet(gateMap['Destination IP/Netmask'], "192.168.18.1/255.255.0.0")
+        this.isSet(gateMap['Gateway'], "192.168.1.1")
+        this.isSet(gateMap['Administrative Distance'], 12)
+        this.isSet(gateMap['Device Interface'], "wan2")
+        this.isSet(gateMap['Comments'], "test comments")
+    }
+})
 
 new Testcase({
     name: 'route_subnet delete',
@@ -170,49 +201,15 @@ new Testcase({
 new Testcase({
     name: 'route_internet_service delete',
     testcase() {
-        this.wait(2000)
         this.click(cloudMap['Routing'])
-        this.wait(30000)
+        this.wait(1000)
         this.click(cloudMap['Delete internet service'])
-        this.wait(3000)
         this.click(cloudMap['YES'])
-        this.wait(2000)
+        this.wait(1000)
         this.click(cloudMap['YES']) // still need double click
-        this.wait(2000)
     },
     verify() {
         openStaticRoutes(this)
         this.isDelete(internetServiceComment)
     }
 })
-
-new Testcase({
-    name: 'routing edit',
-    testcase() {
-        //subnet case
-        this.click(cloudMap['Routing'])
-        this.click(cloudMap['Edit Second Item'])
-        this.wait(2000)
-        this.set('#fcld-routingEditor-destIp', "192.168.18.1")
-        this.set('#fcld-routingEditor-destMask', "255.255.0.0")
-        this.set('#fcld-routingEditor-gateway', "192.168.1.1")
-        this.set('#fcld-routingEditor-distance', 12)
-        this.evaluate(`FcldUiTest.setUiObjectValue("routingEditor-device", "dmz")`)
-        this.wait(1000)
-        this.evaluate(`FcldUiTest.setUiObjectValue("routingEditor-status", "Disabled")`)
-        this.set('#fcld-routingEditor-comment', "test comments test")
-        this.set('#fcld-routingEditor-priority', "2")
-        this.wait(3000)
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        openStaticRoutes(this)
-        this.isSet(gateMap['Destination IP'], "192.168.18.0")
-        this.isSet(gateMap['Destination Netmask'], "255.255.255.0")
-        this.isSet(gateMap['Gateway'], "192.168.1.1")
-        this.isSet(gateMap['Administrative Distance'], 12)
-        this.isSet(gateMap['Device Interface'], "wan2")
-        this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-

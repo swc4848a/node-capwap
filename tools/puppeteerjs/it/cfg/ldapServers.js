@@ -50,6 +50,12 @@ new Testcase({
         this.click(cloudMap['OK'])
     },
     verify() {
+        this.click(`span:contains("User & Device")`)
+        this.click(`span:contains("LDAP Servers")`)
+        this.wait(2000)
+        this.click(`//td[text()="server one"]`)
+        this.click(`span:contains("Edit")`)
+        this.wait(2000)
         this.isSet(gateMap['Name'], "server one")
         this.isSet(gateMap['Server IP/Name'], "3.3.3.3")
         this.isSet(gateMap['Server Port'], 636) // if enable secure connection port must be 636

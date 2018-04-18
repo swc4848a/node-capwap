@@ -1,6 +1,7 @@
 let Testcase = require('../../src/testcase.js');
 let userName = "user one"
-let groupName = "group one"
+let groupFirewallName = "group_firewall"
+let groupGuestName = "group_guest"
 let cloudMap = {
     'Users & Groups': "div.gwt-HTML:contains('Users & Groups')",
     'Create New': "button:contains('Create New')",
@@ -24,7 +25,8 @@ let cloudMap = {
     'OK': "button:contains('OK')",
 
     'Delete user one': `td.left:contains('${userName}')~td.right div[title='Delete']:last()`,
-    'Delete group one': `td.left:contains('${groupName}')~td.right div[title='Delete']:last()`,
+    'Delete group firewall': `td.left:contains('${groupFirewallName}')~td.right div[title='Delete']:last()`,
+    'Delete group guest': `td.left:contains('${groupGuestName}')~td.right div[title='Delete']:last()`,
     'YES': "button:contains('YES')"
 }
 
@@ -75,6 +77,44 @@ function openUserGroups(self) {
     self.click(gateMap['UsersGroups'])
     self.wait(1000)
 }
+
+new Testcase({
+    name: 'radius server new for user one',
+    testcase() {
+        this.click(`//div[text()="User & Device"]`)
+        this.click(`//div[text()="RADIUS Servers"]`)
+        this.click(`button:contains("Create New")`)
+
+        this.set('#fcld-userRadiusServersEditor-name', "radius one")
+        this.set('#fcld-userRadiusServersEditor-server', "3.3.3.3")
+        this.set('#fcld-userRadiusServersEditor-serverSecret', "12345678")
+        this.set('#fcld-userRadiusServersEditor-secondServer', "6.6.6.6")
+        this.set('#fcld-userRadiusServersEditor-secondServerSecret', "12345678")
+        this.evaluate(`FcldUiTest.setUiObjectValue("userRadiusServersEditor-authenticationMethod", "PAP")`)
+        this.set('#fcld-userRadiusServersEditor-nasIp', "2.2.2.2")
+        this.evaluate(`FcldUiTest.setUiObjectValue("userRadiusServersEditor-everyGroupCheckBox", "true")`)
+
+        this.click(cloudMap['Save'])
+        this.wait(1000)
+        this.click(cloudMap['OK'])
+    },
+    verify() {
+        this.click(`span:contains("User & Device")`)
+        this.click(`span:contains("RADIUS Servers")`)
+        this.wait(3000)
+        this.click(`//td[text()="radius one"]`)
+        this.click(`//span[text()="Edit"]`)
+        this.wait(1000)
+        this.isSet(`input#name`, "radius one")
+        this.isSet(`input#server`, "3.3.3.3")
+        this.isSet(`input#secondary-server`, "6.6.6.6")
+        // todo: not set auth-type so do not verify
+        // this.isSet(gateMap['Authentication Method'], true)
+        this.isSet(`input#nas-ip`, "2.2.2.2")
+        this.isCheck(`input#all-usergroup`)
+    }
+})
+
 new Testcase({
     name: 'user new',
     testcase() {
@@ -90,28 +130,22 @@ new Testcase({
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserEditor-status", "false")`)
 
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
         openUserDefinition(this)
-        this.has(userName)
+        this.click(`//td[text()="user one"]`)
+        this.click(`//span[text()="Edit User"]`)
+        this.wait(1000)
+        // todo
+        // this.isSet(``, `user one`)
+        this.has(`Remote RADIUS User`)
+        // this.isSet(`input[type="email"]`, `a@qq.com`)
+        // todo:
+        // this.isSet(`input[ng-model="$ctrl.entry.$sms.phoneNumber"]`, ``)
     }
 })
-
-
-new Testcase({
-    name: 'user delete',
-    testcase() {
-        this.click(cloudMap['Users & Groups'])
-        this.click(cloudMap['Delete user one'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-        openUserDefinition(this)
-        this.isDelete(userName)
-    }
-})
-
 
 /*
 Editor: userUserGroupEditor
@@ -141,7 +175,7 @@ new Testcase({
         this.click(cloudMap['Create New'])
         this.click(cloudMap['User Group'])
         this.wait(1000)
-        this.set('#fcld-userUserGroupEditor-name', groupName)
+        this.set('#fcld-userUserGroupEditor-name', groupFirewallName)
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-groupType", "Firewall User Group")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-member", ["guest"])`)
         // this.hide('Members Panel')
@@ -151,11 +185,16 @@ new Testcase({
         // this.set(cloudMap['Remote Groups Group Name two'], 'remote groups two')
         this.wait(1000)
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
         openUserGroups(this)
-        this.has(groupName)
+        this.wait(1000)
+        this.click(`//td[text()="${groupFirewallName} (0 Members)"]`)
+        this.click(`//span[text()="Edit"]`)
+        this.wait(1000)
+        this.isSet(gateMap['Group Name'], groupFirewallName)
     }
 })
 
@@ -165,19 +204,45 @@ new Testcase({
     testcase() {
         this.click(cloudMap['Users & Groups'])
         this.wait(1000)
-        this.click(cloudMap['Delete group one'])
+        this.click(cloudMap['Delete group firewall'])
         this.wait(1000)
         this.click(cloudMap['YES'])
         this.wait(1000)
     },
     verify() {
         openUserGroups(this)
-        this.isDelete(groupName)
+        this.isDelete(groupFirewallName)
     }
 })
 
+new Testcase({
+    name: 'user delete',
+    testcase() {
+        this.click(cloudMap['Users & Groups'])
+        this.click(cloudMap['Delete user one'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+        openUserDefinition(this)
+        this.isDelete(userName)
+    }
+})
 
-
+// todo:
+new Testcase({
+    name: 'radius server delete for user one',
+    testcase() {
+        this.click(cloudMap['RADIUS Servers'])
+        this.click(cloudMap['Delete radius one'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+        this.click(`span:contains("User & Device")`)
+        this.click(`span:contains("RADIUS Servers")`)
+        this.wait(3000)
+        this.isDelete('radius one')
+    }
+})
 
 new Testcase({
     name: 'user_group_guest new',
@@ -186,7 +251,7 @@ new Testcase({
         this.click(cloudMap['Create New'])
         this.click(cloudMap['User Group'])
         this.wait(1000)
-        this.set('#fcld-userUserGroupEditor-name', groupName)
+        this.set('#fcld-userUserGroupEditor-name', groupGuestName)
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-groupType", "Guest User Group")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-multipleGuestAdd", "false")`)
 
@@ -200,7 +265,7 @@ new Testcase({
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-userName", "true")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-sponsorEnable", "false")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-companyEnable", "false")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-email", "false")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-email", "true")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("userUserGroupEditor-mobilePhone", "false")`)
 
 
@@ -212,11 +277,16 @@ new Testcase({
         // this.set(cloudMap['Remote Groups Group Name two'], 'remote groups two')
         this.wait(1000)
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
         openUserGroups(this)
-        this.has(groupName)
+        this.wait(1000)
+        this.click(`//td[text()="${groupGuestName} (0 Members)"]`)
+        this.click(`//span[text()="Edit"]`)
+        this.wait(1000)
+        this.isSet(gateMap['Group Name'], groupGuestName)
     }
 })
 
@@ -225,11 +295,11 @@ new Testcase({
     name: 'user_group_guest delete',
     testcase() {
         this.click(cloudMap['Users & Groups'])
-        this.click(cloudMap['Delete group one'])
+        this.click(cloudMap['Delete group guest'])
         this.click(cloudMap['YES'])
     },
     verify() {
         openUserGroups(this)
-        this.isDelete(groupName)
+        this.isDelete(groupGuestName)
     }
 })

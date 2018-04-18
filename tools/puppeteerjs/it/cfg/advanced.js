@@ -44,7 +44,7 @@ let gateMap = {
     'Use FortiGuard Server': "input#fg-server",
     'Specify': "input#specify-server",
     'Sync Interval': "input#sync-interval",
-    'Server': "input[ng-model='ctrl.systemNtp.ntpserver[0].server']",
+    'Server': "input[ng-model='$ctrl.systemNtp.ntpserver[0].server']",
 }
 
 function displayCloudPage(obj) {
@@ -137,17 +137,21 @@ new Testcase({
 new Testcase({
     name: 'advanced time setting use fortiguard',
     testcase() {
-        displayCloudPage(this)
+        this.click(cloudMap['Settings'])
+        this.wait(1000)
         //this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-timezone", "(GMT-4:30)Caracas")`)
         //this.set(cloudMap['Time Zone'], "04")
-        this.check(cloudMap['Synchronize with NTP Server'])
-        this.click(cloudMap['Use FortiGuard Server'])
-        this.set(cloudMap['Sync Interval'], 100)
+        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-ntpsync", true)`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-type", "Use FortiGuard Server")`)
+        this.set('#fcld-adminSettingsEditor-syncinterval', 100)
 
         this.click(cloudMap['Save'])
     },
     verify() {
-        displayGatePage(this)
+        this.click(gateMap['System'])
+        this.wait(500)
+        this.click(gateMap['Settings'])
+        this.wait(3000)
         //this.isSet(gateMap['Time Zone'], "string:04")
         this.isCheck(gateMap['Synchronize with NTP Server'])
         this.isCheck(gateMap['Use FortiGuard Server'])
@@ -158,17 +162,21 @@ new Testcase({
 new Testcase({
     name: 'advanced time setting specify',
     testcase() {
-        displayCloudPage(this)
+        this.click(cloudMap['Settings'])
+        this.wait(1000)
         //this.set(cloudMap['Time Zone'], "04")
-        this.check(cloudMap['Synchronize with NTP Server'])
-        this.click(cloudMap['Specify'])
-        this.set(cloudMap['Sync Interval'], 200)
-        this.set(cloudMap['Server'], "g.com")
+        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-ntpsync", true)`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-type", "Specify")`)
+        this.set('#fcld-adminSettingsEditor-syncinterval', 200)
+        this.set('#fcld-adminSettingsEditor-server', 'g.com')
 
         this.click(cloudMap['Save'])
     },
     verify() {
-        displayGatePage(this)
+        this.click(gateMap['System'])
+        this.wait(500)
+        this.click(gateMap['Settings'])
+        this.wait(3000)
         //this.isSet(gateMap['Time Zone'], "string:04")
         this.isCheck(gateMap['Synchronize with NTP Server'])
         this.isCheck(gateMap['Specify'])

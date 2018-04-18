@@ -75,11 +75,20 @@ new Testcase({
         this.set('#fcld-serviceEditor-comments', "test comments")
         this.wait(1000)
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
         openServices(this)
-        this.has(serviceName)
+        this.click(`//span[text()="${serviceName}"]`)
+        this.click(`//span[text()="Edit"]`)
+        this.wait(1000)
+        this.isSet(`input#name`, `${serviceName}`)
+        this.isSet(`textarea#comment`, `test comments`)
+        this.isSet(`input#addr`, `1.1.1.1`)
+        this.isSet(`select#category`, `General`)
+        this.isSet(`input.dlow`, `111`)
+        this.isSet(`input.dhigh`, `222`)
     }
 })
 
@@ -87,7 +96,7 @@ new Testcase({
     name: 'service delete',
     testcase() {
         this.click(cloudMap['Services'])
-        //this.click(cloudMap['Last Page'])
+        this.wait(1000)
         this.click(cloudMap['Delete Service One'])
         this.click(cloudMap['YES'])
     },
@@ -111,11 +120,17 @@ new Testcase({
         // this.click(cloudMap['Popup Panel'])
         this.set('#fcld-serviceGroupEditor-comments', "test comments")
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
         openServices(this)
-        this.has(serviceGroupName)
+        this.click(`//span[text()="ServiceGroup_test_one"]`)
+        this.click(`//span[text()="Edit"]`)
+        this.wait(3000)
+        this.isSet(`input#name`, `ServiceGroup_test_one`)
+        this.isSet(`textarea#comment`, `test comments`)
+        this.has(`HTTP`, `div.select-widget`)
     }
 })
 
@@ -147,11 +162,14 @@ new Testcase({
         this.set('#fcld-serviceCategoryEditor-name', categoryName)
         this.set('#fcld-serviceCategoryEditor-comments', "test comments")
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
-        this.click(gateMap['Services'])
+        openServices(this)
+        this.wait(1000)
         this.click(gateMap['Category Settings'])
+        this.wait(4000)
         this.has(categoryName)
     }
 })

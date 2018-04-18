@@ -93,7 +93,7 @@ class Page {
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 const gui = frame ? frame : this.page;
                 if (item.sel.startsWith(`//`)) {
-                    const elem = await gui.waitFor(item.sel, { timeout: 10000 })
+                    const elem = await gui.waitFor(item.sel, { timeout: 20000 })
                     await elem.click()
                 } else if (item.sel.includes(`:`)) {
                     const disabled = await gui.evaluate(`$("${item.sel}").prop("disabled")`)
@@ -139,9 +139,9 @@ class Page {
             case `isType`:
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 if (frame) {
-                    result = await frame.$eval(`${item.sel}`, el => el.value)
+                    result = await frame.evaluate(`$("${item.sel}").val()`)
                 } else {
-                    result = await this.page.$eval(`${item.sel}`, el => el.value)
+                    result = await this.page.evaluate(`$("${item.sel}").val()`)
                 }
                 console.log(`  ${chalk.blue('result:')} [${result}] expect: [${item.expect}] => ${result == item.expect ? chalk.green('success') : chalk.red('failed')}`)
                 assert.equal(result, item.expect, `${item.sel} should be ${item.expect}`)
@@ -180,7 +180,12 @@ class Page {
             case `has`:
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 if (frame) {
-                    result = await frame.evaluate(`$(':contains("${item.target}")').length`);
+                    let sub_frame = this.page.frames().find(frame => frame.name().includes(`slide-iframe`));
+                    if (sub_frame) {
+                        result = await sub_frame.evaluate(`$(':contains("${item.target}")').length`);
+                    } else {
+                        result = await frame.evaluate(`$(':contains("${item.target}")').length`);
+                    }
                 } else {
                     result = await this.page.evaluate(`$(':contains("${item.target}")').length`);
                 }

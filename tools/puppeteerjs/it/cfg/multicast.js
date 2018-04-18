@@ -1,7 +1,7 @@
 let Testcase = require('../../src/testcase.js');
 
 let sparseModeKeyword="777"
-let denseModeKeyword="wan2"
+let denseModeKeyword="lan"
 
 let cloudMap = {
     'MultiCast': "div.gwt-HTML:contains('Multicast')",
@@ -35,14 +35,14 @@ function openMulticast(self) {
     self.wait(1000)
 }
 
-
+// after save deploy button still disabled
 new Testcase({
     name: 'multicast_sparse_mode new',
     testcase() {
         this.click(cloudMap['MultiCast'])
         this.click(cloudMap['Create New'])
         this.wait(2000)
-        this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-intfCombo", "wan2")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-intfCombo", "wan")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-pimModeCombo", "SPARSE_MODE")`)
         this.set('#fcld-multicastInterfaceEditor-drPriorityTextBox', sparseModeKeyword)
         this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-rpCandidateCheckBox", "true")`)
@@ -77,13 +77,16 @@ new Testcase({
         this.isDelete(sparseModeKeyword)
     }
 })
+
+// after save deploy button still disabled
 new Testcase({
     name: 'multicast_dense_mode new',
     testcase() {
         this.click(cloudMap['MultiCast'])
         this.click(cloudMap['Create New'])
         this.wait(2000)
-        this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-intfCombo", "wan2")`)
+        // 
+        this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-intfCombo", "${denseModeKeyword}")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-pimModeCombo", "DENSE_MODE")`)
 
         this.wait(2000)

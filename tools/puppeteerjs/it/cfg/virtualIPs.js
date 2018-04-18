@@ -2,7 +2,7 @@ let Testcase = require('../../src/testcase.js');
 
 let name = "virtual ip one";
 let grpName = "VIP group 1";
-let extintf = "wan1";
+let extintf = "wan";
 let extip0 = "1.1.1.1";
 let extip1 = "2.2.2.2";
 let mappedip0 = "3.3.3.3";
@@ -75,7 +75,9 @@ new Testcase({
         this.click(cloudMap['Create Virtual IP'])
 
         this.set('#fcld-vipEditor-name', name)
+        //if the extintf value not exist in the comboList, vipPut interface will not pass the extintf value.
         this.evaluate(`FcldUiTest.setUiObjectValue("vipEditor-extintf", "${extintf}")`)
+        this.wait(1000)
         this.evaluate(`FcldUiTest.setUiObjectValue("vipEditor-extip0", "${extip0}")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("vipEditor-extip1", "${extip1}")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("vipEditor-mappedip0", "${mappedip0}")`)

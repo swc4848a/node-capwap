@@ -3,7 +3,7 @@ let Testcase = require('../../src/testcase.js');
 
 let interfaceNameVlan = "vantest"
 let interfaceNameLookBack = "lookbacktest"
-let interfaceNameHardWare = "hardwaretest"
+let interfaceNameHardWare = "hardwareInf"
 let interfaceNameAlias = "alias manual"
 
 
@@ -13,9 +13,9 @@ let cloudMap = {
     'Save': "button:contains('Save')",
     'YES': "span:contains('YES')",
 
-    'Delete for interface van': `tr.disabled:contains('${interfaceNameVlan}') div[title='Delete']`,
-    'Delete for interface lookBack': `tr.disabled:contains('${interfaceNameLookBack}') div[title='Delete']`,
-    'Delete for interface hardware': `tr.disabled:contains('${interfaceNameHardWare}') div[title='Delete']`,
+    'Delete for interface van': `td.left:contains('${interfaceNameVlan}')~td.right div[title='Delete']`,
+    'Delete for interface lookBack': `td.left:contains('${interfaceNameLookBack}')~td.right div[title='Delete']`,
+    'Delete for interface hardware': `td.left:contains('${interfaceNameHardWare}')~td.right div[title='Delete']`,
 }
 
 let gateMap = {
@@ -76,6 +76,7 @@ new Testcase({
         this.wait(500)
         this.click(gateMap['Interfaces'])
         this.wait(1000)
+        this.click(`button.compact-visual-toggle`)
         this.has(interfaceNameVlan)
         this.has(interfaceNameAlias)
         // this.isSet(gateMap['Address Mode Manual', "static")
@@ -134,7 +135,7 @@ new Testcase({
         this.click(gateMap['Network'])
         this.wait(500)
         this.click(gateMap['Interfaces'])
-        this.wait(1000)
+        this.wait(3000)
         this.has(interfaceNameLookBack)
         this.has(interfaceNameAlias)
     }
@@ -154,7 +155,7 @@ new Testcase({
         this.click(gateMap['Network'])
         this.wait(500)
         this.click(gateMap['Interfaces'])
-        this.wait(1000)
+        this.wait(3000)
         //todo isDelete now work now.
         this.isDelete(interfaceNameLookBack)
     }
@@ -184,11 +185,10 @@ new Testcase({
         this.click(cloudMap['Save'])
     },
     verify() {
-
         this.click(gateMap['Network'])
         this.wait(500)
         this.click(gateMap['Interfaces'])
-        this.wait(1000)
+        this.wait(2000)
         this.has(interfaceNameHardWare)
         this.has(interfaceNameAlias)
     }
@@ -208,7 +208,6 @@ new Testcase({
         this.wait(500)
         this.click(gateMap['Interfaces'])
         this.wait(1000)
-        //todo isDelete now work now.
         this.isDelete(interfaceNameHardWare)
     }
 })

@@ -16,7 +16,7 @@ let cloudMap = {
     'OK': "button:contains('OK')",
 
     'Delete radius one': "div[title='Delete']:eq(0)",
-    'YES': "div.gwt-PopupPanel button:contains('YES')"
+    'YES': "button:contains('YES')"
 }
 
 let gateMap = {
@@ -24,13 +24,14 @@ let gateMap = {
     'Name': "input#name",
     'Primary Server IP/Name': "input#server",
     'Secondary Server IP/Name': "input#secondary-server",
-    'Authentication Method': "input:radio[name='auth-type']",
+    'Authentication Method': "input[name='auth-type']",
     'NAS IP': "input#nas-ip",
     'Include in every User Group': "input#all-usergroup",
 
     'radius one': "tr[mkey='radius one']",
 }
 
+// todo: after save, deploy button still disabled
 new Testcase({
     name: 'radius server new',
     testcase() {
@@ -47,13 +48,21 @@ new Testcase({
         this.evaluate(`FcldUiTest.setUiObjectValue("userRadiusServersEditor-everyGroupCheckBox", "true")`)
 
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
+        this.click(`span:contains("User & Device")`)
+        this.click(`span:contains("RADIUS Servers")`)
+        this.wait(3000)
+        this.click(`//td[text()="radius one"]`)
+        this.click(`//span[text()="Edit"]`)
+        this.wait(1000)
         this.isSet(gateMap['Name'], "radius one")
         this.isSet(gateMap['Primary Server IP/Name'], "3.3.3.3")
         this.isSet(gateMap['Secondary Server IP/Name'], "6.6.6.6")
-        this.isSet(gateMap['Authentication Method'], true)
+        // todo: not set auth-type so do not verify
+        // this.isSet(gateMap['Authentication Method'], true)
         this.isSet(gateMap['NAS IP'], "2.2.2.2")
         this.isCheck(gateMap['Include in every User Group'])
     }
@@ -67,7 +76,9 @@ new Testcase({
         this.click(cloudMap['YES'])
     },
     verify() {
-        this.click(gateMap['RADIUS Servers'])
-        this.isDelete(gateMap['radius one'])
+        this.click(`span:contains("User & Device")`)
+        this.click(`span:contains("RADIUS Servers")`)
+        this.wait(3000)
+        this.isDelete('radius one')
     }
 })

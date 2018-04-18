@@ -48,7 +48,7 @@ new Testcase({
     testcase() {
         this.wait(2000)
         this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-timezone", "(GMT-4:30)Caracas")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-ntpsync", false)`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-ntpsync", true)`)
         this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-type", "Specify")`)
         this.set('#fcld-adminSettingsEditor-syncinterval', 60)
         this.set('#fcld-adminSettingsEditor-server', 'test.com')
@@ -59,7 +59,7 @@ new Testcase({
         this.set('#fcld-adminSettingsEditor-adminSshPort', sshPort)
         this.set('#fcld-adminSettingsEditor-admintimeout', idleTimeout)
         this.capture('debugAdminSettings.png')
-        this.click(cloudMap['Save'])
+        this.click('#fcld-adminSettingsEditor-save')
         this.wait(2000)
     },
     verify() {
@@ -81,7 +81,7 @@ new Testcase({
     testcase() {
         this.wait(2000)
         this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-timezone", "(GMT-4:30)Caracas")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-ntpsync", false)`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-ntpsync", true)`)
         this.evaluate(`FcldUiTest.setUiObjectValue("adminSettingsEditor-type", "Specify")`)
         this.set('#fcld-adminSettingsEditor-syncinterval', 61)
         this.set('#fcld-adminSettingsEditor-server', 'test.com')
@@ -92,7 +92,7 @@ new Testcase({
         this.set('#fcld-adminSettingsEditor-adminSshPort', sshPort)
         this.set('#fcld-adminSettingsEditor-admintimeout', idleTimeout)
         this.capture('debugAdminSettings.png')
-        this.click(cloudMap['Save'])
+        this.click('#fcld-adminSettingsEditor-save')
         this.wait(2000)
     },
     verify() {
