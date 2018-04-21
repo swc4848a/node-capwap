@@ -83,6 +83,7 @@ new Testcase({
     testcase() {
         this.click(`//div[text()="User & Device"]`)
         this.click(`//div[text()="RADIUS Servers"]`)
+        this.wait(1000)
         this.click(`button:contains("Create New")`)
 
         this.set('#fcld-userRadiusServersEditor-name', "radius one")
@@ -103,6 +104,7 @@ new Testcase({
         this.click(`span:contains("RADIUS Servers")`)
         this.wait(3000)
         this.click(`//td[text()="radius one"]`)
+        this.wait(1000)
         this.click(`//span[text()="Edit"]`)
         this.wait(1000)
         this.isSet(`input#name`, "radius one")
@@ -119,6 +121,7 @@ new Testcase({
     name: 'user new',
     testcase() {
         this.click(cloudMap['Users & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['User'])
         this.wait(1000)
@@ -172,6 +175,7 @@ new Testcase({
     name: 'user_group_firewall new',
     testcase() {
         this.click(cloudMap['Users & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['User Group'])
         this.wait(1000)
@@ -219,7 +223,9 @@ new Testcase({
     name: 'user delete',
     testcase() {
         this.click(cloudMap['Users & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Delete user one'])
+        this.wait(1000)
         this.click(cloudMap['YES'])
     },
     verify() {
@@ -228,16 +234,20 @@ new Testcase({
     }
 })
 
-// todo:
 new Testcase({
     name: 'radius server delete for user one',
     testcase() {
-        this.click(cloudMap['RADIUS Servers'])
-        this.click(cloudMap['Delete radius one'])
+        this.click(`//div[text()="User & Device"]`)
+        this.wait(500)
+        this.click(`//div[text()="RADIUS Servers"]`)
+        this.wait(3000)
+        this.click("div[title='Delete']:eq(0)")
+        this.wait(500)
         this.click(cloudMap['YES'])
     },
     verify() {
         this.click(`span:contains("User & Device")`)
+        this.wait(500)
         this.click(`span:contains("RADIUS Servers")`)
         this.wait(3000)
         this.isDelete('radius one')
@@ -248,6 +258,7 @@ new Testcase({
     name: 'user_group_guest new',
     testcase() {
         this.click(cloudMap['Users & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.click(cloudMap['User Group'])
         this.wait(1000)
@@ -295,6 +306,7 @@ new Testcase({
     name: 'user_group_guest delete',
     testcase() {
         this.click(cloudMap['Users & Groups'])
+        this.wait(1000)
         this.click(cloudMap['Delete group guest'])
         this.click(cloudMap['YES'])
     },

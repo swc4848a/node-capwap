@@ -124,22 +124,6 @@ new Testcase({
 })
 
 new Testcase({
-    name: 'virtual ip delete',
-    testcase() {
-        this.click(cloudMap['Virtual IPs'])
-        this.click(cloudMap['Delete Virtual IP One'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-        this.click(gateMap['Policy & Objects'])
-        this.wait(1000)
-        this.click(gateMap['Virtual IPs'])
-        this.wait(5000)
-        this.isDelete(name)
-    }
-})
-
-new Testcase({
     name: 'virtual ip group new',
     testcase() {
         
@@ -187,5 +171,21 @@ new Testcase({
         this.click(gateMap['Virtual IPs'])
         this.wait(5000)
         this.isDelete(grpName)
+    }
+})
+
+new Testcase({
+    name: 'virtual ip delete',
+    testcase() {
+        this.click(cloudMap['Virtual IPs'])
+        this.click(cloudMap['Delete Virtual IP One'])
+        this.click(cloudMap['YES'])
+    },
+    verify() {
+        this.click(gateMap['Policy & Objects'])
+        this.wait(1000)
+        this.click(gateMap['Virtual IPs'])
+        this.wait(5000)
+        this.isDelete(name)
     }
 })

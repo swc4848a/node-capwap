@@ -6,14 +6,15 @@ const Config = require('../conf/config')
 
 class Page {
     constructor() {
-        this.browser = undefined;
-        this.page = undefined;
+        this.browser = undefined
+        this.page = undefined
+        this.launchOptions = undefined
     }
     async setup(options) {
         const width = 1600
         const height = 900
 
-        let launchOptions = {
+        this.launchOptions = {
             headless: options.headless,
             ignoreHTTPSErrors: true,
             args: [
@@ -24,13 +25,13 @@ class Page {
         if (process.platform === `win32`) {
 
         } else if (process.platform === `linux`) {
-            launchOptions.executablePath = `/usr/bin/google-chrome`
-            launchOptions.args.push(`--no-sandbox`)
+            this.launchOptions.executablePath = `/usr/bin/google-chrome`
+            this.launchOptions.args.push(`--no-sandbox`)
         } else {
             console.error(`${chalk.red('unsupport')} os ${process.platform}`);
         }
 
-        this.browser = await puppeteer.launch(launchOptions);
+        this.browser = await puppeteer.launch(this.launchOptions);
 
         this.page = await this.browser.newPage();
         this.page.on('console', msg => {
@@ -57,7 +58,9 @@ class Page {
         await this.page.waitFor(3000)
     }
     async close() {
-        await this.page.screenshot({ path: path.join(__dirname, '../out/result.png') });
+        await this.page.screenshot({
+            path: path.join(__dirname, '../out/result.png')
+        });
         await this.browser.close();
     }
     async action(item) {
@@ -69,7 +72,9 @@ class Page {
         switch (item.action) {
             case `screenshot`:
                 console.log(`  ${chalk.blue('screenshot')} ./out/${item.filename}`)
-                await this.page.screenshot({ path: path.join(__dirname, `../out/${item.filename}`) })
+                await this.page.screenshot({
+                    path: path.join(__dirname, `../out/${item.filename}`)
+                })
                 break
             case `evaluate`:
                 console.log(`  ${chalk.blue('evaluate')} ${item.script}`)
@@ -85,7 +90,9 @@ class Page {
                 break
             case `type`:
                 console.log(`  ${chalk.blue('type')} ${item.sel} '${item.val}'`)
-                await this.page.waitFor(item.sel, { timeout: 10000 })
+                await this.page.waitFor(item.sel, {
+                    timeout: 10000
+                })
                 await this.page.type(item.sel, item.val)
                 break
             case `click`:
@@ -93,7 +100,9 @@ class Page {
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 const gui = frame ? frame : this.page;
                 if (item.sel.startsWith(`//`)) {
-                    const elem = await gui.waitFor(item.sel, { timeout: 20000 })
+                    const elem = await gui.waitFor(item.sel, {
+                        timeout: 20000
+                    })
                     await elem.click()
                 } else if (item.sel.includes(`:`)) {
                     const disabled = await gui.evaluate(`$("${item.sel}").prop("disabled")`)
@@ -108,9 +117,9 @@ class Page {
                 }
                 break
             case `condClick`:
-                await this.page.waitFor(2000) 
+                await this.page.waitFor(2000)
                 if (item.cond == `ifExist`) {
-                    if(await this.page.evaluate(`$("${item.sel}").length`)){
+                    if (await this.page.evaluate(`$("${item.sel}").length`)) {
                         await this.page.evaluate(`$("${item.sel}").click()`)
                     }
                 } else {
@@ -126,9 +135,13 @@ class Page {
                 this.page.waitFor(1000)
                 frame = this.page.frames().find(frame => frame.name().includes('embedded-iframe'));
                 if (frame) {
-                    await frame.waitFor(item.sel, { timeout: item.timeout })
+                    await frame.waitFor(item.sel, {
+                        timeout: item.timeout
+                    })
                 } else {
-                    await this.page.waitFor(item.sel, { timeout: item.timeout })
+                    await this.page.waitFor(item.sel, {
+                        timeout: item.timeout
+                    })
                 }
                 console.log(`  ${chalk.blue('waitFor')} ${item.sel} timeout ${item.timeout}`)
                 break
@@ -207,11 +220,21 @@ class Page {
                     assert(false, `${item.sel}: ${error.message}`)
                     break
                 }
+                if (error.message.includes(`Navigation Timeout`)) {
+                    await this.restart(testcase)
+                    break
+                }
                 assert(false, `${item.sel}: ${error.message}`)
                 // this.page.capture(``)
                 break
             }
         }
+    }
+    async restart() {
+        await this.close()
+        await this.setup(this.launchOptions)
+        await this.goto()
+        await this.login()
     }
 };
 

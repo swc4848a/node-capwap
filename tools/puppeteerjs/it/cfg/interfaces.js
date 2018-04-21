@@ -49,8 +49,8 @@ new Testcase({
     name: 'interface_type_vlan new',
     testcase() {
         this.click(cloudMap['Interfaces'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
-
         this.wait(1000)
         this.set('#fcld-interfaceEditor-name', interfaceNameVlan)
         this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
@@ -64,8 +64,8 @@ new Testcase({
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-miscScanGroup", "Monitor")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Disable")`)
-
         this.set('#fcld-interfaceEditor-comments', "test comments")
+
         this.wait(1000)
         this.click(cloudMap['Save'])
         this.wait(5000)
@@ -197,8 +197,8 @@ new Testcase({
 new Testcase({
     name: 'interface_hardware delete',
     testcase() {
-        this.wait(1000)
         this.click(cloudMap['Interfaces'])
+        this.wait(1000)
         this.click(cloudMap['Delete for interface hardware'])
         this.click(cloudMap['YES'])
     },

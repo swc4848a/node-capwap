@@ -16,8 +16,9 @@ let Testcase = require('../../src/testcase.js');
         "user" : "guest",
         "userGroup" : "Guest-group",
         "ip" : "172.16.8.8",
-        "oldProfile" : "monitor-all",
-        "newProfile" : "default",
+        // choose default profile is OK
+        // "oldProfile" : "monitor-all",
+        // "newProfile" : "default",
         "expires" : "2019-02-05 11:12"
 };
 
@@ -47,34 +48,38 @@ let gateMap = {
 }
 
 new Testcase({
-    name: 'Web Profile Overrides edit',
+    name: `Web Profile Overrides User New`,
+    testcase() {
+        this.click(`div:contains("User & Device")`)
+        this.click(`div:contains("Users & Groups")`)
+        this.wait(1000)
+        this.click(`button:contains("Create New")`)
+        this.wait(1000)
+        this.click(`div.filter_text:contains("User"):eq(0)`)
+        this.wait(1000)
+        this.set(`input#fcld-userUserEditor-name`, `guest`)
+        this.set(`input#fcld-userUserEditor-passwd`, `12345678`)
+        this.set(`input#fcld-userUserEditor-emailTo`, `guest@fortinet.com`)
+        this.click(`button:contains("Save")`)
+    }
+})
+
+new Testcase({
+    name: 'Web Profile Overrides New',
     testcase() {
         this.click(cloudMap['Web Profile Overrides'])
         this.wait(1000)
         this.click(cloudMap['Create New'])
         this.wait(1000)
         this.readApiData('utmWebProfileEditor', apiData);
-        /*
-        this.click(cloudMap['Scope Range User'])
-        this.click(cloudMap['Calendar'])
-        this.set(cloudMap['Select Minutes'], "59")
-        this.click(cloudMap['Select'])
-        */
         this.click('#fcld-utmWebProfileEditor-save')
         this.click(cloudMap['OK'])
     },
-    verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
-        this.click(gateMap['Web Profile Overrides'])
-        this.wait(1000)
-        this.has(apiData['oldProfile'])
-        this.has(apiData['newProfile'])        
-    }
+    // do nothing, fos hide this page now
 })
 
 new Testcase({
-    name: 'Web Profile Overrides delete',
+    name: 'Web Profile Overrides Delete',
     testcase() {
         this.click(cloudMap['Web Profile Overrides'])
         this.wait(1000)
@@ -82,14 +87,18 @@ new Testcase({
         this.click(cloudMap['Delete'])
         this.click(cloudMap['YES'])
     },
-    verify() {
-        this.click(gateMap['Security Profiles'])
-        this.wait(500)
-        this.click(gateMap['Web Profile Overrides'])
-        this.wait(1000)
+    // do nothing, fos hide this page now
+})
 
-        this.isDelete(apiData['oldProfile'])
-        this.isDelete(apiData['newProfile'])
+new Testcase({
+    name: `Web Profile Overrides User Delete`,
+    testcase() {
+        this.click(`div:contains("User & Device")`)
+        this.click(`div:contains("Users & Groups")`)
+        this.wait(1000)
+        this.click(`td.left:contains("guest")~td.right div[title="Delete"]`)
+        this.wait(1000)
+        this.click(`span:contains(YES)`)
     }
 })
 

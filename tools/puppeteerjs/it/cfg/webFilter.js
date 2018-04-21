@@ -44,7 +44,7 @@ let apiData = {
 	//"ftgdCategoryBasedFilter.filters",
 	//"ftgdCategoryBasedFilter.quota",
 	"overrideChecked" : true,
-	"override.groups" : "['Guest-group', 'SSO_Guest_Users']",
+	"override.groups" : "['SSO_Guest_Users']",
 	"override.profiles" : "monitor-all",
 	"override.scope" : "User Group",
 	"override.durationMode" : "Predefined",
@@ -266,6 +266,7 @@ new Testcase({
     name: 'web filter edit Allow users to override blocked categories',
     testcase() {
         this.click(cloudMap['Web Filter'])
+        this.wait(1000)
         this.evaluate(`FcldUiTest.setUiObjectValue("utmWebFilterEditor-override.durationMode", "Ask")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("utmWebFilterEditor-override.scope", "Ask")`)
         this.click(cloudMap['Save'])

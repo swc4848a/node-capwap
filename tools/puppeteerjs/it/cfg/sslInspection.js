@@ -40,23 +40,23 @@ let gateMap = {
 
 }
 
-new Testcase({
-    name: 'ssl inspection edit',
-    testcase() {
-        /* read only, don't test.
-        this.click(cloudMap['SSL Inspection'])
+// new Testcase({
+//     name: 'ssl inspection edit',
+//     testcase() {
+//         /* read only, don't test.
+//         this.click(cloudMap['SSL Inspection'])
 
-        this.set(cloudMap['Comments'], "test comemnts")
-        this.click(cloudMap['Multiple Clients Connecting to Multiple Servers'])
-        this.click(cloudMap['SSL Certificate Inspection'])
-        this.click(cloudMap['Untrusted SSL Certificates Allow'])
-        this.click(cloudMap['Allow Invalid SSL Certificates'])
-        this.click(cloudMap['Log Invalid Certificates'])
+//         this.set(cloudMap['Comments'], "test comemnts")
+//         this.click(cloudMap['Multiple Clients Connecting to Multiple Servers'])
+//         this.click(cloudMap['SSL Certificate Inspection'])
+//         this.click(cloudMap['Untrusted SSL Certificates Allow'])
+//         this.click(cloudMap['Allow Invalid SSL Certificates'])
+//         this.click(cloudMap['Log Invalid Certificates'])
 
-        this.click(cloudMap['Save'])
-        */
-    },
-    verify() {
-        this.click(gateMap['SSL Inspection'])
-    }
-})
+//         this.click(cloudMap['Save'])
+//         */
+//     },
+//     verify() {
+//         this.click(gateMap['SSL Inspection'])
+//     }
+// })

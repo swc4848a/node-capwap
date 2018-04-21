@@ -55,7 +55,7 @@ function openStaticRoutes(self) {
     self.click(gateMap['Network'])
     self.wait(1000)
     self.click(gateMap['Routing'])
-    self.wait(1000)
+    self.wait(5000)
 }
 
 

@@ -1,5 +1,6 @@
 let Testcase = require('../../src/testcase.js');
 
+let serverName = "server one"
 let cloudMap = {
     'LDAP Servers': "div.gwt-HTML:contains('LDAP Servers')",
     'Create New': "button:contains('Create New')",
@@ -37,7 +38,7 @@ new Testcase({
         this.click(cloudMap['LDAP Servers'])
         this.click(cloudMap['Create New'])
         this.wait(1000)
-        this.set('#fcld-userLdapServersEditor-name', "server one")
+        this.set('#fcld-userLdapServersEditor-name', serverName)
         this.set('#fcld-userLdapServersEditor-serverIp', "3.3.3.3")
         this.set('#fcld-userLdapServersEditor-serverPort', 100)
         this.set('#fcld-userLdapServersEditor-cnid', "ldap id")
@@ -47,21 +48,23 @@ new Testcase({
 
         this.wait(1000)
         this.click(cloudMap['Save'])
+        this.wait(1000)
         this.click(cloudMap['OK'])
     },
     verify() {
         this.click(`span:contains("User & Device")`)
         this.click(`span:contains("LDAP Servers")`)
         this.wait(2000)
-        this.click(`//td[text()="server one"]`)
+        this.click(`//td[text()='${serverName}']`)
         this.click(`span:contains("Edit")`)
         this.wait(2000)
-        this.isSet(gateMap['Name'], "server one")
+        this.isSet(gateMap['Name'], serverName)
         this.isSet(gateMap['Server IP/Name'], "3.3.3.3")
-        this.isSet(gateMap['Server Port'], 636) // if enable secure connection port must be 636
+        //this.isSet(gateMap['Server Port'], 636) // if enable secure connection port must be 636
+        this.isSet(gateMap['Server Port'], 100) // if enable secure connection port must be 636
         this.isSet(gateMap['Common Name Identifier'], "ldap id")
         this.isSet(gateMap['Distinguished Name'], "ldap dis")
-        this.isCheck(gateMap['Secure Connection'])
+        this.isUncheck(gateMap['Secure Connection'])
     }
 })
 

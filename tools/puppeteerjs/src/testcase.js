@@ -29,9 +29,11 @@ class Testcase {
             this.cloudDeploy()
         }
         if (!(commander.skip() && commander.skip().includes(`verify`))) {
-            this.fosLogin()
-            this.verify()
-            this.fosLogout()
+            if (this.verify) {
+                this.fosLogin()
+                this.verify()
+                this.fosLogout()
+            }
         }
     }
     analysisReportsSetup() {
@@ -60,7 +62,7 @@ class Testcase {
         this.wait(10000)
     }
     cloudDeploy() {
-        this.wait(1000)
+        this.wait(`//div[contains(text(), "Last Modified:")]`)
         this.click(`button:contains('Deploy')`)
         this.click(`//label[text()="Immediately"]`)
         this.click(`//button[text()="Apply"]`)
@@ -80,6 +82,7 @@ class Testcase {
     fosLogout() {
         this.click(`div:contains('admin')`)
         this.click(`span:contains('Logout')`)
+        this.wait(2000)
     }
     capture(filename) {
         this.seq.push({

@@ -53,9 +53,11 @@ new Testcase({
     },
     verify() {
         this.click(`span:contains("User & Device")`)
+        this.wait(500)
         this.click(`span:contains("RADIUS Servers")`)
         this.wait(3000)
         this.click(`//td[text()="radius one"]`)
+        this.wait(1000)
         this.click(`//span[text()="Edit"]`)
         this.wait(1000)
         this.isSet(gateMap['Name'], "radius one")
@@ -72,11 +74,14 @@ new Testcase({
     name: 'radius server delete',
     testcase() {
         this.click(cloudMap['RADIUS Servers'])
+        this.wait(500)
         this.click(cloudMap['Delete radius one'])
+        this.wait(500)
         this.click(cloudMap['YES'])
     },
     verify() {
         this.click(`span:contains("User & Device")`)
+        this.wait(500)
         this.click(`span:contains("RADIUS Servers")`)
         this.wait(3000)
         this.isDelete('radius one')

@@ -40,7 +40,7 @@ let gateMap = {
 }
 
 function displayCloudPage(obj) {
-    obj.click(cloudMap['FortiGuard'])
+    obj.evaluate(`FcldUiTest.setUiObjectValue("MENU:(FortiGuard)", "")`)
     obj.wait(3000)
 }
 
@@ -48,7 +48,7 @@ function displayGatePage(obj) {
     obj.click(gateMap['System'])
     obj.wait(500)
     obj.click(gateMap['FortiGuard'])
-    obj.wait(2000)
+    obj.wait(3000)
 }
 
 let every_hour = 5
@@ -71,7 +71,7 @@ new Testcase({
         this.check('#fcld-fortiGuardEditor-webfilterCache > input')
         this.check('#fcld-fortiGuardEditor-antispamCache > input')
         this.click('#fcld-fortiGuardEditor-save')
-        this.wait(2000)
+        this.wait(1000)
     },
     verify() {
         displayGatePage(this)
@@ -95,7 +95,7 @@ new Testcase({
         this.uncheck('#fcld-fortiGuardEditor-webfilterCache > input')
         this.uncheck('#fcld-fortiGuardEditor-antispamCache > input')
         this.click('#fcld-fortiGuardEditor-save')
-        this.wait(2000)
+        this.wait(1000)
     },
     verify() {
         displayGatePage(this)

@@ -16,7 +16,7 @@ let cloudMap = {
 
 let gateMap = {
     'Network': "//span[text()='Network']",
-    'MultiCast': "a[href='page/route/multicast/edit']",
+    'MultiCast': `//span[text()="Multicast"]`,
     '192.168.18.0 routing': "tr>td>span:contains('192.168.18.0')",
     'Destination IPMask': "input#dst",
     'Gateway': "input#gateway",
@@ -40,6 +40,9 @@ new Testcase({
     name: 'multicast_sparse_mode new',
     testcase() {
         this.click(cloudMap['MultiCast'])
+        this.wait(1000)
+        this.check(`input:checkbox`)
+        this.click(`span:contains('Save')`)
         this.click(cloudMap['Create New'])
         this.wait(2000)
         this.evaluate(`FcldUiTest.setUiObjectValue("multicastInterfaceEditor-intfCombo", "wan")`)
@@ -68,6 +71,7 @@ new Testcase({
     testcase() {
         this.wait(2000)
         this.click(cloudMap['MultiCast'])
+        this.wait(1000)
         this.click(cloudMap['Delete Sparse Item'])
         this.click(cloudMap['YES'])
         this.click(cloudMap['YES']) // still need double click
@@ -83,6 +87,7 @@ new Testcase({
     name: 'multicast_dense_mode new',
     testcase() {
         this.click(cloudMap['MultiCast'])
+        this.wait(1000)
         this.click(cloudMap['Create New'])
         this.wait(2000)
         // 
@@ -110,6 +115,7 @@ new Testcase({
     testcase() {
         this.wait(2000)
         this.click(cloudMap['MultiCast'])
+        this.wait(1000)
         this.click(cloudMap['Delete Dense Item'])
         this.click(cloudMap['YES'])
         this.click(cloudMap['YES']) // still need double click
@@ -125,6 +131,7 @@ new Testcase({
     testcase() {
         //sparse mode
         this.click(cloudMap['MultiCast'])
+        this.wait(1000)
         this.click(cloudMap['Edit first Item'])
         this.wait(2000)
 
