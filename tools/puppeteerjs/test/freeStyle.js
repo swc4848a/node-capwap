@@ -13,7 +13,7 @@ describe(`Free Style Module Demo`, function() {
 
     before(async function() {
         page = new Page();
-        await page.setup({ headless: true });
+        await page.setup({ headless: false });
         p = page.page;
     });
 

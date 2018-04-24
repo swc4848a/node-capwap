@@ -52,7 +52,7 @@ let cloudMap = {
 
 let gateMap = {
     'Security Profiles': "//span[text()='Security Profiles']",
-    'DNS Filter': "a[ng-href='page/p/utm/dns/profile/edit/default/']",
+    'DNS Filter': "//span[text()='DNS Filter']",
 
     'Block DNS requests to known botnet C&C': "input#block-botnet",
     'FortiGuard category based filter': "input#ftgd_ftgd_cats",

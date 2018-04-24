@@ -55,7 +55,7 @@ new Testcase({
         this.set('#fcld-interfaceEditor-name', interfaceNameVlan)
         this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "VLAN")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-physIntf", "wan1")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-physIntf", "wan")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "WAN")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-vlanid", "2048")`)
         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "DHCP")`)

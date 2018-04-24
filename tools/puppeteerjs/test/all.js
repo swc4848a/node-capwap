@@ -37,16 +37,16 @@ describe("All Testcases", function() {
     for (const testcase of cases.cfg) {
         it(testcase.name, async function () {
             console.log(`  ==> run testcase: ${testcase.name}`)
-            // await page.goto();
-            // await page.run(testcase);
+            await page.goto();
+            await page.run(testcase);
         });
     }
 
     for (const testcase of cases.report) {
         it(testcase.name, async function () {
             console.log(`  ==> run testcase: ${testcase.name}`)
-            // await page.goto();
-            // await page.run(testcase);
+            await page.goto();
+            await page.run(testcase);
         });
     }
 });

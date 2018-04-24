@@ -2,6 +2,7 @@ let Testcase = require('../../src/testcase.js');
 
 let policyName="policy_test"
 let cloudMap = {
+    'Interfaces': "div.gwt-HTML:contains('Interfaces')",
     'IPv4 Policy': "div.gwt-HTML:contains('IPv4 Policy'):eq(0)",
     'Create New': "button:contains('Create New')",
     'Delete Last Item': `td.left:contains('${policyName}') ~td.right div[title='Delete']:last()`,
@@ -10,6 +11,8 @@ let cloudMap = {
 }
 
 let gateMap = {
+    'Network': "//span[text()='Network']",
+    'Interfaces': "a[ng-href='page/p/system/interface/']",
     'Policy & Objects': "//span[text()='Policy & Objects']",
     'IPv4 Policy': "//span[text()='IPv4 Policy']"
 }
@@ -21,9 +24,35 @@ function openIPV4Policy(self) {
     self.wait(1000)
 }
 
+new Testcase({
+    name: 'ipv4 policy vlan interface new',
+    testcase() {
+        this.click(cloudMap['Interfaces'])
+        this.wait(1000)
+        this.click(cloudMap['Create New'])
+        this.wait(1000)
+        this.set('#fcld-interfaceEditor-name', `policy-intf`)
+        this.set('#fcld-interfaceEditor-alias', `policy-intf`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "VLAN")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-physIntf", "wan")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "LAN")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-vlanid", "2048")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "DHCP")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDefaultgw", "false")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDnsServerOverride", "false")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-miscScanGroup", "Monitor")`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Disable")`)
+        this.set('#fcld-interfaceEditor-comments', "test comments")
+
+        this.wait(1000)
+        this.click(cloudMap['Save'])
+        this.wait(5000)
+    }
+})
 
 new Testcase({
-    name: 'IPV4_policy new',
+    name: 'ipv4 policy new',
     testcase() {
         this.click(cloudMap['IPv4 Policy'])
         this.wait(1000)
@@ -31,8 +60,8 @@ new Testcase({
         this.wait(1000)
 
         this.set('#fcld-policyEditor-name', policyName)
-        this.evaluate(`FcldUiTest.setUiObjectValue("policyEditor-srcintf", ["dmz","internal"])`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("policyEditor-dstintf", ["wan1","wan2"])`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("policyEditor-srcintf", ["policy-intf"])`)
+        this.evaluate(`FcldUiTest.setUiObjectValue("policyEditor-dstintf", ["policy-intf"])`)
         this.evaluate(`FcldUiTest.setUiObjectValue("policyEditor-srcaddr", ["all","none"])`)
         this.evaluate(`FcldUiTest.setUiObjectValue("policyEditor-dstaddr", ["all","none"])`)
         this.evaluate(`FcldUiTest.setUiObjectValue("policyEditor-schedule", ["always"])`)
@@ -53,10 +82,8 @@ new Testcase({
     }
 })
 
-
-
 new Testcase({
-    name: 'IPV4_policy delete',
+    name: 'ipv4 policy delete',
     testcase() {
         this.wait(1000)
         this.click(cloudMap['IPv4 Policy'])
@@ -68,5 +95,15 @@ new Testcase({
     verify() {
         openIPV4Policy(this)
         this.isDelete(policyName)
+    }
+})
+
+new Testcase({
+    name: 'ipv4 policy vlan interface delete',
+    testcase() {
+        this.wait(1000)
+        this.click(cloudMap['Interfaces'])
+        this.click(`td.left:contains('policy-intf')~td.right div[title='Delete']`)
+        this.click(cloudMap['YES'])
     }
 })
