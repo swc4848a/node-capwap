@@ -4,6 +4,19 @@ const assert = require('chai').assert;
 const chalk = require('chalk');
 const Config = require('../conf/config')
 
+function selectorType(selector) {
+    if (Number.isInteger(selector)) {
+        return `integer`
+    }
+    if (selector.includes(`//`)) {
+        return `xpath`
+    } else if (selector.includes(`:`)) {
+        return `jquery`
+    } else {
+        return `dom`
+    }
+}
+
 class Page {
     constructor() {
         this.browser = undefined
@@ -16,6 +29,7 @@ class Page {
 
         this.launchOptions = {
             headless: options.headless,
+            slowMo: options.slowMo,
             ignoreHTTPSErrors: true,
             args: [
                 `--window-size=${width},${height}`
@@ -47,8 +61,61 @@ class Page {
             height: height,
         });
     }
-    async goto() {
-        await this.page.goto(Config.cloudUrl)
+    async goto(url) {
+        console.log(`  ${chalk.blue('goto')} ${url}`)
+        await this.page.goto(url)
+    }
+    async wait(selectorOrTimeout) {
+        console.log(`  ${chalk.blue('wait')} ${selectorOrTimeout}`)
+        switch (selectorType(selectorOrTimeout)) {
+            case `xpath`:
+                await this.page.waitForXPath(selectorOrTimeout, {
+                    timeout: 40000
+                })
+                break
+            case `dom`:
+            case `integer`:
+                await this.page.waitFor(selectorOrTimeout)
+                break;
+            default:
+                console.log(`unknowned selector type`)
+        }
+    }
+    async type(selector, text) {
+        console.log(`  ${chalk.blue('type')} ${selector} ${text}`)
+        if (Number.isInteger(text)) {
+            text = text.toString()
+        }
+        await this.page.type(selector, text)
+    }
+    async set(selector, text) {
+        console.log(`  ${chalk.blue('set')} ${selector} ${text}`)
+        await this.page.evaluate(`$("${selector}").val("${text}")`)
+    }
+    async click(selector) {
+        console.log(`  ${chalk.blue('click')} ${selector}`)
+        switch (selectorType(selector)) {
+            case `jquery`:
+                await this.page.evaluate(`$('${selector}').click()`)
+                break
+            case `dom`:
+                await this.page.click(selector)
+                break;
+            default:
+                console.log(`unknowned selector type`)
+        }
+    }
+    async evaluate(pageFunction) {
+        console.log(`  ${chalk.blue('evaluate')} ${pageFunction}`)
+        await this.page.evaluate(pageFunction)
+    }
+    async check(selector) {
+        console.log(`  ${chalk.blue('check')} ${selector}`)
+        await this.page.evaluate(`$("${selector}").prop("checked", true)`)
+    }
+    async uncheck(selector) {
+        console.log(`  ${chalk.blue('uncheck')} ${selector}`)
+        await this.page.evaluate(`$("${selector}").prop("checked", false)`)
     }
     async login() {
         await this.page.waitFor(3000)
@@ -233,7 +300,7 @@ class Page {
     async restart() {
         await this.close()
         await this.setup(this.launchOptions)
-        await this.goto()
+        await this.goto(Config.cloudUrl)
         await this.login()
     }
 };

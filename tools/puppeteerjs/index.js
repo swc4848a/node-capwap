@@ -4,6 +4,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const Page = require('./src/page');
 const cases = require('./src/cases');
+const config = require('./conf/config');
 const commander = require('./src/commander');
 commander.show();
 
@@ -25,7 +26,7 @@ commander.show();
     let page = new Page();
     await page.setup({ headless: commander.headless() });
     if (!(commander.skip() && commander.skip().includes(`testcase`))) {
-        await page.goto();
+        await page.goto(config.cloudUrl);
         await page.login();
     }
 
@@ -35,7 +36,7 @@ commander.show();
             continue
         }
         console.log(chalk`  {blue ==>} run testcase: {blue ${testcase.name}}`)
-        await page.goto()
+        await page.goto(config.cloudUrl)
         await page.run(testcase)
     }
 
@@ -45,7 +46,7 @@ commander.show();
             continue
         }
         console.log(chalk`  {blue ==>} run testcase: {blue ${testcase.name}}`)
-        await page.goto()
+        await page.goto(config.cloudUrl)
         await page.run(testcase)
     }
 
