@@ -389,6 +389,8 @@ vsp.VSP_FORTINET_VAP_LDPC_CONFIG = 232
 vsp.VSP_FORTINET_ST_VLAN_ID = 234
 vsp.VSP_FORTINET_STA_RADIUS_INFO = 235
 
+vsp.VSP_FORTINET_STA_MPSK_NAME = 253
+
 vsp.VSP_FORTINET_WTP_POE_OPER = 0x100
 vsp.VSP_FORTINET_WTP_LED_BLINK = 0x101
 
@@ -554,6 +556,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_VAP_LDPC_CONFIG] = "Vap Ldpc Config",
     [vsp.VSP_FORTINET_ST_VLAN_ID] = "St Vlan ID",
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = "Sta Radius Info",
+    [vsp.VSP_FORTINET_STA_MPSK_NAME] = "Sta MPSK Name",
     [vsp.VSP_FORTINET_WTP_POE_OPER] = "Wtp PoE operating mode",
     [vsp.VSP_FORTINET_WTP_LED_BLINK] = "Wtp LED Blink",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = "Wids Subtype Rf Threat Rogue Ap",
@@ -788,6 +791,22 @@ local wtp_poe_mode_opers = {
     [2] = "802.3at",
     [3] = "Power Adapter",
 };
+
+local wids_sub_type = {
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = "RF Threat Rogue AP",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP] = "RF Threat Interfear AP",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WL_BR] = "RF Threat WL BR",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WEP_IV] = "RF Threat Wep IV",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_BC_DEAUTH] = "RF Threat BC DeAuth",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_NL_PBRESP] = "RF Threat NL PbResp",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_LONG_DUR] = "RF Threat Long Dur",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_MAC_OUI] = "RF Threat MAC Oui",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_MGMT_FLOOD] = "RF Threat Mgmt Flood",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_SPOOF_DEAUTH] = "RF Threat Spoof DeAuth",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ASLEAP] = "RF Threat AsLeap",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_EAPOL] = "RF Threat EAPOL",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_LAST] = "RF Threat Last",
+}
 
 local CAPWAP_HDR_LEN = 16
 
@@ -1202,6 +1221,12 @@ pf.mpsk_buf = ProtoField.new("Multi PSK Buf", "ftnt.capwap.message.element.mpsk.
 pf.mpsk_name = ProtoField.new("Name", "ftnt.capwap.message.element.mpsk.name", ftypes.STRING)
 pf.concurrent_clients = ProtoField.new("Concurrent Clients", "ftnt.capwap.message.element.mpsk.current.clients", ftypes.UINT64)
 pf.password = ProtoField.new("Password", "ftnt.capwap.message.element.password", ftypes.STRING)
+
+pf.mpsk_name = ProtoField.new("MPSK Name", "ftnt.capwap.message.element.mpsk.name", ftypes.STRING)
+pf.wids_subtype = ProtoField.new("Wids SubType", "ftnt.capwap.message.element.wids.subtype", ftypes.UINT32, wids_sub_type)
+pf.wids_subtype_len = ProtoField.new("Wids SubType Length", "ftnt.capwap.message.element.wids.subtype.length", ftypes.UINT32)
+pf.wids_subver = ProtoField.new("Wids Sub Version", "ftnt.capwap.message.element.wids.sub.version", ftypes.UINT16)
+pf.wids_datas = ProtoField.new("Wids Datas", "ftnt.capwap.message.element.wids.datas", ftypes.BYTES)
 
 capwap.fields = pf
 
@@ -1692,6 +1717,14 @@ function staLocateDecoder(tlv, tvbrange)
     tlv:add(pf.locate_interval, tvb:range(2, 2))
 end
 
+function widsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.wids_subtype, tvb:range(0, 4))
+    tlv:add(pf.wids_subtype_len, tvb:range(4, 4))
+    tlv:add(pf.wids_subver, tvb:range(8, 2))
+    tlv:add(pf.wids_datas, tvb:range(10))
+end
+
 function widsEnableDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -2000,6 +2033,15 @@ function mgmtVapDecoder(tlv, tvbrange)
     tlv:add(pf.vfid, tvb:range(18+sn_length, 4))
 end
 
+function staMpskNameDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_address, tvb:range(2, 6))
+    tlv:add(pf.length, tvb:range(8, 1))
+    tlv:add(pf.mpsk_name, tvb:range(9))
+end
+
 function wtpPoeOperDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.poe_oper, tvb:range(0, 1))
@@ -2126,7 +2168,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_TXPWR_MAX] = txPowerMaxDecoder,
     [vsp.VSP_FORTINET_TXPWR_DBM] = txPowerDbmDecoder,
     [vsp.VSP_FORTINET_TIMERS_INTERVAL] = nil,
-    [vsp.VSP_FORTINET_WIDS] = nil,
+    [vsp.VSP_FORTINET_WIDS] = widsDecoder,
     [vsp.VSP_FORTINET_WIDS_ENABLE] = widsEnableDecoder,
     [vsp.VSP_FORTINET_WIDS_PARAMS_LONG_DUR] = nil,
     [vsp.VSP_FORTINET_WIDS_PARAMS_ASSOC_TIME] = nil,
@@ -2142,6 +2184,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_VAP_LDPC_CONFIG] = nil,
     [vsp.VSP_FORTINET_ST_VLAN_ID] = nil,
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = nil,
+    [vsp.VSP_FORTINET_STA_MPSK_NAME] = staMpskNameDecoder,
     [vsp.VSP_FORTINET_WTP_POE_OPER] = wtpPoeOperDecoder,
     [vsp.VSP_FORTINET_WTP_LED_BLINK] = wtpLedBlinkDecoder,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = nil,
@@ -2556,6 +2599,11 @@ end
 
 function AddStationDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.mac_length, tvb:range(1, 1))
+    local mac_len = tvb:range(1, 1):uint()
+    tlv:add(pf.mac, tvb:range(2, mac_len))
+    tlv:add(pf.ssid, tvb:range(2 + mac_len))
 end
 
 function Reserved9(tlv, tvbrange)
