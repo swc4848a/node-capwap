@@ -1,5 +1,9 @@
 #diagram
 
+### Generated diagram
+
+![Generated diagram](./diagram.svg)
+
 ### Mermaid
 
 [Mermaid](http://knsv.github.io/mermaid/) doc for modules interaction
@@ -140,7 +144,3 @@ sequenceDiagram
 
     capwap->>external_hostapd: CW_IPC_MSG_C2E_STA_IPADDR
 ```
-
-Generated diagram
-
-![Generated diagram](./diagram.svg)
