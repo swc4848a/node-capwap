@@ -1,0 +1,350 @@
+<svg id="mermaid-1528221358204" width="100%" xmlns="http://www.w3.org/2000/svg" height="100%" style="max-width:1250px;" viewBox="-50 -10 1250 3018"><style>
+
+
+#mermaid-1528221358204 .label {
+  font-family: 'trebuchet ms', verdana, arial;
+  color: #333; }
+
+#mermaid-1528221358204 .node rect,
+#mermaid-1528221358204 .node circle,
+#mermaid-1528221358204 .node ellipse,
+#mermaid-1528221358204 .node polygon {
+  fill: #ECECFF;
+  stroke: #9370DB;
+  stroke-width: 1px; }
+
+#mermaid-1528221358204 .node.clickable {
+  cursor: pointer; }
+
+#mermaid-1528221358204 .arrowheadPath {
+  fill: #333333; }
+
+#mermaid-1528221358204 .edgePath .path {
+  stroke: #333333;
+  stroke-width: 1.5px; }
+
+#mermaid-1528221358204 .edgeLabel {
+  background-color: #e8e8e8; }
+
+#mermaid-1528221358204 .cluster rect {
+  fill: #ffffde !important;
+  stroke: #aaaa33 !important;
+  stroke-width: 1px !important; }
+
+#mermaid-1528221358204 .cluster text {
+  fill: #333; }
+
+#mermaid-1528221358204 div.mermaidTooltip {
+  position: absolute;
+  text-align: center;
+  max-width: 200px;
+  padding: 2px;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-size: 12px;
+  background: #ffffde;
+  border: 1px solid #aaaa33;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 100; }
+
+#mermaid-1528221358204 .actor {
+  stroke: #CCCCFF;
+  fill: #ECECFF; }
+
+#mermaid-1528221358204 text.actor {
+  fill: black;
+  stroke: none; }
+
+#mermaid-1528221358204 .actor-line {
+  stroke: grey; }
+
+#mermaid-1528221358204 .messageLine0 {
+  stroke-width: 1.5;
+  stroke-dasharray: '2 2';
+  marker-end: 'url(#arrowhead)';
+  stroke: #333; }
+
+#mermaid-1528221358204 .messageLine1 {
+  stroke-width: 1.5;
+  stroke-dasharray: '2 2';
+  stroke: #333; }
+
+#mermaid-1528221358204 #arrowhead {
+  fill: #333; }
+
+#mermaid-1528221358204 #crosshead path {
+  fill: #333 !important;
+  stroke: #333 !important; }
+
+#mermaid-1528221358204 .messageText {
+  fill: #333;
+  stroke: none; }
+
+#mermaid-1528221358204 .labelBox {
+  stroke: #CCCCFF;
+  fill: #ECECFF; }
+
+#mermaid-1528221358204 .labelText {
+  fill: black;
+  stroke: none; }
+
+#mermaid-1528221358204 .loopText {
+  fill: black;
+  stroke: none; }
+
+#mermaid-1528221358204 .loopLine {
+  stroke-width: 2;
+  stroke-dasharray: '2 2';
+  marker-end: 'url(#arrowhead)';
+  stroke: #CCCCFF; }
+
+#mermaid-1528221358204 .note {
+  stroke: #aaaa33;
+  fill: #fff5ad; }
+
+#mermaid-1528221358204 .noteText {
+  fill: black;
+  stroke: none;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-size: 14px; }
+
+
+#mermaid-1528221358204 .section {
+  stroke: none;
+  opacity: 0.2; }
+
+#mermaid-1528221358204 .section0 {
+  fill: rgba(102, 102, 255, 0.49); }
+
+#mermaid-1528221358204 .section2 {
+  fill: #fff400; }
+
+#mermaid-1528221358204 .section1,
+#mermaid-1528221358204 .section3 {
+  fill: white;
+  opacity: 0.2; }
+
+#mermaid-1528221358204 .sectionTitle0 {
+  fill: #333; }
+
+#mermaid-1528221358204 .sectionTitle1 {
+  fill: #333; }
+
+#mermaid-1528221358204 .sectionTitle2 {
+  fill: #333; }
+
+#mermaid-1528221358204 .sectionTitle3 {
+  fill: #333; }
+
+#mermaid-1528221358204 .sectionTitle {
+  text-anchor: start;
+  font-size: 11px;
+  text-height: 14px; }
+
+
+#mermaid-1528221358204 .grid .tick {
+  stroke: lightgrey;
+  opacity: 0.3;
+  shape-rendering: crispEdges; }
+
+#mermaid-1528221358204 .grid path {
+  stroke-width: 0; }
+
+
+#mermaid-1528221358204 .today {
+  fill: none;
+  stroke: red;
+  stroke-width: 2px; }
+
+
+
+#mermaid-1528221358204 .task {
+  stroke-width: 2; }
+
+#mermaid-1528221358204 .taskText {
+  text-anchor: middle;
+  font-size: 11px; }
+
+#mermaid-1528221358204 .taskTextOutsideRight {
+  fill: black;
+  text-anchor: start;
+  font-size: 11px; }
+
+#mermaid-1528221358204 .taskTextOutsideLeft {
+  fill: black;
+  text-anchor: end;
+  font-size: 11px; }
+
+
+#mermaid-1528221358204 .taskText0,
+#mermaid-1528221358204 .taskText1,
+#mermaid-1528221358204 .taskText2,
+#mermaid-1528221358204 .taskText3 {
+  fill: white; }
+
+#mermaid-1528221358204 .task0,
+#mermaid-1528221358204 .task1,
+#mermaid-1528221358204 .task2,
+#mermaid-1528221358204 .task3 {
+  fill: #8a90dd;
+  stroke: #534fbc; }
+
+#mermaid-1528221358204 .taskTextOutside0,
+#mermaid-1528221358204 .taskTextOutside2 {
+  fill: black; }
+
+#mermaid-1528221358204 .taskTextOutside1,
+#mermaid-1528221358204 .taskTextOutside3 {
+  fill: black; }
+
+
+#mermaid-1528221358204 .active0,
+#mermaid-1528221358204 .active1,
+#mermaid-1528221358204 .active2,
+#mermaid-1528221358204 .active3 {
+  fill: #bfc7ff;
+  stroke: #534fbc; }
+
+#mermaid-1528221358204 .activeText0,
+#mermaid-1528221358204 .activeText1,
+#mermaid-1528221358204 .activeText2,
+#mermaid-1528221358204 .activeText3 {
+  fill: black !important; }
+
+
+#mermaid-1528221358204 .done0,
+#mermaid-1528221358204 .done1,
+#mermaid-1528221358204 .done2,
+#mermaid-1528221358204 .done3 {
+  stroke: grey;
+  fill: lightgrey;
+  stroke-width: 2; }
+
+#mermaid-1528221358204 .doneText0,
+#mermaid-1528221358204 .doneText1,
+#mermaid-1528221358204 .doneText2,
+#mermaid-1528221358204 .doneText3 {
+  fill: black !important; }
+
+
+#mermaid-1528221358204 .crit0,
+#mermaid-1528221358204 .crit1,
+#mermaid-1528221358204 .crit2,
+#mermaid-1528221358204 .crit3 {
+  stroke: #ff8888;
+  fill: red;
+  stroke-width: 2; }
+
+#mermaid-1528221358204 .activeCrit0,
+#mermaid-1528221358204 .activeCrit1,
+#mermaid-1528221358204 .activeCrit2,
+#mermaid-1528221358204 .activeCrit3 {
+  stroke: #ff8888;
+  fill: #bfc7ff;
+  stroke-width: 2; }
+
+#mermaid-1528221358204 .doneCrit0,
+#mermaid-1528221358204 .doneCrit1,
+#mermaid-1528221358204 .doneCrit2,
+#mermaid-1528221358204 .doneCrit3 {
+  stroke: #ff8888;
+  fill: lightgrey;
+  stroke-width: 2;
+  cursor: pointer;
+  shape-rendering: crispEdges; }
+
+#mermaid-1528221358204 .doneCritText0,
+#mermaid-1528221358204 .doneCritText1,
+#mermaid-1528221358204 .doneCritText2,
+#mermaid-1528221358204 .doneCritText3 {
+  fill: black !important; }
+
+#mermaid-1528221358204 .activeCritText0,
+#mermaid-1528221358204 .activeCritText1,
+#mermaid-1528221358204 .activeCritText2,
+#mermaid-1528221358204 .activeCritText3 {
+  fill: black !important; }
+
+#mermaid-1528221358204 .titleText {
+  text-anchor: middle;
+  font-size: 18px;
+  fill: black; }
+
+#mermaid-1528221358204 g.classGroup text {
+  fill: #9370DB;
+  stroke: none;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-size: 10px; }
+
+#mermaid-1528221358204 g.classGroup rect {
+  fill: #ECECFF;
+  stroke: #9370DB; }
+
+#mermaid-1528221358204 g.classGroup line {
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 .classLabel .box {
+  stroke: none;
+  stroke-width: 0;
+  fill: #ECECFF;
+  opacity: 0.5; }
+
+#mermaid-1528221358204 .classLabel .label {
+  fill: #9370DB;
+  font-size: 10px; }
+
+#mermaid-1528221358204 .relation {
+  stroke: #9370DB;
+  stroke-width: 1;
+  fill: none; }
+
+#mermaid-1528221358204 #compositionStart {
+  fill: #9370DB;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 #compositionEnd {
+  fill: #9370DB;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 #aggregationStart {
+  fill: #ECECFF;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 #aggregationEnd {
+  fill: #ECECFF;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 #dependencyStart {
+  fill: #9370DB;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 #dependencyEnd {
+  fill: #9370DB;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 #extensionStart {
+  fill: #9370DB;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 #extensionEnd {
+  fill: #9370DB;
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1528221358204 .commit-id,
+#mermaid-1528221358204 .commit-msg,
+#mermaid-1528221358204 .branch-label {
+  fill: lightgrey;
+  color: lightgrey; }
+</style><style>#mermaid-1528221358204 {
+    color: rgba(0, 0, 0, 0.65);
+    font: normal normal 400 normal 14px / 21px "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }</style><g></g><g><line id="actor0" x1="75" y1="5" x2="75" y2="3007" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="0" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="75" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="75" dy="0">eap_proxy</tspan></text></g><g><line id="actor1" x1="275" y1="5" x2="275" y2="3007" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="200" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="275" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="275" dy="0">external_hostapd</tspan></text></g><g><line id="actor2" x1="475" y1="5" x2="475" y2="3007" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="400" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="475" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="475" dy="0">internal_hostapd</tspan></text></g><g><line id="actor3" x1="675" y1="5" x2="675" y2="3007" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="600" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="675" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="675" dy="0">capwap</tspan></text></g><g><line id="actor4" x1="875" y1="5" x2="875" y2="3007" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="800" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="875" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="875" dy="0">wtp_wpa</tspan></text></g><g><line id="actor5" x1="1075" y1="5" x2="1075" y2="3007" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="1000" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="1075" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="1075" dy="0">wpa_supplicant</tspan></text></g><defs><marker id="arrowhead" refX="5" refY="2" markerWidth="6" markerHeight="4" orient="auto"><path d="M 0,0 V 4 L6,2 Z"></path></marker></defs><defs><marker id="crosshead" markerWidth="15" markerHeight="8" orient="auto" refX="16" refY="4"><path fill="black" stroke="#000000" stroke-width="1px" d="M 9,2 V 6 L16,4 Z" style="stroke-dasharray: 0, 0;"></path><path fill="none" stroke="#000000" stroke-width="1px" d="M 0,1 L 6,7 M 6,1 L 0,7" style="stroke-dasharray: 0, 0;"></path></marker></defs><g><text x="775" y="93" class="messageText" style="text-anchor: middle;">IEEE 802.11 WLAN Configuration Request</text><line x1="675" y1="100" x2="875" y2="100" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="775" y="128" class="messageText" style="text-anchor: middle;">IEEE 802.11 WLAN Configuration Response</text><line x1="875" y1="135" x2="675" y2="135" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><rect x="650" y="145" fill="#EDF2AE" stroke="#666" width="250" height="36" rx="0" ry="0" class="note"></rect><text x="646" y="169" fill="black" class="noteText"><tspan x="666" fill="black">wtp connect success</tspan></text></g><g><text x="475" y="234" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_VAP_ADD</text><line x1="675" y1="241" x2="275" y2="241" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="269" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_WLAN_INIT</text><line x1="275" y1="276" x2="675" y2="276" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><line x1="265" y1="191" x2="685" y2="191" class="loopLine"></line><line x1="685" y1="191" x2="685" y2="286" class="loopLine"></line><line x1="265" y1="286" x2="685" y2="286" class="loopLine"></line><line x1="265" y1="191" x2="265" y2="286" class="loopLine"></line><polygon points="265,191 315,191 315,204 306.6,211 265,211" class="labelBox"></polygon><text x="272.5" y="206" fill="black" class="labelText"><tspan x="272.5" fill="black">loop</tspan></text><text x="475" y="206" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="475" fill="black">[ 2 Times ]</tspan></text></g><g><text x="475" y="339" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_WLAN_KEY</text><line x1="675" y1="346" x2="275" y2="346" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="374" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_VAP_CHG</text><line x1="675" y1="381" x2="275" y2="381" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="409" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_WLAN_KEY</text><line x1="275" y1="416" x2="675" y2="416" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><line x1="265" y1="296" x2="685" y2="296" class="loopLine"></line><line x1="685" y1="296" x2="685" y2="426" class="loopLine"></line><line x1="265" y1="426" x2="685" y2="426" class="loopLine"></line><line x1="265" y1="296" x2="265" y2="426" class="loopLine"></line><polygon points="265,296 315,296 315,309 306.6,316 265,316" class="labelBox"></polygon><text x="272.5" y="311" fill="black" class="labelText"><tspan x="272.5" fill="black">loop</tspan></text><text x="475" y="311" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="475" fill="black">[ 2 Times ]</tspan></text></g><g><text x="475" y="479" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_WLAN_KEY</text><line x1="675" y1="486" x2="275" y2="486" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><line x1="265" y1="436" x2="685" y2="436" class="loopLine"></line><line x1="685" y1="436" x2="685" y2="496" class="loopLine"></line><line x1="265" y1="496" x2="685" y2="496" class="loopLine"></line><line x1="265" y1="436" x2="265" y2="496" class="loopLine"></line><polygon points="265,436 315,436 315,449 306.6,456 265,456" class="labelBox"></polygon><text x="272.5" y="451" fill="black" class="labelText"><tspan x="272.5" fill="black">loop</tspan></text><text x="475" y="451" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="475" fill="black">[ 2 Times ]</tspan></text></g><g><text x="975" y="524" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_ADD</text><line x1="875" y1="531" x2="1075" y2="531" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="559" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_ADDED</text><line x1="1075" y1="566" x2="875" y2="566" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="594" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_ASSOC</text><line x1="1075" y1="601" x2="875" y2="601" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="675" y="629" class="messageText" style="text-anchor: middle;">Association Request(SSID)</text><line x1="875" y1="636" x2="475" y2="636" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="575" y="664" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_I2C_STA_ADD</text><line x1="475" y1="671" x2="675" y2="671" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="675" y="699" class="messageText" style="text-anchor: middle;">Association Request</text><line x1="475" y1="706" x2="875" y2="706" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="975" y="734" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_ASSOC</text><line x1="875" y1="741" x2="1075" y2="741" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="769" class="messageText" style="text-anchor: middle;">Station Configuration Request</text><line x1="675" y1="776" x2="875" y2="776" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="475" y="804" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_STA_ADD</text><line x1="675" y1="811" x2="275" y2="811" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="864" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_WLAN_KEY</text><line x1="275" y1="871" x2="675" y2="871" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><line x1="265" y1="821" x2="685" y2="821" class="loopLine"></line><line x1="685" y1="821" x2="685" y2="881" class="loopLine"></line><line x1="265" y1="881" x2="685" y2="881" class="loopLine"></line><line x1="265" y1="821" x2="265" y2="881" class="loopLine"></line><polygon points="265,821 315,821 315,834 306.6,841 265,841" class="labelBox"></polygon><text x="272.5" y="836" fill="black" class="labelText"><tspan x="272.5" fill="black">loop</tspan></text><text x="475" y="836" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="475" fill="black">[ 2 Times ]</tspan></text></g><g><rect x="200" y="891" fill="#EDF2AE" stroke="#666" width="150" height="36" rx="0" ry="0" class="note"></rect><text x="196" y="915" fill="black" class="noteText"><tspan x="216" fill="black">EAP: Server state machine created</tspan></text></g><g><text x="775" y="955" class="messageText" style="text-anchor: middle;">Station Configuration Response</text><line x1="875" y1="962" x2="675" y2="962" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="475" y="990" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_8021X [EAP Packet (identifier)]</text><line x1="275" y1="997" x2="675" y2="997" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="1025" class="messageText" style="text-anchor: middle;">EAP Request Identity</text><line x1="675" y1="1032" x2="875" y2="1032" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="475" y="1060" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_STA_KEY_CLR</text><line x1="675" y1="1067" x2="275" y2="1067" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="1095" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_8021X</text><line x1="875" y1="1102" x2="1075" y2="1102" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="1130" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_8021X</text><line x1="1075" y1="1137" x2="875" y2="1137" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="1165" class="messageText" style="text-anchor: middle;">EAP Response Identity</text><line x1="875" y1="1172" x2="675" y2="1172" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="475" y="1200" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_8021X [EAP Response-Identity]</text><line x1="675" y1="1207" x2="275" y2="1207" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="175" y="1235" class="messageText" style="text-anchor: middle;">Access-Request[User-Name]</text><line x1="275" y1="1242" x2="75" y2="1242" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="175" y="1270" class="messageText" style="text-anchor: middle;">Access-Challenge[EAP-Request-PEAP]</text><line x1="75" y1="1277" x2="275" y2="1277" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="1305" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_8021X[IEEE 802.1X]</text><line x1="275" y1="1312" x2="675" y2="1312" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="1340" class="messageText" style="text-anchor: middle;">EAP Request Tunneled TLS EAP (EAP-PEAP)</text><line x1="675" y1="1347" x2="875" y2="1347" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="975" y="1375" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_8021X</text><line x1="875" y1="1382" x2="1075" y2="1382" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="1410" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_8021X</text><line x1="1075" y1="1417" x2="875" y2="1417" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="1445" class="messageText" style="text-anchor: middle;">TLSv1 Client Hello</text><line x1="875" y1="1452" x2="675" y2="1452" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="775" y="1505" class="messageText" style="text-anchor: middle;">TLSv1 Server Hello, Certificate, Sever Hello Done</text><line x1="675" y1="1512" x2="875" y2="1512" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="975" y="1540" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_8021X</text><line x1="875" y1="1547" x2="1075" y2="1547" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="1575" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_8021X</text><line x1="1075" y1="1582" x2="875" y2="1582" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="1610" class="messageText" style="text-anchor: middle;">EAP Response, Tunneled TLS EAP (EAP-PEAP)</text><line x1="875" y1="1617" x2="675" y2="1617" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><line x1="665" y1="1462" x2="1085" y2="1462" class="loopLine"></line><line x1="1085" y1="1462" x2="1085" y2="1627" class="loopLine"></line><line x1="665" y1="1627" x2="1085" y2="1627" class="loopLine"></line><line x1="665" y1="1462" x2="665" y2="1627" class="loopLine"></line><polygon points="665,1462 715,1462 715,1475 706.6,1482 665,1482" class="labelBox"></polygon><text x="672.5" y="1477" fill="black" class="labelText"><tspan x="672.5" fill="black">loop</tspan></text><text x="875" y="1477" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="875" fill="black">[ 3 Times ]</tspan></text></g><g><text x="475" y="1680" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_8021X[EAP Response-PEAP]</text><line x1="675" y1="1687" x2="275" y2="1687" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="175" y="1715" class="messageText" style="text-anchor: middle;">Access-Request[EAP-Message]</text><line x1="275" y1="1722" x2="75" y2="1722" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="175" y="1750" class="messageText" style="text-anchor: middle;">Access-Challenge[EAP-Message]</text><line x1="75" y1="1757" x2="275" y2="1757" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="1785" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_8021X[EAP-Request-PEAP]</text><line x1="275" y1="1792" x2="675" y2="1792" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><line x1="65" y1="1637" x2="685" y2="1637" class="loopLine"></line><line x1="685" y1="1637" x2="685" y2="1802" class="loopLine"></line><line x1="65" y1="1802" x2="685" y2="1802" class="loopLine"></line><line x1="65" y1="1637" x2="65" y2="1802" class="loopLine"></line><polygon points="65,1637 115,1637 115,1650 106.6,1657 65,1657" class="labelBox"></polygon><text x="72.5" y="1652" fill="black" class="labelText"><tspan x="72.5" fill="black">loop</tspan></text><text x="375" y="1652" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="375" fill="black">[ 3 Times ]</tspan></text></g><g><text x="475" y="1830" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_WIDS_EAPOL_INFO</text><line x1="275" y1="1837" x2="675" y2="1837" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="1865" class="messageText" style="text-anchor: middle;">TLSv1 Server Hello, Certificate, Sever Hello Done</text><line x1="675" y1="1872" x2="875" y2="1872" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="975" y="1900" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_8021X</text><line x1="875" y1="1907" x2="1075" y2="1907" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="1935" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_8021X</text><line x1="1075" y1="1942" x2="875" y2="1942" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="1970" class="messageText" style="text-anchor: middle;">TLSv1 Client Key Exchange, Change Cipher Spec, Encrypted Handshake Message</text><line x1="875" y1="1977" x2="675" y2="1977" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="775" y="2005" class="messageText" style="text-anchor: middle;">TLSv1 New Session Ticket</text><line x1="675" y1="2012" x2="875" y2="2012" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="975" y="2040" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_8021X</text><line x1="875" y1="2047" x2="1075" y2="2047" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="2075" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_8021X</text><line x1="1075" y1="2082" x2="875" y2="2082" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="2135" class="messageText" style="text-anchor: middle;">TLSv1 Application Data</text><line x1="875" y1="2142" x2="675" y2="2142" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="775" y="2170" class="messageText" style="text-anchor: middle;">TLSv1 Application Data</text><line x1="675" y1="2177" x2="875" y2="2177" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="975" y="2205" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_8021X</text><line x1="875" y1="2212" x2="1075" y2="2212" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="2240" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_8021X</text><line x1="1075" y1="2247" x2="875" y2="2247" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><line x1="665" y1="2092" x2="1085" y2="2092" class="loopLine"></line><line x1="1085" y1="2092" x2="1085" y2="2257" class="loopLine"></line><line x1="665" y1="2257" x2="1085" y2="2257" class="loopLine"></line><line x1="665" y1="2092" x2="665" y2="2257" class="loopLine"></line><polygon points="665,2092 715,2092 715,2105 706.6,2112 665,2112" class="labelBox"></polygon><text x="672.5" y="2107" fill="black" class="labelText"><tspan x="672.5" fill="black">loop</tspan></text><text x="875" y="2107" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="875" fill="black">[ 2 Times ]</tspan></text></g><g><text x="775" y="2285" class="messageText" style="text-anchor: middle;">TLSv1 Application Data</text><line x1="875" y1="2292" x2="675" y2="2292" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="175" y="2320" class="messageText" style="text-anchor: middle;">EAP Success</text><line x1="75" y1="2327" x2="275" y2="2327" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="2355" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_8021X</text><line x1="275" y1="2362" x2="675" y2="2362" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="2390" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_8021X</text><line x1="675" y1="2397" x2="275" y2="2397" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="2425" class="messageText" style="text-anchor: middle;">EAP Success</text><line x1="675" y1="2432" x2="875" y2="2432" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="775" y="2485" class="messageText" style="text-anchor: middle;">EAPOL Key</text><line x1="675" y1="2492" x2="875" y2="2492" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="975" y="2520" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_C2E_STA_8021X</text><line x1="875" y1="2527" x2="1075" y2="2527" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="975" y="2555" class="messageText" style="text-anchor: middle;">CW_WPA_MSG_E2C_STA_8021X</text><line x1="1075" y1="2562" x2="875" y2="2562" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="2590" class="messageText" style="text-anchor: middle;">EAPOL Key</text><line x1="875" y1="2597" x2="675" y2="2597" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><line x1="665" y1="2442" x2="1085" y2="2442" class="loopLine"></line><line x1="1085" y1="2442" x2="1085" y2="2607" class="loopLine"></line><line x1="665" y1="2607" x2="1085" y2="2607" class="loopLine"></line><line x1="665" y1="2442" x2="665" y2="2607" class="loopLine"></line><polygon points="665,2442 715,2442 715,2455 706.6,2462 665,2462" class="labelBox"></polygon><text x="672.5" y="2457" fill="black" class="labelText"><tspan x="672.5" fill="black">loop</tspan></text><text x="875" y="2457" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="875" fill="black">[ 2 Times ]</tspan></text></g><g><text x="475" y="2660" class="messageText" style="text-anchor: middle;">EAPOL_KEY</text><line x1="675" y1="2667" x2="275" y2="2667" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="2695" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_8021X</text><line x1="275" y1="2702" x2="675" y2="2702" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="2730" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_8021X</text><line x1="675" y1="2737" x2="275" y2="2737" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><line x1="265" y1="2617" x2="685" y2="2617" class="loopLine"></line><line x1="685" y1="2617" x2="685" y2="2747" class="loopLine"></line><line x1="265" y1="2747" x2="685" y2="2747" class="loopLine"></line><line x1="265" y1="2617" x2="265" y2="2747" class="loopLine"></line><polygon points="265,2617 315,2617 315,2630 306.6,2637 265,2637" class="labelBox"></polygon><text x="272.5" y="2632" fill="black" class="labelText"><tspan x="272.5" fill="black">loop</tspan></text><text x="475" y="2632" fill="black" class="loopText" style="text-anchor: middle;"><tspan x="475" fill="black">[ 2 Times ]</tspan></text></g><g><text x="775" y="2775" class="messageText" style="text-anchor: middle;">Station Configuration Request</text><line x1="675" y1="2782" x2="875" y2="2782" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="475" y="2810" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_E2C_WLAN_KEY</text><line x1="275" y1="2817" x2="675" y2="2817" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="475" y="2845" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_WLAN_KEY</text><line x1="675" y1="2852" x2="275" y2="2852" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><text x="775" y="2880" class="messageText" style="text-anchor: middle;">Station Configuration Response</text><line x1="875" y1="2887" x2="675" y2="2887" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></g><g><text x="475" y="2915" class="messageText" style="text-anchor: middle;">CW_IPC_MSG_C2E_STA_IPADDR</text><line x1="675" y1="2922" x2="275" y2="2922" class="messageLine0" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" style="fill: none;"></line></g><g><rect x="0" y="2942" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="75" y="2974.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="75" dy="0">eap_proxy</tspan></text></g><g><rect x="200" y="2942" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="275" y="2974.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="275" dy="0">external_hostapd</tspan></text></g><g><rect x="400" y="2942" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="475" y="2974.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="475" dy="0">internal_hostapd</tspan></text></g><g><rect x="600" y="2942" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="675" y="2974.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="675" dy="0">capwap</tspan></text></g><g><rect x="800" y="2942" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="875" y="2974.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="875" dy="0">wtp_wpa</tspan></text></g><g><rect x="1000" y="2942" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="1075" y="2974.5" dominant-baseline="central" alignment-baseline="central" class="actor" style="text-anchor: middle;"><tspan x="1075" dy="0">wpa_supplicant</tspan></text></g></svg>
