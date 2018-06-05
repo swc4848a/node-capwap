@@ -1,4 +1,4 @@
-#diagram
+# diagram
 
 ### Generated diagram
 
