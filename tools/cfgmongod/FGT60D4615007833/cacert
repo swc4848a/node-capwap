@@ -1,0 +1,279 @@
+FGT60D4615007833 $  get vpn certificate ca
+== [ Fortinet_CA ]
+name: Fortinet_CA   
+== [ Fortinet_Wifi_CA ]
+name: Fortinet_Wifi_CA   
+== [ Fortinet_Wifi_CA2 ]
+name: Fortinet_Wifi_CA2   
+== [ ACCVRAIZ1 ]
+name: ACCVRAIZ1   
+== [ AC_RAIZ_FNMT-RCM ]
+name: AC_RAIZ_FNMT-RCM   
+== [ Actalis_Authentication_Root_CA ]
+name: Actalis_Authentication_Root_CA   
+== [ AddTrust_External_Root ]
+name: AddTrust_External_Root   
+== [ AffirmTrust_Commercial ]
+name: AffirmTrust_Commercial   
+== [ AffirmTrust_Networking ]
+name: AffirmTrust_Networking   
+== [ AffirmTrust_Premium ]
+name: AffirmTrust_Premium   
+== [ AffirmTrust_Premium_ECC ]
+name: AffirmTrust_Premium_ECC   
+== [ Amazon_Root_CA_1 ]
+name: Amazon_Root_CA_1   
+== [ Amazon_Root_CA_2 ]
+name: Amazon_Root_CA_2   
+== [ Amazon_Root_CA_3 ]
+name: Amazon_Root_CA_3   
+== [ Amazon_Root_CA_4 ]
+name: Amazon_Root_CA_4   
+== [ Atos_TrustedRoot_2011 ]
+name: Atos_TrustedRoot_2011   
+== [ Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068 ]
+name: Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068   
+== [ Baltimore_CyberTrust_Root ]
+name: Baltimore_CyberTrust_Root   
+== [ Buypass_Class_2_Root_CA ]
+name: Buypass_Class_2_Root_CA   
+== [ Buypass_Class_3_Root_CA ]
+name: Buypass_Class_3_Root_CA   
+== [ CA_Disig_Root_R1 ]
+name: CA_Disig_Root_R1   
+== [ CA_Disig_Root_R2 ]
+name: CA_Disig_Root_R2   
+== [ CFCA_EV_ROOT ]
+name: CFCA_EV_ROOT   
+== [ COMODO_Certification_Authority ]
+name: COMODO_Certification_Authority   
+== [ COMODO_ECC_Certification_Authority ]
+name: COMODO_ECC_Certification_Authority   
+== [ COMODO_RSA_Certification_Authority ]
+name: COMODO_RSA_Certification_Authority   
+== [ Camerfirma_Chambers_of_Commerce_Root ]
+name: Camerfirma_Chambers_of_Commerce_Root   
+== [ Camerfirma_Global_Chambersign_Root ]
+name: Camerfirma_Global_Chambersign_Root   
+== [ Certigna ]
+name: Certigna   
+== [ Certinomis_-_Root_CA ]
+name: Certinomis_-_Root_CA   
+== [ Certplus_Class_2_Primary_CA ]
+name: Certplus_Class_2_Primary_CA   
+== [ Certplus_Root_CA_G1 ]
+name: Certplus_Root_CA_G1   
+== [ Certplus_Root_CA_G2 ]
+name: Certplus_Root_CA_G2   
+== [ Certum_Trusted_Network_CA ]
+name: Certum_Trusted_Network_CA   
+== [ Certum_Trusted_Network_CA_2 ]
+name: Certum_Trusted_Network_CA_2   
+== [ Chambers_of_Commerce_Root_-_2008 ]
+name: Chambers_of_Commerce_Root_-_2008   
+== [ Comodo_AAA_Services_root ]
+name: Comodo_AAA_Services_root   
+== [ Cybertrust_Global_Root ]
+name: Cybertrust_Global_Root   
+== [ D-TRUST_Root_Class_3_CA_2_2009 ]
+name: D-TRUST_Root_Class_3_CA_2_2009   
+== [ D-TRUST_Root_Class_3_CA_2_EV_2009 ]
+name: D-TRUST_Root_Class_3_CA_2_EV_2009   
+== [ DST_ACES_CA_X6 ]
+name: DST_ACES_CA_X6   
+== [ DST_Root_CA_X3 ]
+name: DST_Root_CA_X3   
+== [ Deutsche_Telekom_Root_CA_2 ]
+name: Deutsche_Telekom_Root_CA_2   
+== [ DigiCert_Assured_ID_Root_CA ]
+name: DigiCert_Assured_ID_Root_CA   
+== [ DigiCert_Assured_ID_Root_G2 ]
+name: DigiCert_Assured_ID_Root_G2   
+== [ DigiCert_Assured_ID_Root_G3 ]
+name: DigiCert_Assured_ID_Root_G3   
+== [ DigiCert_Global_Root_CA ]
+name: DigiCert_Global_Root_CA   
+== [ DigiCert_Global_Root_G2 ]
+name: DigiCert_Global_Root_G2   
+== [ DigiCert_Global_Root_G3 ]
+name: DigiCert_Global_Root_G3   
+== [ DigiCert_High_Assurance_EV_Root_CA ]
+name: DigiCert_High_Assurance_EV_Root_CA   
+== [ DigiCert_Trusted_Root_G4 ]
+name: DigiCert_Trusted_Root_G4   
+== [ E-Tugra_Certification_Authority ]
+name: E-Tugra_Certification_Authority   
+== [ EC-ACC ]
+name: EC-ACC   
+== [ EE_Certification_Centre_Root_CA ]
+name: EE_Certification_Centre_Root_CA   
+== [ Entrust.net_Premium_2048_Secure_Server_CA ]
+name: Entrust.net_Premium_2048_Secure_Server_CA   
+== [ Entrust_Root_Certification_Authority ]
+name: Entrust_Root_Certification_Authority   
+== [ Entrust_Root_Certification_Authority_-_EC1 ]
+name: Entrust_Root_Certification_Authority_-_EC1   
+== [ GDCA_TrustAUTH_R5_ROOT ]
+name: GDCA_TrustAUTH_R5_ROOT   
+== [ GeoTrust_Global_CA ]
+name: GeoTrust_Global_CA   
+== [ GeoTrust_Primary_Certification_Authority ]
+name: GeoTrust_Primary_Certification_Authority   
+== [ GeoTrust_Primary_Certification_Authority_-_G2 ]
+name: GeoTrust_Primary_Certification_Authority_-_G2   
+== [ GeoTrust_Primary_Certification_Authority_-_G3 ]
+name: GeoTrust_Primary_Certification_Authority_-_G3   
+== [ GeoTrust_Universal_CA ]
+name: GeoTrust_Universal_CA   
+== [ GeoTrust_Universal_CA_2 ]
+name: GeoTrust_Universal_CA_2   
+== [ GlobalSign_ECC_Root_CA_-_R4 ]
+name: GlobalSign_ECC_Root_CA_-_R4   
+== [ GlobalSign_ECC_Root_CA_-_R5 ]
+name: GlobalSign_ECC_Root_CA_-_R5   
+== [ GlobalSign_Root_CA ]
+name: GlobalSign_Root_CA   
+== [ GlobalSign_Root_CA_-_R2 ]
+name: GlobalSign_Root_CA_-_R2   
+== [ GlobalSign_Root_CA_-_R3 ]
+name: GlobalSign_Root_CA_-_R3   
+== [ Global_Chambersign_Root_-_2008 ]
+name: Global_Chambersign_Root_-_2008   
+== [ Go_Daddy_Class_2_CA ]
+name: Go_Daddy_Class_2_CA   
+== [ Go_Daddy_Root_Certificate_Authority_-_G2 ]
+name: Go_Daddy_Root_Certificate_Authority_-_G2   
+== [ Hellenic_Academic_and_Research_Institutions_ECC_RootCA_2015 ]
+name: Hellenic_Academic_and_Research_Institutions_ECC_RootCA_2015   
+== [ Hellenic_Academic_and_Research_Institutions_RootCA_2011 ]
+name: Hellenic_Academic_and_Research_Institutions_RootCA_2011   
+== [ Hellenic_Academic_and_Research_Institutions_RootCA_2015 ]
+name: Hellenic_Academic_and_Research_Institutions_RootCA_2015   
+== [ Hongkong_Post_Root_CA_1 ]
+name: Hongkong_Post_Root_CA_1   
+== [ ISRG_Root_X1 ]
+name: ISRG_Root_X1   
+== [ IdenTrust_Commercial_Root_CA_1 ]
+name: IdenTrust_Commercial_Root_CA_1   
+== [ IdenTrust_Public_Sector_Root_CA_1 ]
+name: IdenTrust_Public_Sector_Root_CA_1   
+== [ Izenpe.com ]
+name: Izenpe.com   
+== [ LuxTrust_Global_Root_2 ]
+name: LuxTrust_Global_Root_2   
+== [ Microsec_e-Szigno_Root_CA_2009 ]
+name: Microsec_e-Szigno_Root_CA_2009   
+== [ NetLock_Arany_Class_Gold_Főtanúsítvány ]
+name: NetLock_Arany_Class_Gold_Főtanúsítvány   
+== [ Network_Solutions_Certificate_Authority ]
+name: Network_Solutions_Certificate_Authority   
+== [ OISTE_WISeKey_Global_Root_GA_CA ]
+name: OISTE_WISeKey_Global_Root_GA_CA   
+== [ OISTE_WISeKey_Global_Root_GB_CA ]
+name: OISTE_WISeKey_Global_Root_GB_CA   
+== [ OpenTrust_Root_CA_G1 ]
+name: OpenTrust_Root_CA_G1   
+== [ OpenTrust_Root_CA_G2 ]
+name: OpenTrust_Root_CA_G2   
+== [ OpenTrust_Root_CA_G3 ]
+name: OpenTrust_Root_CA_G3   
+== [ QuoVadis_Root_CA ]
+name: QuoVadis_Root_CA   
+== [ QuoVadis_Root_CA_1_G3 ]
+name: QuoVadis_Root_CA_1_G3   
+== [ QuoVadis_Root_CA_2 ]
+name: QuoVadis_Root_CA_2   
+== [ QuoVadis_Root_CA_2_G3 ]
+name: QuoVadis_Root_CA_2_G3   
+== [ QuoVadis_Root_CA_3 ]
+name: QuoVadis_Root_CA_3   
+== [ QuoVadis_Root_CA_3_G3 ]
+name: QuoVadis_Root_CA_3_G3   
+== [ SSL.com_EV_Root_Certification_Authority_ECC ]
+name: SSL.com_EV_Root_Certification_Authority_ECC   
+== [ SSL.com_EV_Root_Certification_Authority_RSA_R2 ]
+name: SSL.com_EV_Root_Certification_Authority_RSA_R2   
+== [ SSL.com_Root_Certification_Authority_ECC ]
+name: SSL.com_Root_Certification_Authority_ECC   
+== [ SSL.com_Root_Certification_Authority_RSA ]
+name: SSL.com_Root_Certification_Authority_RSA   
+== [ SZAFIR_ROOT_CA2 ]
+name: SZAFIR_ROOT_CA2   
+== [ SecureSign_RootCA11 ]
+name: SecureSign_RootCA11   
+== [ SecureTrust_CA ]
+name: SecureTrust_CA   
+== [ Secure_Global_CA ]
+name: Secure_Global_CA   
+== [ Security_Communication_EV_RootCA1 ]
+name: Security_Communication_EV_RootCA1   
+== [ Security_Communication_RootCA2 ]
+name: Security_Communication_RootCA2   
+== [ Security_Communication_Root_CA ]
+name: Security_Communication_Root_CA   
+== [ Sonera_Class_2_Root_CA ]
+name: Sonera_Class_2_Root_CA   
+== [ Staat_der_Nederlanden_EV_Root_CA ]
+name: Staat_der_Nederlanden_EV_Root_CA   
+== [ Staat_der_Nederlanden_Root_CA_-_G2 ]
+name: Staat_der_Nederlanden_Root_CA_-_G2   
+== [ Staat_der_Nederlanden_Root_CA_-_G3 ]
+name: Staat_der_Nederlanden_Root_CA_-_G3   
+== [ Starfield_Class_2_CA ]
+name: Starfield_Class_2_CA   
+== [ Starfield_Root_Certificate_Authority_-_G2 ]
+name: Starfield_Root_Certificate_Authority_-_G2   
+== [ Starfield_Services_Root_Certificate_Authority_-_G2 ]
+name: Starfield_Services_Root_Certificate_Authority_-_G2   
+== [ SwissSign_Gold_CA_-_G2 ]
+name: SwissSign_Gold_CA_-_G2   
+== [ SwissSign_Silver_CA_-_G2 ]
+name: SwissSign_Silver_CA_-_G2   
+== [ T-TeleSec_GlobalRoot_Class_2 ]
+name: T-TeleSec_GlobalRoot_Class_2   
+== [ T-TeleSec_GlobalRoot_Class_3 ]
+name: T-TeleSec_GlobalRoot_Class_3   
+== [ TUBITAK_Kamu_SM_SSL_Kok_Sertifikasi_-_Surum_1 ]
+name: TUBITAK_Kamu_SM_SSL_Kok_Sertifikasi_-_Surum_1   
+== [ TWCA_Global_Root_CA ]
+name: TWCA_Global_Root_CA   
+== [ TWCA_Root_Certification_Authority ]
+name: TWCA_Root_Certification_Authority   
+== [ Taiwan_GRCA ]
+name: Taiwan_GRCA   
+== [ TeliaSonera_Root_CA_v1 ]
+name: TeliaSonera_Root_CA_v1   
+== [ TrustCor_ECA-1 ]
+name: TrustCor_ECA-1   
+== [ TrustCor_RootCert_CA-1 ]
+name: TrustCor_RootCert_CA-1   
+== [ TrustCor_RootCert_CA-2 ]
+name: TrustCor_RootCert_CA-2   
+== [ Trustis_FPS_Root_CA ]
+name: Trustis_FPS_Root_CA   
+== [ TÜRKTRUST_Elektronik_Sertifika_Hizmet_Sağlayıcısı_H5 ]
+name: TÜRKTRUST_Elektronik_Sertifika_Hizmet_Sağlayıcısı_H5   
+== [ USERTrust_ECC_Certification_Authority ]
+name: USERTrust_ECC_Certification_Authority   
+== [ USERTrust_RSA_Certification_Authority ]
+name: USERTrust_RSA_Certification_Authority   
+== [ VeriSign_Class_3_Public_Primary_Certification_Authority_-_G4 ]
+name: VeriSign_Class_3_Public_Primary_Certification_Authority_-_G4   
+== [ VeriSign_Class_3_Public_Primary_Certification_Authority_-_G5 ]
+name: VeriSign_Class_3_Public_Primary_Certification_Authority_-_G5   
+== [ VeriSign_Universal_Root_Certification_Authority ]
+name: VeriSign_Universal_Root_Certification_Authority   
+== [ Visa_eCommerce_Root ]
+name: Visa_eCommerce_Root   
+== [ XRamp_Global_CA_Root ]
+name: XRamp_Global_CA_Root   
+== [ certSIGN_ROOT_CA ]
+name: certSIGN_ROOT_CA   
+== [ ePKI_Root_Certification_Authority ]
+name: ePKI_Root_Certification_Authority   
+== [ thawte_Primary_Root_CA ]
+name: thawte_Primary_Root_CA   
+== [ thawte_Primary_Root_CA_-_G2 ]
+name: thawte_Primary_Root_CA_-_G2   
+== [ thawte_Primary_Root_CA_-_G3 ]
+name: thawte_Primary_Root_CA_-_G3   

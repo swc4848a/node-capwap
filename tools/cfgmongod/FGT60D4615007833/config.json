@@ -1,0 +1,9 @@
+{
+    "device":{
+        "isTemplate":0
+    },
+    "systemAdmin":{
+        "mode":"fortigate",
+        "password":""
+    }
+}

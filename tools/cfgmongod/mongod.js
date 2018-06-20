@@ -1,42 +1,58 @@
-let mongoose = require('mongoose')
+const MongoClient = require('mongodb').MongoClient;
+const Binary = require('mongodb').Binary;
+const fs = require('fs');
 
-mongoose.connect('mongodb://172.16.94.164/test')
+const url = `mongodb://172.16.95.48:27017`;
+const dbname = `cfgserver`;
+const sn = 'FGT60D4615007833';
+const max = 5;
 
-let db = mongoose.connection
+const insertDocuments = function (db, insertcb, findcb) {
+    let local = fs.readFileSync(`${sn}\\local`);
+    let cacert = fs.readFileSync(`${sn}\\cacert`);
+    let config = fs.readFileSync(`${sn}\\config.json`);
+    let status = fs.readFileSync(`${sn}\\status.json`);
+    db
+        .collection('fos')
+        .insertOne({
+            sn: `${sn}`,
+            local: Binary(local),
+            cacert: Binary(cacert),
+            config: JSON.parse(config),
+            status: JSON.parse(status)
+        }, function (err, result) {
+            if (err) {
+                console.error(err);
+            } else {
+                insertcb(result);
+            }
+        });
 
-db.on('error', console.error.bind(console, 'connection error:'))
-
-var kittySchema = mongoose.Schema({name: String});
-
-kittySchema.methods.speak = function () {
-    var greeting = this.name
-        ? "Meow name is " + this.name
-        : "I don't have a name";
-    console.log(greeting);
+    // db
+    //     .collection('fos')
+    //     .find({
+    //         sn: `${sn}`
+    //     }, function (err, result) {
+    //         if (err) {
+    //             console.error(err)
+    //         } else {
+    //             findcb(result)
+    //         }
+    //     })
 }
 
-var Kitten = mongoose.model('Kitten', kittySchema);
-
-Kitten.find(function (err, kittens) {
-    if (err) 
-        return console.error(err);
-    console.log(kittens);
-})
-
-db.on('open', function () {
-    console.log('mongodb opened!')
-
-    var fluffy = new Kitten({name: 'fluffy'});
-    var silence = new Kitten({name: 'Silence'});
-
-    fluffy.speak();
-    silence.speak();
-
-    fluffy.save(function (err, fluffy) {
-        if (err) 
-            return console.error(err);
-        console.log('fluffy is saved')
-    });
-})
-
-// mongoose.disconnect();
+MongoClient.connect(url, function (err, client) {
+    if (err) {
+        console.error(err);
+        return;
+    }
+    console.log("Connected successfully to server");
+    const db = client.db(dbname);
+    let count = 0;
+    let task = setInterval(function () {
+        insertDocuments(db, function (r) {
+            console.log(`Insert ${count} document => ${r}`);
+            count++;
+        }, function (r) {});
+    }, 10);
+});

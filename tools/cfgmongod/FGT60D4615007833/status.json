@@ -1,0 +1,33 @@
+{
+    "systemStatus":{
+        "platform":"FortiGate-60D",
+        "checksum":"4b 4f 4c 7d 2d 89 d8 2c da c7 3f 4f a9 42 39 6c",
+        "internetService":"4.00364",
+        "ipsDB":"13.00360",
+        "ipsDBExtended":1,
+        "opMode":"NAT",
+        "vdom":0,
+        "fipsCCMode":0,
+        "haMode":"STANDALONE",
+        "sync":0,
+        "needVerify":1,
+        "verifyFailedCount":0,
+        "allowVerifyAfter":0,
+        "deviceVersion":"5.6.3",
+        "deviceBranch":1547,
+        "deviceBuild":1547,
+        "ipsETDB":"13.00393",
+        "appDB":"13.00393",
+        "industrialDB":"13.00391",
+        "bios":"04000024",
+        "fgtAdminPwd":[
+
+        ],
+        "dhcpIntfAddr":[
+
+        ]
+    },
+    "connectedDevice":[
+
+    ]
+}

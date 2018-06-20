@@ -1,0 +1,10 @@
+
+-------------- Installation Log -----------------
+
+FGT60D4615007833 $  config firewall address
+FGT60D4615007833 (address) $      delete "address new"
+FGT60D4615007833 (address) $  end
+
+-------------- Result Diff -----------------
+
+-------------- Finished -----------------
