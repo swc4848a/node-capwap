@@ -15,7 +15,6 @@ const insertDocuments = function (db, count) {
         .collection('fos')
         .insertOne({
             sn: `${sn}`,
-            seq: count,
             local: Binary(local),
             cacert: Binary(cacert),
             config: JSON.parse(config),
