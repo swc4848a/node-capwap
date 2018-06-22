@@ -12,11 +12,12 @@ db = client.cfgserver
 fos = db.fos
 
 local = open("FGT60D4615007833/local", 'r').read()
+remote = open("FGT60D4615007833/remote", 'r').read()
 config = json.loads(open("FGT60D4615007833/config.json", 'r').read())
 
 start = time.time()
 
-max = 100
+max = 1000
 
 for x in range(max):
     fos.insert_one({
@@ -24,6 +25,18 @@ for x in range(max):
         "seq": x,
         "local": local,
         "config": config,
+    })
+    fos.update_one({"sn": "FGT60D4615007833"}, {"$set": {
+        "sn": "FGT60D4615007833",
+        "seq": x,
+        "remote": remote,
+        "config": config,
+    }})
+    fos.find_one({
+        "sn": "FGT60D4615007833"
+    })
+    fos.delete_one({
+        "sn":"FGT60D4615007833"
     })
 
 end = time.time()

@@ -1,51 +1,53 @@
 const MongoClient = require('mongodb').MongoClient;
 const Binary = require('mongodb').Binary;
 const fs = require('fs');
+const util = require('util');
+const bytes = require('utf8-length')
 
 const url = `mongodb://172.16.95.48:27017`;
 const dbname = `cfgserver`;
 const sn = 'FGT60D4615007833';
 
-const insertDocuments = function (db, count) {
+const insertDocuments = async function (db) {
     let local = fs.readFileSync(`${sn}\\local`);
     let cacert = fs.readFileSync(`${sn}\\cacert`);
     let config = fs.readFileSync(`${sn}\\config.json`);
     let status = fs.readFileSync(`${sn}\\status.json`);
-    db
-        .collection('fos')
-        .insertOne({
-            sn: `${sn}`,
-            local: Binary(local),
-            cacert: Binary(cacert),
-            config: JSON.parse(config),
-            status: JSON.parse(status)
-        }, function (err, result) {
-            if (err) {
-                console.error(err);
-            } else {
-                // console.log(`inserted ${count} document ...`);
-            }
-        });
+
+    db.collection('fos').insertOne = util.promisify(db.collection('fos').insertOne);
+
+    let obj = {
+        sn: `${sn}`,
+        local: Binary(local),
+        cacert: Binary(cacert),
+        config: JSON.parse(config),
+        status: JSON.parse(status)
+    }
+
+    await db.collection('fos').insertOne(obj);
+
+    return bytes(JSON.stringify(obj))
 }
 
-const insertLimitTest = function (client) {
-    let insertCount = 0;
-    let max = 100;
+const insertLimitTest = async function (client) {
     const db = client.db(dbname);
+    const max = 1000;
+    let totalSize = 0;
 
     let start = new Date();
 
-    const task = setInterval(function () {
-        insertCount++;
-        if (insertCount > max) {
-            clearInterval(task);
-            client.close();
-            let end = new Date();
-            console.log(`clear task, close connection! use ${end - start} ms`);
-        } else {
-            insertDocuments(db, insertCount);
-        }
-    }, 1);
+    for (let i = 0; i < max; ++i) {
+        totalSize += await insertDocuments(db);
+    }
+
+    let end = new Date();
+
+    client.close();
+
+    let diff = (end - start) / 1000;
+    let speed = totalSize / (diff * 1024 * 1024);
+
+    console.log(`use ${diff} s, speed ${speed} M/s`);
 }
 
 MongoClient.connect(url, function (err, client) {
@@ -55,5 +57,6 @@ MongoClient.connect(url, function (err, client) {
     }
 
     console.log("Connected successfully to server");
+
     insertLimitTest(client);
 });
