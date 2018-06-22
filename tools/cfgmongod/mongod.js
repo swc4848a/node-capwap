@@ -9,10 +9,10 @@ const dbname = `cfgserver`;
 const sn = 'FGT60D4615007833';
 
 const insertDocuments = async function (db) {
-    let local = fs.readFileSync(`${sn}\\local`);
-    let cacert = fs.readFileSync(`${sn}\\cacert`);
-    let config = fs.readFileSync(`${sn}\\config.json`);
-    let status = fs.readFileSync(`${sn}\\status.json`);
+    let local = fs.readFileSync(`${sn}/local`);
+    let cacert = fs.readFileSync(`${sn}/cacert`);
+    let config = fs.readFileSync(`${sn}/config.json`);
+    let status = fs.readFileSync(`${sn}/status.json`);
 
     db.collection('fos').insertOne = util.promisify(db.collection('fos').insertOne);
 
@@ -31,7 +31,7 @@ const insertDocuments = async function (db) {
 
 const insertLimitTest = async function (client) {
     const db = client.db(dbname);
-    const max = 1000;
+    const max = 100;
     let totalSize = 0;
 
     let start = new Date();
