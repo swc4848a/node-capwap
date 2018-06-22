@@ -71,7 +71,44 @@ async function update(db, collection, sn) {
 
     console.log(`udpated ${collection} ${sn}`)
 
-    return bytes(JSON.stringify(obj))
+    return bytes(JSON.stringify({
+        collection: Binary(hugeFile)
+    }))
+}
+
+async function find(db, collection, sn) {
+    db.collection(`${collection}`).find = util.promisify(db.collection(`${collection}`).find);
+    let result
+
+    try {
+        result = await db.collection(`${collection}`).find({
+            sn: sn
+        });
+    } catch (err) {
+        console.error(err)
+        return 0;
+    }
+
+    console.log(`find ${collection} ${sn}`)
+
+    return bytes(result)
+}
+
+async function remove(db, collection, sn) {
+    db.collection(`${collection}`).deleteOne = util.promisify(db.collection(`${collection}`).deleteOne);
+
+    try {
+        result = await db.collection(`${collection}`).deleteOne({
+            sn: sn
+        });
+    } catch (err) {
+        console.error(err)
+        return 0;
+    }
+
+    console.log(`delete ${collection} ${sn}`)
+
+    return bytes(result)
 }
 
 async function insertTest(client) {
@@ -84,6 +121,8 @@ async function insertTest(client) {
     for (let i = 0; i < max; ++i) {
         totalSize += await insert(db, randomCollection(), randomSN());
         totalSize += await update(db, randomCollection(), randomSN());
+        totalSize += await find(db, randomCollection(), randomSN());
+        totalSize += await remove(db, randomCollection(), randomSN());
     }
 
     let end = new Date();
