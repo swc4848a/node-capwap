@@ -1,7 +1,7 @@
 const Config = {
     cloudUrl: `https://alpha.forticloud.com`,
-    cloudUsername: `xxxx@fortinet.com`,
-    cloudPassword: `xxxx`,
+    cloudUsername: `zqqiang@fortinet.com`,
+    cloudPassword: `SuperCRM801`,
     isMultiTenancy: true,
     fortigateUrl: `http://xxx.xxx.xxx.xxx/login`,
     fortigateUsername: `admin`,
