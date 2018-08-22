@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Issues
 
 ## Table of Contents
@@ -56,15 +55,17 @@ alter table table_name add constrains ...;
 ```
 
 <br>[⬆ Back to top](#table-of-contents)
-=======
-# Capwap Issues
 
-#### why AP <==> AC ssl handshake failed ?
+### why AP <==> AC ssl handshake failed ?
+
+<details>
+<summary>View answer</summary>
+
+-by default it should be somewhere around July 2017 when FAP boot up  
+-if AP time older than July 2017 cert verify will fail
+
 ```js
 Certificate failed verification. Error: 9 (certificate is not yet valid)
 ```
-by default it should be somewhere around July 2017 when FAP boot up  
-if AP time older than July 2017 cert verify will fail  
 
-#### how AP and AC sync their time ?
->>>>>>> ca7bfa490ed0b8c558ca1078b8042f6d9fb6e065
+<br>[⬆ Back to top](#table-of-contents)
