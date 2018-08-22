@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [How to restore MySQL database from MyISAM to InnoDB?](#how-to-restore-mysql-database-from-myisam-to-innodb)
+- [Why AP <==> AC ssl handshake failed?](#why-ap-<==>-ac-ssl-handshake-failed)
 
 ### How to restore MySQL database from MyISAM to InnoDB?
 
@@ -95,7 +96,7 @@ alter table table_name add constrains ...;
 </details>
 <br>[⬆ Back to top](#table-of-contents)
 
-### why AP <==> AC ssl handshake failed ?
+### Why AP <==> AC ssl handshake failed?
 
 <details>
 <summary>View answer</summary>
