@@ -389,6 +389,8 @@ vsp.VSP_FORTINET_VAP_LDPC_CONFIG = 232
 vsp.VSP_FORTINET_ST_VLAN_ID = 234
 vsp.VSP_FORTINET_STA_RADIUS_INFO = 235
 
+vsp.VSP_FORTINET_STA_MPSK_NAME = 253
+
 vsp.VSP_FORTINET_WTP_POE_OPER = 0x100
 vsp.VSP_FORTINET_WTP_LED_BLINK = 0x101
 
@@ -423,6 +425,8 @@ vsp.VSP_FORTINET_TIMEZONE_INFO = 0x824
 vsp.VSP_FORTINET_MAC_AUTH_CONFIG = 0x825
 vsp.VSP_FORTINET_MAC_AUTH_REQ = 0x826
 vsp.VSP_FORTINET_MAC_AUTH_RSP = 0x827
+
+vsp.VSP_FORTINET_BGSCAN_DISABLE_SCHEDULE = 0x902
 
 local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_AP_SCAN] = "AP Scan",
@@ -554,6 +558,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_VAP_LDPC_CONFIG] = "Vap Ldpc Config",
     [vsp.VSP_FORTINET_ST_VLAN_ID] = "St Vlan ID",
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = "Sta Radius Info",
+    [vsp.VSP_FORTINET_STA_MPSK_NAME] = "Sta MPSK Name",
     [vsp.VSP_FORTINET_WTP_POE_OPER] = "Wtp PoE operating mode",
     [vsp.VSP_FORTINET_WTP_LED_BLINK] = "Wtp LED Blink",
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = "Wids Subtype Rf Threat Rogue Ap",
@@ -586,6 +591,7 @@ local fortinet_element_id_vals = {
     [vsp.VSP_FORTINET_MAC_AUTH_CONFIG] = "Mac Authentiction Configuration",
     [vsp.VSP_FORTINET_MAC_AUTH_REQ] = "Mac Authentiction Request",
     [vsp.VSP_FORTINET_MAC_AUTH_RSP] = "Mac Authentiction Response",
+    [vsp.VSP_FORTINET_BGSCAN_DISABLE_SCHEDULE] = "Background Scan Disable Schedule",
 };
 
 -- /* ************************************************************************* */
@@ -788,6 +794,29 @@ local wtp_poe_mode_opers = {
     [2] = "802.3at",
     [3] = "Power Adapter",
 };
+
+local wids_sub_type = {
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = "RF Threat Rogue AP",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_INTERFEAR_AP] = "RF Threat Interfear AP",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WL_BR] = "RF Threat WL BR",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_WEP_IV] = "RF Threat Wep IV",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_BC_DEAUTH] = "RF Threat BC DeAuth",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_NL_PBRESP] = "RF Threat NL PbResp",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_LONG_DUR] = "RF Threat Long Dur",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_MAC_OUI] = "RF Threat MAC Oui",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_MGMT_FLOOD] = "RF Threat Mgmt Flood",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_SPOOF_DEAUTH] = "RF Threat Spoof DeAuth",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ASLEAP] = "RF Threat AsLeap",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_EAPOL] = "RF Threat EAPOL",
+    [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_LAST] = "RF Threat Last",
+}
+
+local ap_scan_options = {
+    [0] = "AP Scan Disable",
+    [2] = "AP Scan Fore Groud",
+    [3] = "AP Scan Back Groud 2",
+    [5] = "AP Scan Enable",
+}
 
 local CAPWAP_HDR_LEN = 16
 
@@ -1039,7 +1068,8 @@ pf.ht_short_gi = ProtoField.new("HT Short GI", "ftnt.capwap.message.element.fort
 pf.bandwidth = ProtoField.new("Bandwidth", "ftnt.capwap.message.element.fortinet.bandwidth", ftypes.UINT8)
 pf.bandwidth16 = ProtoField.new("Bandwidth", "ftnt.capwap.message.element.fortinet.bandwidth", ftypes.UINT16)
 pf.bg_scan_interval = ProtoField.new("bg scan interval", "ftnt.capwap.message.element.fortinet.bg.scan.interval", ftypes.UINT16)
-pf.bg_scan_idle = ProtoField.new("bg scan idle", "ftnt.capwap.message.element.fortinet.bg.scan.idle", ftypes.UINT24)
+pf.ap_scan = ProtoField.new("ap scan", "ftnt.capwap.message.element.fortinet.ap.scan", ftypes.UINT8, ap_scan_options)
+pf.bg_scan_idle = ProtoField.new("bg scan idle", "ftnt.capwap.message.element.fortinet.bg.scan.idle", ftypes.UINT16)
 pf.bg_scan_rpt_interval = ProtoField.new("bg scan rpt interval", "ftnt.capwap.message.element.fortinet.bg.scan.rpt.interval", ftypes.UINT16)
 pf.fg_scan_rpt_interval = ProtoField.new("fg scan rpt interval", "ftnt.capwap.message.element.fortinet.fg.scan.rpt.interval", ftypes.UINT16)
 pf.passive = ProtoField.new("Passive", "ftnt.capwap.message.element.fortinet.passive", ftypes.UINT8)
@@ -1149,8 +1179,14 @@ pf.tx_power = ProtoField.new("Tx Power", "ftnt.capwap.message.element.tx.power",
 pf.power_max = ProtoField.new("Power Max", "ftnt.capwap.message.element.power.max", ftypes.UINT16)
 pf.dynamic_vlan = ProtoField.new("Dynamic Vlan", "ftnt.capwap.message.element.dynamic.vlan", ftypes.UINT8)
 pf.number32 = ProtoField.new("Number", "ftnt.capwap.message.element.number", ftypes.UINT32)
-pf.downup_cfg = ProtoField.new("Downup Config", "ftnt.capwap.message.element.", ftypes.UINT8)
-pf.wday = ProtoField.new("Wday", "ftnt.capwap.message.element.wday", ftypes.UINT8)
+pf.downup_cfg = ProtoField.new("Downup Config", "ftnt.capwap.message.element.downup.cfg", ftypes.UINT8)
+pf.wday_sunday = ProtoField.new("Sunday", "ftnt.capwap.message.element.wday.sunday", ftypes.UINT8, nil, base.HEX, 0x01)
+pf.wday_monday = ProtoField.new("Monday", "ftnt.capwap.message.element.wday.monday", ftypes.UINT8, nil, base.HEX, 0x02)
+pf.wday_tuesday = ProtoField.new("Tuesday", "ftnt.capwap.message.element.wday.tuesday", ftypes.UINT8, nil, base.HEX, 0x04)
+pf.wday_wednesday = ProtoField.new("Wednesday", "ftnt.capwap.message.element.wday.wednesday", ftypes.UINT8, nil, base.HEX, 0x08)
+pf.wday_thursday = ProtoField.new("Thursday", "ftnt.capwap.message.element.wday.thursday", ftypes.UINT8, nil, base.HEX, 0x10)
+pf.wday_friday = ProtoField.new("Friday", "ftnt.capwap.message.element.wday.friday", ftypes.UINT8, nil, base.HEX, 0x20)
+pf.wday_saturday = ProtoField.new("Saturday", "ftnt.capwap.message.element.wday.saturday", ftypes.UINT8, nil, base.HEX, 0x40)
 pf.bhour = ProtoField.new("Bhour", "ftnt.capwap.message.element.bhour", ftypes.UINT8)
 pf.bmin = ProtoField.new("Bmin", "ftnt.capwap.message.element.bmin", ftypes.UINT8)
 pf.ehour = ProtoField.new("Ehour", "ftnt.capwap.message.element.ehour", ftypes.UINT8)
@@ -1202,6 +1238,12 @@ pf.mpsk_buf = ProtoField.new("Multi PSK Buf", "ftnt.capwap.message.element.mpsk.
 pf.mpsk_name = ProtoField.new("Name", "ftnt.capwap.message.element.mpsk.name", ftypes.STRING)
 pf.concurrent_clients = ProtoField.new("Concurrent Clients", "ftnt.capwap.message.element.mpsk.current.clients", ftypes.UINT64)
 pf.password = ProtoField.new("Password", "ftnt.capwap.message.element.password", ftypes.STRING)
+
+pf.mpsk_name = ProtoField.new("MPSK Name", "ftnt.capwap.message.element.mpsk.name", ftypes.STRING)
+pf.wids_subtype = ProtoField.new("Wids SubType", "ftnt.capwap.message.element.wids.subtype", ftypes.UINT32, wids_sub_type)
+pf.wids_subtype_len = ProtoField.new("Wids SubType Length", "ftnt.capwap.message.element.wids.subtype.length", ftypes.UINT32)
+pf.wids_subver = ProtoField.new("Wids Sub Version", "ftnt.capwap.message.element.wids.sub.version", ftypes.UINT16)
+pf.wids_datas = ProtoField.new("Wids Datas", "ftnt.capwap.message.element.wids.datas", ftypes.BYTES)
 
 capwap.fields = pf
 
@@ -1692,6 +1734,14 @@ function staLocateDecoder(tlv, tvbrange)
     tlv:add(pf.locate_interval, tvb:range(2, 2))
 end
 
+function widsDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.wids_subtype, tvb:range(0, 4))
+    tlv:add(pf.wids_subtype_len, tvb:range(4, 4))
+    tlv:add(pf.wids_subver, tvb:range(8, 2))
+    tlv:add(pf.wids_datas, tvb:range(10))
+end
+
 function widsEnableDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1891,6 +1941,26 @@ function macAuthRspDecoder(tlv, tvbrange)
     tlv:add(pf.mac_auth_result, tvb:range(9))
 end
 
+function backgroundDisableSchedule(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+
+    local wday_tree = tlv:add("wday")
+    local wday_range = tvb:range(1, 1)
+    wday_tree:add(pf.wday_sunday, wday_range)
+    wday_tree:add(pf.wday_monday, wday_range)
+    wday_tree:add(pf.wday_tuesday, wday_range)
+    wday_tree:add(pf.wday_wednesday, wday_range)
+    wday_tree:add(pf.wday_thursday, wday_range)
+    wday_tree:add(pf.wday_friday, wday_range)
+    wday_tree:add(pf.wday_saturday, wday_range)
+
+    tlv:add(pf.bhour, tvb:range(2, 1))
+    tlv:add(pf.bmin, tvb:range(3, 1))
+    tlv:add(pf.ehour, tvb:range(4, 1))
+    tlv:add(pf.emin, tvb:range(5, 1))
+end
+
 function vapBitmapDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
@@ -1916,7 +1986,17 @@ function downupScheduleDecoder(tlv, tvbrange)
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.wlan_id, tvb:range(1, 1))
     tlv:add(pf.downup_cfg, tvb:range(2, 1))
-    tlv:add(pf.wday, tvb:range(3, 1))
+
+    local wday_tree = tlv:add("wday")
+    local wday_range = tvb:range(3, 1)
+    wday_tree:add(pf.wday_sunday, wday_range)
+    wday_tree:add(pf.wday_monday, wday_range)
+    wday_tree:add(pf.wday_tuesday, wday_range)
+    wday_tree:add(pf.wday_wednesday, wday_range)
+    wday_tree:add(pf.wday_thursday, wday_range)
+    wday_tree:add(pf.wday_friday, wday_range)
+    wday_tree:add(pf.wday_saturday, wday_range)
+
     tlv:add(pf.bhour, tvb:range(4, 1))
     tlv:add(pf.bmin, tvb:range(5, 1))
     tlv:add(pf.ehour, tvb:range(6, 1))
@@ -1982,8 +2062,9 @@ end
 function apScanDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
-    tlv:add(pf.bg_scan_interval, tvb:range(1, 2))
-    tlv:add(pf.bg_scan_idle, tvb:range(3, 3))
+    tlv:add(pf.ap_scan, tvb:range(1, 1))
+    tlv:add(pf.bg_scan_interval, tvb:range(2, 2))
+    tlv:add(pf.bg_scan_idle, tvb:range(4, 2))
     tlv:add(pf.bg_scan_rpt_interval, tvb:range(6, 2))
     tlv:add(pf.fg_scan_rpt_interval, tvb:range(8, 2))
 end
@@ -1998,6 +2079,15 @@ function mgmtVapDecoder(tlv, tvbrange)
     tlv:add(pf.age, tvb:range(10+sn_length, 4))
     tlv:add(pf.period, tvb:range(14+sn_length, 4))
     tlv:add(pf.vfid, tvb:range(18+sn_length, 4))
+end
+
+function staMpskNameDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.wlan_id, tvb:range(1, 1))
+    tlv:add(pf.mac_address, tvb:range(2, 6))
+    tlv:add(pf.length, tvb:range(8, 1))
+    tlv:add(pf.mpsk_name, tvb:range(9))
 end
 
 function wtpPoeOperDecoder(tlv, tvbrange)
@@ -2126,7 +2216,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_TXPWR_MAX] = txPowerMaxDecoder,
     [vsp.VSP_FORTINET_TXPWR_DBM] = txPowerDbmDecoder,
     [vsp.VSP_FORTINET_TIMERS_INTERVAL] = nil,
-    [vsp.VSP_FORTINET_WIDS] = nil,
+    [vsp.VSP_FORTINET_WIDS] = widsDecoder,
     [vsp.VSP_FORTINET_WIDS_ENABLE] = widsEnableDecoder,
     [vsp.VSP_FORTINET_WIDS_PARAMS_LONG_DUR] = nil,
     [vsp.VSP_FORTINET_WIDS_PARAMS_ASSOC_TIME] = nil,
@@ -2142,6 +2232,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_VAP_LDPC_CONFIG] = nil,
     [vsp.VSP_FORTINET_ST_VLAN_ID] = nil,
     [vsp.VSP_FORTINET_STA_RADIUS_INFO] = nil,
+    [vsp.VSP_FORTINET_STA_MPSK_NAME] = staMpskNameDecoder,
     [vsp.VSP_FORTINET_WTP_POE_OPER] = wtpPoeOperDecoder,
     [vsp.VSP_FORTINET_WTP_LED_BLINK] = wtpLedBlinkDecoder,
     [vsp.VSP_FORTINET_WIDS_SUBTYPE_RF_THREAT_ROGUE_AP] = nil,
@@ -2174,6 +2265,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_MAC_AUTH_CONFIG] = macAuthConfigDecoder,
     [vsp.VSP_FORTINET_MAC_AUTH_REQ] = macAuthReqDecoder,
     [vsp.VSP_FORTINET_MAC_AUTH_RSP] = macAuthRspDecoder,
+    [vsp.VSP_FORTINET_BGSCAN_DISABLE_SCHEDULE] = backgroundDisableSchedule,
 }
 
 function boardDataWtpModelNumberDecoder(tlv, tvbrange)
@@ -2556,6 +2648,11 @@ end
 
 function AddStationDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
+    tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.mac_length, tvb:range(1, 1))
+    local mac_len = tvb:range(1, 1):uint()
+    tlv:add(pf.mac, tvb:range(2, mac_len))
+    tlv:add(pf.ssid, tvb:range(2 + mac_len))
 end
 
 function Reserved9(tlv, tvbrange)

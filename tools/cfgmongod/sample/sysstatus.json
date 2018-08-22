@@ -1,0 +1,20 @@
+{
+    "systemStatus":{
+        "platform":"FortiGate-60D",
+        "checksum":"72 72 6d 0c b4 ef 53 48 05 1c 8c 90 df db f3 98",
+        "internetService":"4.00296",
+        "ipsDB":"12.00314",
+        "ipsDBExtended":1,
+        "opMode":"NAT",
+        "vdom":0,
+        "fipsCCMode":0,
+        "haMode":"STANDALONE",
+        "sync":1,
+        "deviceVersion":"5.6.3",
+        "deviceBranch":1547,
+        "deviceBuild":1547
+    },
+    "connectedDevice":[
+
+    ]
+}
