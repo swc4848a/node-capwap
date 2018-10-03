@@ -1131,6 +1131,7 @@ pf.botnet_db_version = ProtoField.new("Botnet DB Version", "ftnt.capwap.message.
 pf.sta_ip = ProtoField.new("Sta IP list", "ftnt.capwap.message.element.sta.ip.list", ftypes.IPv4)
 pf.poe_oper = ProtoField.new("Wtp Poe Mode Oper", "ftnt.capwap.message.element.wtp.poe.mode.oper", ftypes.UINT8, wtp_poe_mode_opers)
 pf.mimo = ProtoField.new("Mimo", "ftnt.capwap.message.element.wtp.mimo", ftypes.UINT16)
+pf.scan_enable = ProtoField.new("Enable", "ftnt.capwap.message.element.scan.enable", ftypes.UINT8)
 
 local CW_UTM_AV_ENGINE_VER = 1
 local CW_UTM_AV_DB_VER = 2
@@ -1630,6 +1631,7 @@ function modeDecoder(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.mode, tvb:range(1, 1))
+    tlv:add(pf.flag, tvb:range(2, 4))
 end
 
 function pureDecoder(tlv, tvbrange)
@@ -1944,9 +1946,10 @@ end
 function backgroundDisableSchedule(tlv, tvbrange)
     local tvb = tvbrange:tvb()
     tlv:add(pf.radio_id, tvb:range(0, 1))
+    tlv:add(pf.scan_enable, tvb:range(1, 1))
 
-    local wday_tree = tlv:add("wday")
-    local wday_range = tvb:range(1, 1)
+    local wday_tree = tlv:add("Wday")
+    local wday_range = tvb:range(2, 1)
     wday_tree:add(pf.wday_sunday, wday_range)
     wday_tree:add(pf.wday_monday, wday_range)
     wday_tree:add(pf.wday_tuesday, wday_range)
@@ -1955,10 +1958,10 @@ function backgroundDisableSchedule(tlv, tvbrange)
     wday_tree:add(pf.wday_friday, wday_range)
     wday_tree:add(pf.wday_saturday, wday_range)
 
-    tlv:add(pf.bhour, tvb:range(2, 1))
-    tlv:add(pf.bmin, tvb:range(3, 1))
-    tlv:add(pf.ehour, tvb:range(4, 1))
-    tlv:add(pf.emin, tvb:range(5, 1))
+    tlv:add(pf.bhour, tvb:range(3, 1))
+    tlv:add(pf.bmin, tvb:range(4, 1))
+    tlv:add(pf.ehour, tvb:range(5, 1))
+    tlv:add(pf.emin, tvb:range(6, 1))
 end
 
 function vapBitmapDecoder(tlv, tvbrange)
@@ -1987,7 +1990,7 @@ function downupScheduleDecoder(tlv, tvbrange)
     tlv:add(pf.wlan_id, tvb:range(1, 1))
     tlv:add(pf.downup_cfg, tvb:range(2, 1))
 
-    local wday_tree = tlv:add("wday")
+    local wday_tree = tlv:add("Wday")
     local wday_range = tvb:range(3, 1)
     wday_tree:add(pf.wday_sunday, wday_range)
     wday_tree:add(pf.wday_monday, wday_range)
@@ -2057,6 +2060,15 @@ function vapPskPasswdDecoder(tlv, tvbrange)
     tlv:add(pf.radio_id, tvb:range(0, 1))
     tlv:add(pf.wlan_id, tvb:range(1, 1))
     tlv:add(pf.key, tvb:range(2))
+end
+
+function lanPortCfgDecoder(tlv, tvbrange)
+    local tvb = tvbrange:tvb()
+    tlv:add(pf.wlan_id, tvb:range(0, 1))
+    tlv:add(pf.mode, tvb:range(1, 1))
+    tlv:add(pf.flags32, tvb:range(2, 4))
+    tlv:add(pf.vlan_id, tvb:range(6, 2))
+    tlv:add(pf.ssid, tvb:range(8))
 end
 
 function apScanDecoder(tlv, tvbrange)
@@ -2191,7 +2203,7 @@ local ftntElementDecoder = {
     [vsp.VSP_FORTINET_DEL_STA_REASON] = deleteStaReasonDecoder,
     [vsp.VSP_FORTINET_STA_VLAN_TAG] = nil,
     [vsp.VSP_FORTINET_VAP_PSK_PASSWD] = vapPskPasswdDecoder,
-    [vsp.VSP_FORTINET_LAN_PORT_CFG] = nil,
+    [vsp.VSP_FORTINET_LAN_PORT_CFG] = lanPortCfgDecoder,
     [vsp.VSP_FORTINET_LAN_PORT_MAC] = nil,
     [vsp.VSP_FORTINET_IP_FRAG] = ipFragDecoder,
     [vsp.VSP_FORTINET_MAX_DISTANCE] = maxDistanceDecoder,
