@@ -1,216 +1,228 @@
-let Testcase = require('../../src/testcase.js');
+let Testcase = require("src/testcase.js");
 
-
-let interfaceNameVlan = "vantest"
-let interfaceNameLookBack = "lookbacktest"
-let interfaceNameHardWare = "hardwareInf"
-let interfaceNameAlias = "alias manual"
-
+let interfaceNameVlan = "vantest";
+let interfaceNameLookBack = "lookbacktest";
+let interfaceNameHardWare = "hardwareInf";
+let interfaceNameAlias = "alias manual";
 
 let cloudMap = {
-    'Interfaces': "div.gwt-HTML:contains('Interfaces')",
-    'Create New': "button:contains('Create New')",
-    'Save': "button:contains('Save')",
-    'YES': "span:contains('YES')",
+  Interfaces: "div.gwt-HTML:contains('Interfaces')",
+  "Create New": "button:contains('Create New')",
+  Save: "button:contains('Save')",
+  YES: "span:contains('YES')",
 
-    'Delete for interface van': `td.left:contains('${interfaceNameVlan}')~td.right div[title='Delete']`,
-    'Delete for interface lookBack': `td.left:contains('${interfaceNameLookBack}')~td.right div[title='Delete']`,
-    'Delete for interface hardware': `td.left:contains('${interfaceNameHardWare}')~td.right div[title='Delete']`,
-}
+  "Delete for interface van": `td.left:contains('${interfaceNameVlan}')~td.right div[title='Delete']`,
+  "Delete for interface lookBack": `td.left:contains('${interfaceNameLookBack}')~td.right div[title='Delete']`,
+  "Delete for interface hardware": `td.left:contains('${interfaceNameHardWare}')~td.right div[title='Delete']`
+};
 
 let gateMap = {
-    'Network': "//span[text()='Network']",
-    'Interfaces': "a[ng-href='page/p/system/interface/']",
-    'Interface Name': "input#name",
-    'Type': "input#type",
-    'VLAN ID': "input#vlanid",
-    'Role': "select#role",
-    'Address Mode Manual': "input#addressing_mode_static",
-    'Address Mode DHCP': "input#addressing_mode_dhcp",
-    'Distance': "input#distance",
-    'IP/Netmask': "input#ipmask",
-    'Device Detection': "input:checkbox#enable-device-identification",
-    'Miscellaneous Block': "input:radio#scan-botnet-connections-block",
-    'Miscellaneous Monitor': "input:radio#scan-botnet-connections-monitor",
-    'Interface Status Disable': "input:radio#admin_status_down",
-    'Comments': "textarea#description",
+  Network: "//span[text()='Network']",
+  Interfaces: "a[ng-href='page/p/system/interface/']",
+  "Interface Name": "input#name",
+  Type: "input#type",
+  "VLAN ID": "input#vlanid",
+  Role: "select#role",
+  "Address Mode Manual": "input#addressing_mode_static",
+  "Address Mode DHCP": "input#addressing_mode_dhcp",
+  Distance: "input#distance",
+  "IP/Netmask": "input#ipmask",
+  "Device Detection": "input:checkbox#enable-device-identification",
+  "Miscellaneous Block": "input:radio#scan-botnet-connections-block",
+  "Miscellaneous Monitor": "input:radio#scan-botnet-connections-monitor",
+  "Interface Status Disable": "input:radio#admin_status_down",
+  Comments: "textarea#description",
 
-    'interface man': "td:contains('interface man')",
-    'interface dhcp': "tr[mkey='interface dhcp']",
-    'interface loop': "tr[mkey='interface loop']",
-    'interface wan': "tr[mkey='interface wan']",
-    'interface dmz': "tr[mkey='interface dmz']",
-    'interface undef': "tr[mkey='interface undef']",
-    'Edit': "button span:contains('Edit'):eq(0)",
-}
-
-
-new Testcase({
-    name: 'interface_type_vlan new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.wait(1000)
-        this.click(cloudMap['Create New'])
-        this.wait(1000)
-        this.set('#fcld-interfaceEditor-name', interfaceNameVlan)
-        this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "VLAN")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-physIntf", "wan")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "WAN")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-vlanid", "2048")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "DHCP")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDefaultgw", "false")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDnsServerOverride", "false")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-miscScanGroup", "Monitor")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Disable")`)
-        this.set('#fcld-interfaceEditor-comments', "test comments")
-
-        this.wait(1000)
-        this.click(cloudMap['Save'])
-        this.wait(5000)
-    },
-    verify() {
-
-        this.click(gateMap['Network'])
-        this.wait(500)
-        this.click(gateMap['Interfaces'])
-        this.wait(1000)
-        this.click(`button.compact-visual-toggle`)
-        this.has(interfaceNameVlan)
-        this.has(interfaceNameAlias)
-        // this.isSet(gateMap['Address Mode Manual', "static")
-        //this.isSet(gateMap['IP/Netmask'], "1.1.1.1/255.255.255.0")
-        // this.isCheck('Device Detection')
-        // this.isCheck('Miscellaneous Block')
-        //this.isCheck(gateMap['Interface Status Disable'])
-        //this.isSet(gateMap['Comments'], "test comments")
-    }
-})
-
+  "interface man": "td:contains('interface man')",
+  "interface dhcp": "tr[mkey='interface dhcp']",
+  "interface loop": "tr[mkey='interface loop']",
+  "interface wan": "tr[mkey='interface wan']",
+  "interface dmz": "tr[mkey='interface dmz']",
+  "interface undef": "tr[mkey='interface undef']",
+  Edit: "button span:contains('Edit'):eq(0)"
+};
 
 new Testcase({
-    name: 'interface_vlan delete',
-    testcase() {
-        this.wait(1000)
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface van'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
+  name: "interface_type_vlan new",
+  testcase() {
+    this.click(cloudMap["Interfaces"]);
+    this.wait(1000);
+    this.click(cloudMap["Create New"]);
+    this.wait(1000);
+    this.set("#fcld-interfaceEditor-name", interfaceNameVlan);
+    this.set("#fcld-interfaceEditor-alias", interfaceNameAlias);
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-type", "VLAN")`
+    );
+    // this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-physIntf", "wan")`)
+    this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "WAN")`);
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-vlanid", "2048")`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "DHCP")`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDefaultgw", "false")`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-dhcpDnsServerOverride", "false")`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-miscScanGroup", "Monitor")`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Disable")`
+    );
+    this.set("#fcld-interfaceEditor-comments", "test comments");
 
-        this.click(gateMap['Network'])
-        this.wait(500)
-        this.click(gateMap['Interfaces'])
-        this.wait(1000)
-        //todo isDelete now work now.
-        this.isDelete(interfaceNameVlan)
-    }
-})
-
-
-new Testcase({
-    name: 'interface_type_lookBack new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-
-        this.wait(1000)
-        this.set('#fcld-interfaceEditor-name', interfaceNameLookBack)
-        this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
-
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "Loopback Interface")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "DMZ")`)
-        this.set('#fcld-interfaceEditor-ipNetMask', "1.1.1.1/255.255.255.0")
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-allowAccess", ["HTTPS","SSH"])`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Enable")`)
-        this.set('#fcld-interfaceEditor-comments', "test comments")
-
-        this.wait(1000)
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-
-        this.click(gateMap['Network'])
-        this.wait(500)
-        this.click(gateMap['Interfaces'])
-        this.wait(3000)
-        this.has(interfaceNameLookBack)
-        this.has(interfaceNameAlias)
-    }
-})
-
-
-new Testcase({
-    name: 'interface_type_lookBack delete',
-    testcase() {
-        this.wait(1000)
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Delete for interface lookBack'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
-
-        this.click(gateMap['Network'])
-        this.wait(500)
-        this.click(gateMap['Interfaces'])
-        this.wait(3000)
-        //todo isDelete now work now.
-        this.isDelete(interfaceNameLookBack)
-    }
-})
-
+    this.wait(1000);
+    this.click(cloudMap["Save"]);
+  },
+  verify() {
+    this.click(gateMap["Network"]);
+    this.wait(500);
+    this.click(gateMap["Interfaces"]);
+    this.wait(1000);
+    this.click(`button.compact-visual-toggle`);
+    this.has(interfaceNameVlan);
+    this.has(interfaceNameAlias);
+    // this.isSet(gateMap['Address Mode Manual', "static")
+    //this.isSet(gateMap['IP/Netmask'], "1.1.1.1/255.255.255.0")
+    // this.isCheck('Device Detection')
+    // this.isCheck('Miscellaneous Block')
+    //this.isCheck(gateMap['Interface Status Disable'])
+    //this.isSet(gateMap['Comments'], "test comments")
+  }
+});
 
 new Testcase({
-    name: 'interface_type_hardware_switch new',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.click(cloudMap['Create New'])
-
-        this.wait(1000)
-        this.set('#fcld-interfaceEditor-name', interfaceNameHardWare)
-        this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
-
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "Hardware Switch")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "DMZ")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "Dedicated to FortiSwitch")`)
-        this.set('#fcld-interfaceEditor-ipNetMask', "1.1.1.1/255.255.255.0")
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-autoAuthDevices", "true")`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-allowAccess", ["HTTPS","SSH"])`)
-        this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Enable")`)
-        this.set('#fcld-interfaceEditor-comments', "test comments")
-
-        this.wait(1000)
-        this.click(cloudMap['Save'])
-    },
-    verify() {
-        this.click(gateMap['Network'])
-        this.wait(500)
-        this.click(gateMap['Interfaces'])
-        this.wait(2000)
-        this.has(interfaceNameHardWare)
-        this.has(interfaceNameAlias)
-    }
-})
+  name: "interface_vlan delete",
+  testcase() {
+    this.wait(1000);
+    this.click(cloudMap["Interfaces"]);
+    this.click(cloudMap["Delete for interface van"]);
+    this.click(cloudMap["YES"]);
+  },
+  verify() {
+    this.click(gateMap["Network"]);
+    this.wait(500);
+    this.click(gateMap["Interfaces"]);
+    this.wait(1000);
+    //todo isDelete now work now.
+    this.isDelete(interfaceNameVlan);
+  }
+});
 
 new Testcase({
-    name: 'interface_hardware delete',
-    testcase() {
-        this.click(cloudMap['Interfaces'])
-        this.wait(1000)
-        this.click(cloudMap['Delete for interface hardware'])
-        this.click(cloudMap['YES'])
-    },
-    verify() {
+  name: "interface_type_lookBack new",
+  testcase() {
+    this.click(cloudMap["Interfaces"]);
+    this.click(cloudMap["Create New"]);
 
-        this.click(gateMap['Network'])
-        this.wait(500)
-        this.click(gateMap['Interfaces'])
-        this.wait(1000)
-        this.isDelete(interfaceNameHardWare)
-    }
-})
+    this.wait(1000);
+    this.set("#fcld-interfaceEditor-name", interfaceNameLookBack);
+    this.set("#fcld-interfaceEditor-alias", interfaceNameAlias);
+
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-type", "Loopback Interface")`
+    );
+    this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "DMZ")`);
+    this.set("#fcld-interfaceEditor-ipNetMask", "1.1.1.1/255.255.255.0");
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-allowAccess", ["HTTPS","SSH"])`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-deviceDetect", "true")`
+    );
+    this.evaluate(
+      `FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Enable")`
+    );
+    this.set("#fcld-interfaceEditor-comments", "test comments");
+
+    this.wait(1000);
+    this.click(cloudMap["Save"]);
+  },
+  verify() {
+    this.click(gateMap["Network"]);
+    this.wait(500);
+    this.click(gateMap["Interfaces"]);
+    this.wait(3000);
+    this.has(interfaceNameLookBack);
+    this.has(interfaceNameAlias);
+  }
+});
+
+new Testcase({
+  name: "interface_type_lookBack delete",
+  testcase() {
+    this.wait(1000);
+    this.click(cloudMap["Interfaces"]);
+    this.click(cloudMap["Delete for interface lookBack"]);
+    this.click(cloudMap["YES"]);
+  },
+  verify() {
+    this.click(gateMap["Network"]);
+    this.wait(500);
+    this.click(gateMap["Interfaces"]);
+    this.wait(3000);
+    //todo isDelete now work now.
+    this.isDelete(interfaceNameLookBack);
+  }
+});
+
+// new Testcase({
+//     name: 'interface_type_hardware_switch new',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.click(cloudMap['Create New'])
+
+//         this.wait(1000)
+//         this.set('#fcld-interfaceEditor-name', interfaceNameHardWare)
+//         this.set('#fcld-interfaceEditor-alias', interfaceNameAlias)
+
+//         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-type", "Hardware Switch")`)
+//         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-role", "DMZ")`)
+//         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-addrModeGroup", "Dedicated to FortiSwitch")`)
+//         this.set('#fcld-interfaceEditor-ipNetMask', "1.1.1.1/255.255.255.0")
+//         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-autoAuthDevices", "true")`)
+//         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-allowAccess", ["HTTPS","SSH"])`)
+//         this.evaluate(`FcldUiTest.setUiObjectValue("interfaceEditor-intfStateGroup", "Enable")`)
+//         this.set('#fcld-interfaceEditor-comments', "test comments")
+
+//         this.wait(1000)
+//         this.click(cloudMap['Save'])
+//     },
+//     verify() {
+//         this.click(gateMap['Network'])
+//         this.wait(500)
+//         this.click(gateMap['Interfaces'])
+//         this.wait(2000)
+//         this.has(interfaceNameHardWare)
+//         this.has(interfaceNameAlias)
+//     }
+// })
+
+// new Testcase({
+//     name: 'interface_hardware delete',
+//     testcase() {
+//         this.click(cloudMap['Interfaces'])
+//         this.wait(1000)
+//         this.click(cloudMap['Delete for interface hardware'])
+//         this.click(cloudMap['YES'])
+//     },
+//     verify() {
+
+//         this.click(gateMap['Network'])
+//         this.wait(500)
+//         this.click(gateMap['Interfaces'])
+//         this.wait(1000)
+//         this.isDelete(interfaceNameHardWare)
+//     }
+// })
 
 // new Testcase({
 //     name: 'interface dhcp new',

@@ -1,6 +1,6 @@
 let Cases = {
-    cfg: [],
-    report: []
-}
+  cfg: [],
+  report: []
+};
 
-module.exports = Cases
+module.exports = Cases;

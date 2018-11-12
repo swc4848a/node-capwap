@@ -1,112 +1,144 @@
-let Testcase = require('../../src/testcase.js');
+let Testcase = require("src/testcase.js");
 
 let cloudMap = {
-    'FortiGuard': "div.gwt-HTML:contains('FortiGuard')",
-    'Accept Push Updates': "#fcld-fortiGuardEditor-acceptPush > input",
-    'Scheduled Updates': "#fcld-fortiGuardEditor-scheduledUpdate > input",
-    'Improve IPS Quality': "#fcld-fortiGuardEditor-improveIpsQ > input",
-    'Use Extended IPS Signature Package': "#fcld-fortiGuardEditor-useExtendedIps > input",
-    'Web Filter Cache': "#fcld-fortiGuardEditor-webfilterCache > input",
-    'Anti-Spam Cache': "#fcld-fortiGuardEditor-antispamCache > input",
-    
-    'Scheduled Updates Type': "select.gwt-ListBox:eq(0)",
-    'Scheduled Updates Weekday': "select.gwt-ListBox:eq(1)",
-    'Scheduled Updates Hour': "select.gwt-ListBox:eq(2)",
-    'Scheduled Updates AM/PM Hour': "select.gwt-ListBox:eq(3)",
-    'Scheduled Updates AM/PM': "select.gwt-ListBox:eq(4)",
-    'Save': "span:contains('Save')",
-}
+  FortiGuard: "div.gwt-HTML:contains('FortiGuard')",
+  "Accept Push Updates": "#fcld-fortiGuardEditor-acceptPush > input",
+  "Scheduled Updates": "#fcld-fortiGuardEditor-scheduledUpdate > input",
+  "Improve IPS Quality": "#fcld-fortiGuardEditor-improveIpsQ > input",
+  "Use Extended IPS Signature Package":
+    "#fcld-fortiGuardEditor-useExtendedIps > input",
+  "Web Filter Cache": "#fcld-fortiGuardEditor-webfilterCache > input",
+  "Anti-Spam Cache": "#fcld-fortiGuardEditor-antispamCache > input",
+
+  "Scheduled Updates Type": "select.gwt-ListBox:eq(0)",
+  "Scheduled Updates Weekday": "select.gwt-ListBox:eq(1)",
+  "Scheduled Updates Hour": "select.gwt-ListBox:eq(2)",
+  "Scheduled Updates AM/PM Hour": "select.gwt-ListBox:eq(3)",
+  "Scheduled Updates AM/PM": "select.gwt-ListBox:eq(4)",
+  Save: "span:contains('Save')"
+};
 
 let gateMap = {
-    'System': "//span[text()='System']",
-    'FortiGuard': "a[ng-href='system/fortiguard']",
-    'Accept Push Updates': "input#avips-push-chk",
-    'Scheduled Updates': "input#avips-schd-chk",
-    'Improve IPS Quality': "input#avips-submit-chk",
-    'Use Extended IPS Signature Package': "input#avips-db-chk",
-    'Web Filter Cache': "input#filter-wfcache-chk",
-    'Anti-Spam Cache': "input#filter-ascache-chk",
+  System: "//span[text()='System']",
+  FortiGuard: "a[ng-href='system/fortiguard']",
+  "Accept Push Updates": "input#avips-push-chk",
+  "Scheduled Updates": "input#avips-schd-chk",
+  "Improve IPS Quality": "input#avips-submit-chk",
+  "Use Extended IPS Signature Package": "input#avips-db-chk",
+  "Web Filter Cache": "input#filter-wfcache-chk",
+  "Anti-Spam Cache": "input#filter-ascache-chk",
 
-    'Scheduled Updates Type': "select#schd-upd-method",
-    'Scheduled Updates Weekday': "select[ng-model='avIps.scheduledUpdate.weekly.day']",
-    'Scheduled Updates Every Hour': "input[ng-model='avIps.scheduledUpdate.every.hour']",
-    'Scheduled Updates Daily Hour': "input[ng-model='avIps.scheduledUpdate.daily.hour']",
-    'Scheduled Updates AM/PM Hour': "input[ng-model='avIps.scheduledUpdate.weekly.hour']",
-    'Scheduled Updates Daily Period': "select[ng-model='avIps.scheduledUpdate.daily.period']",
-    'Scheduled Updates AM/PM': "select[ng-model='avIps.scheduledUpdate.weekly.period']",
-    
-    "Web Filter Cache Mins": "input[ng-model='filter.webFilterCache.ttl']",
-    "Anti Spam Cache Mins": "input[ng-model='filter.antispamCache.ttl']",
-}
+  "Scheduled Updates Type": "select#schd-upd-method",
+  "Scheduled Updates Weekday":
+    "select[ng-model='avIps.scheduledUpdate.weekly.day']",
+  "Scheduled Updates Every Hour":
+    "input[ng-model='avIps.scheduledUpdate.every.hour']",
+  "Scheduled Updates Daily Hour":
+    "input[ng-model='avIps.scheduledUpdate.daily.hour']",
+  "Scheduled Updates AM/PM Hour":
+    "input[ng-model='avIps.scheduledUpdate.weekly.hour']",
+  "Scheduled Updates Daily Period":
+    "select[ng-model='avIps.scheduledUpdate.daily.period']",
+  "Scheduled Updates AM/PM":
+    "select[ng-model='avIps.scheduledUpdate.weekly.period']",
+
+  "Web Filter Cache Mins": "input[ng-model='filter.webFilterCache.ttl']",
+  "Anti Spam Cache Mins": "input[ng-model='filter.antispamCache.ttl']"
+};
 
 function displayCloudPage(obj) {
-    obj.evaluate(`FcldUiTest.setUiObjectValue("MENU:(FortiGuard)", "")`)
-    obj.wait(3000)
+  obj.evaluate(`FcldUiTest.setUiObjectValue("MENU:(FortiGuard)", "click")`);
+  obj.wait(3000);
 }
 
 function displayGatePage(obj) {
-    obj.click(gateMap['System'])
-    obj.wait(500)
-    obj.click(gateMap['FortiGuard'])
-    obj.wait(3000)
+  obj.click(gateMap["System"]);
+  obj.wait(500);
+  obj.click(gateMap["FortiGuard"]);
+  obj.wait(3000);
 }
 
-let every_hour = 5
-let daily_clock = 2
-let daily_AMPM = "AM"
-let weekly_AMPM = "PM"
-let weekly_day = "Monday"
-let web_filter_cache = 50
-let anti_spam_cache = 40
-let weekly_clock = 3
+/**
+ * Editor: fortiGuardEditor
+ * Key/Id (b -> both)
+ *  i : acceptPush,
+ *  k : scheduledUpdate,
+ *  i : scheduledUpdate,
+ *  k : frequency,
+ *  i : frequency,
+ *  k : day,
+ *  i : day,
+ *  b : timeHours24,
+ *  b : timeClock12,
+ *  b : amPm,
+ *  i : improveIpsQ,
+ *  i : useExtendedIps,
+ *  k : webfilterCache,
+ *  i : webfilterCache,
+ *  i : webfilterCacheTtl,
+ *  k : antispamCache,
+ *  i : antispamCache,
+ *  i : antispamCacheTtl,
+ *  i : fortiGuardFilteringPort53,
+ *  i : fortiGuardFilteringPort8888
+ */
+
+let every_hour = 5;
+let daily_clock = 2;
+let daily_AMPM = "AM";
+let weekly_AMPM = "PM";
+let weekly_day = "Monday";
+let web_filter_cache = 50;
+let anti_spam_cache = 40;
+let weekly_clock = 3;
 
 new Testcase({
-    name: 'fortigurad edit enable all checkbox',
-    testcase() {
-        displayCloudPage(this)
-        this.check('#fcld-fortiGuardEditor-acceptPush > input')
-        this.check('#fcld-fortiGuardEditor-improveIpsQ > input')
-        this.check('#fcld-fortiGuardEditor-useExtendedIps > input')
-        this.check('#fcld-fortiGuardEditor-scheduledUpdate > input')
-        this.check('#fcld-fortiGuardEditor-webfilterCache > input')
-        this.check('#fcld-fortiGuardEditor-antispamCache > input')
-        this.click('#fcld-fortiGuardEditor-save')
-        this.wait(1000)
-    },
-    verify() {
-        displayGatePage(this)
-        this.isCheck(gateMap['Accept Push Updates'])
-        this.isCheck(gateMap['Scheduled Updates'])
-        this.isCheck(gateMap['Improve IPS Quality'])
-        this.isCheck(gateMap['Use Extended IPS Signature Package'])
-        this.isCheck(gateMap['Web Filter Cache'])
-        this.isCheck(gateMap['Anti-Spam Cache'])
-    }
-})
+  name: "fortigurad edit enable all checkbox",
+  testcase() {
+    displayCloudPage(this);
+    this.check("#fcld-fortiGuardEditor-acceptPush > input");
+    this.check("#fcld-fortiGuardEditor-improveIpsQ > input");
+    this.check("#fcld-fortiGuardEditor-useExtendedIps > input");
+    this.check("#fcld-fortiGuardEditor-scheduledUpdate > input");
+    this.check("#fcld-fortiGuardEditor-webfilterCache > input");
+    this.check("#fcld-fortiGuardEditor-antispamCache > input");
+    this.click("#fcld-fortiGuardEditor-save");
+    this.wait(1000);
+  },
+  verify() {
+    displayGatePage(this);
+    this.isCheck(gateMap["Accept Push Updates"]);
+    this.isCheck(gateMap["Scheduled Updates"]);
+    this.isCheck(gateMap["Improve IPS Quality"]);
+    this.isCheck(gateMap["Use Extended IPS Signature Package"]);
+    this.isCheck(gateMap["Web Filter Cache"]);
+    this.isCheck(gateMap["Anti-Spam Cache"]);
+  }
+});
 
 new Testcase({
-    name: 'fortigurad edit disable all checkbox',
-    testcase() {
-        displayCloudPage(this)
-        this.uncheck('#fcld-fortiGuardEditor-acceptPush > input')
-        this.uncheck('#fcld-fortiGuardEditor-improveIpsQ > input')
-        this.uncheck('#fcld-fortiGuardEditor-useExtendedIps > input')
-        this.uncheck('#fcld-fortiGuardEditor-scheduledUpdate > input')
-        this.uncheck('#fcld-fortiGuardEditor-webfilterCache > input')
-        this.uncheck('#fcld-fortiGuardEditor-antispamCache > input')
-        this.click('#fcld-fortiGuardEditor-save')
-        this.wait(1000)
-    },
-    verify() {
-        displayGatePage(this)
-        this.isUncheck(gateMap['Accept Push Updates'])
-        this.isUncheck(gateMap['Scheduled Updates'])
-        this.isUncheck(gateMap['Improve IPS Quality'])
-        this.isUncheck(gateMap['Use Extended IPS Signature Package'])
-        this.isUncheck(gateMap['Web Filter Cache'])
-        this.isUncheck(gateMap['Anti-Spam Cache'])
-    }
-})
+  name: "fortigurad edit disable all checkbox",
+  testcase() {
+    displayCloudPage(this);
+    this.uncheck("#fcld-fortiGuardEditor-acceptPush > input");
+    this.uncheck("#fcld-fortiGuardEditor-improveIpsQ > input");
+    this.uncheck("#fcld-fortiGuardEditor-useExtendedIps > input");
+    this.uncheck("#fcld-fortiGuardEditor-scheduledUpdate > input");
+    this.uncheck("#fcld-fortiGuardEditor-webfilterCache > input");
+    this.uncheck("#fcld-fortiGuardEditor-antispamCache > input");
+    this.click("#fcld-fortiGuardEditor-save");
+    this.wait(1000);
+  },
+  verify() {
+    displayGatePage(this);
+    this.isUncheck(gateMap["Accept Push Updates"]);
+    this.isUncheck(gateMap["Scheduled Updates"]);
+    this.isUncheck(gateMap["Improve IPS Quality"]);
+    this.isUncheck(gateMap["Use Extended IPS Signature Package"]);
+    this.isUncheck(gateMap["Web Filter Cache"]);
+    this.isUncheck(gateMap["Anti-Spam Cache"]);
+  }
+});
 /*
 new Testcase({
     name: 'fortigurad edit every',

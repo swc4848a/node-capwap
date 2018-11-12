@@ -1,5 +1,5 @@
 # Auto Test Framework
-Auto test for FortiCloud GUI Config Parts  
+Auto test for FortiCloud managemenet, Analysis ForitView, Reports.  
 
 ## What is this repository for?
 * simulate user click the cloud GUI and deploy to device  
@@ -22,7 +22,12 @@ Auto test for FortiCloud GUI Config Parts
 curl https://intoli.com/install-google-chrome.sh | bash
 ```
 
-## How to run testcase?
+## How to run freestyle testcase?
+```bash
+npm run debug -- --grep "which case you want to run"
+```
+
+## How to run management testcase? [will remove in the future]
 1. show help menu:  
 ```
 λ node index.js --help
@@ -54,9 +59,6 @@ node index.js -s verify
 ```
 node index.js -h
 ```
-5. TODO: run testcases match regular expression:  
-```
-```
 
 ## How do I get result?
 * stdout  
@@ -76,7 +78,88 @@ result: [192.168.100.0/255.255.255.0] expect: [192.168.100.0/255.255.255.0] => f
 
 ## Contribution guidelines
 
-### Develop your testcases
+
+## Develop freestyle testcases
+freestyle testcase under test folder  
+fortiview, fcp, template, vpn should develop under freestyle mode  
+in the furture most testcases should under this pattern  
+
+### GUI freestyle testcase
+* create a free style testcase source file in test folder and name it with menu label name  
+```javascript
+describe(`Free Style Module Demo`, function() {
+    // disable timeouts
+    this.timeout(0);
+    let page;
+
+    before(async function() {
+        page = new Page();
+        await page.setup({ headless: true });
+    });
+
+    after(async function() {
+        await page.close();
+    });
+
+    beforeEach(async function() {
+
+    });
+
+    afterEach(async function() {
+        
+    });
+
+    // .\node_modules\.bin\mocha.cmd --grep "free style testcase demo"
+    it(`free style testcase demo`, async function () {
+        // do everything you want
+        assert.equal(true, true, `should be the same`)
+    });
+});
+```
+### MySql freestyle testcase
+MySql node.js driver is async api so we need use util.promisify  
+async/await js grammar sugar make sure mysql query return  
+we choose this mode as the testcase design pattern.
+
+```javascript
+const mysql = require('mysql');
+const util = require('util');
+
+describe(`Free Style MySQL Demo Suite`, function () {
+    this.timeout(0);
+
+    let connection;
+
+    before(function () {
+        connection = mysql.createConnection({
+            host: `172.16.94.163`,
+            user: `forticrm`,
+            password: `forticrm`,
+            database: `apportal`
+        });
+
+        connection.connect();
+
+        // promisify query api
+        connection.query = util.promisify(connection.query);
+    })
+
+    after(function () {
+        connection.end();
+    })
+
+    // npm run debug -- --grep "free style mysql testcase demo"
+    it(`free style mysql testcase demo`, async function () {
+        const result = await connection.query('SELECT sn,createTime FROM `ap_ap`');
+        console.log(result);
+    })
+})
+```
+
+## Develop management testcases
+design for management config testcase only  
+testcase should be only config in cloud portal and query result from fos gui  
+
 * create a testcase source file in it folder and name it with menu label name  
 ```javascript
 let Testcase = require('../../src/testcase.js');
@@ -173,36 +256,6 @@ new Testcase({
 4. testcase callback define cloud GUI actions exempt the develop action which will do in the framework  
 5. verify callback define gate GUI verify actions  
 
-* create a free style testcase source file in test folder and name it with menu label name  
-```javascript
-describe(`Free Style Module Demo`, function() {
-    // disable timeouts
-    this.timeout(0);
-
-    let page;
-    let p;
-
-    before(async function() {
-        page = new Page();
-        await page.setup({ headless: false });
-        p = page.page;
-    });
-
-    after(async function() {
-        await page.close();
-    });
-
-    it(`free style testcase demo`, async function () {
-        await p.goto(`https://alpha.forticloud.com`)
-        await p.waitFor(`input#email`)
-        await p.type(`input#email`, `xxx@domain.com`)
-        await p.type(`input[name="password"]`, `XXX`)
-        await p.click(`input[type="submit"]`)
-
-        // do everything you want
-    });
-})
-```
 
 ### API documentation
 
@@ -371,10 +424,23 @@ this.has(`126.Mail`)
 
 #### Q: What kinds of Testcase we should avoid?
 
-NOT Modify 'System => Settings SSH port/HTTP/HTTPS port/Central Management'  
 Network Static Route => NOT DELETE default route 0.0.0.0/0  
 Network DNS => DNS Servers must change to Use FortiGuard Servers at last step  
 
 REASON: change this kind of critical settings will break the autotest env  
+
+#### Q: How to navigate left navbar menu?
+
+Avoid using old click method below:
+```javascript
+this.click(gateMap['Policy & Objects'])
+this.click(gateMap['Addresses'])
+```
+Because the menu is folder menu so it is only working when root menu node is closed.
+
+Instead using modern api below:
+```javascript
+evaluate(`FcldUiTest.setUiObjectValue("MENU:(SUB_MENU_LABEL)", "click")`)
+```
 
 ## Todo List

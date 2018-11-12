@@ -1,39 +1,73 @@
-const Page = require('../src/page');
-const cases = require('../src/cases');
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
+const Page = require("src/page");
+const assert = require("assert");
+const config = require("conf/config");
+const mysql = require("mysql");
+const util = require("util");
 
-describe(`Free Style Module Demo`, function() {
-    // disable timeouts
-    this.timeout(0);
-    let page;
+describe(`Free Style Module Demo Suite`, function() {
+  // disable timeouts
+  this.timeout(0);
+  let cloud;
 
-    before(async function() {
-        this.page = new Page();
-        await this.page.setup({ headless: false });
-        page = this.page.instance();
+  async function cloudLogin() {
+    await cloud.goto(`${config.cloudUrl}`);
+    await cloud.wait(`input#email`);
+    await cloud.type(`input#email`, `${config.cloudUsername}`);
+    await cloud.type(`input[name="password"]`, `${config.cloudPassword}`);
+    await cloud.click(`input[type="submit"]`);
+  }
+
+  before(async function() {
+    let headless = undefined === process.env.HEADLESS ? true : false;
+    console.log(`  headless mode is ${headless}`);
+    cloud = new Page();
+    await cloud.setup({
+      headless: headless
+    });
+    await cloudLogin();
+  });
+
+  after(async function() {
+    await cloud.close();
+  });
+
+  beforeEach(async function() {});
+
+  afterEach(async function() {});
+
+  // npm run debug -- --grep "free style testcase demo"
+  it(`free style testcase demo`, async function() {
+    // do everything you want
+    assert.equal(true, true, `should be the same`);
+  });
+});
+
+describe(`Free Style MySQL Demo Suite`, function() {
+  this.timeout(0);
+
+  let connection;
+
+  before(function() {
+    connection = mysql.createConnection({
+      host: `172.16.94.163`,
+      user: `forticrm`,
+      password: `forticrm`,
+      database: `apportal`
     });
 
-    after(async function() {
-        await this.page.close();
-    });
+    connection.connect();
 
-    beforeEach(async function() {
-        await page.goto(`https://alpha.forticloud.com`)
-        await page.waitFor(`input#email`)
-        await page.type(`input#email`, `zqqiang@fortinet.com`)
-        await page.type(`input[name="password"]`, `SuperCRM801`)
-        await page.click(`input[type="submit"]`)
-    });
+    // promisify query api
+    connection.query = util.promisify(connection.query);
+  });
 
-    afterEach(async function() {
-        
-    });
+  after(function() {
+    connection.end();
+  });
 
-    // .\node_modules\.bin\mocha.cmd --grep "free style testcase demo"
-    it(`free style testcase demo`, async function () {
-        // do everything you want
-        assert.equal(true, true, `should be the same`)
-    });
+  // npm run debug -- --grep "free style mysql testcase demo"
+  it(`free style mysql testcase demo`, async function() {
+    const result = await connection.query("SELECT sn,createTime FROM `ap_ap`");
+    console.log(result);
+  });
 });
