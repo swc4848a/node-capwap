@@ -1,4 +1,4 @@
-# APServer all in one docs
+# APServer
 
 ## Table
 
