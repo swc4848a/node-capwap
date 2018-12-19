@@ -62,3 +62,5 @@ graph LR;
     json-->dp
     dp-->|dtls|dc
 ```
+
+![capwap](capwap.svg)
