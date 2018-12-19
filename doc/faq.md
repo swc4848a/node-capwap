@@ -35,11 +35,13 @@ dispatcher_thread -> dispatcher_process_incoming_packets -> cwAcProcDiscoverReqM
 
 #### Q: AP Join: high level description of what happens here and how we process, and which programs/functions are involved
 
+```c
 dispatcher_thread -> dispatcher_process_incoming_packets -> packet_list_add ==> worker->pkts_queue
 
 cwAcThreadMain -> cwAcThreadProcPacket -> cwAcThreadProcCtlPacket -> cwAcProcPlainCtlMsg -> cwAcProcJoinReq ==> emit CWAE_JOIN_REQ_RECV event
 
 cwAcThreadMain -> cwAcFsmThread -> cwAcFsm_advance -> CWAS_JOIN_enter
+```
 
 1. dispatcher thread dispatch the join request message to worker pkts queue
 1. worker thread main loop get join request message from pkts queue and emit CWAE_JOIN_REQ_RECV event
