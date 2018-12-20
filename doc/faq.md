@@ -192,6 +192,65 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
 
 #### Q: AP Config Changes: please mention flow when for example an AP’s LED is turned on or off, an AP radio’s transmit power is changed, etc; please start the flow from user (GUI) and how changed config lands in AP
 
+1. user checked Led Off checkbox on platform form
+
+   ![led_off.png](led_off.png)
+
+1. APPortal send json cmd to APServer which ledOff params is 0
+
+   ```json
+   {
+     "id": 2903,
+     "url": "/wlan/wtpprof/",
+     "method": "put",
+     "apNetworkOid": 1094,
+     "params": [
+       {
+         "platform": "FAP320C",
+         "countryCode": "US",
+         "maxClients": 0,
+         "ledOff": 0,
+         "oid": 1229,
+         "name": "FAP320C",
+         "radios": [
+           {
+             "mode": "ap",
+             "spectrumAnalysis": "disable",
+             "radioProvision": "disable",
+             "radio-scan": "disable",
+             "loadBalancing": "",
+             "band": "2.4GHz 802.11n/g/b",
+             "shortGuardInterval": "enable",
+             "channel": "1,6,11",
+             "txPowerAuto": "disable",
+             "powerLevel": 100,
+             "oid": 2157,
+             "radio_id": 1
+           },
+           {
+             "mode": "ap",
+             "spectrumAnalysis": "disable",
+             "radioProvision": "disable",
+             "radio-scan": "disable",
+             "loadBalancing": "",
+             "band": "5GHz 802.11ac/n/a",
+             "channelWidth": "20MHz",
+             "shortGuardInterval": "enable",
+             "channel": "36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165",
+             "txPowerAuto": "disable",
+             "powerLevel": 100,
+             "oid": 2158,
+             "radio_id": 2
+           }
+         ]
+       }
+     ]
+   }
+   ```
+
+1. wlan_wtpprof_add update wtpprof->led_dark by json ledOff attr
+1. cwAcAddWtpProf -> cwAcWtpprofRbtChg
+
 #### Q: Client Connection - Probing: Are Probe Request / Probe Response processing handled locally in AP or are they forwarded to controller? If forwarded to controller, please mention the flow with CAPWAP protocol message types used.
 
 #### Q: Client Connection – Authentication and Association: Are Authentication / Association Request / Association Response processing handled locally in AP or are they forwarded to controller? If forwarded to controller, please mention the flow with CAPWAP protocol message types used.
@@ -238,3 +297,19 @@ main -> capwap_ac_main -> cwACInit -> cwAcCmfInit2 -> load_wtps_from_db -> cwAcA
 ### JSON Cmd
 
 todos
+
+### Data channel dtls setup thead
+
+```c
+datachan_dtls_setup_thread -> datadtls_process_packets
+```
+
+1. dispatcher thread receive encrypted keep alive message and put it in datadtls.dtls_pkts_queue
+1. data channel dtls thread create socket pair cipher and plain
+1. data channel dtls thread read pkts from datadtls.dtls_pkts_queue and write to cipher socket
+1. cWtpSessionThreadData_tmpDtlsCtx -> acWtpSessionThread_data will SSL_read to get the plain text packet
+1. notify_dispatcher_keepalive_rcvd get session id from the keepalive message and send it to dispatcher
+1. dipatcher calldata_chan_keepalive_rcvd to send session id to worker thread
+1. worker thread call cwAcDataChanFirstKeepAlive to handle first keepalive
+1. emit CWAE_DATA_CHAN_CONNECTED event so the state machine can change according
+1. update ws->dtls_ctx[CW_CHAN_TYPE_DATA] context and send keepalive response
