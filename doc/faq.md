@@ -58,26 +58,26 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
 
 1. User schedule AP firmware download task on GUI
 
-![firmware download](firmware_download.png)
+   ![firmware download](firmware_download.png)
 
 1. APPortal send json "/wlan/image/" to APServer
 
-```json
-{
-  "id": 2851,
-  "url": "/wlan/image/",
-  "method": "put",
-  "apNetworkOid": 1094,
-  "params": [
-    {
-      "sn": "FP320C3X14012026",
-      "fwVersion": "FP320C-v6.0-build0027",
-      "schedule-time": 1545261110,
-      "imageIdentifier": "06000000FIMG0501000003"
-    }
-  ]
-}
-```
+   ```json
+   {
+     "id": 2851,
+     "url": "/wlan/image/",
+     "method": "put",
+     "apNetworkOid": 1094,
+     "params": [
+       {
+         "sn": "FP320C3X14012026",
+         "fwVersion": "FP320C-v6.0-build0027",
+         "schedule-time": 1545261110,
+         "imageIdentifier": "06000000FIMG0501000003"
+       }
+     ]
+   }
+   ```
 
 1. wlan_image_handler process the json cmd match url /wlan/iamge
 1. wlan_image_upgrade schedule a firmware upgrade task
@@ -89,18 +89,18 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
 1. if APServer already download the firmware image before no need to do it again
 1. send_fcld_firmware_download_allow send below json cmd to FirmwareServer
 
-```json
-{
-  "url": "/FirmwareServer/image/allow/",
-  "method": "put",
-  "params": [
-    {
-      "sn": "FP320C3X14012026",
-      "firmware": "FP320C-v6.0-build0027"
-    }
-  ]
-}
-```
+   ```json
+   {
+     "url": "/FirmwareServer/image/allow/",
+     "method": "put",
+     "params": [
+       {
+         "sn": "FP320C3X14012026",
+         "firmware": "FP320C-v6.0-build0027"
+       }
+     ]
+   }
+   ```
 
 1. FirmwareServer will allow that AP with same SN download firmware directly
 1. async task thread send CW_IPC_MSG_CMF2C_IMAGE_PUSH cmd to capwap worker thread
@@ -110,10 +110,10 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
 
 1. next step AP send below HTTPS request to FirmwareServer to download firmware and get firmware info
 
-```
-GET /api/v1/ap/firmware/FP320C-v6.0-build0027 HTTP/1.1
-GET /api/v1/ap/firmware/info/FP320C-v6.0-build0027 HTTP/1.1
-```
+   ```
+   GET /api/v1/ap/firmware/FP320C-v6.0-build0027 HTTP/1.1
+   GET /api/v1/ap/firmware/info/FP320C-v6.0-build0027 HTTP/1.1
+   ```
 
 #### Q: AP Config Download: please mention flow (programs and database) for one example such as an user creating an SSID in AP Portal (available for all his APs) ; i.e., where AP Portal stores the SSID config, how CAPWAP program reads it and sends it to all involved APs ; in capwap module , please try to mention names of functions/threads involved in the flow ; please start the flow from user (GUI) and how config lands in AP
 
