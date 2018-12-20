@@ -317,13 +317,56 @@ Association Request/Response will forward to APServer
 
 #### Q: Client Authentication (11i) – PSK (Personal): Is this handled locally at AP or at controller? If at controller, please mention the flow with CAPWAP protocol message types used. Please mention flow like AP -> CAPWAP program -> …
 
+AP support local standalone mode so wpa2-personal security mode is handled locally at AP
+
 #### Q: Client Authentication (11i) – 802.1X (Enterprise): please mention the flow with CAPWAP protocol message types used. AP -> EAP_PROXY program -> …
+
+let's take 802.1x enterprise user group as an example. See below capwap pkt capture  
+this parts of code is mainly from the open source wpa_supplicant, it's rarely has opportunity to change it  
+so we have low priority to go through it and talk details later  
+this part will touch eap_proxy and hostapd together
+
+![enterprise_usergroup.png](enterprise_usergroup.png)
+
+![enterprise_usergroup_diagram.svg](enterprise_usergroup_diagram.svg)
 
 #### Q: Client Data Transfer - data frames (encrypted or open): I assume AP does not forward data frames to controller. Please clarify.
 
+Yes, client data is not forward to controller
+
 #### Q: Client Disconnection – De-authentication and Disassociation: please mention where these are processed and the flow.
 
+1. similar to assocation flow disassociation is start from ieee802_11_mgmt function
+
+   ```c
+   ieee802_11_mgmt -> handle_disassoc
+   ```
+
+1. it will send CW_IPC_MSG_I2C_STA_DEL message to worker
+1. worker thread cwIpcMsgI2cStaDel function clear context
+1. and send Station Configuration Request with Delete Station message element
+
 #### Q: Periodically Collecting Client Statistics: please mention flow for how AP sends stats such as its clients count, throughput of each client, RSSI of each client, etc. do these go to CAPWAP or APLOGGER, and which database/table. Please try to mention program names and funtions/threads for receiving these statistics. I assume these are WTP Event Requests, please clarify
+
+1. AP clients count: it's calculate by capwap when sta is connected capwap create sta context. When APPortal query the client total info by json cmd cwAcGetClientTotal will do that calculation
+
+   ```json
+   {
+     "id": 2966,
+     "url": "/wlan/wtp/topClient/",
+     "method": "get",
+     "apNetworkOid": 1094,
+     "params": [
+       {
+         "top": 20,
+         "sortByClient": 1,
+         "band5GHz": 1
+       }
+     ]
+   }
+   ```
+
+1. throughput/RSSI: yes, AP report stats by WTP Event Request with sta stats list message element. cwAcUpd_stastatslist update stats into sta context so that when APPortal query by json cmd worker will calc stats from the sta context
 
 #### Q: Periodically Collecting AP Statistics: please mention flow for how AP sends its stats such as operating channel and transmit power, rogue aps detected, etc.
 
@@ -396,7 +439,7 @@ fcldd_handler_t fcldd_handler [] = {
 
 fcldd_handler defined all the json cmd handler entry  
 grep the json cmd from the /var/log/capwap.log and search the url in fcldd_handler  
-then you can get the enttry of that configuration
+then you can get the entry of that configuration
 
 ### Data channel dtls setup thead
 
