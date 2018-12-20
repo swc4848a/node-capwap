@@ -117,6 +117,79 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
 
 #### Q: AP Config Download: please mention flow (programs and database) for one example such as an user creating an SSID in AP Portal (available for all his APs) ; i.e., where AP Portal stores the SSID config, how CAPWAP program reads it and sends it to all involved APs ; in capwap module , please try to mention names of functions/threads involved in the flow ; please start the flow from user (GUI) and how config lands in AP
 
+1. user create one SSID on GUI like below
+
+   ![ssid_config.png](ssid_config.png)
+
+   ![ssid_config_apply.png](ssid_config_apply.png)
+
+1. APPortal save configuration to database apportal.ap_ssid
+1. APPortal also send json cmd to APServer
+
+   ```json
+   {
+     "id": 2876,
+     "url": "/wlan/vap/",
+     "method": "put",
+     "apNetworkOid": 1094,
+     "params": [
+       {
+         "applicationEnabled": "disable",
+         "apply-all": "enable",
+         "auth": "radius",
+         "avEnabled": "disable",
+         "band24MaxClients": 0,
+         "band50MaxClients": 0,
+         "bandAvailability": 3,
+         "botnetEnabled": "disable",
+         "broadcast-ssid": "enable",
+         "captive-category": "clickThrough",
+         "captivePortal": "none",
+         "captiveRedirect": 0,
+         "captiveRedirectURL": "",
+         "dataRates": "",
+         "encrypt": "AES",
+         "intraPrivacy": 0,
+         "ipsEnabled": "disable",
+         "lanIsolation": 0,
+         "macAuth": "0",
+         "macAuthFailThroughMode": 0,
+         "meshBackhaul": 0,
+         "nat": 0,
+         "natIp": "0.0.0.0",
+         "natIpLeaseTime": 3600,
+         "natMask": "0.0.0.0",
+         "oid": 2198,
+         "schedule": 0,
+         "scheduleTime": "",
+         "security": "open",
+         "splashUrl": "",
+         "ssid": "dev-room-ssid",
+         "status": "enable",
+         "walled-gardent-address": "",
+         "webAccess": 0
+       }
+     ]
+   }
+   ```
+
+1. url /wlan/vap/ and method put match wlan_vap_add function
+1. cwAcAddVap -> cwAcWlanRbtChg start the SSID configuration process
+1. check if account_ctx->cw_wl_tree already has this SSID
+   - if exist: do update process
+   - if no: cwAcWlanRbtAdd do wlan create process
+1. cwAcWlanRbtAdd create new cwWlanInfo_t struct, update it with json put params and insert into account_ctx->cw_wl_tree
+1. cwAcTagReferenceChange start the tag bitset process, tag is used to associate the SSID with AP
+1. for each AP has same tag with SSID call cwAcWtpRadioTagChange
+1. cwAcWtpRadioTagChange -> cwAcWtpAddWlan add SSID for matched wtp
+1. cwAcSetupVap will check if hostapd is involved
+   - yes: send CW_IPC_MSG_C2E_VAP_ADD cmd to hostapd
+   - no: cwAcSendLanCfgReq_add send CW_CTL_MSG_TYPE_80211_WLAN_CFG_REQ message to AP
+1. cwAcSendCfgUpdReq_vap_mpsk send Configuration Update Req to AP to update mpsk config if need
+1. cwAcSendWlCfgReqVapDownupSchedule send Configuration Update Req to AP to update downup schedule config if need
+1. cwAcSendCfgUpdReq_vap_downup send Configuration Update Req to AP to downup the SSID if need
+1. cwAcSendCfgUpdReq_vap_me_walled_garden send Configuration Update Req to AP to push the walled garden config if need
+
 #### Q: AP Config Changes: please mention flow when for example an AP’s LED is turned on or off, an AP radio’s transmit power is changed, etc; please start the flow from user (GUI) and how changed config lands in AP
 
 #### Q: Client Connection - Probing: Are Probe Request / Probe Response processing handled locally in AP or are they forwarded to controller? If forwarded to controller, please mention the flow with CAPWAP protocol message types used.
