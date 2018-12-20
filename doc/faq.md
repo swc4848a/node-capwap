@@ -35,6 +35,8 @@ dispatcher_thread -> dispatcher_process_incoming_packets -> cwAcProcDiscoverReqM
 
 #### Q: AP Join: high level description of what happens here and how we process, and which programs/functions are involved
 
+capwap worker thread validate the req message, udpate memory context, update database and build response
+
 ```c
 dispatcher_thread -> dispatcher_process_incoming_packets -> packet_list_add ==> worker->pkts_queue
 
@@ -48,9 +50,70 @@ cwAcThreadMain -> cwAcFsmThread -> cwAcFsm_advance -> CWAS_JOIN_enter
 1. worker thread state machine call CWAS_JOIN_enter to handle join req message
 1. do some element checking including: sn, admin status, session id, dfs cap
 1. update wtp session context, firmware upgrade result, database utm version
-1. build join response message, send by CW_AC_SEND_CTL_MSG, change
+1. build join response message, send by CW_AC_SEND_CTL_MSG, start timer CWTMR_WAIT_JOIN and waiting AP Configuration Status Request message
 
 #### Q: AP Firmware Download: please mention flow/sequence such as AP -> CAPWAP, AP -> FMServer -> DB, etc (which programs/functions are involved and the flow like how AP request the image until how the same reaches the AP)
+
+firmware download involve APPortal, APServer, FirmwareServer and AP
+
+1. User schedule AP firmware download task on GUI
+
+![firmware download](firmware_download.png)
+
+1. APPortal send json "/wlan/image/" to APServer
+
+```json
+{
+  "id": 2851,
+  "url": "/wlan/image/",
+  "method": "put",
+  "apNetworkOid": 1094,
+  "params": [
+    {
+      "sn": "FP320C3X14012026",
+      "fwVersion": "FP320C-v6.0-build0027",
+      "schedule-time": 1545261110,
+      "imageIdentifier": "06000000FIMG0501000003"
+    }
+  ]
+}
+```
+
+1. wlan_image_handler process the json cmd match url /wlan/iamge
+1. wlan_image_upgrade schedule a firmware upgrade task
+1. schedule_firmware_upgrade add new task to scheduler->schedule_list
+1. firmware_upgrade_scheduler_run check download task expiration, status and move task to scheduler->run_list
+1. firmware_upgrade_scheduler_run send WTP_FIRMWARE_STATUS_UPDATE and IMAGE_UPGRADE cmd to async task thread
+1. async task thread receive IMAGE_UPGRADE cmd and call exec_image_upgrade_task
+1. db_get_image_file get firmware image from signaturedb.ap_firmware table and write it in APServer local file system
+1. if APServer already download the firmware image before no need to do it again
+1. send_fcld_firmware_download_allow send below json cmd to FirmwareServer
+
+```json
+{
+  "url": "/FirmwareServer/image/allow/",
+  "method": "put",
+  "params": [
+    {
+      "sn": "FP320C3X14012026",
+      "firmware": "FP320C-v6.0-build0027"
+    }
+  ]
+}
+```
+
+1. FirmwareServer will allow that AP with same SN download firmware directly
+1. async task thread send CW_IPC_MSG_CMF2C_IMAGE_PUSH cmd to capwap worker thread
+1. cwIpcImagePush call cwAcSendCfgUpdReq_image to send Configuration Update Request message to AP
+
+   ![firmware_config_update.png](firmware_config_udpate.png)
+
+1. next step AP send below HTTPS request to FirmwareServer to download firmware and get firmware info
+
+```
+GET /api/v1/ap/firmware/FP320C-v6.0-build0027 HTTP/1.1
+GET /api/v1/ap/firmware/info/FP320C-v6.0-build0027 HTTP/1.1
+```
 
 #### Q: AP Config Download: please mention flow (programs and database) for one example such as an user creating an SSID in AP Portal (available for all his APs) ; i.e., where AP Portal stores the SSID config, how CAPWAP program reads it and sends it to all involved APs ; in capwap module , please try to mention names of functions/threads involved in the flow ; please start the flow from user (GUI) and how config lands in AP
 
