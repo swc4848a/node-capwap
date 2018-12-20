@@ -356,9 +356,11 @@ main -> capwap_ac_main -> cwACInit -> cwAcCmfInit2 -> load_wtps_from_db -> cwAcA
 
 #### Q: AP Config Download: when AP reboots how does it get its config downloaded to begin with (ex: its platform profile, SSIDs to broadcast, MAC access control, associated QoS profile, etc)?
 
-when APServer start [DB Load](#db-load) cwAcCmfInit2 function will iterate modules table to load all the moduels from database
-the database loading order is important we need load account first and then some others
-each load_xxx function define the related context init method and SQL which is good start to understand the database design
+when APServer start [DB Load](#db-load) cwAcCmfInit2 function will be called  
+it iterate modules table to load all the moduels from database  
+the database loading order is important we need load account first and then some others  
+each load_xxx function define the related context init method and  
+SQL which is good start to understand the database design
 
 ```c
 // order is important, NOT change if you are not sure
