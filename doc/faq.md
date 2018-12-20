@@ -190,7 +190,9 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
 1. cwAcSendCfgUpdReq_vap_downup send Configuration Update Req to AP to downup the SSID if need
 1. cwAcSendCfgUpdReq_vap_me_walled_garden send Configuration Update Req to AP to push the walled garden config if need
 
-#### Q: AP Config Changes: please mention flow when for example an AP’s LED is turned on or off, an AP radio’s transmit power is changed, etc; please start the flow from user (GUI) and how changed config lands in AP
+#### Q: AP Config Changes: please mention flow when for example an AP’s LED is turned on or off, LED blinking, an AP radio’s transmit power is changed, etc; please start the flow from user (GUI) and how changed config lands in AP
+
+##### LED truned on or off
 
 1. user checked Led Off checkbox on platform form
 
@@ -249,11 +251,69 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
    ```
 
 1. wlan_wtpprof_add update wtpprof->led_dark by json ledOff attr
-1. cwAcAddWtpProf -> cwAcWtpprofRbtChg
+1. cwAcAddWtpProf -> cwAcWtpprofRbtChg (todo)
+
+##### LED blinking
+
+1. user click the LED blinking link on GUI
+   ![led_blink.png](led_blink.png)
+1. APPortal send json cmd which led_blink is 1 and led_blink_duration is 120s to APServer
+   ```json
+   {
+     "id": 2921,
+     "url": "/wlan/wtp/",
+     "method": "put",
+     "apNetworkOid": 1094,
+     "params": [
+       {
+         "oid": 5491,
+         "sn": "FP320C3X14012026",
+         "name": "FP320C3X14012026",
+         "admin-password": "I79LS/CrUklNpTV1PGImsA==",
+         "allowaccess": ["telnet", "http", "https", "ssh"],
+         "admin": "enable",
+         "apProfileOid": 1229,
+         "led_blink": 1,
+         "led_blink_duration": 120,
+         "tag-oids": []
+       }
+     ]
+   }
+   ```
+1. cwAcWtpRbtChg send the Configuration Update Request with led blink and led blink duration
+
+   ![config_update_led_blink.png](config_update_led_blink.png)
+
+##### AP radio’s transmit power change
+
+todo
 
 #### Q: Client Connection - Probing: Are Probe Request / Probe Response processing handled locally in AP or are they forwarded to controller? If forwarded to controller, please mention the flow with CAPWAP protocol message types used.
 
+Probe Request / Probe Response processing handled locally in AP, APServer doesn't involve in the probe process
+
 #### Q: Client Connection – Authentication and Association: Are Authentication / Association Request / Association Response processing handled locally in AP or are they forwarded to controller? If forwarded to controller, please mention the flow with CAPWAP protocol message types used.
+
+##### Association
+
+Association Request/Response will forward to APServer
+
+![association.png](association.png)
+
+1. association message is received from port 5247 which is capwap data channel
+1. RFC5416 defined the capwap data message bindings
+1. The CAPWAP protocol defines the CAPWAP data message, which is used to encapsulate a wireless payload. For
+   IEEE 802.11, the IEEE 802.11 header and payload are encapsulated
+   ![association_encapsulate.png](association_encapsulate.png)
+1. dispatcher forward the asso req to worker thread
+1. cwAcDataCwRecv is the start entry of asso req message process
+   ```c
+   cwAcDataCwRecv -> cwAcDataWifiMgmtAndUnknownSta -> cw_hapd_80211_input ->
+   ieee802_11_mgmt -> handle_assoc -> send_assoc_resp
+   ```
+1. handle_assoc: before send asso resp to sta it send CW_IPC_MSG_I2C_STA_ADD worker itself
+1. cwIpsMsgI2cStaAdd alloc sta context and link it to all reference context
+1. finally send Station Configuration Request to AP with Add Station message element
 
 #### Q: Client Authentication (11i) – PSK (Personal): Is this handled locally at AP or at controller? If at controller, please mention the flow with CAPWAP protocol message types used. Please mention flow like AP -> CAPWAP program -> …
 
@@ -294,11 +354,52 @@ main -> capwap_ac_main -> cwACInit -> cwAcCmfInit2 -> load_wtps_from_db -> cwAcA
 1. APServer only load database when startup
 1. When user change configuration on GUI the apportal will send [json cmd](#json-cmd) to APServer capwap daemon
 
+#### Q: AP Config Download: when AP reboots how does it get its config downloaded to begin with (ex: its platform profile, SSIDs to broadcast, MAC access control, associated QoS profile, etc)?
+
+when APServer start [DB Load](#db-load) cwAcCmfInit2 function will iterate modules table to load all the moduels from database
+the database loading order is important we need load account first and then some others
+each load_xxx function define the related context init method and SQL which is good start to understand the database design
+
+```c
+// order is important, NOT change if you are not sure
+static struct {
+    int (* func)(char *user, char *password, char *host);
+    const char *desc;
+} modules[] = {
+    {load_accounts_from_db, "load_accounts_from_db"},
+    {load_tags, "load_tags"},
+    {load_users_from_db, "load_users_from_db"},
+    {load_groups_from_db, "load_groups_from_db"},
+    {load_radius_from_db, "load_radius_from_db"},
+    {load_utmprofiles, "load_utmprofiles"},
+    {load_qos_from_db, "load_qos_from_db"},
+    {load_wlans_from_db, "load_wlans_from_db"},
+    {load_wtp_profs_from_db, "load_wtp_profs_from_db"},
+    {load_wtps_from_db, "load_wtps_from_db"},
+    {load_firmware_upgrade_task, "load_firmware_upgrade_task"},
+    {load_vlan_sevices, "load_vlan_sevices"},
+    {load_mac_auth_address, "load_mac_auth_address"},
+    {NULL, ""}
+};
+```
+
 ### JSON Cmd
 
-todos
+```c
+fcldd_handler_t fcldd_handler [] = {
+    {"/wlan/apNetwork/", wlan_apnetwork_handler, JSON_METHOD_ROUTING_GLOBA},
+	...
+};
+```
+
+fcldd_handler defined all the json cmd handler entry  
+grep the json cmd from the /var/log/capwap.log and search the url in fcldd_handler  
+then you can get the enttry of that configuration
 
 ### Data channel dtls setup thead
+
+when first data channel keep alive message is coming dispatcher can't know which ap is from
+data channel keepalive message is from diff port but the keepalive contain the session id which should be same with join req
 
 ```c
 datachan_dtls_setup_thread -> datadtls_process_packets
@@ -309,7 +410,8 @@ datachan_dtls_setup_thread -> datadtls_process_packets
 1. data channel dtls thread read pkts from datadtls.dtls_pkts_queue and write to cipher socket
 1. cWtpSessionThreadData_tmpDtlsCtx -> acWtpSessionThread_data will SSL_read to get the plain text packet
 1. notify_dispatcher_keepalive_rcvd get session id from the keepalive message and send it to dispatcher
-1. dipatcher calldata_chan_keepalive_rcvd to send session id to worker thread
+1. dipatcher call data_chan_keepalive_rcvd to send session id to worker thread
 1. worker thread call cwAcDataChanFirstKeepAlive to handle first keepalive
 1. emit CWAE_DATA_CHAN_CONNECTED event so the state machine can change according
 1. update ws->dtls_ctx[CW_CHAN_TYPE_DATA] context and send keepalive response
+1. finally apserver update the data channel port and ip hash so next data pkt can handle by its worker
