@@ -348,6 +348,8 @@ Yes, client data is not forward to controller
 
 #### Q: Periodically Collecting Client Statistics: please mention flow for how AP sends stats such as its clients count, throughput of each client, RSSI of each client, etc. do these go to CAPWAP or APLOGGER, and which database/table. Please try to mention program names and funtions/threads for receiving these statistics. I assume these are WTP Event Requests, please clarify
 
+##### current stats
+
 1. AP clients count: it's calculate by capwap when sta is connected capwap create sta context. When APPortal query the client total info by json cmd cwAcGetClientTotal will do that calculation
 
    ```json
@@ -368,11 +370,141 @@ Yes, client data is not forward to controller
 
 1. throughput/RSSI: yes, AP report stats by WTP Event Request with sta stats list message element. cwAcUpd_stastatslist update stats into sta context so that when APPortal query by json cmd worker will calc stats from the sta context
 
+##### history stats
+
+1. user also has the requirement of history stats report so we have stats serialization
+1. ap report client stats by wtp event request every 2 minutes (default interval)
+1. todo
+
 #### Q: Periodically Collecting AP Statistics: please mention flow for how AP sends its stats such as operating channel and transmit power, rogue aps detected, etc.
+
+1. when user click Status View tab APPortal send json cmd to APServer to query wtp info
+
+   ```json
+   {
+   "id": 3089,
+   "url": "/wlan/wtp/",
+   "method": "get",
+   "apNetworkOid": 1094,
+   "params": [
+   	{
+   	"oid": 5491,
+   	"name": "FP320C3X14012026"
+   	}
+   ]
+   }
+   {
+   "id": 3089,
+   "result": [
+   	{
+   	"data": [
+   		{
+   		"serial": "FP320C3X14012026",
+   		"ap_profile": 1229,
+   		"connecting_from": "172.16.95.49",
+   		"datachan_connecting_from": "172.16.95.49",
+   		"state": "authorized",
+   		"status": "connected",
+   		"wtp_id": "FP320C3X14012026",
+   		"region_code": "A ",
+   		"name": "FP320C3X14012026",
+   		"mgmt_vlanid": 0,
+   		"is_trial": 1,
+   		"led_blink": 0,
+   		"led_blink_duration": 0,
+   		"led_blink_remain": 0,
+   		"data_chan_sec": "clear-text",
+   		"last_reboot_time": 1545263893,
+   		"reboot_last_day": false,
+   		"clients": 0,
+   		"os_version": "FP320C-v6.0-build0021",
+   		"local_ipv4_addr": "192.168.1.110",
+   		"board_mac": "08:5b:0e:c6:6a:58",
+   		"join_time": 1545263932,
+   		"connection_state": "Connected",
+   		"image_download_progress": 0,
+   		"radio": [
+   			{
+   			"radio_id": 1,
+   			"mode": "AP",
+   			"country_name": "US",
+   			"country_code": 841,
+   			"client_count": 0,
+   			"base_bssid": "08:5b:0e:c6:6a:5a",
+   			"max_vaps": 8,
+   			"oper_chan": 11,
+   			"txPowerAuto": "disable",
+   			"powerLevel": 100,
+   			"oper_txpower": 24,
+   			"bandwidth_rx": 293782,
+   			"bandwidth_tx": 0,
+   			"bytes_rx": 3266398377,
+   			"bytes_tx": 10803382,
+   			"interfering_aps": 0,
+   			"detect_interfering": false,
+   			"mac_errors_rx": 1,
+   			"mac_errors_tx": 1,
+   			"radio_type": "2.4GHz 802.11n/g/b",
+   			"beacon_interval": "100 ms",
+   			"short_guard_interval": "enable",
+   			"channel": "1, 6, 11",
+   			"radio_resource_provision": "disable",
+   			"rogue_ap_scan": "disable",
+   			"ap_scan_passive": "disable",
+   			"tags": []
+   			},
+   			{
+   			"radio_id": 2,
+   			"mode": "AP",
+   			"country_name": "US",
+   			"country_code": 841,
+   			"client_count": 0,
+   			"base_bssid": "08:5b:0e:c6:6a:62",
+   			"max_vaps": 8,
+   			"oper_chan": 116,
+   			"txPowerAuto": "disable",
+   			"powerLevel": 100,
+   			"oper_txpower": 22,
+   			"bandwidth_rx": 5666,
+   			"bandwidth_tx": 7333,
+   			"bytes_rx": 218492303,
+   			"bytes_tx": 98221638,
+   			"interfering_aps": 0,
+   			"detect_interfering": false,
+   			"mac_errors_rx": 0,
+   			"mac_errors_tx": 0,
+   			"radio_type": "5GHz 802.11ac/n/a",
+   			"beacon_interval": "100 ms",
+   			"short_guard_interval": "enable",
+   			"channel": "36, 40, 44, 48, 52, 56, 60, 64, 100, 104, 108, 112, 116, 132, 136, 140, 149, 153, 157, 161, 165",
+   			"radio_resource_provision": "disable",
+   			"rogue_ap_scan": "disable",
+   			"ap_scan_passive": "disable",
+   			"tags": []
+   			}
+   		]
+   		}
+   	],
+   	"code": 0,
+   	"message": "ok"
+   	}
+   ]
+   }
+   ```
+
+1. ap stats still from the wtp event request message
+1. CWAS_RUN_enter function case CWAE_WTP_EVENT_REQ_RECV has all the meInfo process handler
 
 #### Q: Client Roaming (Reassociation): please mention the flow and CAPWAP messages involved
 
+1. similar to assocation flow reassociation is start from ieee802_11_mgmt function
+1. match case WLAN_FC_STYPE_REASSOC_REQ and call handle_assoc
+1. finally send association response to client
+
 #### Q: Keep-Alive: Is there any keep-alive mechanism between AP and AC? If so, please tell whether it uses control or data channel. I assume it uses Echo Request / Echo Response packets, please confirm.
+
+1. control channel use echo req/rsp to keep alive
+1. data channel use keep-alive message with session id
 
 #### Q:
 
