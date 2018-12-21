@@ -512,7 +512,12 @@ Yes, client data is not forward to controller
 
 ### DB Load
 
-APServer start will load related config from apportal database
+APServer start will load related config from apportal database  
+when APServer start cwAcCmfInit2 function will be called  
+it iterate modules table to load all the moduels from database  
+the database loading order is important we need load account first and then some others  
+each load_xxx function define the related context init method and  
+SQL which is good start to understand the database design
 
 ```c
 main -> capwap_ac_main -> cwACInit -> cwAcCmfInit2 -> load_wtps_from_db -> cwAcAddWtpHashEntry -> add_wtp_sn_hash_entry
@@ -523,19 +528,6 @@ main -> capwap_ac_main -> cwACInit -> cwAcCmfInit2 -> load_wtps_from_db -> cwAcA
 1. SQL "SELECT ... p.sn ... from ap_ap AS p ..." is in load_wtps.
 1. finally \_\_wtp_sn_head filled with all the related ap info.
 1. other part of codes can use find_wtp_sn_hash_entry to check if ap already configed.
-
-#### Q: In DB Load, how the cache (in memory list of ap_ap table) gets updated when customer deploys a new AP through AP Portal (how the entry is read from ap_ap table into cache)
-
-1. APServer only load database when startup
-1. When user change configuration on GUI the apportal will send [json cmd](#json-cmd) to APServer capwap daemon
-
-#### Q: AP Config Download: when AP reboots how does it get its config downloaded to begin with (ex: its platform profile, SSIDs to broadcast, MAC access control, associated QoS profile, etc)?
-
-when APServer start [DB Load](#db-load) cwAcCmfInit2 function will be called  
-it iterate modules table to load all the moduels from database  
-the database loading order is important we need load account first and then some others  
-each load_xxx function define the related context init method and  
-SQL which is good start to understand the database design
 
 ```c
 // order is important, NOT change if you are not sure
@@ -559,6 +551,23 @@ static struct {
     {NULL, ""}
 };
 ```
+
+#### Q: In DB Load, how the cache (in memory list of ap_ap table) gets updated when customer deploys a new AP through AP Portal (how the entry is read from ap_ap table into cache)
+
+1. APServer only load database when startup
+1. When user change configuration on GUI the apportal will send [json cmd](#json-cmd) to APServer capwap daemon
+
+#### Q: AP Config Download: when AP reboots how does it get its config downloaded to begin with (ex: its platform profile, SSIDs to broadcast, MAC access control, associated QoS profile, etc)?
+
+1. after join ap get some basic config from the Configuration Status Response message
+
+   ![config_status_resp.png](config_status_resp.png)
+
+1. SSID is from the IEEE 802.11 WLAN Configuration Request
+   ![wlan_config_req.png](wlan_config_req.png)
+
+1. you can try to change some config and see which capwap control message is push to ap and when ap join the same message used
+1. all other configs push by its related capwap messages, so ap config download is part of the protocol covered by RFC5415
 
 ### JSON Cmd
 
