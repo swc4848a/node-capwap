@@ -601,3 +601,10 @@ datachan_dtls_setup_thread -> datadtls_process_packets
 1. emit CWAE_DATA_CHAN_CONNECTED event so the state machine can change according
 1. update ws->dtls_ctx[CW_CHAN_TYPE_DATA] context and send keepalive response
 1. finally apserver update the data channel port and ip hash so next data pkt can handle by its worker
+
+#### Q: how session id is established (is it created afresh or do we use if it already exists). And, where all the session-id is used subsequently?
+
+1. The Session ID message element value contains a randomly generated unsigned 128-bit integer.
+1. CAPWAP Data Channel Keep-Alive, includes the Session Identifier message element, which is used to bind the control and data plane.
+1. Data Channel Keep-Alive packet, with a Session ID message element matching that included by the WTP in the Join Request message.
+1. Use of the Session Identifier message element enables the AC to match the control and data plane flows from multiple WTPs behind the same NAT system (multiple WTPs sharing the same IP address).
