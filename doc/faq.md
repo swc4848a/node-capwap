@@ -439,7 +439,12 @@ Yes, client data is not forward to controller
 
 1. user also has the requirement of history stats report so we have stats serialization
 1. ap report client stats by wtp event request every 2 minutes (default interval)
-1. todo
+1. worker thread will write traffic log to share memory
+   ```c
+   cwSendApLogsvrMsg(ws->account_info, LOGTYPE_TRAFFIC, &t, sizeof(t));
+   ```
+1. aplogger daemon get traffic logs from the share memory and write to acctXXX.wlTraffic table
+1. when GUI need draw history report about traffic datas they can get data from the wlTraffic table
 
 #### Q: Periodically Collecting AP Statistics: please mention flow for how AP sends its stats such as operating channel and transmit power, rogue aps detected, etc.
 
