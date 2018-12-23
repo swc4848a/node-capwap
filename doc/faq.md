@@ -251,7 +251,13 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
    ```
 
 1. wlan_wtpprof_add update wtpprof->led_dark by json ledOff attr
-1. cwAcAddWtpProf -> cwAcWtpprofRbtChg (todo)
+1. if led dark is changed APServer push Configuration Update Request with led dark vsp element
+   ```c
+   cwAcAddWtpProf -> cwAcWtpprofRbtChg
+   if (led_dark_chg && ws->wtpcfg->wtp_cap.ledDark) {
+       cwAcSendCfgUpdReq_led_dark(ws);
+   }
+   ```
 
 ##### LED blinking
 
@@ -286,7 +292,66 @@ firmware download involve APPortal, APServer, FirmwareServer and AP
 
 ##### AP radio’s transmit power change
 
-todo
+1. user change ap tx power on GUI below
+   ![tx_power.png](tx_power.png)
+1. APPortal send json cmd to APServer
+
+   ```json
+   {
+     "id": 3108,
+     "url": "/wlan/wtpprof/",
+     "method": "put",
+     "apNetworkOid": 1094,
+     "params": [
+       {
+         "platform": "FAP320C",
+         "countryCode": "US",
+         "maxClients": 0,
+         "ledOff": 0,
+         "oid": 1229,
+         "name": "FAP320C",
+         "radios": [
+           {
+             "mode": "ap",
+             "spectrumAnalysis": "disable",
+             "radioProvision": "disable",
+             "radio-scan": "disable",
+             "loadBalancing": "",
+             "band": "2.4GHz 802.11n/g/b",
+             "shortGuardInterval": "enable",
+             "channel": "1,6,11",
+             "txPowerAuto": "disable",
+             "powerLevel": 26,
+             "oid": 2157,
+             "radio_id": 1
+           },
+           {
+             "mode": "ap",
+             "spectrumAnalysis": "disable",
+             "radioProvision": "disable",
+             "radio-scan": "disable",
+             "loadBalancing": "",
+             "band": "5GHz 802.11ac/n/a",
+             "channelWidth": "20MHz",
+             "shortGuardInterval": "enable",
+             "channel": "36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165",
+             "txPowerAuto": "disable",
+             "powerLevel": 100,
+             "oid": 2158,
+             "radio_id": 2
+           }
+         ]
+       }
+     ]
+   }
+   ```
+
+1. update wtpprof->radio txpower from json powerLevel attribute
+1. send Configuration Update Req with txpower element
+
+   ```c
+   pkt = cw_add_me_vsp_txpwr_percentage(pkt, rId, cmf_radio->txpower);
+   ```
 
 #### Q: Client Connection - Probing: Are Probe Request / Probe Response processing handled locally in AP or are they forwarded to controller? If forwarded to controller, please mention the flow with CAPWAP protocol message types used.
 
