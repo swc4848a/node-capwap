@@ -24,3 +24,5 @@ Some advanced features such as dynamic VLAN need AP has enterprise license.
 Admin user can set ap contract start and end date on controller GUI.  
 APServer aync task will pull these contract info in period from meta db portal.deviceContract table.  
 APServer only keep ap with enterprise license and check from the diff between pull result.
+
+## SSID (VAP)

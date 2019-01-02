@@ -22,4 +22,6 @@ AC get sta ip from WTP EVENT REQ from vsp CW_ME_TYPE_VSP_STA_IP_LIST
 ## acctxxxx Database
 
 APServer(aplogger daemon) and APLogServer are responsible for handle AP logs which containing both event, traffic and UTM logs.  
-When user create new APNetwork APServer will create the new acctxxxx database and all the tables in that db on APPortal Server.
+When user create new APNetwork APServer will create the new acctxxxx database and all the tables in that db on APPortal Server.  
+wlEvent: all the event logs will write to this table containing join, client auth and errors logs.  
+wlTraffic: all the traffic logs used by APPortal to draw the history user's statics chart.
